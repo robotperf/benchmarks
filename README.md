@@ -1,6 +1,6 @@
 # RobotPerf Benchmarks
 
-[**Benchmark results** 🤖](#benchmarks) | [Create a benchmark]() | [*Contributing* 🌍](#contributing) | [`Contact and support` 📨](#contact-and-support)
+[**Benchmark results** 🤖](#benchmarks) | [Benchmark spec 📖](benchmarks/README.md) | [*Contributing* 🌍](#contributing) | [`Contact and support` 📨](#contact-and-support)
 
 <a href="https://accelerationrobotics.com/robotperf.php"><img src="imgs/robotperf-temporary.png" align="left" hspace="8" vspace="2" width="200"></a>
 
@@ -8,13 +8,15 @@ RobotPerf is an **open reference benchmarking suite that is used to evaluate rob
 
 The project's <ins>mission is to build open, fair and useful robotics benchmarks that are technology agnostic, vendor-neutral and provide unbiased evaluations of robotics computing performance for hardware, software, and services</ins>.  As a reference performance benchmarking suite in robotics, RobotPerf *can be used to evaluate robotics computing performance across compute substratrated including CPUs, GPUs, FPGAs and other compute accelerators*. The benchmarks are designed to be representative of the performance of a robotic system and to be reproducible across different robotic systems. For that, RobotPerf builds on top of ROS 2, the de facto standard for robot application development.
 
+Refer to the [Benchmark Specification](benchmarks/README.md) for more details.
+
 ## Why RobotPerf?
 
 ![RobotPerf arquitecture diagram](imgs/robotperf-diagram-ros2.svg)
 
  The myriad combinations of robot hardware and robotics software make assessing robotic-system performance challenging, specially in an architecture-neutral, representative, and reproducible manner. RobotPerf addresses this issue delivering **a reference performance benchmarking suite that is used to evaluate robotics computing performance across CPU, GPU, FPGA and other compute accelerators**.
 
-| Mission | Vission | Standards |
+| Mission | Vision | Standards |
 |---|---|----|
 |  Represented by consortium of robotics leaders from industry, academia and research labs, RobotPerf is formated as an open project whose mission is to build open, fair and useful robotics benchmarks that are technology agnostic, vendor-neutral and provide unbiased evaluations of robotics computing performance for hardware, software, and services. |  Benchmarking helps assess performance. Performance information can help roboticists design more efficient robotic systems and select the right hardware for each robotic application. It can also help understand the trade-offs between different algorithms that implement the same capability. | RobotPerf benchmarks aligns to robotics standards so that you <ins>don’t spend time reinventing the wheel and re-develop what already works</ins>. Benchmarks are conducted using [ROS 2](https://accelerationrobotics.com/ros.php) as its common baseline. RobotPerf also aligns to standardization initiatives within the ROS ecosystem related to computing performance and benchmarking such as [REP 2008](https://github.com/ros-infrastructure/rep/pull/324) (ROS 2 Hardware Acceleration Architecture and Conventions) and the [REP 2014](https://github.com/ros-infrastructure/rep/pull/364) (Benchmarking performance in ROS 2).|
 
@@ -28,10 +30,10 @@ RobotPerf benchmarks aim to cover the **complete robotics pipeline** including p
 | [![perception benchmarks](imgs/icon-perception.png)](#perception) | [![localization benchmarks](imgs/icon-localization.png)](#localization) | [![control benchmarks](imgs/icon-control.png)](#control) | [![navigation benchmarks](imgs/icon-navigation.png)](#navigation) | [![manipulation benchmarks](imgs/icon-manipulation.png)](#manipulation) | 
 
 
-### `A` Perception
+### Perception
 
-| ID | Benchmark summary | 🖥️ AMD Ryzen 5[^3]<sub><sup>CPU baseline</sub></sup> | 🤖[`ROBOTCORE`](https://accelerationrobotics.com/robotcore.php)[^4] | 🤖 `Kria KR260` | 🤖 `Jetson Nano` | 🤖 `Jetson AGX Orin` |
-|:---:|---|:---:|:---:|:---:|:---:|:---:|
+| ID | Benchmark summary | Metric | 🖥️ AMD Ryzen 5[^3]<sub><sup>CPU baseline</sub></sup> | 🤖[`ROBOTCORE`](https://accelerationrobotics.com/robotcore.php)[^4] | 🤖 `Kria KR260` | 🤖 `Jetson Nano` | 🤖 `Jetson AGX Orin` |
+|:---:|---|---|:---:|:---:|:---:|:---:|:---:|
 | [`a1`]() | TODO |  |  |  |  |
 
 
@@ -46,6 +48,12 @@ TODO
 TODO
 
 ## Contributing
+
+Start by reading the [benchmark specification](benchmarks/README.md). You can contribute to the project both as an individual or as a organization. 
+
+If you are an individual, feel free to contribute by running the benchmarks and/or by contributing with new benchmarks (see [spec](benchmarks/README.md)). Once ready, submit a [pull request](https://github.com/robotperf/benchmarks/pulls) and/or [raise issues](https://github.com/robotperf/benchmarks/issues) as appropriate. 
+
+If you are an organization willing to commit resources to the project and contribute to it, please [`contact here`](mailto:contact@accelerationrobotics.com).
 
 ## Contact and support
 
