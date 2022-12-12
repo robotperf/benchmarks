@@ -34,7 +34,7 @@ RobotPerf benchmarks aim to cover the **complete robotics pipeline** including p
 
 | ID | Benchmark summary | Metric | 🖥️ AMD Ryzen 5[^3] | 🤖[`ROBOTCORE`](https://accelerationrobotics.com/robotcore.php)[^4] | 🤖 `Kria KR260` | 🤖 `Jetson Nano` | 🤖 `Jetson AGX Xavier` |
 |:---:|---|---|:---:|:---:|:---:|:---:|:---:|
-| (*example, needs review*) [`a1`](benchmarks/perception/a1_perception_2nodes) | Perception computational graph composed by 2 dataflow-connected *Components*, `rectify` and `resize`. Package relies on [image_pipeline](https://github.com/ros-perception/image_pipeline) package. | latency |  | **66.82** ms <sub><sup>(Fri Oct 14 02:12:55 PM CET 2022)</sub></sup> |  66.82 ms (⚪`1.0`x)<sub><sup>(14-10-2022 02:12:55 PM CET)</sub></sup> |  238.13 ms (🔻`0.38`x)<sub><sup>(14-10-2022)</sub></sup> | 106.34 ms (🔻`0.86`x) |
+| (*example, needs review*) [`a1`](benchmarks/perception/a1_perception_2nodes) | Perception computational graph composed by 2 dataflow-connected *Components*, `rectify` and `resize`. Package relies on [image_pipeline](https://github.com/ros-perception/image_pipeline) package. | latency |  | **66.82** ms <sub><sup><i>(14-10-2022)</i></sub></sup> |  66.82 ms (⚪`1.0`x)<sub><sup><i>(14-10-2022)</i></sub></sup> |  238.13 ms (🔻`0.38`x)<sub><sup><i>(14-10-2022)</i></sub></sup> | 106.34 ms (🔻`0.86`x)<sub><sup><i>(14-10-2022)</i></sub></sup> |
 | ... | ... | ... | ... | ... | ... | ... | ... |
 
 
