@@ -32,9 +32,10 @@ RobotPerf benchmarks aim to cover the **complete robotics pipeline** including p
 
 ### Perception
 
-| ID | Benchmark summary | Metric | 🖥️ AMD Ryzen 5[^3]<sub><sup>CPU baseline</sub></sup> | 🤖[`ROBOTCORE`](https://accelerationrobotics.com/robotcore.php)[^4] | 🤖 `Kria KR260` | 🤖 `Jetson Nano` | 🤖 `Jetson AGX Orin` |
+| ID | Benchmark summary | Metric | 🖥️ AMD Ryzen 5[^3] | 🤖[`ROBOTCORE`](https://accelerationrobotics.com/robotcore.php)[^4] | 🤖 `Kria KR260` | 🤖 `Jetson Nano` | 🤖 `Jetson AGX Xavier` |
 |:---:|---|---|:---:|:---:|:---:|:---:|:---:|
-| [`a1`]() | TODO |  |  |  |  |
+| (*example, needs review*) [`a1`](benchmarks/perception/a1_perception_2nodes) | Simple perception computational graph composed by 2 dataflow-connected *Components*, `rectify` and `resize`. Package relies on [image_pipeline](https://github.com/ros-perception/image_pipeline) package. | latency |  | **66.82** ms |  66.82 ms (⚪`1.0`x) |  238.13 ms (🔻`0.38`x) | 106.34 ms (🔻`0.86`x) |
+| ... | ... | ... | ... | ... | ... | ... | ... |
 
 
 
@@ -49,11 +50,7 @@ TODO
 
 ## Contributing
 
-Start by reading the [benchmark specification](benchmarks/README.md). You can contribute to the project both as an individual or as a organization. 
-
-If you are an individual, feel free to contribute by running the benchmarks and/or by contributing with new benchmarks (see [spec](benchmarks/README.md)). Once ready, submit a [pull request](https://github.com/robotperf/benchmarks/pulls) and/or [raise issues](https://github.com/robotperf/benchmarks/issues) as appropriate. 
-
-If you are an organization willing to commit resources to the project and contribute to it, please [`contact here`](mailto:contact@accelerationrobotics.com).
+Start by reading the [benchmark specification](benchmarks/README.md). You can contribute to the project both as an individual or as a organization. If you are an individual, feel free to contribute by running the benchmarks and/or by contributing with new benchmarks (see [spec](benchmarks/README.md)). Once ready, submit a [pull request](https://github.com/robotperf/benchmarks/pulls) and/or [raise issues](https://github.com/robotperf/benchmarks/issues) as appropriate. If you are an organization willing to commit resources to the project and contribute to it, please [`contact here`](mailto:contact@accelerationrobotics.com).
 
 ## Contact and support
 
