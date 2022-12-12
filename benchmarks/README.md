@@ -29,7 +29,7 @@ RobotPerf benchmarks aligns to robotics standards so that you don’t spend time
 ## Nomenclature
 
 - Each computing target will be marked with a symbol denoting its group as in:
-  - edge/embedded -> 
-  - workstation ->
-  - data center ->
-  - cloud targets ->
+  - edge/embedded -> 🤖
+  - workstation -> 🖥️
+  - data center -> 🗄
+  - cloud targets -> ⛅

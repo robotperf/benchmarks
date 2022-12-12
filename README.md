@@ -1,6 +1,6 @@
 # RobotPerf Benchmarks
 
-[**Benchmarks** 🤖](#benchmarks) | [*Contributing* 🌍](#contributing) | [`Contact and support` 📨](#contact-and-support)
+[**Benchmark results** 🤖](#benchmarks) | [Create a benchmark]() | [*Contributing* 🌍](#contributing) | [`Contact and support` 📨](#contact-and-support)
 
 <a href="https://accelerationrobotics.com/robotperf.php"><img src="imgs/robotperf-temporary.png" align="left" hspace="8" vspace="2" width="200"></a>
 
@@ -14,9 +14,9 @@ The project's <ins>mission is to build open, fair and useful robotics benchmarks
 
  The myriad combinations of robot hardware and robotics software make assessing robotic-system performance challenging, specially in an architecture-neutral, representative, and reproducible manner. RobotPerf addresses this issue delivering **a reference performance benchmarking suite that is used to evaluate robotics computing performance across CPU, GPU, FPGA and other compute accelerators**.
 
-| Mission | Vission |
-|:---:|:---:|
-|  Represented by consortium of robotics leaders from industry, academia and research labs, RobotPerf is formated as an open project whose mission is to build open, fair and useful robotics benchmarks that are technology agnostic, vendor-neutral and provide unbiased evaluations of robotics computing performance for hardware, software, and services. |  Benchmarking helps assess performance. Performance information can help roboticists design more efficient robotic systems and select the right hardware for each robotic application. It can also help understand the trade-offs between different algorithms that implement the same capability. |
+| Mission | Vission | Standards |
+|---|---|----|
+|  Represented by consortium of robotics leaders from industry, academia and research labs, RobotPerf is formated as an open project whose mission is to build open, fair and useful robotics benchmarks that are technology agnostic, vendor-neutral and provide unbiased evaluations of robotics computing performance for hardware, software, and services. |  Benchmarking helps assess performance. Performance information can help roboticists design more efficient robotic systems and select the right hardware for each robotic application. It can also help understand the trade-offs between different algorithms that implement the same capability. | RobotPerf benchmarks aligns to robotics standards so that you <ins>don’t spend time reinventing the wheel and re-develop what already works</ins>. Benchmarks are conducted using [ROS 2](https://accelerationrobotics.com/ros.php) as its common baseline. RobotPerf also aligns to standardization initiatives within the ROS ecosystem related to computing performance and benchmarking such as [REP 2008](https://github.com/ros-infrastructure/rep/pull/324) (ROS 2 Hardware Acceleration Architecture and Conventions) and the [REP 2014](https://github.com/ros-infrastructure/rep/pull/364) (Benchmarking performance in ROS 2).|
 
 ## Benchmarks
 
@@ -30,8 +30,8 @@ RobotPerf benchmarks aim to cover the **complete robotics pipeline** including p
 
 ### `A` Perception
 
-| ID | Benchmark summary | `ROBOTCORE` | `Kria KR260` | `Jetson Nano` | `Jetson AGX Orin` |
-|:---:|---|:---:|:---:|:---:|:---:|
+| ID | Benchmark summary | 🖥️ AMD Ryzen 5[^3]<sub><sup>CPU baseline</sub></sup> | 🤖[`ROBOTCORE`](https://accelerationrobotics.com/robotcore.php)[^4] | 🤖 `Kria KR260` | 🤖 `Jetson Nano` | 🤖 `Jetson AGX Orin` |
+|:---:|---|:---:|:---:|:---:|:---:|:---:|
 | [`a1`]() | TODO |  |  |  |  |
 
 
@@ -54,3 +54,5 @@ For getting involved in the project and/or receiving support to run the RobotPer
 
 [^1]: Quigley, M., Conley, K., Gerkey, B., Faust, J., Foote, T., Leibs, J., ... & Ng, A. Y. (2009, May). ROS: an open-source Robot Operating System. In ICRA workshop on open source software (Vol. 3, No. 3.2, p. 5).
 [^2]: Macenski, S., Foote, T., Gerkey, B., Lalancette, C., & Woodall, W. (2022). Robot Operating System 2: Design, architecture, and uses in the wild. Science Robotics, 7(66), eabm6074.
+[^3]: AMD Ryzen 5 PRO 4650G, see https://www.amd.com/en/products/apu/amd-ryzen-5-pro-4650g
+[^4]: ROBOTCORE® is a robot-specific processing unit that helps map Robot Operating System (ROS) computational graphs to its CPUs, GPU and FPGA efficiently to obtain best performance. More at https://accelerationrobotics.com/robotcore.php
