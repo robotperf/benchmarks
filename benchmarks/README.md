@@ -78,7 +78,7 @@ Create a new benchmark by following these steps:
 1. Select the [category](#category) of the benchmark and its corresponding category identifier letter.
 2. Compose the benchmark [ID](#ids) by concatenating the category identifier letter with a number that is unique across all benchmarks of that category (generally, iterate to the next number available).
 3. Create the corresponding ROS 2 package with the name `<ID>_<benchmark_name>` (*e.g. `a1_perception_2node`*) in the right category folder (*e.g. `perception`*). The benchmark should follow [REP 2014](https://github.com/ros-infrastructure/rep/pull/364) guidelines.
-4. Create a `benchmark.yaml` file within the ROS 2 package that describes the benchmark. For a practical example, refer to the [TEMPLATE](./TEMPLATE.yaml). At least the following fields should be defined:
+4. Create a `benchmark.yaml` file within the ROS 2 package that describes the benchmark. At least the following fields should be defined:
    - `id`: id of the benchmark
    - `name`: name of the benchmark
    - `description`: short description of the benchmark
@@ -88,3 +88,5 @@ Create a new benchmark by following these steps:
      - `hardware`: name of the hardware used to run the benchmark
      - `timestampt`: timestamp of the result
      - `value`: value of the metric
+
+For a practical example, refer to the [TEMPLATE](./TEMPLATE.yaml). 
