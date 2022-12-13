@@ -1,0 +1,46 @@
+id: a1
+name: a1_perception_2nodes
+description: |
+  A simple perception computational graph composed by 2 Components, `rectify` and `resize` operations. Used to demonstrate a simple perception pipeline using the [image_pipeline](https://github.com/ros-perception/image_pipeline) package.
+metric:
+  metric: "latency"
+  unit: "ms"
+reproduction: |
+  # Install the image_pipeline package
+  apt-get install ros-humble-image-pipeline
+  
+  # Create a ROS 2 overlay workspace
+  mkdir -p ~/ros2_overlay_ws/src  
+  
+  # Clone the benchmark repository
+  cd ~/ros2_overlay_ws/src
+  git clone https://github.com/robotperf/benchmarks
+  
+  # Build the benchmark
+  cd ~/ros2_overlay_ws; colcon build --packages-select a1_perception_2nodes
+  
+  # Launch the benchmark
+  ros2 launch a1_perception_2nodes a1_perception_2nodes.launch.py
+
+  # Generate the report for the benchmark
+  ros2 launch a1_perception_2nodes a1_perception_2nodes.launch.py
+results:
+  - result:
+      hardware: ROBOTCORE
+      timestampt: 14-10-2022
+      value: 66.82
+  - result:
+      hardware: Kria KR260
+      timestampt: 14-10-2022
+      value: 66.82
+  - result:
+      hardware: Jetson Nano
+      timestampt: 14-10-2022
+      value: 238.13
+  - result:
+      hardware: Jetson AGX Xavier
+      timestampt: 14-10-2022
+      value: 106.34
+
+  
+  
