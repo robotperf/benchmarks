@@ -16,6 +16,8 @@
   - [Creating a new benchmark](#creating-a-new-benchmark)
 
 
+<a href="https://accelerationrobotics.com/robotperf.php"><img src="../imgs/ROBOTPerf.svg" align="left" hspace="8" vspace="2" width="200"></a>
+
 This document describes **how each RobotPerf benchmark should be designed and implemented**. The benchmarks are designed to be <ins>representative of the performance of a robotic system and should be easily reproducible</ins> across compute targets. The benchmarks are designed to be <ins>technology agnostic</ins> and <ins>vendor-neutral</ins> so that they can be used to evaluate robotics computing performance across compute substratrated including CPUs, GPUs, FPGAs and other compute accelerators. The benchmarks are designed to be <ins>open and fair</ins> so that robotic architects can make informed decisions about the hardware and software components of their robotic systems. For all these reasons, we build on top of ROS 2, the de facto standard for robot application development.
 
 *The current document is purposely written informal to allow rapid iterations and feedback. In time, the format of this document may change to a more formal specification*.

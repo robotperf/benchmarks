@@ -2,7 +2,7 @@
 
 [**Benchmark results** 🤖](#benchmarks) | [Benchmark spec 📖](benchmarks/README.md) | [*Contributing* 🌍](#contributing) | [`Contact and support` 📨](#contact-and-support)
 
-<a href="https://accelerationrobotics.com/robotperf.php"><img src="imgs/robotperf-temporary.png" align="left" hspace="8" vspace="2" width="200"></a>
+<a href="https://accelerationrobotics.com/robotperf.php"><img src="imgs/ROBOTPerf.svg" align="left" hspace="8" vspace="2" width="200"></a>
 
 RobotPerf is an **open reference benchmarking suite that is used to evaluate robotics computing performance** fairly with [ROS 2](https://accelerationrobotics.com/ros.php) as its common baseline, *so that robotic architects can make informed decisions about the hardware and software components of their robotic systems*. 
 
@@ -12,7 +12,7 @@ Refer to the [Benchmark Specification](benchmarks/README.md) for more details.
 
 ## Why RobotPerf?
 
-![RobotPerf arquitecture diagram](imgs/robotperf-diagram-ros2.svg)
+![RobotPerf arquitecture diagram](imgs/robotperf-diagram-ros2.png)
 
  The myriad combinations of robot hardware and robotics software make assessing robotic-system performance challenging, specially in an architecture-neutral, representative, and reproducible manner. RobotPerf addresses this issue delivering **a reference performance benchmarking suite that is used to evaluate robotics computing performance across CPU, GPU, FPGA and other compute accelerators**.
 
