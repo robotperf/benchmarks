@@ -90,5 +90,11 @@ Create a new benchmark by following these steps:
      - `hardware`: name of the hardware used to run the benchmark
      - `timestampt`: timestamp of the result
      - `value`: value of the metric
+     - `note`: a note or comment about the result
+     - `category`: category of the hardware used to run the benchmark, typically one of the following:
+       - `edge/embedded`
+       - `workstation`
+       - `data center`
+       - `cloud`
 
 For a practical example, refer to the [TEMPLATE](./TEMPLATE.yaml). 

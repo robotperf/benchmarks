@@ -30,20 +30,27 @@ reproduction: |
 results:
   - result:
       hardware: ROBOTCORE
+      category: edge
       timestampt: 14-10-2022
       value: 66.82
+      note: ""
   - result:
       hardware: Kria KR260
+      category: edge      
       timestampt: 14-10-2022
       value: 66.82
+      note: ""      
   - result:
       hardware: Jetson Nano
+      category: edge      
       timestampt: 14-10-2022
       value: 238.13
+      note: ""
   - result:
       hardware: Jetson AGX Xavier
+      category: edge      
       timestampt: 14-10-2022
       value: 106.34
-
+      note: ""
   
   
