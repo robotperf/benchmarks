@@ -4,7 +4,7 @@
    @@@@@ @@  @@    @@@@
    @@@@@ @@  @@    @@@@
    @@@@@ @@  @@    @@@@ Copyright (c) 2023, Acceleration Robotics®
-   @@@@@ @@  @@    @@@@ Author: Víctor Mayoral Vilches <victorma@xilinx.com>
+   @@@@@ @@  @@    @@@@ Author: Víctor Mayoral Vilches <victor@accelerationrobotics.com>
    @@@@@ @@  @@    @@@@
    @@@@@@@@@&@@@@@@@@@@
    @@@@@@@@@@@@@@@@@@@@
