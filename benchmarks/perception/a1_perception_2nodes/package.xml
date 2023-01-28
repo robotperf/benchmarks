@@ -17,9 +17,20 @@
   <buildtool_depend>ament_cuda</buildtool_depend>  
 
   <depend>rclcpp</depend>
-  <depend>tracetools_benchmark</depend>  
+  <depend>tracetools</depend>
+  <depend>tracetools_benchmark</depend>
+  <depend>tracetools_analysis</depend>
+  <depend>tracetools_launch</depend>
+  <depend>tracetools_trace</depend>
   <depend>rclcpp_components</depend>
   <depend>image_transport</depend>
+  <depend>image_pipeline</depend>
+  <depend>cyclonedds</depend>
+  <depend>rmw_cyclonedds_cpp</depend>
+  <depend>lttng_tools</depend>
+  <depend>liblttng_ust_dev</depend>
+  <depend>babeltrace</depend>
+  <depend>python3_bt2</depend>
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
