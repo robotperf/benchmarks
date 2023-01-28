@@ -14,7 +14,7 @@
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <buildtool_depend>ament_vitis</buildtool_depend>
-  <buildtool_depend>ament_cuda</buildtool_depend>  
+  <!-- <buildtool_depend>ament_cuda</buildtool_depend>   -->
 
   <depend>rclcpp</depend>
   <depend>tracetools</depend>
@@ -27,10 +27,10 @@
   <depend>image_pipeline</depend>
   <depend>cyclonedds</depend>
   <depend>rmw_cyclonedds_cpp</depend>
-  <depend>lttng_tools</depend>
-  <depend>liblttng_ust_dev</depend>
+  <depend>lttng-tools</depend>
+  <depend>liblttng-ust-dev</depend>
   <depend>babeltrace</depend>
-  <depend>python3_bt2</depend>
+  <!-- <depend>python3-bt2</depend> -->
 
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>

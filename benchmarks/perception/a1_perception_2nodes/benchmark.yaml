@@ -2,20 +2,21 @@ id: a1
 name: a1_perception_2nodes
 description: |
   A simple perception computational graph composed by 2 Components, `rectify` and `resize` operations. Used to demonstrate a simple perception pipeline using the [image_pipeline](https://github.com/ros-perception/image_pipeline) package.
+short: Perception computational graph composed by 2 dataflow-connected *Components*, `rectify` and `resize`.
 graph: ../../../imgs/a1_perception_2nodes.svg
 metric:
   metric: "latency"
   unit: "ms"
 reproduction: |
   # Create a ROS 2 overlay workspace
-  mkdir -p ~/benchmark_ws/src  
+  mkdir -p ~/benchmark_ws/src
   
   # Clone the benchmark repository
   cd ~/benchmark_ws/src && git clone https://github.com/robotperf/benchmarks
   
   # Build the benchmark
   source /opt/ros/humble/setup.bash
-  cd ~/benchmark_ws; colcon build --packages-select a1_perception_2nodes
+  cd ~/benchmark_ws; colcon build --merge-install
   
   # Source the workspace as an overlay, launch the benchmark
   source install/setup.bash

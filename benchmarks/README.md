@@ -84,6 +84,8 @@ Create a new benchmark by following these steps:
    - `id`: id of the benchmark
    - `name`: name of the benchmark
    - `description`: short description of the benchmark
+   - `short`: short description of the benchmark
+   - `graph`: depiction of the computational graph of the benchmark
    - `metric`, including subfields `metric` and `unit`
    - `reproduction`: instructions on how to reproduce the benchmark. Additional reproduction fields can be added as needed (e.g. `reproduction-robotcore` if special instructions are needed to reproduce the benchmark on [ROBOTCORE](https://accelerationrobotics.com/robotcore.php) hardware)
    - `results`: a list of results (`result`), each containing:
