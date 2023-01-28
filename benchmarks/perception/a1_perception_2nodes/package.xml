@@ -13,7 +13,7 @@
   <author email="victor@accelerationrobotics.com">Víctor Mayoral Vilches</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
-  <buildtool_depend>ament_vitis</buildtool_depend>
+  <!-- <buildtool_depend>ament_vitis</buildtool_depend> -->
   <!-- <buildtool_depend>ament_cuda</buildtool_depend>   -->
 
   <depend>rclcpp</depend>

@@ -9,21 +9,23 @@ metric:
   unit: "ms"
 reproduction: |
   # Create a ROS 2 overlay workspace
-  mkdir -p ~/benchmark_ws/src
+  mkdir -p /tmp/benchmark_ws/src
   
   # Clone the benchmark repository
-  cd ~/benchmark_ws/src && git clone https://github.com/robotperf/benchmarks
+  cd /tmp/benchmark_ws/src && git clone https://github.com/robotperf/benchmarks
+  
+  # Fetch dependencies
+  source /opt/ros/humble/setup.bash
+  cd /tmp/benchmark_ws && sudo rosdep update && sudo apt-get update &&
+    sudo rosdep install --from-paths src --ignore-src --rosdistro humble -y
   
   # Build the benchmark
-  source /opt/ros/humble/setup.bash
-  cd ~/benchmark_ws; colcon build --merge-install
+  colcon build --merge-install
   
   # Source the workspace as an overlay, launch the benchmark
   source install/setup.bash
-  ros2 launch a1_perception_nodes trace_a1_perception_2nodes.launch.py
+  RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch a1_perception_2nodes trace_a1_perception_2nodes.launch.py
 
-  # Generate the report for the benchmark
-  ros2 launch a1_perception_nodes analyze_a1_perception_2nodes.launch.py
 results:
   - result:
       hardware: ROBOTCORE
