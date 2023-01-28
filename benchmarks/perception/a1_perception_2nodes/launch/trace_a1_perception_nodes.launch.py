@@ -66,8 +66,9 @@ def generate_launch_description():
                     ("camera_info", "/camera/camera_info"),
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],
-            ),            
+            ),
             ComposableNode(
+                namespace="benchmark",
                 package="image_proc",
                 plugin="image_proc::RectifyNode",
                 name="rectify_node",
@@ -79,13 +80,13 @@ def generate_launch_description():
             ),
 
             ComposableNode(
-                namespace="resize",
+                namespace="benchmark",
                 package="image_proc",
                 plugin="image_proc::ResizeNode",
                 name="resize_node",
                 remappings=[
                     ("camera_info", "/camera/camera_info"),
-                    ("image", "/image_rect"),
+                    ("image", "/benchmark/image_rect"),
                     ("resize", "resize"),
                 ],
                 parameters=[
@@ -101,11 +102,11 @@ def generate_launch_description():
                 plugin="robotperf::perception::ImageOutputComponent",
                 name="image_output_component",
                 remappings=[
-                    ("image", "/resize"),
+                    ("image", "/benchmark/resize"),
                     ("camera_info", "/camera/camera_info"),
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],
-            ),                        
+            ),
         ],
         output="screen",
     )

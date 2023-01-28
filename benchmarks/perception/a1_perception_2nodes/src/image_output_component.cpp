@@ -41,7 +41,7 @@ ImageOutputComponent::ImageOutputComponent(const rclcpp::NodeOptions & options)
 {
   // Create image sub
   sub_image_ = image_transport::create_camera_subscription(
-    this, "image_out",
+    this, "image",
     std::bind(
       &ImageOutputComponent::imageCb, this,
       std::placeholders::_1,
