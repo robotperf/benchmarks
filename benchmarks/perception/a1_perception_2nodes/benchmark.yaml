@@ -2,6 +2,7 @@ id: a1
 name: a1_perception_2nodes
 description: |
   A simple perception computational graph composed by 2 Components, `rectify` and `resize` operations. Used to demonstrate a simple perception pipeline using the [image_pipeline](https://github.com/ros-perception/image_pipeline) package.
+graph: ../../../imgs/a1_perception_2nodes.svg
 metric:
   metric: "latency"
   unit: "ms"

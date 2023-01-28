@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(a1_perception_nodes)
+project(a1_perception_2nodes)
 
 # Default to C++14
 if(NOT CMAKE_CXX_STANDARD)

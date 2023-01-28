@@ -5,6 +5,7 @@
 ### Description
 A simple perception computational graph composed by 2 Components, `rectify` and `resize` operations. Used to demonstrate a simple perception pipeline using the [image_pipeline](https://github.com/ros-perception/image_pipeline) package.
 
+![](../../../imgs/a1_perception_2nodes.svg)
 
 ### Metric
 `latency`, ms
