@@ -19,10 +19,10 @@ reproduction: |
   
   # Source the workspace as an overlay, launch the benchmark
   source install/setup.bash
-  ros2 launch a1_perception_nodes trace_a1_perception_nodes.launch.py
+  ros2 launch a1_perception_nodes trace_a1_perception_2nodes.launch.py
 
   # Generate the report for the benchmark
-  ros2 launch a1_perception_nodes analyze_a1_perception_nodes.launch.py
+  ros2 launch a1_perception_nodes analyze_a1_perception_2nodes.launch.py
 results:
   - result:
       hardware: ROBOTCORE
