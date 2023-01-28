@@ -28,7 +28,7 @@ limitations under the License.
 #define TRACETOOLS_BENCHMARK__TP_CALL_H_
 
 #undef TRACEPOINT_PROVIDER
-#define TRACEPOINT_PROVIDER ros2_acceleration
+#define TRACEPOINT_PROVIDER robotperf_benchmarks
 
 #undef TRACEPOINT_INCLUDE
 #define TRACEPOINT_INCLUDE "tracetools_benchmark/tp_call.h"

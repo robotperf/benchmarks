@@ -36,9 +36,9 @@ from tracetools_trace.tools.names import DEFAULT_CONTEXT
 def generate_launch_description():
      # Trace
     trace = Trace(
-        session_name="trace_rectify_resize_fpga",
+        session_name="a1_perception_nodes_fpga",
         events_ust=[
-            "ros2_image_pipeline:*",
+            "robotperf_benchmarks:*",
         ]
         + DEFAULT_EVENTS_ROS,
         context_fields={
@@ -55,14 +55,33 @@ def generate_launch_description():
         executable="component_container",
         composable_node_descriptions=[    
             ComposableNode(
-                namespace="acceleration/resize",
+                package="a1_perception_nodes",
+                plugin="robotperf::perception::ImageInputComponent",
+                name="image_input_component",
+                remappings=[
+                    ("image", "/camera/image_raw"),
+                    ("camera_info", "/camera/camera_info"),
+                ],
+                extra_arguments=[{'use_intra_process_comms': True}],
+            ),
+            ComposableNode(
+                namespace="acceleration/rectify",
+                package="image_proc",
+                plugin="image_proc::RectifyNodeFPGA",
+                name="rectify_node_fpga",
+                remappings=[
+                    ("image", "/input"),
+                    ("camera_info", "/camera/camera_info"),
+                    ("image_rect", "image_rect"),
+                ],
+            ),            
+            ComposableNode(
                 package="image_proc",
                 plugin="image_proc::ResizeNodeFPGA",
                 name="resize_node_fpga",
                 remappings=[
                     ("camera_info", "/camera/camera_info"),
-                    ("image", "/acceleration/rectify/image_rect"),
-                    # ("image", "/camera/image_raw"),
+                    ("image", "/image_rect"),
                     ("resize", "/resize"),
                 ],
                 parameters=[
@@ -73,16 +92,15 @@ def generate_launch_description():
                 ],
             ),
             ComposableNode(
-                namespace="acceleration/rectify",
-                package="image_proc",
-                plugin="image_proc::RectifyNodeFPGA",
-                name="rectify_node_fpga",
+                package="a1_perception_nodes",
+                plugin="robotperf::perception::ImageOutputComponent",
+                name="image_output_component",
                 remappings=[
-                    ("image", "/camera/image_raw"),
+                    ("image", "/resize"),
                     ("camera_info", "/camera/camera_info"),
-                    ("image_rect", "image_rect"),
                 ],
-            ),            
+                extra_arguments=[{'use_intra_process_comms': True}],
+            ),
         ],
         output="screen",
     )

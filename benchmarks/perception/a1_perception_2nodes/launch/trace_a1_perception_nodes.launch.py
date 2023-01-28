@@ -35,9 +35,9 @@ from tracetools_trace.tools.names import DEFAULT_CONTEXT
 def generate_launch_description():
      # Trace
     trace = Trace(
-        session_name="trace_rectify_resize",
+        session_name="a1_perception_nodes",
         events_ust=[
-            "ros2_image_pipeline:*",
+            "robotperf_benchmarks:*",
             # "lttng_ust_cyg_profile*",
             # "lttng_ust_statedump*",
             # "liblttng-ust-libc-wrapper",
@@ -72,7 +72,7 @@ def generate_launch_description():
                 plugin="image_proc::RectifyNode",
                 name="rectify_node",
                 remappings=[
-                    ("image", "/camera/image_raw"),
+                    ("image", "/input"),
                     ("camera_info", "/camera/camera_info"),
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],
