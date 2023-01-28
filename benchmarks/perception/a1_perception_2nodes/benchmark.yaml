@@ -6,24 +6,22 @@ metric:
   metric: "latency"
   unit: "ms"
 reproduction: |
-  # Install the image_pipeline package
-  apt-get install ros-humble-image-pipeline
-  
   # Create a ROS 2 overlay workspace
-  mkdir -p ~/ros2_overlay_ws/src  
+  mkdir -p ~/benchmark_ws/src  
   
   # Clone the benchmark repository
-  cd ~/ros2_overlay_ws/src
-  git clone https://github.com/robotperf/benchmarks
+  cd ~/benchmark_ws/src && git clone https://github.com/robotperf/benchmarks
   
   # Build the benchmark
-  cd ~/ros2_overlay_ws; colcon build --packages-select a1_perception_2nodes
+  source /opt/ros/humble/setup.bash
+  cd ~/benchmark_ws; colcon build --packages-select a1_perception_2nodes
   
-  # Launch the benchmark
-  ros2 launch a1_perception_2nodes a1_perception_2nodes.launch.py
+  # Source the workspace as an overlay, launch the benchmark
+  source install/setup.bash
+  ros2 launch a1_perception_nodes trace_a1_perception_nodes.launch.py
 
   # Generate the report for the benchmark
-  ros2 launch a1_perception_2nodes a1_perception_2nodes.launch.py
+  ros2 launch a1_perception_nodes analyze_a1_perception_nodes.launch.py
 results:
   - result:
       hardware: ROBOTCORE
