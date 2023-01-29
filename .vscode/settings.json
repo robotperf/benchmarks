@@ -1,0 +1,3 @@
+{
+    "cmake.sourceDirectory": "${workspaceFolder}/benchmarks/other/tracetools_benchmark"
+}
