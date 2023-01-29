@@ -38,6 +38,8 @@ def generate_launch_description():
         session_name="a1_perception_2nodes",
         events_ust=[
             "robotperf_benchmarks:*",
+            "ros2_image_pipeline:*",
+            "ros2:*"
             # "lttng_ust_cyg_profile*",
             # "lttng_ust_statedump*",
             # "liblttng-ust-libc-wrapper",

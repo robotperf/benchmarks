@@ -5,4 +5,4 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         ros-humble-image-pipeline ros-humble-tracetools-* \
         ros-humble-image-common lttng-tools liblttng-ust-dev \
         babeltrace python3-bt2 ros-humble-rmw-cyclonedds-cpp \
-        ros-humble-cyclonedds* net-tools
+        ros-humble-cyclonedds* net-tools less
