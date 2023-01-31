@@ -39,6 +39,8 @@ def generate_launch_description():
         session_name="a1_perception_nodes_fpga",
         events_ust=[
             "robotperf_benchmarks:*",
+            "ros2_image_pipeline:*",
+            "ros2:*"
         ]
         + DEFAULT_EVENTS_ROS,
         context_fields={
@@ -55,7 +57,7 @@ def generate_launch_description():
         executable="component_container",
         composable_node_descriptions=[
             ComposableNode(
-                package="a1_perception_nodes",
+                package="a1_perception_2nodes",
                 plugin="robotperf::perception::ImageInputComponent",
                 name="image_input_component",
                 remappings=[
@@ -74,6 +76,7 @@ def generate_launch_description():
                     ("camera_info", "/camera/camera_info"),
                     ("image_rect", "image_rect"),
                 ],
+                extra_arguments=[{'use_intra_process_comms': True}],
             ),
             ComposableNode(
                 namespace="benchmark",
@@ -91,9 +94,10 @@ def generate_launch_description():
                         "scale_width": 2.0,
                     }
                 ],
+                extra_arguments=[{'use_intra_process_comms': True}],
             ),
             ComposableNode(
-                package="a1_perception_nodes",
+                package="a1_perception_2nodes",
                 plugin="robotperf::perception::ImageOutputComponent",
                 name="image_output_component",
                 remappings=[

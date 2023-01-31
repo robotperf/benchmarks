@@ -98,5 +98,6 @@ Create a new benchmark by following these steps:
        - `workstation`
        - `data center`
        - `cloud`
+     - datasource: path of the datasource to obtain the result (relative to [rosbags](https://github.com/robotperf/rosbags) repository of RobotPerf)
 
 For a practical example, refer to the [TEMPLATE](./TEMPLATE.yaml). 
