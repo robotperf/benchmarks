@@ -16,11 +16,11 @@ reproduction: |
   
   # Fetch dependencies
   source /opt/ros/humble/setup.bash
-  cd /tmp/benchmark_ws && sudo rosdep update && sudo apt-get update &&
+  cd /tmp/benchmark_ws && sudo rosdep update || true && sudo apt-get update &&
     sudo rosdep install --from-paths src --ignore-src --rosdistro humble -y
   
   # Build the benchmark
-  colcon build --merge-install
+  colcon build --merge-install --packages-up-to a1_perception_2nodes
   
   # Source the workspace as an overlay, launch the benchmark
   source install/setup.bash
