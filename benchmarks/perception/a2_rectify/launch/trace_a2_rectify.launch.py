@@ -35,7 +35,7 @@ from tracetools_trace.tools.names import DEFAULT_CONTEXT
 def generate_launch_description():
      # Trace
     trace = Trace(
-        session_name="a1_perception_2nodes",
+        session_name="a2_rectify",
         events_ust=[
             "robotperf_benchmarks:*",
             "ros2_image_pipeline:*",

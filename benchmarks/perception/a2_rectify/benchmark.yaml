@@ -26,32 +26,12 @@ reproduction: |
   source install/setup.bash
   RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch a2_rectify trace_a2_rectify.launch.py
 
+# Data not valid at the moment, just a placeholder for now
 results:
   - result:
       hardware: ROBOTCORE
       category: edge
       timestampt: 14-10-2022
       value: 66.82
-      note: ""
-      datasource: "perception/image"
-  - result:
-      hardware: Kria KR260
-      category: edge      
-      timestampt: 14-10-2022
-      value: 66.82
-      note: ""
-      datasource: "perception/image"
-  - result:
-      hardware: Jetson Nano
-      category: edge      
-      timestampt: 14-10-2022
-      value: 238.13
-      note: ""
-      datasource: "perception/image"
-  - result:
-      hardware: Jetson AGX Xavier
-      category: edge      
-      timestampt: 14-10-2022
-      value: 106.34
       note: ""
       datasource: "perception/image"
