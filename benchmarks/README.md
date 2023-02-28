@@ -37,7 +37,20 @@ RobotPerf benchmarks aligns (*and will contribute*) to robotics standards so tha
 ## General concepts
 
 ### Nomenclature
-This specification follows [REP 2014](https://github.com/ros-infrastructure/rep/pull/364) nomenclature. Refer to this document for more information.
+This specification follows [REP 2014](https://github.com/ros-infrastructure/rep/pull/364) nomenclature. Refer to this document for more information. Below is the current list of all the terminology deemed important to distinguish. Recommendations for additional terminology are welcomed and can be done through pull requests or discussion during working group meetings.
+
+- **Application.** An application refers to a particular use case that aims to achieve a specific objective in the real world. Each application will vary and may span one or more tasks or sub-tasks. An example of an application would be an autonomous vehicle, which would be associated with a specific set of tasks, sub-tasks, and workloads.
+- **Benchmark.** A benchmark is a standardized test or set of tests used to evaluate the performance of computer hardware, software, or systems. A benchmark typically consists of a workload designed to simulate real-world tasks and measure the time it takes to complete them.
+- **Benchmarking Suite.** A benchmarking suite refers to a collection of benchmarks typically covering one component of the robotics pipeline.
+- **Dataset.** Used synonymously with rosbags, a dataset is a tool for recording and playing back ROS message data. It is a file containing a recorded stream of ROS messages in a serialized format, along with the metadata necessary to reproduce the original message stream. The rosbag can be replayed later to simulate a specific scenario or to analyze data.
+- **Meta-package.** A meta-package is a type of package that groups together multiple related packages, providing a convenient way to manage and distribute them as a single unit.
+- **Package.** In the context of ROS2, a package is a basic unit of code organization that contains related ROS nodes, libraries, launch files, configuration files, and other resources necessary to implement a particular functionality or behavior.
+- **Reference Implementation.** A reference implementation is a standardized implementation of a benchmark that is used as a baseline for comparison with other implementations. The reference implementation serves as a common point of reference for evaluating the performance of different hardware or software configurations.
+- **Robotics Pipeline.** The robotics pipeline is a series of steps or stages that robotic systems typically go through in order to perform a specific objective. The robotics pipeline is currently comprised of five tasks: perception, localization, control, navigation, and manipulation.
+- **Task.** A task refers to a specific problem or objective a system is designed to solve or accomplish. These objectives are generally broad, such as perception or control.
+- **Task Hierarchy.** The overall hierarchical structure of RobotPerf benchmarking. RobotPerf is currently split into five tasks: perception, localization, control, navigation, and manipulation. These tasks are split into sub-tasks, which are then associated with a set of workloads that define individual benchmarks within ROS2.
+- **Sub-Task.** Sub-tasks are subsets of the task space that represent more fine-grained tasks within the same domain. For example, some sub-tasks of perception might be object recognition, object tracking, and scene reconstruction.
+- **Workload.** A workload is the most granular item in the task hierarchy and refers to an individual benchmark within a task or sub-task specifically designed to test the performance of a system. An individual sub-task, such as object detection, may have multiple workloads that focus on environments for different types of robots, such as autonomous vehicles, drones, or industrial robots.
 
 ### Category
 Each benchmark should be categorized as one of the following:
