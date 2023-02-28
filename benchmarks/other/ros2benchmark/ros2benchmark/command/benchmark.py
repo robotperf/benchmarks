@@ -8,7 +8,7 @@ from ros2cli.command import CommandExtension
 
 
 class BenchmarkCommand(CommandExtension):
-    """Various hardware benchmark related sub-commands."""
+    """Various performance benchmarking related sub-commands."""
 
     def add_arguments(self, parser, cli_name):
         self._subparser = parser

@@ -5,21 +5,9 @@
 
 from ros2cli.node.strategy import add_arguments as add_strategy_node_arguments
 from ros2cli.node.strategy import NodeStrategy
-from ros2benchmark.verb import VerbExtension, Benchmark, run
+from ros2benchmark.verb import VerbExtension, Benchmark, run, search_benchmarks
 import os
 import yaml
-
-
-def search_benchmarks(filename="benchmark.yaml", searchpath="src"):
-    """
-    Returns a list with the paths of each benchmarks' benchmark.yaml
-    """
-    benchmark_paths = []
-    for root, dirs, files in os.walk("./" + searchpath):
-        for file in files:
-            if file == filename:
-                benchmark_paths.append(os.path.join(root, file))    
-    return benchmark_paths
 
 
 class ListVerb(VerbExtension):
