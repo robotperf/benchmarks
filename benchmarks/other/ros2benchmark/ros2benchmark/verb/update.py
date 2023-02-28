@@ -14,11 +14,11 @@ import yaml
 import sys
 
 class UpdateVerb(VerbExtension):
-    def update_general_readme_benchmarks(self, 
-                                         general_readme_path, 
-                                         new_content="This is the new content."):
-        """
-        Update benchmarks' general README.md file benchmarks
+    """
+    Update README.md files, first from benchmarks, then general
+    """
+    def update_general_readme_benchmarks(self, general_readme_path, new_content="This is the new content."):
+        """Update benchmarks' general README.md file benchmarks
         """
 
         # Open the README.md file for reading and writing
@@ -44,6 +44,7 @@ class UpdateVerb(VerbExtension):
 
     def main(self, *, args):
         """
+        
         For each benchmarks in the workspace, update README.md file. Then, 
         update general README.md file.
 
