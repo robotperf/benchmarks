@@ -37,7 +37,15 @@ RobotPerf benchmarks aligns (*and will contribute*) to robotics standards so tha
 ## General concepts
 
 ### Nomenclature
-This specification follows [REP 2014](https://github.com/ros-infrastructure/rep/pull/364) nomenclature. Refer to this document for more information.
+This specification follows [REP 2014](https://github.com/ros-infrastructure/rep/pull/364) nomenclature. Refer to this document for more information. Below is the current list of all the terminology deemed important to distinguish. Recommendations for additional terminology are welcomed and can be done through pull requests or discussion during [working group meetings](https://github.com/ros-acceleration/community#meetings).
+
+- **Application.** An application refers to a particular use case that aims to achieve a specific objective in the real world. Each application will vary and may span one or more tasks or sub-tasks. An example of an application would be an autonomous vehicle, which would be associated with a specific set of tasks, sub-tasks, and workloads.
+- **Benchmark.** A benchmark is a standardized test or set of tests used to evaluate the performance of computer hardware, software, or systems. A benchmark typically consists of a workload designed to simulate real-world tasks and measure the time it takes to complete them.
+- **Benchmarking Suite.** A benchmarking suite refers to a collection of benchmarks, each typically covering one or multiple components of the robotics pipeline.
+- **Dataset.** A dataset is a tool that enables standardization of the information used for evaluating benchmarks. A rosbag is one type of dataset that is used for recording and playing back ROS message data. It is a file containing a recorded stream of ROS messages in a serialized format, along with the metadata necessary to reproduce the original message stream. The rosbag can be replayed later to simulate a specific scenario or to analyze data.
+- **Meta-package.** A meta-package is a type of package that groups together multiple related packages, providing a convenient way to manage and distribute them as a single unit.
+- **Package.** In the context of ROS2, a package is a basic unit of code organization that contains related ROS nodes, libraries, launch files, configuration files, and other resources necessary to implement a particular functionality or behavior.
+- **Reference Implementation.** A reference implementation is a standardized implementation of a benchmark that is used as a baseline for comparison with other implementations. The reference implementation serves as a common point of reference for evaluating the performance of different hardware or software configurations.
 
 ### Category
 Each benchmark should be categorized as one of the following:
