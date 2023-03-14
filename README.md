@@ -30,23 +30,20 @@ RobotPerf benchmarks aim to cover the **complete robotics pipeline** including p
 | [![perception benchmarks](imgs/icon-perception.png)](#perception) | [![localization benchmarks](imgs/icon-localization.png)](#localization) | [![control benchmarks](imgs/icon-control.png)](#control) | [![navigation benchmarks](imgs/icon-navigation.png)](#navigation) | [![manipulation benchmarks](imgs/icon-manipulation.png)](#manipulation) | 
 
 
+<!-- perception-benchmarks-init -->
+
 ### Perception
 
-| ID | Graph | Benchmark summary | Metric | 🖥️ AMD Ryzen 5[^3] | 🤖[`ROBOTCORE`](https://accelerationrobotics.com/robotcore.php)[^4] | 🤖 `Kria KR260` | 🤖 `Jetson Nano` | 🤖 `Jetson AGX Xavier` |
-|:---:|---|---|---|:---:|:---:|:---:|:---:|:---:|
-| [`a1`](benchmarks/perception/a1_perception_2nodes) | [![](imgs/a1_perception_2nodes.svg)](imgs/a1_perception_2nodes.svg) | Perception computational graph composed by 2 dataflow-connected *Components*, `rectify` and `resize`. | latency (ms) |  | **66.82** ms <sub><sup><i>(14-10-2022)</i></sub></sup> |  66.82 ms (⚪`1.0`x)<sub><sup><i>(14-10-2022)</i></sub></sup> |  238.13 ms (🔻`0.38`x)<sub><sup><i>(14-10-2022)</i></sub></sup> | 106.34 ms (🔻`0.86`x)<sub><sup><i>(14-10-2022)</i></sub></sup> |
-| ... | ... | ... | ... | ... | ... | ... | ... | ... |
+| ID | Graph | Summary | Metric | Hardware | Value | Category | Timestamp | Note | Data Source |
+| --- | --- | -------- | --- | ----------- | --- | --- | --- | --- | --- |
+| [a1](https://github.com/robotperf/benchmarks/tree/main//benchmarks/perception/a1_perception_2nodes) | ![](imgs/a1_perception_2nodes.svg) | Perception computational graph composed by 2 dataflow-connected *Components*, `rectify` and `resize`. | latency (ms) | ROBOTCORE | 66.82 | edge | 14-10-2022 |  | perception/image |
+| [a1](https://github.com/robotperf/benchmarks/tree/main//benchmarks/perception/a1_perception_2nodes) | ![](imgs/a1_perception_2nodes.svg) | Perception computational graph composed by 2 dataflow-connected *Components*, `rectify` and `resize`. | latency (ms) | Kria KR260 | 66.82 | edge | 14-10-2022 |  | perception/image |
+| [a1](https://github.com/robotperf/benchmarks/tree/main//benchmarks/perception/a1_perception_2nodes) | ![](imgs/a1_perception_2nodes.svg) | Perception computational graph composed by 2 dataflow-connected *Components*, `rectify` and `resize`. | latency (ms) | Jetson Nano | 238.13 | edge | 14-10-2022 |  | perception/image |
+| [a1](https://github.com/robotperf/benchmarks/tree/main//benchmarks/perception/a1_perception_2nodes) | ![](imgs/a1_perception_2nodes.svg) | Perception computational graph composed by 2 dataflow-connected *Components*, `rectify` and `resize`. | latency (ms) | Jetson AGX Xavier | 106.34 | edge | 14-10-2022 |  | perception/image |
+| [a2](https://github.com/robotperf/benchmarks/tree/main//benchmarks/perception/a2_rectify) | ![](imgs/a2_rectify.svg) | Perception rectify ROS Component. | latency (ms) | ROBOTCORE | 66.82 | edge | 14-10-2022 |  | perception/image |
 
 
-
-### Localization
-TODO
-### Control
-TODO
-### Navigation
-TODO
-### Manipulation
-TODO
+<!-- perception-benchmarks-fini -->
 
 ## Contributing
 
