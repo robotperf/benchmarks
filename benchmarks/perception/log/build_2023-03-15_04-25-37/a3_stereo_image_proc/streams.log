@@ -1,0 +1,44 @@
+[0.010s] Invoking command in '/home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/build/a3_stereo_image_proc': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/build/a3_stereo_image_proc -- -j24 -l24
+[0.027s] Invoked command in '/home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/build/a3_stereo_image_proc' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/build/a3_stereo_image_proc -- -j24 -l24
+[0.039s] Invoking command in '/home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/build/a3_stereo_image_proc': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/build/a3_stereo_image_proc
+[0.042s] -- Install configuration: ""
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/config
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/config/drive_bot.rviz
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/config/view_bot.rviz
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/config/empty.yaml
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/description
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/description/gazebo_control.xacro
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/description/robot_core.xacro
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/description/left_camera.xacro
+[0.042s] -- Installing: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/description/robot.urdf.xacro
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/description/inertial_macros.xacro
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/description/stereo_camera.xacro
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/description/camera.xacro
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/description/lidar.xacro
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/description/right_camera.xacro
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/launch
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/launch/rplidar.launch.py
+[0.042s] -- Installing: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/launch/camera.launch.py
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/launch/launch_sim.launch.py
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/launch/rsp.launch.py
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/worlds
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/worlds/homes2.world
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/worlds/empty.world
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/worlds/homes.world
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/worlds/obstacles.world
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/ament_index/resource_index/package_run_dependencies/a3_stereo_image_proc
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/ament_index/resource_index/parent_prefix_path/a3_stereo_image_proc
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/environment/ament_prefix_path.sh
+[0.042s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/environment/ament_prefix_path.dsv
+[0.043s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/environment/path.sh
+[0.043s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/environment/path.dsv
+[0.043s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/local_setup.bash
+[0.043s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/local_setup.sh
+[0.043s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/local_setup.zsh
+[0.043s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/local_setup.dsv
+[0.043s] -- Installing: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/package.dsv
+[0.043s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/ament_index/resource_index/packages/a3_stereo_image_proc
+[0.043s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/cmake/a3_stereo_image_procConfig.cmake
+[0.043s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/cmake/a3_stereo_image_procConfig-version.cmake
+[0.043s] -- Up-to-date: /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/install/share/a3_stereo_image_proc/package.xml
+[0.044s] Invoked command in '/home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/build/a3_stereo_image_proc' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/jason/Desktop/Jason/RobotPerf/benchmarks/benchmarks/perception/build/a3_stereo_image_proc
