@@ -1,8 +1,0 @@
-source;share/a3_stereo_image_proc/hook/cmake_prefix_path.ps1
-source;share/a3_stereo_image_proc/hook/cmake_prefix_path.dsv
-source;share/a3_stereo_image_proc/hook/cmake_prefix_path.sh
-source;share/a3_stereo_image_proc/local_setup.bash
-source;share/a3_stereo_image_proc/local_setup.dsv
-source;share/a3_stereo_image_proc/local_setup.ps1
-source;share/a3_stereo_image_proc/local_setup.sh
-source;share/a3_stereo_image_proc/local_setup.zsh
