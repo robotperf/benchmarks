@@ -47,17 +47,17 @@ cd /tmp/benchmark_ws
 # Source the workspace as an overlay
 source install/setup.bash
 
-# Terminal 2: Test Stereo Image
-ros2 launch a3_stereo_image_proc trace_a3_stereo_image_proc.launch.py
+# Terminal 2: View Graph
+rqt_graph
 
 # Terminal 3: Visualize Image Feed
-rviz2 -d benchmarks/perception/a3_stereo_image_proc/config/camera_bot.rviz
+rviz2 -d src/benchmarks/benchmarks/perception/a3_stereo_image_proc/config/camera_bot.rviz
 
-# Terminal 4: View Stereo Image Disparty Map
+# Terminal 4: Test Stereo Image
+ros2 launch a3_stereo_image_proc trace_a3_stereo_image_proc.launch.py
+
+# Terminal 5: View Stereo Image Disparty Map
 ros2 run image_view disparity_view image:=/benchmark/disparity
-
-# Terminal 5: View Graph
-rqt_graph
 
 # Verify data was collected
 cd ~/.ros/tracing
