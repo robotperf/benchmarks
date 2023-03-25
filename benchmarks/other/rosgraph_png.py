@@ -21,7 +21,7 @@ def main():
         print('Usage: {} <output_png>, defaulting to /tmp/analysis/graph.png'.format(sys.argv[0]))  # e.g. rosgraph_png.py /tmp/benchmark_ws/src/benchmarks/graph.png
         output_png = "/tmp/analysis/graph"
     else:
-        output_png = sys.argv[1].split('.png')[0]        
+        output_png = sys.argv[1].split('.png')[0]
 
     rclpy.init()
     node = rclpy.create_node('_my_node')
