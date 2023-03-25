@@ -120,7 +120,7 @@ def add_markers_to_figure(
             assert False, "invalid marker_type value"
 
 
-def msgsets_from_trace(tracename):
+def msgsets_from_trace(tracename, debug=False):
     """
     Returns a list of message sets ready to be used
     for plotting them in various forms.
@@ -158,10 +158,11 @@ def msgsets_from_trace(tracename):
     for index in range(len(image_pipeline_msgs)):
         if image_pipeline_msgs[index].event.name in target_chain:  # optimization
 
-            # print("new: " + image_pipeline_msgs[index].event.name)
-            # print("expected: " + str(target_chain[chain_index]))
-            # print("chain_index: " + str(chain_index))
-            # print("---")
+            if debug:
+                print("---")
+                print("new: " + image_pipeline_msgs[index].event.name)
+                print("expected: " + str(target_chain[chain_index]))
+                print("chain_index: " + str(chain_index))
 
             # first one            
             if (
@@ -173,7 +174,8 @@ def msgsets_from_trace(tracename):
                     "vpid"
                 )
                 chain_index += 1
-                # print(color("Found: " + str(image_pipeline_msgs[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
+                if debug:
+                    print(color("Found: " + str(image_pipeline_msgs[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
             # last one
             elif (
                 image_pipeline_msgs[index].event.name == target_chain[chain_index]
@@ -184,7 +186,8 @@ def msgsets_from_trace(tracename):
             ):
                 new_set.append(image_pipeline_msgs[index])
                 image_pipeline_msg_sets.append(new_set)
-                # print(color("Found: " + str(image_pipeline_msgs[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
+                if debug:
+                    print(color("Found: " + str(image_pipeline_msgs[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
                 chain_index = 0  # restart
                 new_set = []  # restart
             # match
@@ -195,7 +198,8 @@ def msgsets_from_trace(tracename):
             ):
                 new_set.append(image_pipeline_msgs[index])
                 chain_index += 1
-                # print(color("Found: " + str(image_pipeline_msgs[index].event.name), fg="green"))
+                if debug:
+                    print(color("Found: " + str(image_pipeline_msgs[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="green"))
             # altered order
             elif (
                 image_pipeline_msgs[index].event.name in target_chain
@@ -210,9 +214,19 @@ def msgsets_from_trace(tracename):
                     and target_chain[chain_index - 1] == "ros2:callback_start"):
                     new_set.pop()
                     chain_index -= 1
+                # # it's been observed that "robotperf_benchmarks:robotperf_image_input_cb_init" triggers
+                # # before "ros2_image_pipeline:image_proc_rectify_cb_fini" which leads to trouble
+                # # Skip this as well as the next event
+                # elif (image_pipeline_msgs[index].event.name == "robotperf_benchmarks:robotperf_image_input_cb_init"
+                #     and target_chain[chain_index - 3] == "ros2_image_pipeline:image_proc_rectify_cb_fini"):
+                #     print(color("Skipping: " + str(image_pipeline_msgs[index].event.name), fg="yellow"))
+                # elif (image_pipeline_msgs[index].event.name == "robotperf_benchmarks:robotperf_image_input_cb_fini"
+                #     and target_chain[chain_index - 3] == "ros2_image_pipeline:image_proc_rectify_cb_fini"):
+                #     print(color("Skipping: " + str(image_pipeline_msgs[index].event.name), fg="yellow"))
                 else:
                     new_set.append(image_pipeline_msgs[index])
-                    # print(color("Altered order: " + str([x.event.name for x in new_set]) + ", restarting", fg="red"))
+                    if debug:
+                        print(color("Altered order: " + str([x.event.name for x in new_set]) + ", restarting", fg="red"))
                     chain_index = 0  # restart
                     new_set = []  # restart
     return image_pipeline_msg_sets
@@ -1117,8 +1131,13 @@ target_chain_marker = [
 # For some reason it seems to be displayed in the reverse order on the Y axis
 segment_types = ["rmw", "rcl", "rclcpp", "userland", "benchmark"]
 
-image_pipeline_msg_sets = msgsets_from_trace("/tmp/analysis/trace/trace_cpu_ctf")
+image_pipeline_msg_sets = msgsets_from_trace("/tmp/analysis/trace/trace_cpu_ctf", True)
+# image_pipeline_msg_sets = msgsets_from_trace("/tmp/benchmark_ws/src/benchmarks/trace_old/trace_cpu_ctf")
+# image_pipeline_msg_sets = msgsets_from_trace("/tmp/benchmark_ws/src/benchmarks/trace/trace_cpu_ctf", True)
 index_to_plot = len(image_pipeline_msg_sets)//2
+if len(image_pipeline_msg_sets) < 1:
+    print(color("No msg sets found", fg="red"))
+    sys.exit(1)
 
 ####################
 # print timing pipeline
