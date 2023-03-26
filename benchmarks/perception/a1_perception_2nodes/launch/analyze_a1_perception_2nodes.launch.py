@@ -1292,12 +1292,14 @@ for meta in benchmark_meta_paths:
         branch_name = benchmark.id + "-" + str(len(benchmark.results))
         with open(meta, 'w') as file:
             file.write(str(benchmark))
-
         print(benchmark)
 
 
 # commit and push in a new branch called "branch_name" and drop instructions to create a PR
 run('cd /tmp/benchmarks && git checkout -b ' + branch_name + ' \
-    && git add . && git commit -m "Add result" && git push origin ' + branch_name + ' \
+    && git add . \
+    && git commit -m "Add result" && git push origin ' + branch_name + ' \
+    && git config --global user.email "contact@accelerationrobotics.com" \
+    && git config --global user.name "Acceleration Robotics ROBOTCORE® Framework pipeline" \
     && gh pr create --title "Add result" --body "Add result"'
     ,shell=True)
