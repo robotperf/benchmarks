@@ -1315,5 +1315,6 @@ print("Create PR")
 run('cd /tmp/benchmarks \
     && git config --global user.email "victor@accelerationrobotics.com" \
     && git config --global user.name "Víctor Mayoral-Vilches" \
+    && echo "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" | gh auth login --with-token \
     && gh pr create --title "Add result" --body "Add result"'
     ,shell=True)
