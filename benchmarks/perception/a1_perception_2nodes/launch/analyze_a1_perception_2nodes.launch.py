@@ -947,13 +947,12 @@ def results(sets):
 
     print(statistics_data[2])
     return {
-            "hardware": "kr260",
-            "category": "perception",
+            "hardware": os.environ.get('HARDWARE'),
+            "category": os.environ.get('CATEGORY'),
             "timestampt": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())),
             "value": float(statistics_data[2]),
-            "note": "Note",
             "note": "mean_benchmark {}, rms_benchmark {}, max_benchmark {}, min_benchmark {}".format(statistics_data[0], statistics_data[1], statistics_data[2], statistics_data[3]),
-            "datasource": "perception/image"
+            "datasource": os.environ.get('ROSBAG')
         }
 
 
@@ -1295,26 +1294,14 @@ for meta in benchmark_meta_paths:
         print(benchmark)
 
 
-# commit and push in a new branch called "branch_name" and drop instructions to create a PR
-print("Commit")
-run('cd /tmp/benchmarks && git checkout -b ' + branch_name + ' \
-    && git add . \
-    && git config --global user.email "victor@accelerationrobotics.com" \
-    && git config --global user.name "Víctor Mayoral-Vilches" \
-    && git commit -m "Add result"', shell=True)
-
-print("Push")
-run('cd /tmp/benchmarks \
-    && git config --global user.email "victor@accelerationrobotics.com" \
-    && git config --global user.name "Víctor Mayoral-Vilches" \
-    && export GITHUB_TOKEN=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 \
-    && git push origin ' + branch_name
-    ,shell=True)
-
-print("Create PR")
-run('cd /tmp/benchmarks \
-    && git config --global user.email "victor@accelerationrobotics.com" \
-    && git config --global user.name "Víctor Mayoral-Vilches" \
-    && echo "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" | gh auth login --with-token \
-    && gh pr create --title "Add result" --body "Add result"'
-    ,shell=True)
+# # commit and push in a new branch called "branch_name" and drop instructions to create a PR
+# # NOTE: conflicts with permissions
+# #   - fatal: could not read Username for 'https://github.com': No such device or address
+# #   - Try authenticating with:  gh auth login
+# run('cd /tmp/benchmarks && git checkout -b ' + branch_name + ' \
+#     && git add . \
+#     && git config --global user.email "victor@accelerationrobotics.com" \
+#     && git config --global user.name "Víctor Mayoral-Vilches" \
+#     && git commit -m "Add result" && git push origin ' + branch_name + ' \
+#     && gh pr create --title "Add result" --body "Add result"'
+#     ,shell=True)
