@@ -1298,8 +1298,8 @@ for meta in benchmark_meta_paths:
 # commit and push in a new branch called "branch_name" and drop instructions to create a PR
 run('cd /tmp/benchmarks && git checkout -b ' + branch_name + ' \
     && git add . \
-    && git commit -m "Add result" && git push origin ' + branch_name + ' \
     && git config --global user.email "contact@accelerationrobotics.com" \
     && git config --global user.name "Acceleration Robotics ROBOTCORE® Framework pipeline" \
+    && git commit -m "Add result" && git push origin ' + branch_name + ' \
     && gh pr create --title "Add result" --body "Add result"'
     ,shell=True)
