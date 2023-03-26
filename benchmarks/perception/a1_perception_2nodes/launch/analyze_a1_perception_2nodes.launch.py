@@ -1307,6 +1307,7 @@ print("Push")
 run('cd /tmp/benchmarks \
     && git config --global user.email "victor@accelerationrobotics.com" \
     && git config --global user.name "Víctor Mayoral-Vilches" \
+    && export GITHUB_TOKEN=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 \
     && git push origin ' + branch_name
     ,shell=True)
 
