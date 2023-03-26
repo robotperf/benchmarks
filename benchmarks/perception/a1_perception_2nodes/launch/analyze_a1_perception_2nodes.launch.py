@@ -1298,10 +1298,11 @@ for meta in benchmark_meta_paths:
 # # NOTE: conflicts with permissions
 # #   - fatal: could not read Username for 'https://github.com': No such device or address
 # #   - Try authenticating with:  gh auth login
-# run('cd /tmp/benchmarks && git checkout -b ' + branch_name + ' \
-#     && git add . \
-#     && git config --global user.email "victor@accelerationrobotics.com" \
-#     && git config --global user.name "Víctor Mayoral-Vilches" \
-#     && git commit -m "Add result" && git push origin ' + branch_name + ' \
-#     && gh pr create --title "Add result" --body "Add result"'
-#     ,shell=True)
+run('cd /tmp/benchmarks && git checkout -b ' + branch_name + ' \
+    && git add . \
+    && git config --global user.email "victor@accelerationrobotics.com" \
+    && git config --global user.name "Víctor Mayoral-Vilches" \
+    && git commit -m "' + benchmark.id + ' results for ' + os.environ.get('HARDWARE') + ' (CI_PIPELINE_ID: ' + os.environ.get('CI_PIPELINE_ID') + ')"'
+    , shell=True)
+    # && git push origin ' + branch_name + ' \
+    # && gh pr create --title "Add result" --body "Add result"'
