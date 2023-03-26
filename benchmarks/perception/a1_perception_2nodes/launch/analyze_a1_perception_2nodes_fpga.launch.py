@@ -1503,6 +1503,9 @@ segment_types = ["rmw", "rcl", "rclcpp", "userland", "benchmark"]
 
 image_pipeline_msg_sets = msgsets_from_trace("/tmp/analysis/trace/trace_cpu_ctf")
 index_to_plot = len(image_pipeline_msg_sets)//2
+if len(image_pipeline_msg_sets) < 1:
+    print(color("No msg sets found", fg="red"))
+    sys.exit(1)
 
 ######################
 # draw bar charts

@@ -92,7 +92,7 @@ def search_benchmarks(filename="benchmark.yaml", searchpath="src"):
     Returns a list with the paths of each benchmarks' benchmark.yaml
     """
     benchmark_paths = []
-    for root, dirs, files in os.walk("./" + searchpath):
+    for root, dirs, files in os.walk(searchpath):
         for file in files:
             if file == filename:
                 benchmark_paths.append(os.path.join(root, file))    

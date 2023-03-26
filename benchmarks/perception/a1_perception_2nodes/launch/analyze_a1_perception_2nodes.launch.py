@@ -28,12 +28,15 @@ import os
 import pandas as pd
 import numpy as np
 import pprint
+import subprocess
+import yaml
+import time
 from tabnanny import verbose
 from turtle import width
 from launch import LaunchDescription
 from wasabi import color
 from typing import List, Optional, Tuple, Union
-
+from ros2benchmark.verb import VerbExtension, Benchmark, run, search_benchmarks
 from bokeh.plotting.figure import figure, Figure
 from bokeh.plotting import output_notebook, save, output_file
 from bokeh.io import show, export_png
@@ -921,6 +924,66 @@ def table(list_sets, list_sets_names, from_baseline=True):
         # print(row)
 
 
+def results(sets):
+    """
+    Builds a dictionary of results from a list of sets.
+
+    :param: sets: list of processed data
+
+    NOTE: Syntax should follow the following format:
+        {
+            "hardware": "kr260",
+            "category": "perception",
+            "timestampt": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())),
+            "value": 15.2,
+            "note": "Note",
+            "datasource": "perception/image"
+        }    
+    """
+
+    # mean_benchmark, rms_benchmark, max_benchmark, min_benchmark, mean_, rms_, max_, min_
+    # 0,                1,                  2,          3,          4,      5,   6,    7
+    statistics_data = statistics(sets)
+
+    print(statistics_data[2])
+    return {
+            "hardware": "kr260",
+            "category": "perception",
+            "timestampt": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())),
+            "value": float(statistics_data[2]),
+            "note": "Note",
+            "note": "mean_benchmark {}, rms_benchmark {}, max_benchmark {}, min_benchmark {}".format(statistics_data[0], statistics_data[1], statistics_data[2], statistics_data[3]),
+            "datasource": "perception/image"
+        }
+
+
+def run(cmd, shell=False, timeout=1):
+    """
+    Spawns a new processe launching cmd, connect to their input/output/error pipes, and obtain their return codes.
+    :param cmd: command split in the form of a list
+    :returns: stdout
+    """
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=shell)
+    try:
+        outs, errs = proc.communicate(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        proc.kill()
+        outs, errs = proc.communicate()
+
+    # decode, or None
+    if outs:
+        outs = outs.decode("utf-8").strip()
+    else:
+        outs = None
+
+    if errs:
+        errs = errs.decode("utf-8").strip()
+    else:
+        errs = None
+    return outs, errs
+    
+
+
 def generate_launch_description():
     return LaunchDescription()
 
@@ -1206,3 +1269,35 @@ fig.update_xaxes(title_text = "")
 fig.update_yaxes(title_text = "Milliseconds")
 # fig.show()
 fig.write_image("/tmp/analysis/plot_barchart.png", width=1400, height=1000)
+
+
+# ///////////////////
+# Add results into robotperf/benchmarks repo
+
+path_repo = "/tmp/benchmarks"
+branch_name = ""
+benchmark_name = "a1_perception_2nodes"
+result = results(image_pipeline_msg_sets_barchart)
+# fetch repo
+run('if [ -d "/tmp/benchmarks" ]; then cd ' + path_repo +  ' && git pull; \
+        else cd /tmp && git clone https://github.com/robotperf/benchmarks; fi',
+    shell=True)
+
+# add result
+benchmark_meta_paths = search_benchmarks(searchpath="/tmp/benchmarks")
+for meta in benchmark_meta_paths:
+    benchmark = Benchmark(meta)
+    if benchmark.name == benchmark_name:
+        benchmark.results.append(result)
+        branch_name = benchmark.id + "-" + str(len(benchmark.results))
+        with open(meta, 'w') as file:
+            file.write(str(benchmark))
+
+        print(benchmark)
+
+
+# commit and push in a new branch called "branch_name" and drop instructions to create a PR
+run('cd /tmp/benchmarks && git checkout -b ' + branch_name + ' \
+    && git add . && git commit -m "Add result" && git push origin ' + branch_name + ' \
+    && gh pr create --title "Add result" --body "Add result"'
+    ,shell=True)
