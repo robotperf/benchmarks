@@ -1302,10 +1302,12 @@ run('cd /tmp/benchmarks && git checkout -b ' + branch_name + ' \
     && git add . \
     && git config --global user.email "victor@accelerationrobotics.com" \
     && git config --global user.name "Víctor Mayoral-Vilches" \
-    && git commit -m "' + benchmark.id + ' results for ' + os.environ.get('HARDWARE') + ' \
-        (CI_PIPELINE_ID: ' + os.environ.get('CI_PIPELINE_ID') + ')\n \
-        - CI_PIPELINE_URL: ' + os.environ.get('CI_PIPELINE_URL') + '\n \
-        - CI_JOB_URL: ' + os.environ.get('CI_JOB_URL') + '"'
+    && git commit -m "' + benchmark_name + ' results for ' + os.environ.get('HARDWARE') + ' (' + result["value"] + ')\n \
+    - CI_PIPELINE_URL: ' + os.environ.get('CI_PIPELINE_URL') + '\n \
+    - CI_JOB_URL: ' + os.environ.get('CI_JOB_URL') + '"'
     , shell=True)
     # && git push origin ' + branch_name + ' \
     # && gh pr create --title "Add result" --body "Add result"'
+
+# show message of last git commit
+run('cd /tmp/benchmarks && git log -1', shell=True)
