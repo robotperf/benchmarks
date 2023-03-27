@@ -13,6 +13,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
 RUN pip3 install wasabi bokeh==2.4.3 selenium plotly kaleido arrow
 RUN pip3 install xacro
 
+
 RUN add-apt-repository ppa:mozillateam/ppa -y
 RUN echo "Package: *\nPin: release o=LP-PPA-mozillateam\nPin-Priority: 1001\n\nPackage: firefox\nPin: version 1:1snap1-0ubuntu2\nPin-Priority: -1" > /etc/apt/preferences.d/mozilla-firefox
 RUN apt-get update && apt-get install -y firefox firefox-geckodriver
