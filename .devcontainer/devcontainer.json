@@ -44,7 +44,8 @@
 				"ms-toolsai.jupyter-renderers",
 				"ms-toolsai.jupyter",
 				"ms-python.vscode-pylance",
-				"ms-vscode.cmake-tools"
+				"ms-vscode.cmake-tools",
+				"GitHub.copilot"
 			]
 		}
 	},

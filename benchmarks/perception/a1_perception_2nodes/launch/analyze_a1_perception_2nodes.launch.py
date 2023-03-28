@@ -28,12 +28,15 @@ import os
 import pandas as pd
 import numpy as np
 import pprint
+import subprocess
+import yaml
+import time
 from tabnanny import verbose
 from turtle import width
 from launch import LaunchDescription
 from wasabi import color
 from typing import List, Optional, Tuple, Union
-
+from ros2benchmark.verb import VerbExtension, Benchmark, run, search_benchmarks
 from bokeh.plotting.figure import figure, Figure
 from bokeh.plotting import output_notebook, save, output_file
 from bokeh.io import show, export_png
@@ -120,7 +123,7 @@ def add_markers_to_figure(
             assert False, "invalid marker_type value"
 
 
-def msgsets_from_trace(tracename):
+def msgsets_from_trace(tracename, debug=False):
     """
     Returns a list of message sets ready to be used
     for plotting them in various forms.
@@ -158,10 +161,11 @@ def msgsets_from_trace(tracename):
     for index in range(len(image_pipeline_msgs)):
         if image_pipeline_msgs[index].event.name in target_chain:  # optimization
 
-            # print("new: " + image_pipeline_msgs[index].event.name)
-            # print("expected: " + str(target_chain[chain_index]))
-            # print("chain_index: " + str(chain_index))
-            # print("---")
+            if debug:
+                print("---")
+                print("new: " + image_pipeline_msgs[index].event.name)
+                print("expected: " + str(target_chain[chain_index]))
+                print("chain_index: " + str(chain_index))
 
             # first one            
             if (
@@ -173,7 +177,8 @@ def msgsets_from_trace(tracename):
                     "vpid"
                 )
                 chain_index += 1
-                # print(color("Found: " + str(image_pipeline_msgs[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
+                if debug:
+                    print(color("Found: " + str(image_pipeline_msgs[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
             # last one
             elif (
                 image_pipeline_msgs[index].event.name == target_chain[chain_index]
@@ -184,7 +189,8 @@ def msgsets_from_trace(tracename):
             ):
                 new_set.append(image_pipeline_msgs[index])
                 image_pipeline_msg_sets.append(new_set)
-                # print(color("Found: " + str(image_pipeline_msgs[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
+                if debug:
+                    print(color("Found: " + str(image_pipeline_msgs[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
                 chain_index = 0  # restart
                 new_set = []  # restart
             # match
@@ -195,7 +201,8 @@ def msgsets_from_trace(tracename):
             ):
                 new_set.append(image_pipeline_msgs[index])
                 chain_index += 1
-                # print(color("Found: " + str(image_pipeline_msgs[index].event.name), fg="green"))
+                if debug:
+                    print(color("Found: " + str(image_pipeline_msgs[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="green"))
             # altered order
             elif (
                 image_pipeline_msgs[index].event.name in target_chain
@@ -210,9 +217,19 @@ def msgsets_from_trace(tracename):
                     and target_chain[chain_index - 1] == "ros2:callback_start"):
                     new_set.pop()
                     chain_index -= 1
+                # # it's been observed that "robotperf_benchmarks:robotperf_image_input_cb_init" triggers
+                # # before "ros2_image_pipeline:image_proc_rectify_cb_fini" which leads to trouble
+                # # Skip this as well as the next event
+                # elif (image_pipeline_msgs[index].event.name == "robotperf_benchmarks:robotperf_image_input_cb_init"
+                #     and target_chain[chain_index - 3] == "ros2_image_pipeline:image_proc_rectify_cb_fini"):
+                #     print(color("Skipping: " + str(image_pipeline_msgs[index].event.name), fg="yellow"))
+                # elif (image_pipeline_msgs[index].event.name == "robotperf_benchmarks:robotperf_image_input_cb_fini"
+                #     and target_chain[chain_index - 3] == "ros2_image_pipeline:image_proc_rectify_cb_fini"):
+                #     print(color("Skipping: " + str(image_pipeline_msgs[index].event.name), fg="yellow"))
                 else:
                     new_set.append(image_pipeline_msgs[index])
-                    # print(color("Altered order: " + str([x.event.name for x in new_set]) + ", restarting", fg="red"))
+                    if debug:
+                        print(color("Altered order: " + str([x.event.name for x in new_set]) + ", restarting", fg="red"))
                     chain_index = 0  # restart
                     new_set = []  # restart
     return image_pipeline_msg_sets
@@ -907,6 +924,65 @@ def table(list_sets, list_sets_names, from_baseline=True):
         # print(row)
 
 
+def results(sets):
+    """
+    Builds a dictionary of results from a list of sets.
+
+    :param: sets: list of processed data
+
+    NOTE: Syntax should follow the following format:
+        {
+            "hardware": "kr260",
+            "category": "perception",
+            "timestampt": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())),
+            "value": 15.2,
+            "note": "Note",
+            "datasource": "perception/image"
+        }    
+    """
+
+    # mean_benchmark, rms_benchmark, max_benchmark, min_benchmark, mean_, rms_, max_, min_
+    # 0,                1,                  2,          3,          4,      5,   6,    7
+    statistics_data = statistics(sets)
+
+    print(statistics_data[2])
+    return {
+            "hardware": os.environ.get('HARDWARE'),
+            "category": os.environ.get('CATEGORY'),
+            "timestampt": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())),
+            "value": float(statistics_data[2]),
+            "note": "mean_benchmark {}, rms_benchmark {}, max_benchmark {}, min_benchmark {}".format(statistics_data[0], statistics_data[1], statistics_data[2], statistics_data[3]),
+            "datasource": os.environ.get('ROSBAG')
+        }
+
+
+def run(cmd, shell=False, timeout=1):
+    """
+    Spawns a new processe launching cmd, connect to their input/output/error pipes, and obtain their return codes.
+    :param cmd: command split in the form of a list
+    :returns: stdout
+    """
+    proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, shell=shell)
+    try:
+        outs, errs = proc.communicate(timeout=timeout)
+    except subprocess.TimeoutExpired:
+        proc.kill()
+        outs, errs = proc.communicate()
+
+    # decode, or None
+    if outs:
+        outs = outs.decode("utf-8").strip()
+    else:
+        outs = None
+
+    if errs:
+        errs = errs.decode("utf-8").strip()
+    else:
+        errs = None
+    return outs, errs
+    
+
+
 def generate_launch_description():
     return LaunchDescription()
 
@@ -1117,8 +1193,13 @@ target_chain_marker = [
 # For some reason it seems to be displayed in the reverse order on the Y axis
 segment_types = ["rmw", "rcl", "rclcpp", "userland", "benchmark"]
 
-image_pipeline_msg_sets = msgsets_from_trace("/tmp/analysis/trace/trace_cpu_ctf")
+image_pipeline_msg_sets = msgsets_from_trace("/tmp/analysis/trace/trace_cpu_ctf", True)
+# image_pipeline_msg_sets = msgsets_from_trace("/tmp/benchmark_ws/src/benchmarks/trace_old/trace_cpu_ctf")
+# image_pipeline_msg_sets = msgsets_from_trace("/tmp/benchmark_ws/src/benchmarks/trace/trace_cpu_ctf", True)
 index_to_plot = len(image_pipeline_msg_sets)//2
+if len(image_pipeline_msg_sets) < 1:
+    print(color("No msg sets found", fg="red"))
+    sys.exit(1)
 
 ####################
 # print timing pipeline
@@ -1187,3 +1268,47 @@ fig.update_xaxes(title_text = "")
 fig.update_yaxes(title_text = "Milliseconds")
 # fig.show()
 fig.write_image("/tmp/analysis/plot_barchart.png", width=1400, height=1000)
+
+
+# ///////////////////
+# Add results into robotperf/benchmarks repo
+
+path_repo = "/tmp/benchmarks"
+branch_name = ""
+benchmark_name = "a1_perception_2nodes"
+result = results(image_pipeline_msg_sets_barchart)
+# fetch repo
+run('if [ -d "/tmp/benchmarks" ]; then cd ' + path_repo +  ' && git pull; \
+        else cd /tmp && git clone https://github.com/robotperf/benchmarks; fi',
+    shell=True)
+
+# add result
+benchmark_meta_paths = search_benchmarks(searchpath="/tmp/benchmarks")
+for meta in benchmark_meta_paths:
+    benchmark = Benchmark(meta)
+    if benchmark.name == benchmark_name:
+        benchmark.results.append(result)
+        branch_name = benchmark.id + "-" + str(len(benchmark.results))
+        with open(meta, 'w') as file:
+            file.write(str(benchmark))
+        print(benchmark)
+
+
+# commit and push in a new branch called "branch_name" and drop instructions to create a PR
+# NOTE: conflicts with permissions
+#   - fatal: could not read Username for 'https://github.com': No such device or address
+#   - Try authenticating with:  gh auth login
+run('cd /tmp/benchmarks && git checkout -b ' + branch_name + ' \
+    && git add . \
+    && git config --global user.email "victor@accelerationrobotics.com" \
+    && git config --global user.name "Víctor Mayoral-Vilches" \
+    && git commit -m "' + benchmark_name + ' results for ' + os.environ.get('HARDWARE') + ' (' + str(result["value"]) + ')\n \
+    - CI_PIPELINE_URL: ' + os.environ.get('CI_PIPELINE_URL') + '\n \
+    - CI_JOB_URL: ' + os.environ.get('CI_JOB_URL') + '"'
+    , shell=True)
+    # && git push origin ' + branch_name + ' \
+    # && gh pr create --title "Add result" --body "Add result"'
+
+# show message of last git commit
+outs, err = run('cd /tmp/benchmarks && git log -1', shell=True)
+print(outs)
