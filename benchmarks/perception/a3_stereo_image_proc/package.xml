@@ -12,6 +12,7 @@
   <test_depend>ament_lint_auto</test_depend>
   <test_depend>ament_lint_common</test_depend>
 
+  <depend>a1_perception_2nodes</depend>
 
   <!-- Might not need all of these packages  -->
   <depend>rclcpp</depend>
@@ -29,7 +30,7 @@
   <depend>liblttng-ust-dev</depend>
   <depend>babeltrace</depend>
   <depend>stereo_image_proc</depend>
-
+  
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <!-- <buildtool_depend>ament_vitis</buildtool_depend> -->

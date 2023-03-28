@@ -37,9 +37,29 @@ def generate_launch_description():
         executable="component_container",
         composable_node_descriptions=[
             ComposableNode(
-                package="a3_stereo_image_proc",
-                plugin="robotperf::perception::ImagesInputComponent",
-                name="images_input_component",
+                package="a1_perception_2nodes",
+                plugin="robotperf::perception::ImageInputComponent",
+                name="image_input_component",
+                parameters=[
+                    {"input_topic_name":"/input/left_input/left_image_raw"}
+                ],
+                remappings=[
+                    ("image", "/left_camera/image_raw"),
+                    ("camera_info", "/left_camera/camera_info"),
+                ],
+                extra_arguments=[{'use_intra_process_comms': True}],
+            ),
+            ComposableNode(
+                package="a1_perception_2nodes",
+                plugin="robotperf::perception::ImageInputComponent",
+                name="image_input_component",
+                parameters=[
+                    {"input_topic_name":"/input/right_input/right_image_raw"}
+                ],
+                remappings=[
+                    ("image", "/right_camera/image_raw"),
+                    ("camera_info", "/right_camera/camera_info"),
+                ],
                 extra_arguments=[{'use_intra_process_comms': True}],
             ),
             ComposableNode(
@@ -48,10 +68,10 @@ def generate_launch_description():
                 plugin="stereo_image_proc::DisparityNode",
                 name="stereo_image_proc_disparity_node",
                 remappings=[
-                    ('left/camera_info', '/image_input/left_input/camera_info'),
-                    ('left/image_rect', '/image_input/left_input/left_image_raw'),
-                    ('right/camera_info', '/image_input/right_input/camera_info'),
-                    ('right/image_rect', '/image_input/right_input/right_image_raw'),                    
+                    ('left/camera_info', '/input/left_input/camera_info'),
+                    ('left/image_rect', '/input/left_input/left_image_raw'),
+                    ('right/camera_info', '/input/right_input/camera_info'),
+                    ('right/image_rect', '/input/right_input/right_image_raw'),                    
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],
             ),
