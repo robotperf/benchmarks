@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
 
 import sys
-
 import rclpy
 import time
 import graphviz
-
 from rqt_graph.ros_graph import *
 from rqt_graph.dotcode import \
     RosGraphDotcodeGenerator, NODE_NODE_GRAPH, NODE_TOPIC_ALL_GRAPH, NODE_TOPIC_GRAPH
 from rqt_graph.rosgraph2_impl import Graph
 from qt_dotgraph.pydotfactory import PydotFactory
+
 
 dot_file = '/tmp/graph.dot'
 time_update = 3
