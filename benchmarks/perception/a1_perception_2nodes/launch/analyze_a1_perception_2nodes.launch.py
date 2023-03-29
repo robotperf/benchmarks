@@ -1277,21 +1277,22 @@ path_repo = "/tmp/benchmarks"
 branch_name = ""
 benchmark_name = "a1_perception_2nodes"
 result = results(image_pipeline_msg_sets_barchart)
-# fetch repo
-run('if [ -d "/tmp/benchmarks" ]; then cd ' + path_repo +  ' && git pull; \
-        else cd /tmp && git clone https://github.com/robotperf/benchmarks; fi',
-    shell=True)
 
-# add result
-benchmark_meta_paths = search_benchmarks(searchpath="/tmp/benchmarks")
-for meta in benchmark_meta_paths:
-    benchmark = Benchmark(meta)
-    if benchmark.name == benchmark_name:
-        benchmark.results.append(result)
-        branch_name = benchmark.id + "-" + str(len(benchmark.results))
-        with open(meta, 'w') as file:
-            file.write(str(benchmark))
-        print(benchmark)
+# # fetch repo
+# run('if [ -d "/tmp/benchmarks" ]; then cd ' + path_repo +  ' && git pull; \
+#         else cd /tmp && git clone https://github.com/robotperf/benchmarks; fi',
+#     shell=True)
+
+if os.path.exists(path_repo):
+    benchmark_meta_paths = search_benchmarks(searchpath="/tmp/benchmarks")
+    for meta in benchmark_meta_paths:
+        benchmark = Benchmark(meta)
+        if benchmark.name == benchmark_name:
+            benchmark.results.append(result)
+            branch_name = benchmark.id + "-" + str(len(benchmark.results))
+            with open(meta, 'w') as file:
+                file.write(str(benchmark))
+            print(benchmark)
 
 
 # # commit and push in a new branch called "branch_name" and drop instructions to create a PR
