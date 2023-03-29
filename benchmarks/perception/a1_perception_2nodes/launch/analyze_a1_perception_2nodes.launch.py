@@ -1294,21 +1294,21 @@ for meta in benchmark_meta_paths:
         print(benchmark)
 
 
-# commit and push in a new branch called "branch_name" and drop instructions to create a PR
-# NOTE: conflicts with permissions
-#   - fatal: could not read Username for 'https://github.com': No such device or address
-#   - Try authenticating with:  gh auth login
-run('cd /tmp/benchmarks && git checkout -b ' + branch_name + ' \
-    && git add . \
-    && git config --global user.email "victor@accelerationrobotics.com" \
-    && git config --global user.name "Víctor Mayoral-Vilches" \
-    && git commit -m "' + benchmark_name + ' results for ' + os.environ.get('HARDWARE') + ' (' + str(result["value"]) + ')\n \
-    - CI_PIPELINE_URL: ' + os.environ.get('CI_PIPELINE_URL') + '\n \
-    - CI_JOB_URL: ' + os.environ.get('CI_JOB_URL') + '"'
-    , shell=True)
-    # && git push origin ' + branch_name + ' \
-    # && gh pr create --title "Add result" --body "Add result"'
+# # commit and push in a new branch called "branch_name" and drop instructions to create a PR
+# # NOTE: conflicts with permissions
+# #   - fatal: could not read Username for 'https://github.com': No such device or address
+# #   - Try authenticating with:  gh auth login
+# run('cd /tmp/benchmarks && git checkout -b ' + branch_name + ' \
+#     && git add . \
+#     && git config --global user.email "victor@accelerationrobotics.com" \
+#     && git config --global user.name "Víctor Mayoral-Vilches" \
+#     && git commit -m "' + benchmark_name + ' results for ' + os.environ.get('HARDWARE') + ' (' + str(result["value"]) + ')\n \
+#     - CI_PIPELINE_URL: ' + os.environ.get('CI_PIPELINE_URL') + '\n \
+#     - CI_JOB_URL: ' + os.environ.get('CI_JOB_URL') + '"'
+#     , shell=True)
+#     # && git push origin ' + branch_name + ' \
+#     # && gh pr create --title "Add result" --body "Add result"'
 
-# show message of last git commit
-outs, err = run('cd /tmp/benchmarks && git log -1', shell=True)
-print(outs)
+# # show message of last git commit
+# outs, err = run('cd /tmp/benchmarks && git log -1', shell=True)
+# print(outs)
