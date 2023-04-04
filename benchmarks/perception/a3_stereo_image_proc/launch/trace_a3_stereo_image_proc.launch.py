@@ -26,7 +26,6 @@ def generate_launch_description():
                 'kernel': [],
                 'userspace': ['vpid', 'vtid', 'procname'],
         },
-        # events_kernel=DEFAULT_EVENTS_KERNEL,
         # context_names=DEFAULT_CONTEXT,
     )
  
