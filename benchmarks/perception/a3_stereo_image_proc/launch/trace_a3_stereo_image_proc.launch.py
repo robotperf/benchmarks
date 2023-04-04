@@ -26,7 +26,6 @@ def generate_launch_description():
                 'kernel': [],
                 'userspace': ['vpid', 'vtid', 'procname'],
         },
-        # context_names=DEFAULT_CONTEXT,
     )
  
     perception_container = ComposableNodeContainer(
