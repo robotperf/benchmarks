@@ -53,9 +53,3 @@ void DisparityOutputComponent::disparityCb(
 // component to be discoverable when its library
 // is being loaded into a running process.
 RCLCPP_COMPONENTS_REGISTER_NODE(robotperf::perception::DisparityOutputComponent)
-
-
-
-
-
-
