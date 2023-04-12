@@ -17,9 +17,6 @@ def generate_launch_description():
             "robotperf_benchmarks:*",
             "ros2_image_pipeline:*",
             "ros2:*"
-            # "lttng_ust_cyg_profile*",
-            # "lttng_ust_statedump*",
-            # "liblttng-ust-libc-wrapper",
         ]
         + DEFAULT_EVENTS_ROS,
         context_fields={

@@ -31,9 +31,3 @@ protected:
 }  // namespace robotperf
 
 #endif  // ROBOTPER_AIAMOUTPUTPUT_COMPONENT_HPP_
-
-
-
-
-
-
