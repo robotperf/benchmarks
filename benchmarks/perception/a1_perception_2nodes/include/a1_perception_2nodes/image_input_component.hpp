@@ -25,7 +25,6 @@ public:
   explicit ImageInputComponent(const rclcpp::NodeOptions &);
 
 protected:
-  std::string input_topic_name;
   image_transport::CameraPublisher pub_image_;
   image_transport::CameraSubscriber sub_image_;
 
