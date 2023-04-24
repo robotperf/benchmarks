@@ -1008,6 +1008,7 @@ target_chain = [
     'robotperf_benchmarks:robotperf_image_output_cb_fini',
     # "ros2:callback_end",
 ]
+
 target_chain_dissambiguous = [
     # "ros2:callback_start",
     "robotperf_benchmarks:robotperf_image_input_cb_init",
@@ -1125,7 +1126,6 @@ if image_pipeline_msg_sets:
 ######################
 msg_set = image_pipeline_msg_sets[index_to_plot]
 traces(msg_set)
-
 
 ######################
 # draw bar charts
