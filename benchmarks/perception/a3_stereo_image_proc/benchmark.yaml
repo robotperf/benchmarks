@@ -44,6 +44,9 @@ reproduction: |
   cd ~/.ros/tracing
   babeltrace a3_stereo_image_proc | less
 
+  # Analyze Data
+  ros2 launch a3_stereo_image_proc analyze_a3_stereo_image_proc.launch.py
+
   # Optional: Visualize benchmark process while it's running using this script
   chmod +x src/benchmarks/benchmarks/perception/a3_stereo_image_proc/scripts/visualize_benchmark.sh
   ./src/benchmarks/benchmarks/perception/a3_stereo_image_proc/scripts/visualize_benchmark.sh
@@ -75,6 +78,6 @@ results:
       hardware: 12th Gen Intel(R) Core(TM) i9-12900KF
       category: edge
       timestampt: 28-03-2023
-      value: 1000.00
-      note: "TEMPORARY VALUE. Will be updated once analysis is complete!"
+      value: 25.242392
+      note: ""
       datasource: "perception/image3"
