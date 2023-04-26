@@ -1,9 +1,8 @@
-id: a3
-name: a3_stereo_image_proc
+id: a4
+name: a4_depth_image_proc
 description: |
-  The [stereo_image_proc](https://github.com/ros-perception/image_pipeline/tree/humble/stereo_image_proc) package computes the disparity map using a left and right image. A disparity map represents the difference in pixel position between corresponding points in the stereo images. Disparity images are images that show the difference in displacement or distance between corresponding points in a pair of stereo images. Stereo images are two images of the same scene taken from slightly different viewpoints, such as from the left and right eyes of a human observer or from two cameras. Disparity images are often used in computer vision and image processing applications, such as 3D reconstruction, depth estimation, and object recognition. By analyzing the disparities between corresponding points in stereo images, it is possible to infer the depth of objects in the scene and create a 3D representation of the environment.
-  A simple perception computational graph composed by 2 Components, `rectify` and `resize` operations. Used to demonstrate a simple perception pipeline using the  package.
-short: Perception computational graph to compute a disparity map for stereo images.
+  The [depth_image_proc](https://github.com/ros-perception/image_pipeline/tree/humble/depth_image_proc) package computes a point cloud using a rectified depth image and a rectified color image. 
+short: Perception computational graph to compute a point cloud using a rectified depth image and a rectified color image. 
 graph: /imgs/a3_stereo_image_proc_graph.png
 metric:
   metric: "latency"
@@ -20,9 +19,6 @@ reproduction: |
   source /opt/ros/humble/setup.bash
   cd /tmp/benchmark_ws && sudo rosdep update || true && sudo apt-get update &&
     sudo rosdep install --from-paths src --ignore-src --rosdistro humble -y
-
-  # Install the stereo_image_proc package
-  sudo apt-get install ros-humble-stereo-image-proc
 
   # Build the benchmark
   colcon build --merge-install --packages-up-to a4_depth_image_proc
@@ -42,11 +38,14 @@ reproduction: |
 
   # Verify data was collected
   cd ~/.ros/tracing
-  babeltrace a3_stereo_image_proc | less
+  babeltrace a4_depth_image_proc | less
+
+  # Analyze Data
+  ros2 launch a4_depth_image_proc analyze_a4_depth_image_proc.launch.py
 
   # Optional: Visualize benchmark process while it's running using this script
-  chmod +x src/benchmarks/benchmarks/perception/a3_stereo_image_proc/scripts/visualize_benchmark.sh
-  ./src/benchmarks/benchmarks/perception/a3_stereo_image_proc/scripts/visualize_benchmark.sh
+  chmod +x src/benchmarks/benchmarks/perception/a4_depth_image_proc/scripts/visualize_benchmark.sh
+  ./src/benchmarks/benchmarks/perception/a4_depth_image_proc/scripts/visualize_benchmark.sh
   
   ## ------- Reproduce Simulation -------
   cd /tmp/benchmark_ws
@@ -56,10 +55,10 @@ reproduction: |
 
   # Terminal 1: Launch Simulation
   cd /tmp/benchmark_ws 
-  ros2 launch a3_stereo_image_proc launch_sim.launch.py world:=src/benchmarks/benchmarks/perception/a3_stereo_image_proc/worlds/neighborhood.world
+  ros2 launch a4_depth_image_proc launch_sim.launch.py world:=src/benchmarks/benchmarks/perception/a4_depth_image_proc/worlds/parking_garage.world
 
   # Terminal 2: Visualize perception from robot's perspective using rviz
-  rviz2 -d benchmarks/perception/a3_stereo_image_proc/config/camera_bot.rviz
+  rviz2 -d src/benchmarks/benchmarks/perception/a4_depth_image_proc/config/sim_depth_camera_bot.rviz
 
   # Terminal 3: Record a rosbag (ctrl+c to end recording)
   ros2 bag record -a
@@ -74,7 +73,7 @@ results:
   - result:
       hardware: 12th Gen Intel(R) Core(TM) i9-12900KF
       category: edge
-      timestampt: 28-03-2023
-      value: 1000.00
-      note: "TEMPORARY VALUE. Will be updated once analysis is complete!"
-      datasource: "perception/image3"
+      timestampt: 26-04-2023
+      value: 939.43
+      note: "Mean: 37.09 ms,  RMS: 65.12 ms, Max: 939.43 ms, Min: 7.97 ms over 1147 samples."
+      datasource: "perception/depth_image1"

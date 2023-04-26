@@ -96,12 +96,12 @@ def generate_launch_description():
                 ],                  
                 extra_arguments=[{'use_intra_process_comms': True}],
             ),
-            # ComposableNode(
-            #     package="a3_stereo_image_proc",
-            #     plugin="robotperf::perception::DisparityOutputComponent",
-            #     name="disparity_output_component",
-            #     extra_arguments=[{'use_intra_process_comms': True}],
-            # ),
+            ComposableNode(
+                package="a4_depth_image_proc",
+                plugin="robotperf::perception::PointCloudOutputComponent",
+                name="point_cloud_output_component",
+                extra_arguments=[{'use_intra_process_comms': True}],
+            ),
         ],
         output="screen",
     )

@@ -3,8 +3,8 @@
 <package format="3">
   <name>a4_depth_image_proc</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="jasonjabbour@g.harvard.edu">jason</maintainer>
+  <description>RobotPerf benchmark for the depth_image_proc package</description>
+  <maintainer email="jasonjabbour@g.harvard.edu">Jason Jabbour</maintainer>
   <license>TODO: License declaration</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
@@ -29,7 +29,7 @@
   <depend>lttng-tools</depend>
   <depend>liblttng-ust-dev</depend>
   <depend>babeltrace</depend>
-  <depend>stereo_image_proc</depend>
+  <depend>depth_image_proc</depend>
   
 
   <buildtool_depend>ament_cmake</buildtool_depend>
