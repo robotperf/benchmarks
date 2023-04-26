@@ -62,7 +62,7 @@ reproduction: |
   ros2 launch a3_stereo_image_proc launch_sim.launch.py world:=src/benchmarks/benchmarks/perception/a3_stereo_image_proc/worlds/neighborhood.world
 
   # Terminal 2: Visualize perception from robot's perspective using rviz
-  rviz2 -d benchmarks/perception/a3_stereo_image_proc/config/camera_bot.rviz
+  rviz2 -d src/benchmarks/benchmarks/perception/a3_stereo_image_proc/config/camera_bot.rviz
 
   # Terminal 3: Record a rosbag (ctrl+c to end recording)
   ros2 bag record -a
@@ -78,6 +78,6 @@ results:
       hardware: 12th Gen Intel(R) Core(TM) i9-12900KF
       category: edge
       timestampt: 28-03-2023
-      value: 25.242392
-      note: ""
+      value: 132.12
+      note: "Mean: 26.25 ms,  RMS: 27.18 ms, Max: 132.12 ms, Min: 8.73 ms over 1124 samples."
       datasource: "perception/image3"

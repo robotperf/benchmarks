@@ -36,7 +36,7 @@ from turtle import width
 from launch import LaunchDescription
 from wasabi import color
 from typing import List, Optional, Tuple, Union
-from ros2benchmark.verb import VerbExtension, Benchmark, run, search_benchmarks
+# from ros2benchmark.verb import VerbExtension, Benchmark, run, search_benchmarks
 from bokeh.plotting.figure import figure, Figure
 from bokeh.plotting import output_notebook, save, output_file
 from bokeh.io import show, export_png
@@ -594,8 +594,7 @@ def print_timeline(image_pipeline_msg_sets):
                 bg="white",
             )
             print(stringout)
-
-
+    
 def rms(list):
     return np.sqrt(np.mean(np.array(list) ** 2))
 
@@ -761,7 +760,7 @@ def statistics(image_pipeline_msg_sets_ms, verbose=False):
     max_ = max_sets(image_pipeline_msg_sets_ms)
 
     indices = [i for i in range(
-                target_chain_dissambiguous.index("ros2:callback_end"),
+                target_chain_dissambiguous.index("robotperf_benchmarks:robotperf_image_input_cb_fini (2)"),
                 1 + target_chain_dissambiguous.index("robotperf_benchmarks:robotperf_image_output_cb_init"),
                 )
               ]
@@ -1015,8 +1014,8 @@ target_chain_dissambiguous = [
     "robotperf_benchmarks:robotperf_image_input_cb_fini",
     # "ros2:callback_end",
     # "ros2:callback_start (2)",
-    'robotperf_benchmarks:robotperf_image_input_cb_init',
-    'robotperf_benchmarks:robotperf_image_input_cb_fini',
+    'robotperf_benchmarks:robotperf_image_input_cb_init (2)',
+    'robotperf_benchmarks:robotperf_image_input_cb_fini (2)',
     # "ros2:callback_end (2)",
     # "ros2:callback_start (3)",
     "robotperf_benchmarks:robotperf_image_output_cb_init",
@@ -1107,6 +1106,7 @@ segment_types = ["rmw", "rcl", "rclcpp", "userland", "benchmark"]
 image_pipeline_msg_sets = msgsets_from_trace("/root/.ros/tracing/a3_stereo_image_proc", True)
 # image_pipeline_msg_sets = msgsets_from_trace("/tmp/benchmark_ws/src/benchmarks/trace_old/trace_cpu_ctf")
 # image_pipeline_msg_sets = msgsets_from_trace("/tmp/benchmark_ws/src/benchmarks/trace/trace_cpu_ctf", True)
+print(f'msg sets length: {len(image_pipeline_msg_sets)}')
 index_to_plot = len(image_pipeline_msg_sets)//2
 if len(image_pipeline_msg_sets) < 1:
     print(color("No msg sets found", fg="red"))
@@ -1116,16 +1116,16 @@ if len(image_pipeline_msg_sets) < 1:
 # print timing pipeline
 ####################
 if image_pipeline_msg_sets: 
-    print_timeline([image_pipeline_msg_sets[index_to_plot]])  # timeline of last message
+    # print_timeline([image_pipeline_msg_sets[index_to_plot]])  # timeline of last message
     # print(len(image_pipeline_msg_sets))
-    # print_timeline(image_pipeline_msg_sets)  # all timelines
-    # print_timeline_average(image_pipeline_msg_sets)  # timeline of averages, NOTE only totals are of interest
+    # print_timeline(image_pipeline_msg_sets) # all timelines
+    print_timeline_average(image_pipeline_msg_sets)  # timeline of averages, NOTE only totals are of interest
 
-######################
-# draw tracepoints
-######################
-msg_set = image_pipeline_msg_sets[index_to_plot]
-traces(msg_set)
+# ######################
+# # draw tracepoints
+# ######################
+# msg_set = image_pipeline_msg_sets[index_to_plot]
+# traces(msg_set)
 
 ######################
 # draw bar charts
@@ -1141,84 +1141,84 @@ table(
         from_baseline=False
     )
 
-#///////////////////
-# Plot, either averages or latest, etc
-#///////////////////
+# #///////////////////
+# # Plot, either averages or latest, etc
+# #///////////////////
+# image_pipeline_msg_sets_min = pd.DataFrame(image_pipeline_msg_sets_barchart).min()
+# image_pipeline_msg_sets_mean = pd.DataFrame(image_pipeline_msg_sets_barchart).mean()
+# image_pipeline_msg_sets_max = pd.DataFrame(image_pipeline_msg_sets_barchart).max()
+# image_pipeline_msg_sets_index = pd.DataFrame(barchart_data(image_pipeline_msg_sets[index_to_plot])).transpose()[0]
+# image_pipeline_msg_sets_index = image_pipeline_msg_sets_index.rename(None)
 
-image_pipeline_msg_sets_mean = pd.DataFrame(image_pipeline_msg_sets_barchart).mean()
-image_pipeline_msg_sets_max = pd.DataFrame(image_pipeline_msg_sets_barchart).max()
-image_pipeline_msg_sets_index = pd.DataFrame(barchart_data(image_pipeline_msg_sets[index_to_plot])).transpose()[0]
-image_pipeline_msg_sets_index = image_pipeline_msg_sets_index.rename(None)
+# df_mean = pd.concat(
+#     [
+#         image_pipeline_msg_sets_index,
+#         image_pipeline_msg_sets_mean,
+#         image_pipeline_msg_sets_max,
+#     ], axis=1).transpose()
+# df_mean.columns = target_chain_dissambiguous
+# substrates = pd.DataFrame({'substrate':
+#     [
+#         "RobotPerf benchmark: a1_perception_2nodes (instance)",
+#         "RobotPerf benchmark: a1_perception_2nodes (mean)",
+#         "RobotPerf benchmark: a1_perception_2nodes (max)",
+#     ]})
+# df_mean = df_mean.join(substrates)
 
-df_mean = pd.concat(
-    [
-        image_pipeline_msg_sets_index,
-        image_pipeline_msg_sets_mean,
-        image_pipeline_msg_sets_max,
-    ], axis=1).transpose()
-df_mean.columns = target_chain_dissambiguous
-substrates = pd.DataFrame({'substrate':
-    [
-        "RobotPerf benchmark: a1_perception_2nodes (instance)",
-        "RobotPerf benchmark: a1_perception_2nodes (mean)",
-        "RobotPerf benchmark: a1_perception_2nodes (max)",
-    ]})
-df_mean = df_mean.join(substrates)
-
-import plotly.express as px
-fig = px.bar(
-    df_mean,
-    template="plotly_white",
-    x="substrate",
-    y=target_chain_dissambiguous,
-    color_discrete_sequence=px.colors.sequential.Inferno + px.colors.diverging.BrBG,
-    # colors at https://plotly.com/python/discrete-color/
-)
-fig.update_xaxes(title_text = "")
-fig.update_yaxes(title_text = "Milliseconds")
-# fig.show()
-fig.write_image("/tmp/analysis/plot_barchart.png", width=1400, height=1000)
-
-
-# ///////////////////
-# Add results into robotperf/benchmarks repo
-
-path_repo = "/tmp/benchmarks"
-branch_name = ""
-benchmark_name = "a1_perception_2nodes"
-result = results(image_pipeline_msg_sets_barchart)
-# fetch repo
-run('if [ -d "/tmp/benchmarks" ]; then cd ' + path_repo +  ' && git pull; \
-        else cd /tmp && git clone https://github.com/robotperf/benchmarks; fi',
-    shell=True)
-
-# add result
-benchmark_meta_paths = search_benchmarks(searchpath="/tmp/benchmarks")
-for meta in benchmark_meta_paths:
-    benchmark = Benchmark(meta)
-    if benchmark.name == benchmark_name:
-        benchmark.results.append(result)
-        branch_name = benchmark.id + "-" + str(len(benchmark.results))
-        with open(meta, 'w') as file:
-            file.write(str(benchmark))
-        print(benchmark)
+# import plotly.express as px
+# fig = px.bar(
+#     df_mean,
+#     template="plotly_white",
+#     x="substrate",
+#     y=target_chain_dissambiguous,
+#     color_discrete_sequence=px.colors.sequential.Inferno + px.colors.diverging.BrBG,
+#     # colors at https://plotly.com/python/discrete-color/
+# )
+# fig.update_xaxes(title_text = "")
+# fig.update_yaxes(title_text = "Milliseconds")
+# # fig.show()
+# fig.write_image("/tmp/analysis/plot_barchart.png", width=1400, height=1000)
 
 
-# commit and push in a new branch called "branch_name" and drop instructions to create a PR
-# NOTE: conflicts with permissions
-#   - fatal: could not read Username for 'https://github.com': No such device or address
-#   - Try authenticating with:  gh auth login
-run('cd /tmp/benchmarks && git checkout -b ' + branch_name + ' \
-    && git add . \
-    && git config --global user.email "victor@accelerationrobotics.com" \
-    && git config --global user.name "Víctor Mayoral-Vilches" \
-    && git commit -m "' + benchmark_name + ' results for ' + os.environ.get('HARDWARE') + ' (' + str(result["value"]) + ')\n \
-    - CI_PIPELINE_URL: ' + os.environ.get('CI_PIPELINE_URL') + '\n \
-    - CI_JOB_URL: ' + os.environ.get('CI_JOB_URL') + '"'
-    , shell=True)
-    # && git push origin ' + branch_name + ' \
-    # && gh pr create --title "Add result" --body "Add result"'
+# # ///////////////////
+# # Add results into robotperf/benchmarks repo
 
-# show message of last git commit
-outs, err = run('cd /tmp/benchmarks && git log -1', shell=True)
-print(outs)
+# path_repo = "/tmp/benchmarks"
+# branch_name = ""
+# benchmark_name = "a1_perception_2nodes"
+# result = results(image_pipeline_msg_sets_barchart)
+# # fetch repo
+# run('if [ -d "/tmp/benchmarks" ]; then cd ' + path_repo +  ' && git pull; \
+#         else cd /tmp && git clone https://github.com/robotperf/benchmarks; fi',
+#     shell=True)
+
+# # add result
+# benchmark_meta_paths = search_benchmarks(searchpath="/tmp/benchmarks")
+# for meta in benchmark_meta_paths:
+#     benchmark = Benchmark(meta)
+#     if benchmark.name == benchmark_name:
+#         benchmark.results.append(result)
+#         branch_name = benchmark.id + "-" + str(len(benchmark.results))
+#         with open(meta, 'w') as file:
+#             file.write(str(benchmark))
+#         print(benchmark)
+
+
+# # commit and push in a new branch called "branch_name" and drop instructions to create a PR
+# # NOTE: conflicts with permissions
+# #   - fatal: could not read Username for 'https://github.com': No such device or address
+# #   - Try authenticating with:  gh auth login
+# run('cd /tmp/benchmarks && git checkout -b ' + branch_name + ' \
+#     && git add . \
+#     && git config --global user.email "victor@accelerationrobotics.com" \
+#     && git config --global user.name "Víctor Mayoral-Vilches" \
+#     && git commit -m "' + benchmark_name + ' results for ' + os.environ.get('HARDWARE') + ' (' + str(result["value"]) + ')\n \
+#     - CI_PIPELINE_URL: ' + os.environ.get('CI_PIPELINE_URL') + '\n \
+#     - CI_JOB_URL: ' + os.environ.get('CI_JOB_URL') + '"'
+#     , shell=True)
+#     # && git push origin ' + branch_name + ' \
+#     # && gh pr create --title "Add result" --body "Add result"'
+
+# # show message of last git commit
+# outs, err = run('cd /tmp/benchmarks && git log -1', shell=True)
+# print(outs)
