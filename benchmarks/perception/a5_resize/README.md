@@ -3,7 +3,7 @@
 Perception resize ROS Component.
 
 ### ID
-a5
+![](../../../imgs/a5_resize.svg)
 
 ### Description
 A simple perception resize ROS robotics operation. Used to demonstrate a simple perception component [image_pipeline](https://github.com/ros-perception/image_pipeline) package.
