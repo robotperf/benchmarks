@@ -29,9 +29,9 @@ reproduction: |
 # Data not valid at the moment, just a placeholder for now
 results:
   - result:
-      hardware: ROBOTCORE
-      category: edge
-      timestampt: 14-10-2022
-      value: 66.82
+      hardware: Intel® Core™ i5-8250U CPU @ 1.60GHz × 8
+      category: workstation
+      timestampt: 08-05-2023
+      value: 33.68
       note: ""
-      datasource: "perception/image"
+      datasource: "perception/image2"

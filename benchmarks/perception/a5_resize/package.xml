@@ -8,7 +8,7 @@
     Used to demonstrate a simple perception component 
     image_pipeline package.
   </description>
-  <maintainer email="martinho@todo.todo">martinho</maintainer>
+  <maintainer email="martinho@accelerationrobotics.com">Martiño Crespo</maintainer>
   <license>Apache License 2.0</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
