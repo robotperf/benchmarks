@@ -764,8 +764,12 @@ class BenchmarkAnalyzer:
         min_ = self.min_sets(image_pipeline_msg_sets_ms)
         max_ = self.max_sets(image_pipeline_msg_sets_ms)
 
+        first_target = "ros2:callback_end"
+        if self.benchmark_name == "a3_stereo_image_proc":
+            first_target = "robotperf_benchmarks:robotperf_image_input_cb_fini (2)"
+
         indices = [i for i in range(
-                    self.target_chain_dissambiguous.index("ros2:callback_end"),
+                    self.target_chain_dissambiguous.index(first_target),
                     1 + self.target_chain_dissambiguous.index("robotperf_benchmarks:robotperf_image_output_cb_init"),
                     )
                 ]
