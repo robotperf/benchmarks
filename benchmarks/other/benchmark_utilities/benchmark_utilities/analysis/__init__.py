@@ -1033,6 +1033,10 @@ class BenchmarkAnalyzer:
         # Plot, either averages or latest, etc
         #///////////////////
 
+        # TODO: the plotting code below doesn't work with a5_resize
+        if self.benchmark_name != "a1_perception_2nodes":
+            sys.exit()
+
         image_pipeline_msg_sets_mean = pd.DataFrame(image_pipeline_msg_sets_barchart).mean()
         image_pipeline_msg_sets_max = pd.DataFrame(image_pipeline_msg_sets_barchart).max()
         image_pipeline_msg_sets_index = pd.DataFrame(self.barchart_data(image_pipeline_msg_sets[index_to_plot])).transpose()[0]
