@@ -36,16 +36,31 @@ from bokeh.models.annotations import Label
 
 class BenchmarkAnalyzer:
 
-    def __init__(self, benchmark_name, target_chain, target_chain_dissambiguous, target_chain_colors_fg, target_chain_colors_fg_bokeh, target_chain_layer, target_chain_label_layer, target_chain_marker):
-        self.target_chain = target_chain
-        self.target_chain_dissambiguous = target_chain_dissambiguous
-        self.target_chain_colors_fg = target_chain_colors_fg
-        self.target_chain_colors_fg_bokeh = target_chain_colors_fg_bokeh
-        self.target_chain_layer = target_chain_layer
-        self.target_chain_label_layer = target_chain_label_layer
-        self.target_chain_marker = target_chain_marker       
-
+    def __init__(self, benchmark_name):
         self.benchmark_name = benchmark_name
+
+        # initialize arrays where tracing configuration will be stored
+        self.target_chain = []
+        self.target_chain_dissambiguous = []
+        self.target_chain_colors_fg = []
+        self.target_chain_colors_fg_bokeh = []
+        self.target_chain_layer = []
+        self.target_chain_label_layer = []
+        self.target_chain_marker = []       
+
+
+    def add_target(self, target_dict):
+        # targeted chain of messages for tracing
+        # NOTE: there're not "publish" tracepoints because
+        # graph's using inter-process communications
+        
+        self.target_chain.append(target_dict["name"])
+        self.target_chain_dissambiguous.append(target_dict["name_disambiguous"])
+        self.target_chain_colors_fg.append(target_dict["colors_fg"])
+        self.target_chain_colors_fg_bokeh.append(target_dict["colors_fg_bokeh"])
+        self.target_chain_layer.append(target_dict["layer"])
+        self.target_chain_label_layer.append(target_dict["label_layer"])
+        self.target_chain_marker.append(target_dict["marker"])
 
 
     def get_change(self, first, second):
