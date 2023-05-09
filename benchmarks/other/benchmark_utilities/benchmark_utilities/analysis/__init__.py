@@ -36,7 +36,7 @@ from bokeh.models.annotations import Label
 
 class BenchmarkAnalyzer:
 
-    def __init__(self, target_chain, target_chain_dissambiguous, target_chain_colors_fg, target_chain_colors_fg_bokeh, target_chain_layer, target_chain_label_layer, target_chain_marker):
+    def __init__(self, benchmark_name, target_chain, target_chain_dissambiguous, target_chain_colors_fg, target_chain_colors_fg_bokeh, target_chain_layer, target_chain_label_layer, target_chain_marker):
         self.target_chain = target_chain
         self.target_chain_dissambiguous = target_chain_dissambiguous
         self.target_chain_colors_fg = target_chain_colors_fg
@@ -44,6 +44,8 @@ class BenchmarkAnalyzer:
         self.target_chain_layer = target_chain_layer
         self.target_chain_label_layer = target_chain_label_layer
         self.target_chain_marker = target_chain_marker       
+
+        self.benchmark_name = benchmark_name
 
 
     def get_change(self, first, second):
@@ -269,7 +271,7 @@ class BenchmarkAnalyzer:
         segment_types = ["rmw", "rcl", "rclcpp", "userland", "benchmark"]
 
         fig = figure(
-            title="RobotPerf benchmark: a1_perception_2nodes",
+            title="RobotPerf benchmark:" + self.benchmark_name,
             x_axis_label=f"Milliseconds",
             y_range=segment_types,
             plot_width=2000,
@@ -966,7 +968,7 @@ class BenchmarkAnalyzer:
         return outs, errs
 
     def analyze_traces(self):
-        image_pipeline_msg_sets = self.msgsets_from_trace(os.getenv("HOME") + "/.ros/tracing/a1_perception_2nodes", True)
+        image_pipeline_msg_sets = self.msgsets_from_trace(os.getenv("HOME") + "/.ros/tracing/" + self.benchmark_name, True)
         # image_pipeline_msg_sets = self.msgsets_from_trace("/tmp/benchmark_ws/src/benchmarks/trace_old/trace_cpu_ctf")
         # image_pipeline_msg_sets = self.msgsets_from_trace("/tmp/benchmark_ws/src/benchmarks/trace/trace_cpu_ctf", True)
         index_to_plot = len(image_pipeline_msg_sets)//2
@@ -1022,9 +1024,9 @@ class BenchmarkAnalyzer:
         df_mean.columns = self.target_chain_dissambiguous
         substrates = pd.DataFrame({'substrate':
             [
-                "RobotPerf benchmark: a1_perception_2nodes (instance)",
-                "RobotPerf benchmark: a1_perception_2nodes (mean)",
-                "RobotPerf benchmark: a1_perception_2nodes (max)",
+                "RobotPerf benchmark:" + self.benchmark_name + "(instance)",
+                "RobotPerf benchmark:" + self.benchmark_name + "(mean)",
+                "RobotPerf benchmark:" + self.benchmark_name + "(max)",
             ]})
         df_mean = df_mean.join(substrates)
 
@@ -1048,7 +1050,6 @@ class BenchmarkAnalyzer:
 
         path_repo = "/tmp/benchmarks"
         branch_name = ""
-        benchmark_name = "a1_perception_2nodes"
         result = self.results(image_pipeline_msg_sets_barchart)
 
         # # fetch repo
@@ -1060,7 +1061,7 @@ class BenchmarkAnalyzer:
             benchmark_meta_paths = search_benchmarks(searchpath="/tmp/benchmarks")
             for meta in benchmark_meta_paths:
                 benchmark = Benchmark(meta)
-                if benchmark.name == benchmark_name:
+                if benchmark.name == self.benchmark_name:
                     benchmark.results.append(result)
                     branch_name = benchmark.id + "-" + str(len(benchmark.results))
                     with open(meta, 'w') as file:
@@ -1076,7 +1077,7 @@ class BenchmarkAnalyzer:
         #     && git add . \
         #     && git config --global user.email "victor@accelerationrobotics.com" \
         #     && git config --global user.name "Víctor Mayoral-Vilches" \
-        #     && git commit -m "' + benchmark_name + ' results for ' + os.environ.get('HARDWARE') + ' (' + str(result["value"]) + ')\n \
+        #     && git commit -m "' + self.benchmark_name + ' results for ' + os.environ.get('HARDWARE') + ' (' + str(result["value"]) + ')\n \
         #     - CI_PIPELINE_URL: ' + os.environ.get('CI_PIPELINE_URL') + '\n \
         #     - CI_JOB_URL: ' + os.environ.get('CI_JOB_URL') + '"'
         #     , shell=True)
