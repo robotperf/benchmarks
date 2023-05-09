@@ -37,8 +37,9 @@ from bokeh.models.annotations import Label
 
 class BenchmarkAnalyzer:
 
-    def __init__(self, benchmark_name):
+    def __init__(self, benchmark_name, hardware_device_type="cpu"):
         self.benchmark_name = benchmark_name
+        self.hardware_device_type = hardware_device_type
 
         # initialize arrays where tracing configuration will be stored
         self.target_chain = []
@@ -134,6 +135,119 @@ class BenchmarkAnalyzer:
                 )
             else:
                 assert False, "invalid marker_type value"
+
+
+    def msgsets_from_ctf_vtf_traces(ctf_trace, vtf_trace):
+        """
+        Returns a list of message sets ready to be used
+        for plotting them in various forms. Takes two inputs,
+        corresponding with the absolute paths to a CTF and and 
+        VTF (CTF format).
+
+        NOTE: NOT coded for multiple Nodes running concurrently or multithreaded executors
+        Classification expects events in the corresponding order.
+        """
+
+        msg_it = bt2.TraceCollectionMessageIterator(ctf_trace)
+        # Iterate the trace messages and pick right ones
+        ctf_msgs = []
+        for msg in msg_it:
+            # `bt2._EventMessageConst` is the Python type of an event message.
+            if type(msg) is bt2._EventMessageConst:
+                # An event message holds a trace event.
+                event = msg.event
+                # Only check `sched_switch` events.
+                if event.name in self.target_chain:
+                    ctf_msgs.append(msg)
+
+        msg_it = bt2.TraceCollectionMessageIterator(vtf_trace)
+        # Iterate the trace messages and pick right ones
+        vtf_msgs = []
+        for msg in msg_it:
+            # `bt2._EventMessageConst` is the Python type of an event message.
+            if type(msg) is bt2._EventMessageConst:
+                # An event message holds a trace event.
+                event = msg.event
+                # Only check `sched_switch` events.
+                if event.name in self.target_chain:
+                    vtf_msgs.append(msg)
+
+        all_msgs = ctf_msgs + vtf_msgs
+        all_msgs_sorted = sorted(all_msgs, key= lambda x: x.default_clock_snapshot.ns_from_origin)
+
+        # Form sets with each pipeline
+        image_pipeline_msg_sets = []
+        new_set = []  # used to track new complete sets
+        chain_index = 0  # track where in the chain we are so far
+        vpid_chain = -1  # used to track a set and differentiate from other callbacks
+
+        # NOTE: NOT CODED FOR MULTIPLE NODES RUNNING CONCURRENTLY
+        # this classification is going to miss the initial matches because
+        # "ros2:callback_start" will not be associated with the target chain and it won't stop
+        # being considered until a "ros2:callback_end" of that particular process is seen
+        for index in range(len(all_msgs_sorted)):
+            if all_msgs_sorted[index].event.name in self.target_chain:  # optimization
+
+                # print("new: " + all_msgs_sorted[index].event.name)
+                # print("expected: " + str(self.target_chain[chain_index]))
+                # print("chain_index: " + str(chain_index))
+                # print("---")
+
+                # first one            
+                if (
+                    chain_index == 0
+                    and all_msgs_sorted[index].event.name == self.target_chain[chain_index]
+                ):
+                    new_set.append(all_msgs_sorted[index])
+                    # vpid_chain = all_msgs_sorted[index].event.common_context_field.get(
+                    #     "vpid"
+                    # )
+                    chain_index += 1
+                    # print(color("Found: " + str(all_msgs_sorted[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
+                # last one
+                elif (
+                    all_msgs_sorted[index].event.name == self.target_chain[chain_index]
+                    and self.target_chain[chain_index] == self.target_chain[-1]
+                    and new_set[-1].event.name == self.target_chain[-2]
+                    # and all_msgs_sorted[index].event.common_context_field.get("vpid")
+                    # == vpid_chain
+                ):
+                    new_set.append(all_msgs_sorted[index])
+                    image_pipeline_msg_sets.append(new_set)
+                    # print(color("Found: " + str(all_msgs_sorted[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
+                    chain_index = 0  # restart
+                    new_set = []  # restart
+                # match
+                elif (
+                    all_msgs_sorted[index].event.name == self.target_chain[chain_index]
+                    # and all_msgs_sorted[index].event.common_context_field.get("vpid")
+                    # == vpid_chain
+                ):
+                    new_set.append(all_msgs_sorted[index])
+                    chain_index += 1
+                    # print(color("Found: " + str(all_msgs_sorted[index].event.name), fg="green"))
+                # altered order
+                elif (
+                    all_msgs_sorted[index].event.name in self.target_chain
+                    # and all_msgs_sorted[index].event.common_context_field.get("vpid")
+                    # == vpid_chain
+                ):
+                    # pop ros2:callback_start in new_set, if followed by "ros2:callback_end"
+                    # NOTE: consider case of disconnected series of:
+                    #       "ros2:callback_start"
+                    #       "ros2:callback_end"
+                    if (all_msgs_sorted[index].event.name == "ros2:callback_end"
+                        and self.target_chain[chain_index - 1] == "ros2:callback_start"):
+                        new_set.pop()
+                        chain_index -= 1
+                    else:
+                        new_set.append(all_msgs_sorted[index])
+                        # print(color("Altered order: " + str([x.event.name for x in new_set]) + ", restarting", fg="red"))
+                        chain_index = 0  # restart
+                        new_set = []  # restart
+
+        # print(len(image_pipeline_msg_sets))
+    return image_pipeline_msg_sets
 
 
     def msgsets_from_trace(self, tracename, debug=False):
@@ -286,7 +400,10 @@ class BenchmarkAnalyzer:
         # TODO: make this function generic so other benchmarks can also be plotted 
 
         # For some reason it seems to be displayed in the reverse order on the Y axis
-        segment_types = ["rmw", "rcl", "rclcpp", "userland", "benchmark"]
+        if self.hardware_device_type == "cpu":
+            segment_types = ["rmw", "rcl", "rclcpp", "userland", "benchmark"]
+        elif self.hardware_device_type == "fpga":
+            segment_types = ["kernel", "rmw", "rcl", "rclcpp", "userland", "benchmark"]
 
         fig = figure(
             title="RobotPerf benchmark:" + self.benchmark_name,
@@ -454,6 +571,33 @@ class BenchmarkAnalyzer:
         )
 
         # print("2")
+
+        if self.hardware_device_type == "fpga":
+            ## kernel_enqueue (rectify)
+            callback_start = (target_chain_ns[7] - init_ns) / 1e6
+            callback_end = (target_chain_ns[8] - init_ns) / 1e6
+            duration = callback_end - callback_start
+            add_durations_to_figure(
+                fig,
+                target_chain_layer[7], # index used in here
+                                        # should match with the
+                                        # one from the callback_start
+                [(callback_start, callback_start + duration, duration)],
+                "palegreen",
+            )
+
+            ## kernel_enqueue (resize)
+            callback_start = (target_chain_ns[15] - init_ns) / 1e6
+            callback_end = (target_chain_ns[16] - init_ns) / 1e6
+            duration = callback_end - callback_start
+            add_durations_to_figure(
+                fig,
+                target_chain_layer[15], # index used in here
+                                        # should match with the
+                                        # one from the callback_start
+                [(callback_start, callback_start + duration, duration)],
+                "palegreen",
+            )
 
         for msg_index in range(len(msg_set)):
             #     self.add_markers_to_figure(fig, msg_set[msg_index].event.name, [(target_chain_ns[msg_index] - init_ns)/1e6], 'blue', marker_type='plus', legend_label='timing')
@@ -990,9 +1134,16 @@ class BenchmarkAnalyzer:
         return outs, errs
 
     def analyze_traces(self):
-        image_pipeline_msg_sets = self.msgsets_from_trace(os.getenv("HOME") + "/.ros/tracing/" + self.benchmark_name, True)
-        # image_pipeline_msg_sets = self.msgsets_from_trace("/tmp/benchmark_ws/src/benchmarks/trace_old/trace_cpu_ctf")
-        # image_pipeline_msg_sets = self.msgsets_from_trace("/tmp/benchmark_ws/src/benchmarks/trace/trace_cpu_ctf", True)
+        if self.hardware_device_type = "cpu":
+            image_pipeline_msg_sets = self.msgsets_from_trace(os.getenv("HOME") + "/.ros/tracing/" + self.benchmark_name, True)
+            # image_pipeline_msg_sets = self.msgsets_from_trace("/tmp/benchmark_ws/src/benchmarks/trace_old/trace_cpu_ctf")
+            # image_pipeline_msg_sets = self.msgsets_from_trace("/tmp/benchmark_ws/src/benchmarks/trace/trace_cpu_ctf", True)
+        elif self.hardware_device_type = "fpga":
+            image_pipeline_msg_sets = msgsets_from_ctf_vtf_traces(
+                "/tmp/analysis/trace/trace_cpu_ctf",
+                "/tmp/analysis/trace/trace_fpga_vtf_ctf_fix",
+            )
+
         index_to_plot = len(image_pipeline_msg_sets)//2
         if len(image_pipeline_msg_sets) < 1:
             print(color("No msg sets found", fg="red"))
