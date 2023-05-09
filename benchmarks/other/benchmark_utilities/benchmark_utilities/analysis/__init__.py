@@ -1,5 +1,6 @@
 # Copyright (C) Acceleration Robotics S.L.U. - All Rights Reserved
 #
+# Written by Víctor Mayoral Vilches <victor@accelerationrobotics.com>
 # Written by Martiño Crespo <martinho@accelerationrobotics.com>
 # Licensed under the Apache License, Version 2.0
 
@@ -281,6 +282,8 @@ class BenchmarkAnalyzer:
 
 
     def traces(self, msg_set):
+        # this method only works for hardcoded traces, specifically for the a1 benchmark
+        # TODO: make this function generic so other benchmarks can also be plotted 
 
         # For some reason it seems to be displayed in the reverse order on the Y axis
         segment_types = ["rmw", "rcl", "rclcpp", "userland", "benchmark"]
@@ -1003,8 +1006,9 @@ class BenchmarkAnalyzer:
         ######################
         # draw tracepoints
         ######################
-        msg_set = image_pipeline_msg_sets[index_to_plot]
-        self.traces(msg_set)
+        if self.benchmark_name == "a1_perception_2nodes":
+            msg_set = image_pipeline_msg_sets[index_to_plot]
+            self.traces(msg_set)
 
 
         ######################
