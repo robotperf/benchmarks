@@ -39,8 +39,12 @@ namespace perception
 ImageInputComponent::ImageInputComponent(const rclcpp::NodeOptions & options)
 : rclcpp::Node("ImageInputComponent", options)
 {
+
+  // Get the input_topic_name parameter from the parameter server with default value "input"
+  std::string input_topic_name = this->declare_parameter<std::string>("input_topic_name", "input");
+
   // Create image pub
-  pub_image_ = image_transport::create_camera_publisher(this, "input");
+  pub_image_ = image_transport::create_camera_publisher(this, input_topic_name);
   // Create image sub
   sub_image_ = image_transport::create_camera_subscription(
     this, "image",
