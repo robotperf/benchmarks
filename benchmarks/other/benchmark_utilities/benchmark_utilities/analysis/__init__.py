@@ -946,7 +946,7 @@ class BenchmarkAnalyzer:
         ]
 
 
-    def table(self, list_sets, list_sets_names, from_baseline=True):
+    def print_markdown_table(self, list_sets, list_sets_names, from_baseline=True):
         """
         Creates a markdown table from a list of sets
 
@@ -1133,64 +1133,50 @@ class BenchmarkAnalyzer:
             errs = None
         return outs, errs
 
-    def analyze_traces(self):
+    def get_target_chain_traces(self):
         if self.hardware_device_type == "cpu":
-            image_pipeline_msg_sets = self.msgsets_from_trace(os.getenv("HOME") + "/.ros/tracing/" + self.benchmark_name, True)
-            # image_pipeline_msg_sets = self.msgsets_from_trace("/tmp/benchmark_ws/src/benchmarks/trace_old/trace_cpu_ctf")
-            # image_pipeline_msg_sets = self.msgsets_from_trace("/tmp/benchmark_ws/src/benchmarks/trace/trace_cpu_ctf", True)
+            self.image_pipeline_msg_sets = self.msgsets_from_trace(os.getenv("HOME") + "/.ros/tracing/" + self.benchmark_name, True)
+            # self.image_pipeline_msg_sets = self.msgsets_from_trace("/tmp/benchmark_ws/src/benchmarks/trace_old/trace_cpu_ctf")
+            # self.image_pipeline_msg_sets = self.msgsets_from_trace("/tmp/benchmark_ws/src/benchmarks/trace/trace_cpu_ctf", True)
         elif self.hardware_device_type == "fpga":
-            image_pipeline_msg_sets = msgsets_from_ctf_vtf_traces(
+            self.image_pipeline_msg_sets = msgsets_from_ctf_vtf_traces(
                 "/tmp/analysis/trace/trace_cpu_ctf",
                 "/tmp/analysis/trace/trace_fpga_vtf_ctf_fix",
             )
 
-        index_to_plot = len(image_pipeline_msg_sets)//2
-        if len(image_pipeline_msg_sets) < 1:
+    def get_index_to_plot(self):
+        index_to_plot = len(self.image_pipeline_msg_sets)//2
+        if len(self.image_pipeline_msg_sets) < 1:
             print(color("No msg sets found", fg="red"))
             sys.exit(1)
 
-        ####################
-        # print timing pipeline
-        ####################
-        if image_pipeline_msg_sets: 
-            self.print_timeline([image_pipeline_msg_sets[index_to_plot]])  # timeline of last message
-            # print(len(image_pipeline_msg_sets))
-            # self.print_timeline(image_pipeline_msg_sets)  # all timelines
-            # self.print_timeline_average(image_pipeline_msg_sets)  # timeline of averages, NOTE only totals are of interest
+        return index_to_plot
 
-        ######################
-        # draw tracepoints
-        ######################
+    def print_timing_pipeline(self):
+        if self.image_pipeline_msg_sets: 
+            self.print_timeline([self.image_pipeline_msg_sets[self.index_to_plot]])     # timeline of last message
+            # print(len(self.image_pipeline_msg_sets))
+            # self.print_timeline(self.image_pipeline_msg_sets)                         # all timelines
+            # self.print_timeline_average(self.image_pipeline_msg_sets)                 # timeline of averages, NOTE only totals are of interest
+
+    def draw_tracepoints(self):
         if self.benchmark_name == "a1_perception_2nodes":
-            msg_set = image_pipeline_msg_sets[index_to_plot]
+            msg_set = self.image_pipeline_msg_sets[self.index_to_plot]
             self.traces(msg_set)
 
+    def draw_bar_charts(self):
+        self.image_pipeline_msg_sets_barchart = self.barchart_data(self.image_pipeline_msg_sets)
 
-        ######################
-        # draw bar charts
-        ######################
-        image_pipeline_msg_sets_barchart = self.barchart_data(image_pipeline_msg_sets)
-
-        # ///////////////////
-        # Markdown Table results
-        # ///////////////////
-        self.table(
-                [image_pipeline_msg_sets_barchart,],
-                ["RobotPerf benchmark"],
-                from_baseline=False
-            )
-
-        #///////////////////
+    def plot_latency_results(self):
         # Plot, either averages or latest, etc
-        #///////////////////
 
         # TODO: the plotting code below doesn't work with a5_resize
         if self.benchmark_name != "a1_perception_2nodes":
             sys.exit()
 
-        image_pipeline_msg_sets_mean = pd.DataFrame(image_pipeline_msg_sets_barchart).mean()
-        image_pipeline_msg_sets_max = pd.DataFrame(image_pipeline_msg_sets_barchart).max()
-        image_pipeline_msg_sets_index = pd.DataFrame(self.barchart_data(image_pipeline_msg_sets[index_to_plot])).transpose()[0]
+        image_pipeline_msg_sets_mean = pd.DataFrame(self.image_pipeline_msg_sets_barchart).mean()
+        image_pipeline_msg_sets_max = pd.DataFrame(self.image_pipeline_msg_sets_barchart).max()
+        image_pipeline_msg_sets_index = pd.DataFrame(self.barchart_data(self.image_pipeline_msg_sets[self.index_to_plot])).transpose()[0]
         image_pipeline_msg_sets_index = image_pipeline_msg_sets_index.rename(None)
 
         df_mean = pd.concat(
@@ -1228,7 +1214,7 @@ class BenchmarkAnalyzer:
 
         path_repo = "/tmp/benchmarks"
         branch_name = ""
-        result = self.results(image_pipeline_msg_sets_barchart)
+        result = self.results(self.image_pipeline_msg_sets_barchart)
 
         # # fetch repo
         # run('if [ -d "/tmp/benchmarks" ]; then cd ' + path_repo +  ' && git pull; \
@@ -1246,7 +1232,7 @@ class BenchmarkAnalyzer:
                         file.write(str(benchmark))
                     print(benchmark)
 
-
+    # def upload_results():
         # # commit and push in a new branch called "branch_name" and drop instructions to create a PR
         # # NOTE: conflicts with permissions
         # #   - fatal: could not read Username for 'https://github.com': No such device or address
@@ -1265,3 +1251,25 @@ class BenchmarkAnalyzer:
         # # show message of last git commit
         # outs, err = run('cd /tmp/benchmarks && git log -1', shell=True)
         # print(outs)
+
+    def analyze_latency(self):
+
+        self.get_target_chain_traces()
+
+        self.index_to_plot = self.get_index_to_plot()
+
+        self.print_timing_pipeline()
+
+        self.draw_tracepoints()
+
+        self.draw_bar_charts()
+
+        self.print_markdown_table(
+            [self.image_pipeline_msg_sets_barchart],
+            ["RobotPerf benchmark"],
+            from_baseline=False
+        )
+
+        self.plot_latency_results()
+
+        # self.upload_results()

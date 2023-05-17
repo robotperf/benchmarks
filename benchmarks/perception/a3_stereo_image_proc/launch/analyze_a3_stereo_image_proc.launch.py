@@ -39,4 +39,4 @@ ba.add_target({"name": "robotperf_benchmarks:robotperf_image_input_cb_fini", "na
 ba.add_target({"name": "robotperf_benchmarks:robotperf_image_output_cb_init", "name_disambiguous": "robotperf_benchmarks:robotperf_image_output_cb_init", "colors_fg": "red", "colors_fg_bokeh": "red", "layer": "benchmark", "label_layer": 5, "marker": "plus"})
 ba.add_target({"name": "robotperf_benchmarks:robotperf_image_output_cb_fini", "name_disambiguous": "robotperf_benchmarks:robotperf_image_output_cb_fini", "colors_fg": "red", "colors_fg_bokeh": "lavender", "layer": "userland", "label_layer": 4, "marker": "plus"})
 
-ba.analyze_traces()
+ba.analyze_latency()
