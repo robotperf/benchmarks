@@ -247,7 +247,7 @@ class BenchmarkAnalyzer:
                         new_set = []  # restart
 
         # print(len(image_pipeline_msg_sets))
-    return image_pipeline_msg_sets
+        return image_pipeline_msg_sets
 
 
     def msgsets_from_trace(self, tracename, debug=False):
@@ -1134,11 +1134,11 @@ class BenchmarkAnalyzer:
         return outs, errs
 
     def analyze_traces(self):
-        if self.hardware_device_type = "cpu":
+        if self.hardware_device_type == "cpu":
             image_pipeline_msg_sets = self.msgsets_from_trace(os.getenv("HOME") + "/.ros/tracing/" + self.benchmark_name, True)
             # image_pipeline_msg_sets = self.msgsets_from_trace("/tmp/benchmark_ws/src/benchmarks/trace_old/trace_cpu_ctf")
             # image_pipeline_msg_sets = self.msgsets_from_trace("/tmp/benchmark_ws/src/benchmarks/trace/trace_cpu_ctf", True)
-        elif self.hardware_device_type = "fpga":
+        elif self.hardware_device_type == "fpga":
             image_pipeline_msg_sets = msgsets_from_ctf_vtf_traces(
                 "/tmp/analysis/trace/trace_cpu_ctf",
                 "/tmp/analysis/trace/trace_fpga_vtf_ctf_fix",
