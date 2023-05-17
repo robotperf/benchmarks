@@ -3,11 +3,13 @@
 Perception resize ROS Component.
 
 ### ID
-![](../../../imgs/a5_resize.svg)
+a5
 
 ### Description
 A simple perception resize ROS robotics operation. Used to demonstrate a simple perception component [image_pipeline](https://github.com/ros-perception/image_pipeline) package.
 
+
+![](../../../imgs/a5_resize.svg)
 
 **Metric**: latency (ms)
 
@@ -38,4 +40,5 @@ RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch a5_resize trace_a5_resize.laun
 
 | Hardware | Value | Category | Timestamp | Note | Data Source |
 | --- | --- | --- | --- | --- | --- |
+| Intel® Core™ i5-8250U CPU @ 1.60GHz × 8 | 33.68 | workstation | 08-05-2023 |  | perception/image2 |
 
