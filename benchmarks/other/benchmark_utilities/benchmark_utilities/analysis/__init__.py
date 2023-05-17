@@ -799,10 +799,10 @@ class BenchmarkAnalyzer:
                 for i in indices:
                     indices_sum += set[i]
                 with_indices_sets.append(indices_sum)
-            return self.rms(with_indices_sets)
+            return self.mean(with_indices_sets)
         else:
             total_in_sets = [sum(set) for set in image_pipeline_msg_sets]
-            return self.rms(total_in_sets)
+            return self.mean(total_in_sets)
 
 
     def max_sets(self, image_pipeline_msg_sets, indices=None):
