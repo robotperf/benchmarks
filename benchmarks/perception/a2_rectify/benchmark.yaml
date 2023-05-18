@@ -1,37 +1,36 @@
-id: a2
-name: a2_rectify
-description: |
-  A simple perception rectify ROS robotics operation. Used to demonstrate a simple perception component [image_pipeline](https://github.com/ros-perception/image_pipeline) package.
-short: Perception rectify ROS Component.
-graph: ../../../imgs/a2_rectify.svg
-metric:
-  metric: "latency"
-  unit: "ms"
-reproduction: |
-  # Create a ROS 2 overlay workspace
-  mkdir -p /tmp/benchmark_ws/src
-  
-  # Clone the benchmark repository
-  cd /tmp/benchmark_ws/src && git clone https://github.com/robotperf/benchmarks
-  
-  # Fetch dependencies
-  source /opt/ros/humble/setup.bash
-  cd /tmp/benchmark_ws && sudo rosdep update || true && sudo apt-get update &&
-    sudo rosdep install --from-paths src --ignore-src --rosdistro humble -y
-  
-  # Build the benchmark
-  colcon build --merge-install --packages-up-to a2_rectify
-  
-  # Source the workspace as an overlay, launch the benchmark
-  source install/setup.bash
-  RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch a2_rectify trace_a2_rectify.launch.py
+description: 'A simple perception rectify ROS robotics operation. Used to demonstrate
+  a simple perception component [image_pipeline](https://github.com/ros-perception/image_pipeline)
+  package.
 
-# Data not valid at the moment, just a placeholder for now
+  '
+graph: ../../../imgs/a2_rectify.svg
+id: a2
+metric:
+  metric: latency
+  unit: ms
+name: a2_rectify
+reproduction: "# Create a ROS 2 overlay workspace\nmkdir -p /tmp/benchmark_ws/src\n\
+  \n# Clone the benchmark repository\ncd /tmp/benchmark_ws/src && git clone https://github.com/robotperf/benchmarks\n\
+  \n# Fetch dependencies\nsource /opt/ros/humble/setup.bash\ncd /tmp/benchmark_ws\
+  \ && sudo rosdep update || true && sudo apt-get update &&\n  sudo rosdep install\
+  \ --from-paths src --ignore-src --rosdistro humble -y\n\n# Build the benchmark\n\
+  colcon build --merge-install --packages-up-to a2_rectify\n\n# Source the workspace\
+  \ as an overlay, launch the benchmark\nsource install/setup.bash\nRMW_IMPLEMENTATION=rmw_cyclonedds_cpp\
+  \ ros2 launch a2_rectify trace_a2_rectify.launch.py\n"
 results:
-  - result:
-      hardware: ROBOTCORE
-      category: edge
-      timestampt: 14-10-2022
-      value: 66.82
-      note: ""
-      datasource: "perception/image"
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: ROBOTCORE
+    note: ''
+    timestampt: 14-10-2022
+    value: 66.82
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    note: mean_benchmark 2.8676033714285714, rms_benchmark 2.8897651859085913, max_benchmark
+      3.2603079999999998, min_benchmark 0.8727670000000001
+    timestampt: '2023-05-18 15:30:29'
+    value: 3.2603079999999998
+short: Perception rectify ROS Component.
