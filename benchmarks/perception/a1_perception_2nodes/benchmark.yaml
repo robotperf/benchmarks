@@ -1,57 +1,58 @@
-id: a1
-name: a1_perception_2nodes
-description: |
-  A simple perception computational graph composed by 2 Components, `rectify` and `resize` operations. Used to demonstrate a simple perception pipeline using the [image_pipeline](https://github.com/ros-perception/image_pipeline) package.
-short: Perception computational graph composed by 2 dataflow-connected *Components*, `rectify` and `resize`.
-graph: ../../../imgs/a1_perception_2nodes.svg
-metric:
-  metric: "latency"
-  unit: "ms"
-reproduction: |
-  # Create a ROS 2 overlay workspace
-  mkdir -p /tmp/benchmark_ws/src
-  
-  # Clone the benchmark repository
-  cd /tmp/benchmark_ws/src && git clone https://github.com/robotperf/benchmarks
-  
-  # Fetch dependencies
-  source /opt/ros/humble/setup.bash
-  cd /tmp/benchmark_ws && sudo rosdep update || true && sudo apt-get update &&
-    sudo rosdep install --from-paths src --ignore-src --rosdistro humble -y
-  
-  # Build the benchmark
-  colcon build --merge-install --packages-up-to a1_perception_2nodes
-  
-  # Source the workspace as an overlay, launch the benchmark
-  source install/setup.bash
-  RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch a1_perception_2nodes trace_a1_perception_2nodes.launch.py
+description: 'A simple perception computational graph composed by 2 Components, `rectify`
+  and `resize` operations. Used to demonstrate a simple perception pipeline using
+  the [image_pipeline](https://github.com/ros-perception/image_pipeline) package.
 
+  '
+graph: ../../../imgs/a1_perception_2nodes.svg
+id: a1
+metric:
+  metric: latency
+  unit: ms
+name: a1_perception_2nodes
+reproduction: "# Create a ROS 2 overlay workspace\nmkdir -p /tmp/benchmark_ws/src\n\
+  \n# Clone the benchmark repository\ncd /tmp/benchmark_ws/src && git clone https://github.com/robotperf/benchmarks\n\
+  \n# Fetch dependencies\nsource /opt/ros/humble/setup.bash\ncd /tmp/benchmark_ws\
+  \ && sudo rosdep update || true && sudo apt-get update &&\n  sudo rosdep install\
+  \ --from-paths src --ignore-src --rosdistro humble -y\n\n# Build the benchmark\n\
+  colcon build --merge-install --packages-up-to a1_perception_2nodes\n\n# Source the\
+  \ workspace as an overlay, launch the benchmark\nsource install/setup.bash\nRMW_IMPLEMENTATION=rmw_cyclonedds_cpp\
+  \ ros2 launch a1_perception_2nodes trace_a1_perception_2nodes.launch.py\n"
 results:
-  - result:
-      hardware: ROBOTCORE
-      category: edge
-      timestampt: 14-10-2022
-      value: 66.82
-      note: ""
-      datasource: "perception/image"
-  - result:
-      hardware: Kria KR260
-      category: edge      
-      timestampt: 14-10-2022
-      value: 66.82
-      note: ""
-      datasource: "perception/image"
-  - result:
-      hardware: Jetson Nano
-      category: edge      
-      timestampt: 14-10-2022
-      value: 238.13
-      note: ""
-      datasource: "perception/image"
-  - result:
-      hardware: Jetson AGX Xavier
-      category: edge      
-      timestampt: 14-10-2022
-      value: 106.34
-      note: ""
-      datasource: "perception/image"
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: ROBOTCORE
+    note: ''
+    timestampt: 14-10-2022
+    value: 66.82
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    note: ''
+    timestampt: 14-10-2022
+    value: 66.82
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Jetson Nano
+    note: ''
+    timestampt: 14-10-2022
+    value: 238.13
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Jetson AGX Xavier
+    note: ''
+    timestampt: 14-10-2022
+    value: 106.34
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    note: mean_benchmark 14.263804487179486, rms_benchmark 14.947153162904215, max_benchmark
+      22.019986, min_benchmark 5.391826999999999
+    timestampt: '2023-05-18 15:27:17'
+    value: 22.019986
+short: Perception computational graph composed by 2 dataflow-connected *Components*,
+  `rectify` and `resize`.
