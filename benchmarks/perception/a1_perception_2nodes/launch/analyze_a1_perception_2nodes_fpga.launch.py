@@ -35,6 +35,43 @@ ba = BenchmarkAnalyzer(
     "a1_perception_2nodes_fpga",
     hardware_device_type="fpga")
 
+# targeted chain of messages for tracing
+# NOTE: there're not "publish" tracepoints because
+# graph's using inter-process communications
+#
+target_chain = [
+    "ros2:callback_start",  # 0
+    "robotperf_benchmarks:robotperf_image_input_cb_init",  # 1
+    "robotperf_benchmarks:robotperf_image_input_cb_fini",  # 2
+    "ros2:callback_end",  # 3
+    "ros2:callback_start",  # 4
+    "ros2_image_pipeline:image_proc_rectify_cb_init",  # 5
+    "ros2_image_pipeline:image_proc_rectify_init",  # 6
+    "ros2:vitis_profiler:kernel_enqueue",  # 7
+    "ros2:vitis_profiler:kernel_enqueue",  # 8
+    "ros2_image_pipeline:image_proc_rectify_fini",  # 9
+    # "ros2:rclcpp_publish",
+    # "ros2:rcl_publish",
+    # "ros2:rmw_publish",
+    "ros2_image_pipeline:image_proc_rectify_cb_fini",  # 10
+    "ros2:callback_end",  # 11
+    "ros2:callback_start",  # 12
+    "ros2_image_pipeline:image_proc_resize_cb_init",  # 13
+    "ros2_image_pipeline:image_proc_resize_init",  # 14
+    "ros2:vitis_profiler:kernel_enqueue",  # 15
+    "ros2:vitis_profiler:kernel_enqueue",  # 16
+    "ros2_image_pipeline:image_proc_resize_fini",  # 17
+    # "ros2:rclcpp_publish",
+    # "ros2:rcl_publish",
+    # "ros2:rmw_publish",
+    "ros2_image_pipeline:image_proc_resize_cb_fini",  # 18
+    "ros2:callback_end",  # 19
+    "ros2:callback_start",  # 20
+    "robotperf_benchmarks:robotperf_image_output_cb_init",  # 21
+    "robotperf_benchmarks:robotperf_image_output_cb_fini",  # 22
+    "ros2:callback_end",  # 23
+]
+
 # add parameters for analyzing the traces
 ba.add_target(
     {
