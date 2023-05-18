@@ -1185,7 +1185,7 @@ class BenchmarkAnalyzer:
         # if self.benchmark_name != "a1_perception_2nodes":
         #     sys.exit()
 
-        image_pipeline_msg_sets_mean = pd.DataFrame(self.image_pipeline_msg_sets_barchart).mean()
+        image_pipeline_msg_sets_mean = pd.DataFrame(self.image_pipeline_msg_sets_barchart).mean()        
         image_pipeline_msg_sets_max = pd.DataFrame(self.image_pipeline_msg_sets_barchart).max()
         image_pipeline_msg_sets_index = pd.DataFrame(self.barchart_data(self.image_pipeline_msg_sets[self.index_to_plot])).transpose()[0]
         image_pipeline_msg_sets_index = image_pipeline_msg_sets_index.rename(None)
