@@ -56,7 +56,8 @@ void ImageOutputComponent::imageCb(
     robotperf_image_output_cb_init,
     static_cast<const void *>(this),
     static_cast<const void *>(&(*image_msg)),
-    static_cast<const void *>(&(*info_msg)));
+    static_cast<const void *>(&(*info_msg)),
+    image_msg->header.stamp.nanosec);
 
   TRACEPOINT(
     robotperf_image_output_cb_fini,

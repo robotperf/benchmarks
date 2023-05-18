@@ -78,12 +78,14 @@ TRACETOOLS_PUBLIC bool ros_trace_compile_status();
  * \param[in] image_input_node rclcpp::node::Node subject to the callback
  * \param[in] image_input_image_msg image ROS message stored as sensor_msgs::msg::Image::ConstSharedPtr
  * \param[in] image_input_info_msg info ROS message as sensor_msgs::msg::CameraInfo::ConstSharedPtr
+ * \param[in] image_input_header_nsec_arg nanosec field of the header (std_msgs/Header) of sensor_msgs::msg::Image's ROS message 
  */
 DECLARE_TRACEPOINT(
   robotperf_image_input_cb_init,
   const void * image_input_node,
   const void * image_input_image_msg,
-  const void * image_input_info_msg)
+  const void * image_input_info_msg,
+  uint32_t image_input_header_nsec_arg)
 
 /// `robotperf_image_input_cb_fini`
 /**
@@ -110,12 +112,14 @@ DECLARE_TRACEPOINT(
  * \param[in] image_output_node rclcpp::node::Node subject to the callback
  * \param[in] image_output_image_msg image ROS message stored as sensor_msgs::msg::Image::ConstSharedPtr
  * \param[in] image_output_info_msg info ROS message as sensor_msgs::msg::CameraInfo::ConstSharedPtr
+ * \param[in] image_output_header_nsec_arg nanosec field of the header (std_msgs/Header) of sensor_msgs::msg::Image's ROS message 
  */
 DECLARE_TRACEPOINT(
   robotperf_image_output_cb_init,
   const void * image_output_node,
   const void * image_output_image_msg,
-  const void * image_output_info_msg)
+  const void * image_output_info_msg,
+  uint32_t image_output_header_nsec_arg)  
 
 /// `robotperf_image_output_cb_fini`
 /**
