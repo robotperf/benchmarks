@@ -1163,17 +1163,43 @@ class BenchmarkAnalyzer:
                     True)
 
     def get_index_to_plot(self):
-        index_to_plot = len(self.image_pipeline_msg_sets)//2
-        if len(self.image_pipeline_msg_sets) < 1:
-            print(color("No msg sets found", fg="red"))
-            sys.exit(1)
+        """ Obtain the index to plot given a series of sets
+
+        # Implementation 1
+        Obtains the Panda DataFrame of the corresponding sets,
+        calculates the sum of latencies, obtains the max and 
+        fetches the index.
+
+        # Implemetation 2
+        Index at the middle of the sets
+        """
+
+        # Implementation 1
+        # figure out the index of the set with the max value (longest, latency-wise)
+        max_sum = sum(self.image_pipeline_msg_sets_barchart[0])
+        max_index = 0
+        for i, lst in enumerate(self.image_pipeline_msg_sets_barchart):
+            current_sum = sum(lst)            
+            if current_sum > max_sum:
+                max_sum = current_sum
+                max_index = i       
+
+        index_to_plot =  max_index
+        # # debug
+        # print(self.image_pipeline_msg_sets_barchart[max_index])
+        # print(sum(self.image_pipeline_msg_sets_barchart[max_index]))
+
+        # # Implementation 2
+        # index_to_plot = len(self.image_pipeline_msg_sets)//2
+        # if len(self.image_pipeline_msg_sets) < 1:
+        #     print(color("No msg sets found", fg="red"))
+        #     sys.exit(1)
 
         return index_to_plot
 
     def print_timing_pipeline(self):
         if self.image_pipeline_msg_sets: 
-            self.print_timeline([self.image_pipeline_msg_sets[self.index_to_plot]])     # timeline of last message
-            # print(len(self.image_pipeline_msg_sets))
+            self.print_timeline([self.image_pipeline_msg_sets[self.index_to_plot]])     # timeline of max
             # self.print_timeline(self.image_pipeline_msg_sets)                         # all timelines
             # self.print_timeline_average(self.image_pipeline_msg_sets)                 # timeline of averages, NOTE only totals are of interest
 
@@ -1182,7 +1208,7 @@ class BenchmarkAnalyzer:
             msg_set = self.image_pipeline_msg_sets[self.index_to_plot]
             self.traces(msg_set)
 
-    def draw_bar_charts(self):
+    def bar_charts(self):
         self.image_pipeline_msg_sets_barchart = self.barchart_data(self.image_pipeline_msg_sets)
 
     def plot_latency_results(self):
@@ -1278,10 +1304,10 @@ class BenchmarkAnalyzer:
                 Path of the CTF tracefiles. Defaults to None.
         """
         self.get_target_chain_traces(tracepath)
+        self.bar_charts()
         self.index_to_plot = self.get_index_to_plot()
         self.print_timing_pipeline()
         self.draw_tracepoints()
-        self.draw_bar_charts()
         self.print_markdown_table(
             [self.image_pipeline_msg_sets_barchart],
             ["RobotPerf benchmark"],
