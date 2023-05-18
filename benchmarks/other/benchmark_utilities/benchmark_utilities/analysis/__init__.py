@@ -35,8 +35,8 @@ from bokeh.models.annotations import Label
 # color("{:02x}".format(x), fg=16, bg="green")
 # debug = True  # debug flag, set to True if desired
 
-class BenchmarkAnalyzer:
 
+class BenchmarkAnalyzer:
     def __init__(self, benchmark_name, hardware_device_type="cpu"):
         self.benchmark_name = benchmark_name
         self.hardware_device_type = hardware_device_type
@@ -48,14 +48,13 @@ class BenchmarkAnalyzer:
         self.target_chain_colors_fg_bokeh = []
         self.target_chain_layer = []
         self.target_chain_label_layer = []
-        self.target_chain_marker = []       
-
+        self.target_chain_marker = []
 
     def add_target(self, target_dict):
         # targeted chain of messages for tracing
         # NOTE: there're not "publish" tracepoints because
         # graph's using inter-process communications
-        
+
         self.target_chain.append(target_dict["name"])
         self.target_chain_dissambiguous.append(target_dict["name_disambiguous"])
         self.target_chain_colors_fg.append(target_dict["colors_fg"])
@@ -63,7 +62,6 @@ class BenchmarkAnalyzer:
         self.target_chain_layer.append(target_dict["layer"])
         self.target_chain_label_layer.append(target_dict["label_layer"])
         self.target_chain_marker.append(target_dict["marker"])
-
 
     def get_change(self, first, second):
         """
@@ -75,7 +73,6 @@ class BenchmarkAnalyzer:
             return (abs(first - second) / second) * 100.0
         except ZeroDivisionError:
             return float("inf")
-
 
     def add_durations_to_figure(
         self, 
@@ -98,7 +95,6 @@ class BenchmarkAnalyzer:
                 line_width=line_width,
                 **base_kwargs,
             )
-
 
     def add_markers_to_figure(
         self, 
@@ -1133,16 +1129,21 @@ class BenchmarkAnalyzer:
             errs = None
         return outs, errs
 
-    def get_target_chain_traces(self):
-        if self.hardware_device_type == "cpu":
-            self.image_pipeline_msg_sets = self.msgsets_from_trace(os.getenv("HOME") + "/.ros/tracing/" + self.benchmark_name, True)
-            # self.image_pipeline_msg_sets = self.msgsets_from_trace("/tmp/benchmark_ws/src/benchmarks/trace_old/trace_cpu_ctf")
-            # self.image_pipeline_msg_sets = self.msgsets_from_trace("/tmp/benchmark_ws/src/benchmarks/trace/trace_cpu_ctf", True)
-        elif self.hardware_device_type == "fpga":
-            self.image_pipeline_msg_sets = msgsets_from_ctf_vtf_traces(
-                "/tmp/analysis/trace/trace_cpu_ctf",
-                "/tmp/analysis/trace/trace_fpga_vtf_ctf_fix",
-            )
+    def get_target_chain_traces(self, trace_path):
+        if trace_path:
+            self.image_pipeline_msg_sets \
+                = self.msgsets_from_trace(trace_path, True)
+        else:
+            if self.hardware_device_type == "cpu":
+                self.image_pipeline_msg_sets = self.msgsets_from_trace(
+                    # os.getenv("HOME") + "/.ros/tracing/" + self.benchmark_name,
+                    "/tmp/analysis/trace/trace_cpu_ctf",
+                    True)
+            elif self.hardware_device_type == "fpga":
+                self.image_pipeline_msg_sets = msgsets_from_ctf_vtf_traces(
+                    "/tmp/analysis/trace/trace_cpu_ctf",
+                    "/tmp/analysis/trace/trace_fpga_vtf_ctf_fix",
+                )
 
     def get_index_to_plot(self):
         index_to_plot = len(self.image_pipeline_msg_sets)//2
@@ -1232,38 +1233,38 @@ class BenchmarkAnalyzer:
                         file.write(str(benchmark))
                     print(benchmark)
 
-    # def upload_results():
-        # # commit and push in a new branch called "branch_name" and drop instructions to create a PR
-        # # NOTE: conflicts with permissions
-        # #   - fatal: could not read Username for 'https://github.com': No such device or address
-        # #   - Try authenticating with:  gh auth login
-        # run('cd /tmp/benchmarks && git checkout -b ' + branch_name + ' \
-        #     && git add . \
-        #     && git config --global user.email "victor@accelerationrobotics.com" \
-        #     && git config --global user.name "Víctor Mayoral-Vilches" \
-        #     && git commit -m "' + self.benchmark_name + ' results for ' + os.environ.get('HARDWARE') + ' (' + str(result["value"]) + ')\n \
-        #     - CI_PIPELINE_URL: ' + os.environ.get('CI_PIPELINE_URL') + '\n \
-        #     - CI_JOB_URL: ' + os.environ.get('CI_JOB_URL') + '"'
-        #     , shell=True)
-        #     # && git push origin ' + branch_name + ' \
-        #     # && gh pr create --title "Add result" --body "Add result"'
+    def upload_results():
+        # commit and push in a new branch called "branch_name" and drop instructions to create a PR
+        # NOTE: conflicts with permissions
+        #   - fatal: could not read Username for 'https://github.com': No such device or address
+        #   - Try authenticating with:  gh auth login
+        run('cd /tmp/benchmarks && git checkout -b ' + branch_name + ' \
+            && git add . \
+            && git config --global user.email "victor@accelerationrobotics.com" \
+            && git config --global user.name "Víctor Mayoral-Vilches" \
+            && git commit -m "' + self.benchmark_name + ' results for ' + os.environ.get('HARDWARE') + ' (' + str(result["value"]) + ')\n \
+            - CI_PIPELINE_URL: ' + os.environ.get('CI_PIPELINE_URL') + '\n \
+            - CI_JOB_URL: ' + os.environ.get('CI_JOB_URL') + '"'
+            , shell=True)
+            # && git push origin ' + branch_name + ' \
+            # && gh pr create --title "Add result" --body "Add result"'
 
-        # # show message of last git commit
-        # outs, err = run('cd /tmp/benchmarks && git log -1', shell=True)
-        # print(outs)
+        # show message of last git commit
+        outs, err = run('cd /tmp/benchmarks && git log -1', shell=True)
+        print(outs)
 
-    def analyze_latency(self):
+    def analyze_latency(self, tracepath=None):
+        """Analyze latency of the image pipeline
 
-        self.get_target_chain_traces()
-
+        Args:
+            tracepath (string, optional):
+                Path of the CTF tracefiles. Defaults to None.
+        """
+        self.get_target_chain_traces(tracepath)
         self.index_to_plot = self.get_index_to_plot()
-
         self.print_timing_pipeline()
-
         self.draw_tracepoints()
-
         self.draw_bar_charts()
-
         self.print_markdown_table(
             [self.image_pipeline_msg_sets_barchart],
             ["RobotPerf benchmark"],
@@ -1271,5 +1272,4 @@ class BenchmarkAnalyzer:
         )
 
         self.plot_latency_results()
-
-        # self.upload_results()
+        # self.upload_results()  # performed in CI/CD pipelines instead
