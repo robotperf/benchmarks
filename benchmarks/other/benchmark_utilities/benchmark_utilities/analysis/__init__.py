@@ -191,7 +191,7 @@ class BenchmarkAnalyzer:
 
                 if debug:
                     print("---")
-                    print("new: " + image_pipeline_msgs[index].event.name)
+                    print("new: " + all_msgs_sorted[index].event.name)
                     print("expected: " + str(self.target_chain[chain_index]))
                     print("chain_index: " + str(chain_index))
 
