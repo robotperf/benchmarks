@@ -1154,7 +1154,6 @@ class BenchmarkAnalyzer:
                     "/tmp/analysis/trace/trace_cpu_ctf",
                     "/tmp/analysis/trace/trace_fpga_vtf_ctf_fix",
                     True)
-                )
 
     def get_index_to_plot(self):
         index_to_plot = len(self.image_pipeline_msg_sets)//2
