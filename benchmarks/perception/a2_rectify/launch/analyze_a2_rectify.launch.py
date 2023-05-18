@@ -33,6 +33,35 @@ def generate_launch_description():
 
 ba = BenchmarkAnalyzer("a2_rectify")
 
+target_chain = [
+    "ros2:callback_start",
+    "robotperf_benchmarks:robotperf_image_input_cb_init",
+    "robotperf_benchmarks:robotperf_image_input_cb_fini",
+    "ros2:callback_end",
+    "ros2:callback_start",
+    "ros2_image_pipeline:image_proc_rectify_cb_init",
+    "ros2_image_pipeline:image_proc_rectify_init",
+    "ros2_image_pipeline:image_proc_rectify_fini",
+    # "ros2:rclcpp_publish",
+    # "ros2:rcl_publish",
+    # "ros2:rmw_publish",
+    "ros2_image_pipeline:image_proc_rectify_cb_fini",
+    "ros2:callback_end",
+    # "ros2:callback_start",
+    # "ros2_image_pipeline:image_proc_resize_cb_init",
+    # "ros2_image_pipeline:image_proc_resize_init",
+    # "ros2_image_pipeline:image_proc_resize_fini",
+    # "ros2:rclcpp_publish",
+    # "ros2:rcl_publish",
+    # "ros2:rmw_publish",
+    # "ros2_image_pipeline:image_proc_resize_cb_fini",
+    # "ros2:callback_end",
+    "ros2:callback_start",
+    "robotperf_benchmarks:robotperf_image_output_cb_init",
+    "robotperf_benchmarks:robotperf_image_output_cb_fini",
+    "ros2:callback_end",
+]
+
 # add parameters for analyzing the traces
 ba.add_target(
     {

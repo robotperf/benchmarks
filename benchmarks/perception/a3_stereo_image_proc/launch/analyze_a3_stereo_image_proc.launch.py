@@ -26,17 +26,94 @@ import os
 from benchmark_utilities.analysis import BenchmarkAnalyzer
 from launch import LaunchDescription
 
+
 def generate_launch_description():
     return LaunchDescription()
 
+
 ba = BenchmarkAnalyzer("a3_stereo_image_proc")
 
+target_chain = [
+    # "ros2:callback_start",
+    'robotperf_benchmarks:robotperf_image_input_cb_init',
+    'robotperf_benchmarks:robotperf_image_input_cb_fini',
+    # 'ros2:callback_end',
+    # 'ros2:callback_start',
+    'robotperf_benchmarks:robotperf_image_input_cb_init',
+    'robotperf_benchmarks:robotperf_image_input_cb_fini',
+    # 'ros2:callback_end',
+    # "ros2:callback_start",
+    'robotperf_benchmarks:robotperf_image_output_cb_init',
+    'robotperf_benchmarks:robotperf_image_output_cb_fini',
+    # "ros2:callback_end",
+]
+
 # add parameters for analyzing the traces
-ba.add_target({"name": "robotperf_benchmarks:robotperf_image_input_cb_init", "name_disambiguous": "robotperf_benchmarks:robotperf_image_input_cb_init", "colors_fg": "blue", "colors_fg_bokeh": "silver", "layer": "userland", "label_layer": 4, "marker": "plus"})
-ba.add_target({"name": "robotperf_benchmarks:robotperf_image_input_cb_fini", "name_disambiguous": "robotperf_benchmarks:robotperf_image_input_cb_fini", "colors_fg": "blue", "colors_fg_bokeh": "darkgray", "layer": "benchmark", "label_layer": 5, "marker": "plus"})
-ba.add_target({"name": "robotperf_benchmarks:robotperf_image_input_cb_init", "name_disambiguous": "robotperf_benchmarks:robotperf_image_input_cb_init (2)", "colors_fg": "yellow", "colors_fg_bokeh": "salmon", "layer": "userland", "label_layer": 4, "marker": "plus"})
-ba.add_target({"name": "robotperf_benchmarks:robotperf_image_input_cb_fini", "name_disambiguous": "robotperf_benchmarks:robotperf_image_input_cb_fini (2)", "colors_fg": "yellow", "colors_fg_bokeh": "darksalmon", "layer": "benchmark", "label_layer": 5, "marker": "plus"})
-ba.add_target({"name": "robotperf_benchmarks:robotperf_image_output_cb_init", "name_disambiguous": "robotperf_benchmarks:robotperf_image_output_cb_init", "colors_fg": "red", "colors_fg_bokeh": "red", "layer": "benchmark", "label_layer": 5, "marker": "plus"})
-ba.add_target({"name": "robotperf_benchmarks:robotperf_image_output_cb_fini", "name_disambiguous": "robotperf_benchmarks:robotperf_image_output_cb_fini", "colors_fg": "red", "colors_fg_bokeh": "lavender", "layer": "userland", "label_layer": 4, "marker": "plus"})
+ba.add_target(
+    {
+        "name": "robotperf_benchmarks:robotperf_image_input_cb_init",
+        "name_disambiguous": "robotperf_benchmarks:robotperf_image_input_cb_init",
+        "colors_fg": "blue",
+        "colors_fg_bokeh": "silver",
+        "layer": "userland",
+        "label_layer": 4,
+        "marker": "plus",
+    }
+)
+ba.add_target(
+    {
+        "name": "robotperf_benchmarks:robotperf_image_input_cb_fini",
+        "name_disambiguous": "robotperf_benchmarks:robotperf_image_input_cb_fini",
+        "colors_fg": "blue",
+        "colors_fg_bokeh": "darkgray",
+        "layer": "benchmark",
+        "label_layer": 5,
+        "marker": "plus",
+    }
+)
+ba.add_target(
+    {
+        "name": "robotperf_benchmarks:robotperf_image_input_cb_init",
+        "name_disambiguous": "robotperf_benchmarks:robotperf_image_input_cb_init (2)",
+        "colors_fg": "yellow",
+        "colors_fg_bokeh": "salmon",
+        "layer": "userland",
+        "label_layer": 4,
+        "marker": "plus",
+    }
+)
+ba.add_target(
+    {
+        "name": "robotperf_benchmarks:robotperf_image_input_cb_fini",
+        "name_disambiguous": "robotperf_benchmarks:robotperf_image_input_cb_fini (2)",
+        "colors_fg": "yellow",
+        "colors_fg_bokeh": "darksalmon",
+        "layer": "benchmark",
+        "label_layer": 5,
+        "marker": "plus",
+    }
+)
+ba.add_target(
+    {
+        "name": "robotperf_benchmarks:robotperf_image_output_cb_init",
+        "name_disambiguous": "robotperf_benchmarks:robotperf_image_output_cb_init",
+        "colors_fg": "red",
+        "colors_fg_bokeh": "red",
+        "layer": "benchmark",
+        "label_layer": 5,
+        "marker": "plus",
+    }
+)
+ba.add_target(
+    {
+        "name": "robotperf_benchmarks:robotperf_image_output_cb_fini",
+        "name_disambiguous": "robotperf_benchmarks:robotperf_image_output_cb_fini",
+        "colors_fg": "red",
+        "colors_fg_bokeh": "lavender",
+        "layer": "userland",
+        "label_layer": 4,
+        "marker": "plus",
+    }
+)
 
 ba.analyze_latency()
