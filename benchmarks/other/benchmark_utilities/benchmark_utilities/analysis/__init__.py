@@ -1181,9 +1181,9 @@ class BenchmarkAnalyzer:
     def plot_latency_results(self):
         # Plot, either averages or latest, etc
 
-        # TODO: the plotting code below doesn't work with a5_resize
-        if self.benchmark_name != "a1_perception_2nodes":
-            sys.exit()
+        # # TODO: the plotting code below doesn't work with a5_resize
+        # if self.benchmark_name != "a1_perception_2nodes":
+        #     sys.exit()
 
         image_pipeline_msg_sets_mean = pd.DataFrame(self.image_pipeline_msg_sets_barchart).mean()
         image_pipeline_msg_sets_max = pd.DataFrame(self.image_pipeline_msg_sets_barchart).max()
