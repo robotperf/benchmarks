@@ -133,7 +133,7 @@ class BenchmarkAnalyzer:
                 assert False, "invalid marker_type value"
 
 
-    def msgsets_from_ctf_vtf_traces(ctf_trace, vtf_trace):
+    def msgsets_from_ctf_vtf_traces(self, ctf_trace, vtf_trace):
         """
         Returns a list of message sets ready to be used
         for plotting them in various forms. Takes two inputs,
@@ -1140,7 +1140,7 @@ class BenchmarkAnalyzer:
                     "/tmp/analysis/trace/trace_cpu_ctf",
                     True)
             elif self.hardware_device_type == "fpga":
-                self.image_pipeline_msg_sets = msgsets_from_ctf_vtf_traces(
+                self.image_pipeline_msg_sets = self.msgsets_from_ctf_vtf_traces(
                     "/tmp/analysis/trace/trace_cpu_ctf",
                     "/tmp/analysis/trace/trace_fpga_vtf_ctf_fix",
                 )
