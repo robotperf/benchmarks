@@ -133,7 +133,7 @@ class BenchmarkAnalyzer:
                 assert False, "invalid marker_type value"
 
 
-    def msgsets_from_ctf_vtf_traces(self, ctf_trace, vtf_trace):
+    def msgsets_from_ctf_vtf_traces(self, ctf_trace, vtf_trace, debug=False):
         """
         Returns a list of message sets ready to be used
         for plotting them in various forms. Takes two inputs,
@@ -189,7 +189,13 @@ class BenchmarkAnalyzer:
                 # print("chain_index: " + str(chain_index))
                 # print("---")
 
-                # first one            
+                if debug:
+                    print("---")
+                    print("new: " + image_pipeline_msgs[index].event.name)
+                    print("expected: " + str(self.target_chain[chain_index]))
+                    print("chain_index: " + str(chain_index))
+
+                # first one
                 if (
                     chain_index == 0
                     and all_msgs_sorted[index].event.name == self.target_chain[chain_index]
@@ -199,7 +205,8 @@ class BenchmarkAnalyzer:
                     #     "vpid"
                     # )
                     chain_index += 1
-                    # print(color("Found: " + str(all_msgs_sorted[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
+                    if debug:
+                        print(color("Found: " + str(all_msgs_sorted[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
                 # last one
                 elif (
                     all_msgs_sorted[index].event.name == self.target_chain[chain_index]
@@ -210,7 +217,8 @@ class BenchmarkAnalyzer:
                 ):
                     new_set.append(all_msgs_sorted[index])
                     image_pipeline_msg_sets.append(new_set)
-                    # print(color("Found: " + str(all_msgs_sorted[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
+                    if debug:
+                        print(color("Found: " + str(all_msgs_sorted[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
                     chain_index = 0  # restart
                     new_set = []  # restart
                 # match
@@ -221,7 +229,8 @@ class BenchmarkAnalyzer:
                 ):
                     new_set.append(all_msgs_sorted[index])
                     chain_index += 1
-                    # print(color("Found: " + str(all_msgs_sorted[index].event.name), fg="green"))
+                    if debug:
+                        print(color("Found: " + str(all_msgs_sorted[index].event.name), fg="green"))
                 # altered order
                 elif (
                     all_msgs_sorted[index].event.name in self.target_chain
@@ -238,7 +247,8 @@ class BenchmarkAnalyzer:
                         chain_index -= 1
                     else:
                         new_set.append(all_msgs_sorted[index])
-                        # print(color("Altered order: " + str([x.event.name for x in new_set]) + ", restarting", fg="red"))
+                        if debug:
+                            print(color("Altered order: " + str([x.event.name for x in new_set]) + ", restarting", fg="red"))
                         chain_index = 0  # restart
                         new_set = []  # restart
 
@@ -1143,6 +1153,7 @@ class BenchmarkAnalyzer:
                 self.image_pipeline_msg_sets = self.msgsets_from_ctf_vtf_traces(
                     "/tmp/analysis/trace/trace_cpu_ctf",
                     "/tmp/analysis/trace/trace_fpga_vtf_ctf_fix",
+                    True)
                 )
 
     def get_index_to_plot(self):
