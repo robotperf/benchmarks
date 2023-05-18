@@ -206,7 +206,7 @@ class BenchmarkAnalyzer:
                     # )
                     chain_index += 1
                     if debug:
-                        print(color("Found: " + str(all_msgs_sorted[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
+                        print(color("Found first: " + str(all_msgs_sorted[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
                 # last one
                 elif (
                     all_msgs_sorted[index].event.name == self.target_chain[chain_index]
@@ -218,7 +218,7 @@ class BenchmarkAnalyzer:
                     new_set.append(all_msgs_sorted[index])
                     image_pipeline_msg_sets.append(new_set)
                     if debug:
-                        print(color("Found: " + str(all_msgs_sorted[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
+                        print(color("Found last: " + str(all_msgs_sorted[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
                     chain_index = 0  # restart
                     new_set = []  # restart
                 # match
@@ -230,7 +230,7 @@ class BenchmarkAnalyzer:
                     new_set.append(all_msgs_sorted[index])
                     chain_index += 1
                     if debug:
-                        print(color("Found: " + str(all_msgs_sorted[index].event.name), fg="green"))
+                        print(color("Found: " + str(all_msgs_sorted[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="green"))
                 # altered order
                 elif (
                     all_msgs_sorted[index].event.name in self.target_chain
