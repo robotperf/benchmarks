@@ -261,18 +261,16 @@ class BenchmarkAnalyzer:
         Returns ROS message header timestamp as unique identifier
         from a CTF msg
         """        
-        print(msg.event.name)
-        print(msg.event.common_context_field.get("vpid"))
-        print(msg.payload)
+        id_nanosecs = msg.event.payload_field["image_input_header_nsec"]
+        id_sec = msg.event.payload_field["image_input_header_sec"]
 
-        return "a"
-
-    
+        id = id_sec + id_nanosecs/1e9
+        return id
 
     def msgsets_from_trace_identifier(
         self, 
         tracename, 
-        unique_funq=self.timestamp_identifier, 
+        unique_funq=None, 
         debug=False
     ):
         """
@@ -288,6 +286,9 @@ class BenchmarkAnalyzer:
             debug (bool, optional): [description]. Defaults to False.
 
         """
+        if unique_funq is None:
+            unique_funq = self.timestamp_identifier
+
         msg_it = bt2.TraceCollectionMessageIterator(tracename)
 
         # Iterate the trace messages and pick ros2 ones
@@ -302,10 +303,27 @@ class BenchmarkAnalyzer:
                 if event.name in self.target_chain:
                     image_pipeline_msgs.append(msg)
 
-        for index in range(len(image_pipeline_msgs)):
-            id = timestamp_identifier(image_pipeline_msgs[index])
+        # Form sets with each pipeline
+        image_pipeline_msg_dict = {}
+        new_set = []  # used to track new complete sets
+        chain_index = 0  # track where in the chain we are so far
+
+        for msg in image_pipeline_msgs:
+            id = unique_funq(msg)
+            if id in image_pipeline_msg_dict.keys():
+                image_pipeline_msg_dict[id].append(msg)
+            else:
+                image_pipeline_msg_dict[id] = [msg]
 
 
+        for key_id, value_list in image_pipeline_msg_dict.items():
+            if len(value_list) != len(self.target_chain):
+                if debug:
+                    print(color("Message with id: " + str(key_id) + " not fully propagated, discarding chain - " + str([x.event.name for x in value_list]), fg="red"))
+                del image_pipeline_msg_dict[key_id]
+
+        # survivors
+        return list(image_pipeline_msg_dict.values())
 
     def msgsets_from_trace(self, tracename, debug=False):
         """
@@ -330,7 +348,8 @@ class BenchmarkAnalyzer:
                 # An event message holds a trace event.
                 event = msg.event
                 # Only check `sched_switch` events.
-                if "ros2" in event.name or "robotperf" in event.name:
+                # if "ros2" in event.name or "robotperf" in event.name:
+                if event.name in self.target_chain:
                     image_pipeline_msgs.append(msg)
 
         # Form sets with each pipeline
@@ -1426,15 +1445,21 @@ class BenchmarkAnalyzer:
         if trace_path:
             # self.image_pipeline_msg_sets \
             #     = self.msgsets_from_trace(trace_path, True)
-            
-            self.msgsets_from_trace_identifier(trace_path, True)
+            self.image_pipeline_msg_sets \
+                = self.msgsets_from_trace_identifier(trace_path, debug=True)
         else:
             if self.hardware_device_type == "cpu":
-                self.image_pipeline_msg_sets = self.msgsets_from_trace(
-                    # os.getenv("HOME") + "/.ros/tracing/" + self.benchmark_name,
-                    "/tmp/analysis/trace/trace_cpu_ctf",
-                    True)
+                # self.image_pipeline_msg_sets = self.msgsets_from_trace(
+                #     # os.getenv("HOME") + "/.ros/tracing/" + self.benchmark_name,
+                #     "/tmp/analysis/trace/trace_cpu_ctf",
+                #     True)
+                self.image_pipeline_msg_sets \
+                    = self.msgsets_from_trace_identifier(
+                        "/tmp/analysis/trace/trace_cpu_ctf", 
+                        debug=True)
             elif self.hardware_device_type == "fpga":
+                # NOTE: can't use msgsets_from_trace_identifier because vtf traces
+                # won't have the unique identifier
                 self.image_pipeline_msg_sets = self.msgsets_from_ctf_vtf_traces(
                     "/tmp/analysis/trace/trace_cpu_ctf",
                     "/tmp/analysis/trace/trace_fpga_vtf_ctf_fix",
@@ -1584,15 +1609,14 @@ class BenchmarkAnalyzer:
                 Path of the CTF tracefiles. Defaults to None.
         """
         self.get_target_chain_traces(tracepath)        
-        # self.bar_charts()
-        # self.index_to_plot = self.get_index_to_plot()
-        # self.print_timing_pipeline()
-        # self.draw_tracepoints()
-        # self.print_markdown_table(
-        #     [self.image_pipeline_msg_sets_barchart],
-        #     ["RobotPerf benchmark"],
-        #     from_baseline=False
-        # )
-
-        # self.plot_latency_results()
-        # # self.upload_results()  # performed in CI/CD pipelines instead
+        self.bar_charts()
+        self.index_to_plot = self.get_index_to_plot()
+        self.print_timing_pipeline()
+        self.draw_tracepoints()
+        self.print_markdown_table(
+            [self.image_pipeline_msg_sets_barchart],
+            ["RobotPerf benchmark"],
+            from_baseline=False
+        )
+        self.plot_latency_results()
+        # self.upload_results()  # performed in CI/CD pipelines instead

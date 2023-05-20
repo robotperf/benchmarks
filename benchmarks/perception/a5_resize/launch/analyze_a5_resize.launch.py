@@ -33,18 +33,18 @@ def generate_launch_description():
 
 ba = BenchmarkAnalyzer("a5_resize")
 
-# add parameters for analyzing the traces
-ba.add_target(
-    {
-        "name": "ros2:callback_start",
-        "name_disambiguous": "ros2:callback_start",
-        "colors_fg": "blue",
-        "colors_fg_bokeh": "lightgray",
-        "layer": "rclcpp",
-        "label_layer": 3,
-        "marker": "diamond",
-    }
-)
+# # add parameters for analyzing the traces
+# ba.add_target(
+#     {
+#         "name": "ros2:callback_start",
+#         "name_disambiguous": "ros2:callback_start",
+#         "colors_fg": "blue",
+#         "colors_fg_bokeh": "lightgray",
+#         "layer": "rclcpp",
+#         "label_layer": 3,
+#         "marker": "diamond",
+#     }
+# )
 ba.add_target(
     {
         "name": "robotperf_benchmarks:robotperf_image_input_cb_init",
@@ -67,28 +67,28 @@ ba.add_target(
         "marker": "plus",
     }
 )
-ba.add_target(
-    {
-        "name": "ros2:callback_end",
-        "name_disambiguous": "ros2:callback_end",
-        "colors_fg": "blue",
-        "colors_fg_bokeh": "gray",
-        "layer": "rclcpp",
-        "label_layer": 3,
-        "marker": "diamond",
-    }
-)
-ba.add_target(
-    {
-        "name": "ros2:callback_start",
-        "name_disambiguous": "ros2:callback_start (2)",
-        "colors_fg": "blue",
-        "colors_fg_bokeh": "lavender",
-        "layer": "rclcpp",
-        "label_layer": 3,
-        "marker": "diamond",
-    }
-)
+# ba.add_target(
+#     {
+#         "name": "ros2:callback_end",
+#         "name_disambiguous": "ros2:callback_end",
+#         "colors_fg": "blue",
+#         "colors_fg_bokeh": "gray",
+#         "layer": "rclcpp",
+#         "label_layer": 3,
+#         "marker": "diamond",
+#     }
+# )
+# ba.add_target(
+#     {
+#         "name": "ros2:callback_start",
+#         "name_disambiguous": "ros2:callback_start (2)",
+#         "colors_fg": "blue",
+#         "colors_fg_bokeh": "lavender",
+#         "layer": "rclcpp",
+#         "label_layer": 3,
+#         "marker": "diamond",
+#     }
+# )
 ba.add_target(
     {
         "name": "ros2_image_pipeline:image_proc_resize_cb_init",
@@ -133,28 +133,28 @@ ba.add_target(
         "marker": "plus",
     }
 )
-ba.add_target(
-    {
-        "name": "ros2:callback_end",
-        "name_disambiguous": "ros2:callback_end (2)",
-        "colors_fg": "blue",
-        "colors_fg_bokeh": "mediumslateblue",
-        "layer": "rclcpp",
-        "label_layer": 3,
-        "marker": "diamond",
-    }
-)
-ba.add_target(
-    {
-        "name": "ros2:callback_start",
-        "name_disambiguous": "ros2:callback_start (3)",
-        "colors_fg": "blue",
-        "colors_fg_bokeh": "chartreuse",
-        "layer": "rclcpp",
-        "label_layer": 3,
-        "marker": "diamond",
-    }
-)
+# ba.add_target(
+#     {
+#         "name": "ros2:callback_end",
+#         "name_disambiguous": "ros2:callback_end (2)",
+#         "colors_fg": "blue",
+#         "colors_fg_bokeh": "mediumslateblue",
+#         "layer": "rclcpp",
+#         "label_layer": 3,
+#         "marker": "diamond",
+#     }
+# )
+# ba.add_target(
+#     {
+#         "name": "ros2:callback_start",
+#         "name_disambiguous": "ros2:callback_start (3)",
+#         "colors_fg": "blue",
+#         "colors_fg_bokeh": "chartreuse",
+#         "layer": "rclcpp",
+#         "label_layer": 3,
+#         "marker": "diamond",
+#     }
+# )
 ba.add_target(
     {
         "name": "robotperf_benchmarks:robotperf_image_output_cb_init",
@@ -177,16 +177,16 @@ ba.add_target(
         "marker": "plus",
     }
 )
-ba.add_target(
-    {
-        "name": "ros2:callback_end",
-        "name_disambiguous": "ros2:callback_end (3)",
-        "colors_fg": "blue",
-        "colors_fg_bokeh": "cornflowerblue",
-        "layer": "rclcpp",
-        "label_layer": 3,
-        "marker": "diamond",
-    }
-)
+# ba.add_target(
+#     {
+#         "name": "ros2:callback_end",
+#         "name_disambiguous": "ros2:callback_end (3)",
+#         "colors_fg": "blue",
+#         "colors_fg_bokeh": "cornflowerblue",
+#         "layer": "rclcpp",
+#         "label_layer": 3,
+#         "marker": "diamond",
+#     }
+# )
 
 ba.analyze_latency()
