@@ -34,6 +34,47 @@ def generate_launch_description():
 ba = BenchmarkAnalyzer("a1_perception_2nodes")
 
 # add parameters for analyzing the traces
+
+## brute forcing the target chain
+# target_chain = [
+#     "ros2:callback_start",  # 0
+#     "robotperf_benchmarks:robotperf_image_input_cb_init",  # 1
+#     "robotperf_benchmarks:robotperf_image_input_cb_fini",  # 2
+#     "ros2:callback_end",  # 3
+#     "ros2:callback_start",  # 4
+#     "ros2_image_pipeline:image_proc_rectify_cb_init",  # 5
+#     "ros2_image_pipeline:image_proc_rectify_init",  # 6
+#     "ros2_image_pipeline:image_proc_rectify_fini",  # 7
+#     "ros2_image_pipeline:image_proc_rectify_cb_fini",  # 8
+#     "ros2:callback_end",  # 9
+#     "ros2:callback_start",  # 10
+#     "ros2_image_pipeline:image_proc_resize_cb_init",  # 11
+#     "ros2_image_pipeline:image_proc_resize_init",  # 12
+#     "ros2_image_pipeline:image_proc_resize_fini",  # 13
+#     "ros2_image_pipeline:image_proc_resize_cb_fini",  # 14
+#     "ros2:callback_end",  # 15
+#     "ros2:callback_start",  # 16
+#     "robotperf_benchmarks:robotperf_image_output_cb_init",  # 17
+#     "robotperf_benchmarks:robotperf_image_output_cb_fini",  # 18
+#     "ros2:callback_end",  # 19
+# ]
+
+## using message header id
+target_chain = [
+    "robotperf_benchmarks:robotperf_image_input_cb_init",  # 0
+    "robotperf_benchmarks:robotperf_image_input_cb_fini",  # 1
+    "ros2_image_pipeline:image_proc_rectify_cb_init",  # 2
+    "ros2_image_pipeline:image_proc_rectify_init",  # 3
+    "ros2_image_pipeline:image_proc_rectify_fini",  # 4
+    "ros2_image_pipeline:image_proc_rectify_cb_fini",  # 5
+    "ros2_image_pipeline:image_proc_resize_cb_init",  # 6
+    "ros2_image_pipeline:image_proc_resize_init",  # 7
+    "ros2_image_pipeline:image_proc_resize_fini",  # 8
+    "ros2_image_pipeline:image_proc_resize_cb_fini",  # 9
+    "robotperf_benchmarks:robotperf_image_output_cb_init",  # 10
+    "robotperf_benchmarks:robotperf_image_output_cb_fini",  # 11
+]
+
 # ba.add_target(
 #     {
 #         "name": "ros2:callback_start",

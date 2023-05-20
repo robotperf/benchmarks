@@ -473,6 +473,180 @@ class BenchmarkAnalyzer:
         # fig.show()
         fig.write_image("/tmp/analysis/plot_barplot.png", width=1400, height=1000)    
 
+    def traces_id(self, msg_set):
+        # this method only works for hardcoded traces, specifically for the a1 benchmark
+        # TODO: make this function generic so other benchmarks can also be plotted 
+
+        # For some reason it seems to be displayed in the reverse order on the Y axis
+        if self.hardware_device_type == "cpu":
+            segment_types = ["rmw", "rcl", "rclcpp", "userland", "benchmark"]
+        elif self.hardware_device_type == "fpga":
+            segment_types = ["kernel", "rmw", "rcl", "rclcpp", "userland", "benchmark"]
+
+        fig = figure(
+            title="RobotPerf benchmark:" + self.benchmark_name,
+            x_axis_label=f"Milliseconds",
+            y_range=segment_types,
+            plot_width=2000,
+            plot_height=600,
+        )
+        fig.title.align = "center"
+        fig.title.text_font_size = "20px"
+        # fig.xaxis[0].formatter = DatetimeTickFormatter(milliseconds = ['%3Nms'])
+        fig.xaxis[0].formatter = PrintfTickFormatter(format="%f ms")
+        fig.xaxis[0].ticker.desired_num_ticks = 20
+        fig.xaxis[0].axis_label_text_font_size = "30px"
+        fig.yaxis[0].major_label_text_font_size = "25px"
+
+        target_chain_ns = []
+        for msg_index in range(len(msg_set)):
+            target_chain_ns.append(msg_set[msg_index].default_clock_snapshot.ns_from_origin)
+        init_ns = target_chain_ns[0]
+
+        # print("1")
+
+        # draw durations
+        ## robotperf_image_input_cb_fini-robotperf_image_output_cb_init duration
+        callback_start = (target_chain_ns[1] - init_ns) / 1e6
+        callback_end = (target_chain_ns[10] - init_ns) / 1e6
+        duration = callback_end - callback_start
+        self.add_durations_to_figure(
+            fig,
+            self.target_chain_layer[1],  # index used in here
+                                    # should match with the
+                                    # one from the callback_start
+            [(callback_start, callback_start + duration, duration)],
+            "khaki",
+        )
+
+        ## rclcpp callbacks - robotperf_image_input_cb_init
+        callback_start = (target_chain_ns[0] - init_ns) / 1e6
+        callback_end = (target_chain_ns[1] - init_ns) / 1e6
+        duration = callback_end - callback_start
+        self.add_durations_to_figure(
+            fig,
+            self.target_chain_layer[0],  # index used in here
+                                    # should match with the
+                                    # one from the callback_start
+            [(callback_start, callback_start + duration, duration)],
+            "lightgray",
+        )
+
+        ## rclcpp callbacks - rectify
+        callback_start = (target_chain_ns[2] - init_ns) / 1e6
+        callback_end = (target_chain_ns[5] - init_ns) / 1e6
+        duration = callback_end - callback_start
+        self.add_durations_to_figure(
+            fig,
+            self.target_chain_layer[2],  # index used in here
+                                    # should match with the
+                                    # one from the callback_start
+            [(callback_start, callback_start + duration, duration)],
+            "lightgray",
+        )
+
+        ## rclcpp callbacks - resize
+        callback_start = (target_chain_ns[6] - init_ns) / 1e6
+        callback_end = (target_chain_ns[9] - init_ns) / 1e6
+        duration = callback_end - callback_start
+        self.add_durations_to_figure(
+            fig,
+            self.target_chain_layer[6],  # index used in here
+                                    # should match with the
+                                    # one from the callback_start
+            [(callback_start, callback_start + duration, duration)],
+            "lightgray",
+        )
+
+        ## rclcpp callbacks - robotperf_image_output_cb_init
+        callback_start = (target_chain_ns[10] - init_ns) / 1e6
+        callback_end = (target_chain_ns[11] - init_ns) / 1e6
+        duration = callback_end - callback_start
+        self.add_durations_to_figure(
+            fig,
+            self.target_chain_layer[10],  # index used in here
+                                    # should match with the
+                                    # one from the callback_start
+            [(callback_start, callback_start + duration, duration)],
+            "lightgray",
+        )
+
+        ## rectify op
+        callback_start = (target_chain_ns[3] - init_ns) / 1e6
+        callback_end = (target_chain_ns[4] - init_ns) / 1e6
+        duration = callback_end - callback_start
+        self.add_durations_to_figure(
+            fig,
+            self.target_chain_layer[3],  # index used in here
+                                    # should match with the
+                                    # one from the callback_start
+            [(callback_start, callback_start + duration, duration)],
+            "seashell",
+        )
+
+        ## resize op
+        callback_start = (target_chain_ns[7] - init_ns) / 1e6
+        callback_end = (target_chain_ns[8] - init_ns) / 1e6
+        duration = callback_end - callback_start
+        self.add_durations_to_figure(
+            fig,
+            self.target_chain_layer[7],  # index used in here
+                                    # should match with the
+                                    # one from the callback_start
+            [(callback_start, callback_start + duration, duration)],
+            "seashell",
+        )
+
+        for msg_index in range(len(msg_set)):
+            #     self.add_markers_to_figure(fig, msg_set[msg_index].event.name, [(target_chain_ns[msg_index] - init_ns)/1e6], 'blue', marker_type='plus', legend_label='timing')
+            # print("marker ms: " + str((target_chain_ns[msg_index] - init_ns) / 1e6))
+            self.add_markers_to_figure(
+                fig,
+                self.target_chain_layer[msg_index],
+                [(target_chain_ns[msg_index] - init_ns) / 1e6],
+                self.target_chain_colors_fg_bokeh[msg_index],
+                marker_type=self.target_chain_marker[msg_index],
+                # legend_label=msg_set[msg_index].event.name,
+                legend_label=self.target_chain_dissambiguous[msg_index],
+                size=10,
+            )        
+            if "robotperf_image_input_cb_fini" in msg_set[msg_index].event.name:
+                label = Label(
+                    x=(target_chain_ns[msg_index] - init_ns) / 1e6,
+                    y=self.target_chain_label_layer[msg_index],
+                    x_offset=-40,
+                    y_offset=-40,
+                    text=self.target_chain_dissambiguous[msg_index].split(":")[-1],
+                )
+
+            elif "robotperf_image_output_cb_init" in msg_set[msg_index].event.name:
+                label = Label(
+                    x=(target_chain_ns[msg_index] - init_ns) / 1e6,
+                    y=self.target_chain_label_layer[msg_index],
+                    x_offset=-200,
+                    y_offset=-40,
+                    text=self.target_chain_dissambiguous[msg_index].split(":")[-1],
+                )
+            else:
+                label = Label(
+                    x=(target_chain_ns[msg_index] - init_ns) / 1e6,
+                    y=self.target_chain_label_layer[msg_index],
+                    x_offset=-30,
+                    y_offset=-30,
+                    # text=self.target_chain_dissambiguous[msg_index].split(":")[-1],
+                    text="",
+                )
+            fig.add_layout(label)
+
+        # hack legend to the right
+        fig.legend.location = "right"
+        new_legend = fig.legend[0]
+        fig.legend[0] = None
+        fig.add_layout(new_legend, "right")
+        
+        ## output
+        # show(fig)  # show in browser    
+        export_png(fig, filename="/tmp/analysis/plot_trace.png")
 
     def traces(self, msg_set):
         # this method only works for hardcoded traces, specifically for the a1 benchmark
@@ -1509,7 +1683,8 @@ class BenchmarkAnalyzer:
     def draw_tracepoints(self):        
         msg_set = self.image_pipeline_msg_sets[self.index_to_plot]
         if self.benchmark_name == "a1_perception_2nodes":
-            self.traces(msg_set)
+            # self.traces(msg_set)
+            self.traces_id(msg_set)
         elif self.benchmark_name == "a1_perception_2nodes_fpga":
             self.traces_fpga(msg_set)
 
