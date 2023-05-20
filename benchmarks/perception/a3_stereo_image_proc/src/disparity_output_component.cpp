@@ -33,14 +33,16 @@ void DisparityOutputComponent::disparityCb(
     static_cast<const void *>(this),
     static_cast<const void *>(&(*disparity_msg)),
     nullptr,
-    disparity_msg->header.stamp.nanosec
-    );
+    disparity_msg->header.stamp.nanosec,
+    disparity_msg->header.stamp.sec);
 
   TRACEPOINT(
     robotperf_image_output_cb_fini,    
     static_cast<const void *>(this),
     static_cast<const void *>(&(*disparity_msg)),
-    nullptr);
+    nullptr,
+    disparity_msg->header.stamp.nanosec,
+    disparity_msg->header.stamp.sec);
 
 }
 

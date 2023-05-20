@@ -256,10 +256,64 @@ class BenchmarkAnalyzer:
         return image_pipeline_msg_sets
 
 
+    def timestamp_identifier(self, msg):
+        """
+        Returns ROS message header timestamp as unique identifier
+        from a CTF msg
+        """        
+        print(msg.event.name)
+        print(msg.event.common_context_field.get("vpid"))
+        print(msg.payload)
+
+        return "a"
+
+    
+
+    def msgsets_from_trace_identifier(
+        self, 
+        tracename, 
+        unique_funq=self.timestamp_identifier, 
+        debug=False
+    ):
+        """
+        Returns a list of message sets ready to be used
+        for plotting them in various forms. Uses unique identifer
+        function to 
+
+        NOTE: A different implementation than msgsets_from_trace and which
+        allows determining messages dropped or not propagated appropriately.
+
+        Args:
+            tracename (string): path for the trace file
+            debug (bool, optional): [description]. Defaults to False.
+
+        """
+        msg_it = bt2.TraceCollectionMessageIterator(tracename)
+
+        # Iterate the trace messages and pick ros2 ones
+        image_pipeline_msgs = []
+        for msg in msg_it:
+            # `bt2._EventMessageConst` is the Python type of an event message.
+            if type(msg) is bt2._EventMessageConst:
+                # An event message holds a trace event.
+                event = msg.event
+                # Only check `sched_switch` events.
+                # if "ros2" in event.name or "robotperf" in event.name:
+                if event.name in self.target_chain:
+                    image_pipeline_msgs.append(msg)
+
+        for index in range(len(image_pipeline_msgs)):
+            id = timestamp_identifier(image_pipeline_msgs[index])
+
+
+
     def msgsets_from_trace(self, tracename, debug=False):
         """
         Returns a list of message sets ready to be used
         for plotting them in various forms.
+
+        NOTE: A brute-force implementation. Brings various issues when
+        facing concurrent setups and/or machines with less capabilities.
 
         NOTE: NOT coded for multiple Nodes running concurrently or multithreaded executors
         Classification expects events in the corresponding order.
@@ -1370,8 +1424,10 @@ class BenchmarkAnalyzer:
 
     def get_target_chain_traces(self, trace_path):
         if trace_path:
-            self.image_pipeline_msg_sets \
-                = self.msgsets_from_trace(trace_path, True)
+            # self.image_pipeline_msg_sets \
+            #     = self.msgsets_from_trace(trace_path, True)
+            
+            self.msgsets_from_trace_identifier(trace_path, True)
         else:
             if self.hardware_device_type == "cpu":
                 self.image_pipeline_msg_sets = self.msgsets_from_trace(
@@ -1527,16 +1583,16 @@ class BenchmarkAnalyzer:
             tracepath (string, optional):
                 Path of the CTF tracefiles. Defaults to None.
         """
-        self.get_target_chain_traces(tracepath)
-        self.bar_charts()
-        self.index_to_plot = self.get_index_to_plot()
-        self.print_timing_pipeline()
-        self.draw_tracepoints()
-        self.print_markdown_table(
-            [self.image_pipeline_msg_sets_barchart],
-            ["RobotPerf benchmark"],
-            from_baseline=False
-        )
+        self.get_target_chain_traces(tracepath)        
+        # self.bar_charts()
+        # self.index_to_plot = self.get_index_to_plot()
+        # self.print_timing_pipeline()
+        # self.draw_tracepoints()
+        # self.print_markdown_table(
+        #     [self.image_pipeline_msg_sets_barchart],
+        #     ["RobotPerf benchmark"],
+        #     from_baseline=False
+        # )
 
-        self.plot_latency_results()
-        # self.upload_results()  # performed in CI/CD pipelines instead
+        # self.plot_latency_results()
+        # # self.upload_results()  # performed in CI/CD pipelines instead

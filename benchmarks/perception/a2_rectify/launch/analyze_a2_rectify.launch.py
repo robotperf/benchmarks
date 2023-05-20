@@ -34,46 +34,34 @@ def generate_launch_description():
 ba = BenchmarkAnalyzer("a2_rectify")
 
 target_chain = [
-    "ros2:callback_start",
+    # "ros2:callback_start",
     "robotperf_benchmarks:robotperf_image_input_cb_init",
     "robotperf_benchmarks:robotperf_image_input_cb_fini",
-    "ros2:callback_end",
-    "ros2:callback_start",
+    # "ros2:callback_end",
+    # "ros2:callback_start",
     "ros2_image_pipeline:image_proc_rectify_cb_init",
     "ros2_image_pipeline:image_proc_rectify_init",
     "ros2_image_pipeline:image_proc_rectify_fini",
-    # "ros2:rclcpp_publish",
-    # "ros2:rcl_publish",
-    # "ros2:rmw_publish",
     "ros2_image_pipeline:image_proc_rectify_cb_fini",
-    "ros2:callback_end",
-    # "ros2:callback_start",
-    # "ros2_image_pipeline:image_proc_resize_cb_init",
-    # "ros2_image_pipeline:image_proc_resize_init",
-    # "ros2_image_pipeline:image_proc_resize_fini",
-    # "ros2:rclcpp_publish",
-    # "ros2:rcl_publish",
-    # "ros2:rmw_publish",
-    # "ros2_image_pipeline:image_proc_resize_cb_fini",
     # "ros2:callback_end",
-    "ros2:callback_start",
+    # "ros2:callback_start",
     "robotperf_benchmarks:robotperf_image_output_cb_init",
     "robotperf_benchmarks:robotperf_image_output_cb_fini",
-    "ros2:callback_end",
+    # "ros2:callback_end",
 ]
 
-# add parameters for analyzing the traces
-ba.add_target(
-    {
-        "name": "ros2:callback_start",
-        "name_disambiguous": "ros2:callback_start",
-        "colors_fg": "blue",
-        "colors_fg_bokeh": "lightgray",
-        "layer": "rclcpp",
-        "label_layer": 3,
-        "marker": "diamond",
-    }
-)
+# # add parameters for analyzing the traces
+# ba.add_target(
+#     {
+#         "name": "ros2:callback_start",
+#         "name_disambiguous": "ros2:callback_start",
+#         "colors_fg": "blue",
+#         "colors_fg_bokeh": "lightgray",
+#         "layer": "rclcpp",
+#         "label_layer": 3,
+#         "marker": "diamond",
+#     }
+# )
 ba.add_target(
     {
         "name": "robotperf_benchmarks:robotperf_image_input_cb_init",
@@ -96,28 +84,28 @@ ba.add_target(
         "marker": "plus",
     }
 )
-ba.add_target(
-    {
-        "name": "ros2:callback_end",
-        "name_disambiguous": "ros2:callback_end",
-        "colors_fg": "blue",
-        "colors_fg_bokeh": "gray",
-        "layer": "rclcpp",
-        "label_layer": 3,
-        "marker": "diamond",
-    }
-)
-ba.add_target(
-    {
-        "name": "ros2:callback_start",
-        "name_disambiguous": "ros2:callback_start (2)",
-        "colors_fg": "blue",
-        "colors_fg_bokeh": "lightsalmon",
-        "layer": "rclcpp",
-        "label_layer": 3,
-        "marker": "diamond",
-    }
-)
+# ba.add_target(
+#     {
+#         "name": "ros2:callback_end",
+#         "name_disambiguous": "ros2:callback_end",
+#         "colors_fg": "blue",
+#         "colors_fg_bokeh": "gray",
+#         "layer": "rclcpp",
+#         "label_layer": 3,
+#         "marker": "diamond",
+#     }
+# )
+# ba.add_target(
+#     {
+#         "name": "ros2:callback_start",
+#         "name_disambiguous": "ros2:callback_start (2)",
+#         "colors_fg": "blue",
+#         "colors_fg_bokeh": "lightsalmon",
+#         "layer": "rclcpp",
+#         "label_layer": 3,
+#         "marker": "diamond",
+#     }
+# )
 ba.add_target(
     {
         "name": "ros2_image_pipeline:image_proc_rectify_cb_init",
@@ -162,28 +150,28 @@ ba.add_target(
         "marker": "plus",
     }
 )
-ba.add_target(
-    {
-        "name": "ros2:callback_end",
-        "name_disambiguous": "ros2:callback_end (2)",
-        "colors_fg": "blue",
-        "colors_fg_bokeh": "red",
-        "layer": "rclcpp",
-        "label_layer": 3,
-        "marker": "diamond",
-    }
-)
-ba.add_target(
-    {
-        "name": "ros2:callback_start",
-        "name_disambiguous": "ros2:callback_start (3)",
-        "colors_fg": "blue",
-        "colors_fg_bokeh": "chartreuse",
-        "layer": "rclcpp",
-        "label_layer": 3,
-        "marker": "diamond",
-    }
-)
+# ba.add_target(
+#     {
+#         "name": "ros2:callback_end",
+#         "name_disambiguous": "ros2:callback_end (2)",
+#         "colors_fg": "blue",
+#         "colors_fg_bokeh": "red",
+#         "layer": "rclcpp",
+#         "label_layer": 3,
+#         "marker": "diamond",
+#     }
+# )
+# ba.add_target(
+#     {
+#         "name": "ros2:callback_start",
+#         "name_disambiguous": "ros2:callback_start (3)",
+#         "colors_fg": "blue",
+#         "colors_fg_bokeh": "chartreuse",
+#         "layer": "rclcpp",
+#         "label_layer": 3,
+#         "marker": "diamond",
+#     }
+# )
 ba.add_target(
     {
         "name": "robotperf_benchmarks:robotperf_image_output_cb_init",
@@ -206,16 +194,16 @@ ba.add_target(
         "marker": "plus",
     }
 )
-ba.add_target(
-    {
-        "name": "ros2:callback_end",
-        "name_disambiguous": "ros2:callback_end ()",
-        "colors_fg": "blue",
-        "colors_fg_bokeh": "cornflowerblue",
-        "layer": "rclcpp",
-        "label_layer": 3,
-        "marker": "diamond",
-    }
-)
+# ba.add_target(
+#     {
+#         "name": "ros2:callback_end",
+#         "name_disambiguous": "ros2:callback_end ()",
+#         "colors_fg": "blue",
+#         "colors_fg_bokeh": "cornflowerblue",
+#         "layer": "rclcpp",
+#         "label_layer": 3,
+#         "marker": "diamond",
+#     }
+# )
 
 ba.analyze_latency()
