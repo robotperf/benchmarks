@@ -312,18 +312,28 @@ class BenchmarkAnalyzer:
         for msg in image_pipeline_msgs:
             id = unique_funq(msg)
             if id in image_pipeline_msg_dict.keys():
-                image_pipeline_msg_dict[id].append(msg)
+                if (len(image_pipeline_msg_dict[id]) < len(self.target_chain)):
+                    image_pipeline_msg_dict[id].append(msg)
+                else:
+                    pass
+                    if debug:
+                        print(color("Message with id: " + str(id) + " already fully propagated, discarding - " + str(msg.event.name), fg="yellow"))
             else:
                 image_pipeline_msg_dict[id] = [msg]
 
 
         del_list = []
         for key_id, value_list in image_pipeline_msg_dict.items():
+            names_value_list = [msg.event.name for msg in value_list]
             if len(value_list) != len(self.target_chain):
                 if debug:
-                    print(color("Message with id: " + str(key_id) + " not fully propagated, discarding chain - " + str([x.event.name for x in value_list]), fg="red"))
+                    print(color("Message with id: " + str(key_id) + " not fully propagated (missing number), discarding chain - " + str([x.event.name for x in value_list]), fg="orange"))
                 # del image_pipeline_msg_dict[key_id]  # this leads to error:
                 #                                      # dictionary changed size during iteration
+                del_list.append(key_id)
+            if not all(item in names_value_list for item in self.target_chain):
+                if debug:
+                    print(color("Message with id: " + str(key_id) + " does not have all tracepoints, discarding chain - " + str([x.event.name for x in value_list]), fg="red"))
                 del_list.append(key_id)
         for key in del_list:
             del image_pipeline_msg_dict[key]

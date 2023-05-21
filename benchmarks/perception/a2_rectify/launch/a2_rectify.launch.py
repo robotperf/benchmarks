@@ -22,7 +22,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
+import json
 from launch_ros.actions import ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
 from launch import LaunchDescription
@@ -31,7 +31,8 @@ from ros2_benchmark import ImageResolution
 from ros2_benchmark import ROS2BenchmarkConfig, ROS2BenchmarkTest
 
 IMAGE_RESOLUTION = ImageResolution.HD
-ROSBAG_PATH = '/tmp/benchmark_ws/rosbags/perception/image'  # NOTE: hardcoded, modify accordingly
+ROSBAG_PATH = '/tmp/benchmark_ws/src/rosbags/image'  # NOTE: hardcoded, modify accordingly
+# ROSBAG_PATH = '/tmp/rosbags/perception/image'
 
 def launch_setup(container_prefix, container_sigterm_timeout):
     """Generate launch description for benchmarking image_proc RectifyNode."""
@@ -115,21 +116,37 @@ class TestRectifyNode(ROS2BenchmarkTest):
         benchmark_name='image_proc::RectifyNode Benchmark',
         input_data_path=ROSBAG_PATH,
         # Upper and lower bounds of peak throughput search window
-        publisher_upper_frequency=50.0,
-        publisher_lower_frequency=10.0,
+        publisher_upper_frequency=30.0,
+        publisher_lower_frequency=30.0,
         # The number of frames to be buffered
-        playback_message_buffer_size=100,
+        playback_message_buffer_size=68,
         custom_report_info={'data_resolution': IMAGE_RESOLUTION}
     )
 
     def test_benchmark(self):
-        self.run_benchmark()
+        json_file_path = self.run_benchmark()
+        # Open the file and load the JSON content into a Python dictionary
+        with open(json_file_path, 'r') as f:
+            data = json.load(f)
+        # Extract the desired fields
+        mean_latency = data.get("BasicPerformanceMetrics.MEAN_LATENCY")
+        max_latency = data.get("BasicPerformanceMetrics.MAX_LATENCY")
+        min_latency = data.get("BasicPerformanceMetrics.MIN_LATENCY")
+        rms_latency = data.get("BasicPerformanceMetrics.RMS_LATENCY")
+        frames_sent = int(data.get("BasicPerformanceMetrics.NUM_FRAMES_SENT"))
+        frames_missed = int(data.get("BasicPerformanceMetrics.NUM_MISSED_FRAMES"))               
+
+        str_out =  "|     | Benchmark Mean | Benchmark RMS | Benchmark Max  | Benchmark Min | Lost Messages |\n"
+        str_out += "| --- | -------------- | ------------- | -------------- | ------------- | --------------|\n"
+        str_out += "| ros2_benchmark | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | {:.2f} % |\n".format(
+            mean_latency, rms_latency, max_latency, min_latency, (frames_missed/frames_sent)*100)
+        print(str_out)
 
 
 def generate_test_description():
     return TestRectifyNode.generate_test_description_with_nsys(launch_setup)
 
-# added to comply with ROS 2 Launch system
-def generate_launch_description():
-    # return LaunchDescription()
-    return TestRectifyNode.generate_test_description_with_nsys(launch_setup)
+# # added to comply with ROS 2 Launch system
+# def generate_launch_description():
+#     # return LaunchDescription()
+#     return TestRectifyNode.generate_test_description_with_nsys(launch_setup)
