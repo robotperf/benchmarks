@@ -49,6 +49,7 @@ class BenchmarkAnalyzer:
         self.target_chain_layer = []
         self.target_chain_label_layer = []
         self.target_chain_marker = []
+        self.lost_msgs = 0  # lost messages counter, target_chain not fully met
 
     def add_target(self, target_dict):
         # targeted chain of messages for tracing
@@ -316,11 +317,17 @@ class BenchmarkAnalyzer:
                 image_pipeline_msg_dict[id] = [msg]
 
 
+        del_list = []
         for key_id, value_list in image_pipeline_msg_dict.items():
             if len(value_list) != len(self.target_chain):
                 if debug:
                     print(color("Message with id: " + str(key_id) + " not fully propagated, discarding chain - " + str([x.event.name for x in value_list]), fg="red"))
-                del image_pipeline_msg_dict[key_id]
+                # del image_pipeline_msg_dict[key_id]  # this leads to error:
+                #                                      # dictionary changed size during iteration
+                del_list.append(key_id)
+        for key in del_list:
+            del image_pipeline_msg_dict[key]
+            self.lost_msgs += 1
 
         # survivors
         return list(image_pipeline_msg_dict.values())
@@ -1481,6 +1488,14 @@ class BenchmarkAnalyzer:
 
         baseline = list_statistics[2]  # baseline for %
 
+        # add missing messages at the end
+        # NOTE: programmed for only 1 initial list_statistics, if more provided
+        # consider extending the self.lost_msgs to a list
+        if len(list_statistics) == 3:  # 1 initial, +2 headers
+            list_statistics[0].append("Lost Messages")
+            list_statistics[1].append("---")
+            list_statistics[2].append("{:.2f} %".format((self.lost_msgs/len(self.image_pipeline_msg_sets))*100))
+
         length_list = [len(row) for row in list_statistics]
         column_width = max(length_list)
         count = 0
@@ -1579,13 +1594,13 @@ class BenchmarkAnalyzer:
         # 0,                1,                  2,          3,          4,      5,   6,    7
         statistics_data = self.statistics(sets)
 
-        print(statistics_data[2])
+        # print(statistics_data[2])
         return {
                 "hardware": os.environ.get('HARDWARE'),
                 "category": os.environ.get('CATEGORY'),
                 "timestampt": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())),
                 "value": float(statistics_data[2]),
-                "note": "mean_benchmark {}, rms_benchmark {}, max_benchmark {}, min_benchmark {}".format(statistics_data[0], statistics_data[1], statistics_data[2], statistics_data[3]),
+                "note": "mean_benchmark {}, rms_benchmark {}, max_benchmark {}, min_benchmark {}, lost messages {:.2f} %".format(statistics_data[0], statistics_data[1], statistics_data[2], statistics_data[3], (self.lost_msgs/len(self.image_pipeline_msg_sets))*100),
                 "datasource": os.environ.get('ROSBAG')
             }
 
