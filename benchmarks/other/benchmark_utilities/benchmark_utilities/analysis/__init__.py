@@ -331,6 +331,7 @@ class BenchmarkAnalyzer:
                 # del image_pipeline_msg_dict[key_id]  # this leads to error:
                 #                                      # dictionary changed size during iteration
                 del_list.append(key_id)
+                continue
             if not all(item in names_value_list for item in self.target_chain):
                 if debug:
                     print(color("Message with id: " + str(key_id) + " does not have all tracepoints, discarding chain - " + str([x.event.name for x in value_list]), fg="red"))
