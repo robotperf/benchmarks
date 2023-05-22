@@ -1,12 +1,12 @@
-id: a1
-name: a1_perception_2nodes
+id: a6
+name: a6_rectify_throughput
 description: |
-  A simple perception computational graph composed by 2 Components, `rectify` and `resize` operations. Used to demonstrate a simple perception pipeline using the [image_pipeline](https://github.com/ros-perception/image_pipeline) package.
-short: Perception computational graph composed by 2 dataflow-connected *Components*, `rectify` and `resize`.
-graph: ../../../imgs/a1_perception_2nodes.svg
+  A simple perception rectify ROS robotics operation. Used to demonstrate a simple perception component [image_pipeline](https://github.com/ros-perception/image_pipeline) package.
+short: Perception rectify ROS Component.
+graph: ../../../imgs/a2_rectify_throughput.svg
 metric:
-  metric: "latency"
-  unit: "ms"
+  metric: "throughput"
+  unit: "bytes/s"
 reproduction: |
   # Create a ROS 2 overlay workspace
   mkdir -p /tmp/benchmark_ws/src
@@ -20,11 +20,11 @@ reproduction: |
     sudo rosdep install --from-paths src --ignore-src --rosdistro humble -y
   
   # Build the benchmark
-  colcon build --merge-install --packages-up-to a1_perception_2nodes
+  colcon build --merge-install --packages-up-to a6_rectify_throughput
   
   # Source the workspace as an overlay, launch the benchmark
   source install/setup.bash
-  RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch a1_perception_2nodes trace_a1_perception_2nodes.launch.py
+  RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch a6_rectify_throughput trace_a6_rectify_throughput.launch.py
 
 results:
   - result:
@@ -32,26 +32,5 @@ results:
       category: edge
       timestampt: 14-10-2022
       value: 66.82
-      note: ""
-      datasource: "perception/image"
-  - result:
-      hardware: Kria KR260
-      category: edge      
-      timestampt: 14-10-2022
-      value: 66.82
-      note: ""
-      datasource: "perception/image"
-  - result:
-      hardware: Jetson Nano
-      category: edge      
-      timestampt: 14-10-2022
-      value: 238.13
-      note: ""
-      datasource: "perception/image"
-  - result:
-      hardware: Jetson AGX Xavier
-      category: edge      
-      timestampt: 14-10-2022
-      value: 106.34
       note: ""
       datasource: "perception/image"

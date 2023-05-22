@@ -1,16 +1,14 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="2">
-  <name>a1_perception_2nodes</name>
+  <name>a6_rectify_throughput</name>
   <version>0.1.0</version>
   <description>
-    A simple perception computational graph composed by 2 Components, 
-    `rectify` and `resize` operations. Used to demonstrate a simple perception 
-    pipeline using the image_pipeline package.
+      A simple perception rectify ROS robotics operation. Used to demonstrate a simple perception component [image_pipeline](https://github.com/ros-perception/image_pipeline) package.
   </description>
-  <maintainer email="victor@accelerationrobotics.com">Víctor Mayoral Vilches</maintainer>
+  <maintainer email="alex@accelerationrobotics.com">Alejandra Martínez Fariña</maintainer>
   <license>Apache License 2.0</license>
-  <author email="victor@accelerationrobotics.com">Víctor Mayoral Vilches</author>
+  <author email="alex@accelerationrobotics.com">Alejandra Martínez Fariña</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <!-- <buildtool_depend>ament_vitis</buildtool_depend> -->

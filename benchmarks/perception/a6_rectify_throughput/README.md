@@ -1,17 +1,17 @@
-# a1_perception_2nodes
+# a6_rectify_throughput
 
-Perception computational graph composed by 2 dataflow-connected *Components*, `rectify` and `resize`.
+Perception rectify ROS Component.
 
 ### ID
-a1
+a6
 
 ### Description
-A simple perception computational graph composed by 2 Components, `rectify` and `resize` operations. Used to demonstrate a simple perception pipeline using the [image_pipeline](https://github.com/ros-perception/image_pipeline) package.
+A simple perception rectify ROS robotics operation. Used to demonstrate a simple perception component [image_pipeline](https://github.com/ros-perception/image_pipeline) package.
 
 
-![](../../../imgs/a1_perception_2nodes.svg)
+![](../../../imgs/a6_rectify_throughput.svg)
 
-**Metric**: latency (ms)
+**Metric**: throughput (bytes/s)
 
 ## Reproduction Steps
 
@@ -28,11 +28,11 @@ cd /tmp/benchmark_ws && sudo rosdep update || true && sudo apt-get update &&
   sudo rosdep install --from-paths src --ignore-src --rosdistro humble -y
 
 # Build the benchmark
-colcon build --merge-install --packages-up-to a1_perception_2nodes
+colcon build --merge-install --packages-up-to a6_rectify_throughput
 
 # Source the workspace as an overlay, launch the benchmark
 source install/setup.bash
-RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch a1_perception_2nodes trace_a1_perception_2nodes.launch.py
+RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch a6_rectify_throughput trace_a6_rectify_throughput.launch.py
 
 ```
 

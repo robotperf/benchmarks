@@ -35,7 +35,7 @@ from tracetools_trace.tools.names import DEFAULT_CONTEXT
 def generate_launch_description():
      # Trace
     trace = Trace(
-        session_name="a1_perception_2nodes",
+        session_name="a6_rectify_throughput",
         events_ust=[
             "robotperf_benchmarks:*",
             "ros2_image_pipeline:*",
@@ -60,7 +60,7 @@ def generate_launch_description():
         executable="component_container",
         composable_node_descriptions=[
             ComposableNode(
-                package="a1_perception_2nodes",
+                package="a6_rectify_throughput",
                 plugin="robotperf::perception::ImageInputComponent",
                 name="image_input_component",
                 remappings=[
@@ -82,25 +82,7 @@ def generate_launch_description():
             ),
 
             ComposableNode(
-                namespace="benchmark",
-                package="image_proc",
-                plugin="image_proc::ResizeNode",
-                name="resize_node",
-                remappings=[
-                    ("camera_info", "/camera/camera_info"),
-                    ("image", "/benchmark/image_rect"),
-                    ("resize", "resize"),
-                ],
-                parameters=[
-                    {
-                        "scale_height": 2.0,
-                        "scale_width": 2.0,
-                    }
-                ],
-                extra_arguments=[{'use_intra_process_comms': True}],
-            ),
-            ComposableNode(
-                package="a1_perception_2nodes",
+                package="a6_rectify_throughput",
                 plugin="robotperf::perception::ImageOutputComponent",
                 name="image_output_component",
                 remappings=[
