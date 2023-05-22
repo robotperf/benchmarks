@@ -28,7 +28,7 @@ limitations under the License.
 #include <sensor_msgs/msg/image.hpp>
 
 #include "tracetools_benchmark/tracetools.h"
-#include "a1_perception_2nodes/image_input_component.hpp"
+#include "a6_rectify_throughput/image_input_component.hpp"
 
 namespace robotperf
 {
