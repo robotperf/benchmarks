@@ -56,25 +56,33 @@ void TRACEPOINT(
   robotperf_image_input_cb_init,
   const void * image_input_node_arg,
   const void * image_input_image_msg_arg,
-  const void * image_input_info_msg_arg)
+  const void * image_input_info_msg_arg,
+  uint32_t image_input_header_nsec_arg,
+  uint32_t image_input_header_sec_arg)
 {
   CONDITIONAL_TP(
     robotperf_image_input_cb_init,
     image_input_node_arg,
     image_input_image_msg_arg,
-    image_input_info_msg_arg);
+    image_input_info_msg_arg,
+    image_input_header_nsec_arg,
+    image_input_header_sec_arg);
 }
 void TRACEPOINT(
   robotperf_image_input_cb_fini,
   const void * image_input_node_arg,
   const void * image_input_image_msg_arg,
-  const void * image_input_info_msg_arg)
+  const void * image_input_info_msg_arg,
+  uint32_t image_input_header_nsec_arg,
+  uint32_t image_input_header_sec_arg)
 {
   CONDITIONAL_TP(
     robotperf_image_input_cb_fini,
     image_input_node_arg,
     image_input_image_msg_arg,
-    image_input_info_msg_arg);
+    image_input_info_msg_arg,
+    image_input_header_nsec_arg,
+    image_input_header_sec_arg);
 }
 
 // image_output
@@ -82,25 +90,33 @@ void TRACEPOINT(
   robotperf_image_output_cb_init,
   const void * image_output_node_arg,
   const void * image_output_image_msg_arg,
-  const void * image_output_info_msg_arg)
+  const void * image_output_info_msg_arg,
+  uint32_t image_input_header_nsec_arg,
+  uint32_t image_input_header_sec_arg)
 {
   CONDITIONAL_TP(
     robotperf_image_output_cb_init,
     image_output_node_arg,
     image_output_image_msg_arg,
-    image_output_info_msg_arg);
+    image_output_info_msg_arg,
+    image_input_header_nsec_arg,
+    image_input_header_sec_arg);
 }
 void TRACEPOINT(
   robotperf_image_output_cb_fini,
   const void * image_output_node_arg,
   const void * image_output_image_msg_arg,
-  const void * image_output_info_msg_arg)
+  const void * image_output_info_msg_arg,
+  uint32_t image_input_header_nsec_arg,
+  uint32_t image_input_header_sec_arg)
 {
   CONDITIONAL_TP(
     robotperf_image_output_cb_fini,
     image_output_node_arg,
     image_output_image_msg_arg,
-    image_output_info_msg_arg);
+    image_output_info_msg_arg,
+    image_input_header_nsec_arg,
+    image_input_header_sec_arg);
 }
 
 #ifndef _WIN32

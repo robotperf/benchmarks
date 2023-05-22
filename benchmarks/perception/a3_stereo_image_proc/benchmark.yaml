@@ -21,9 +21,6 @@ reproduction: |
   cd /tmp/benchmark_ws && sudo rosdep update || true && sudo apt-get update &&
     sudo rosdep install --from-paths src --ignore-src --rosdistro humble -y
 
-  # Install the stereo_image_proc package
-  sudo apt-get install ros-humble-stereo-image-proc
-
   # Build the benchmark
   colcon build --merge-install --packages-up-to a3_stereo_image_proc
 
