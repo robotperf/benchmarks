@@ -29,6 +29,7 @@ limitations under the License.
 
 #include "tracetools_benchmark/tracetools.h"
 #include "a6_rectify_throughput/image_input_component.hpp"
+#include <rclcpp/serialization.hpp>
 
 namespace robotperf
 {
@@ -58,13 +59,29 @@ void ImageInputComponent::imageCb(
   sensor_msgs::msg::Image::ConstSharedPtr image_msg,
   sensor_msgs::msg::CameraInfo::ConstSharedPtr info_msg)
 {
+  //Serialize the Image and CameraInfo messages
+  rclcpp::SerializedMessage serialized_data_img;
+  rclcpp::Serialization<sensor_msgs::msg::Image> image_serialization;
+  const void* image_ptr = reinterpret_cast<const void*>(image_msg.get());
+  image_serialization.serialize_message(image_ptr, &serialized_data_img);
+  size_t image_msg_size = serialized_data_img.get_rcl_serialized_message().buffer_length;
+  
+  rclcpp::SerializedMessage serialized_data_info;
+  rclcpp::Serialization<sensor_msgs::msg::CameraInfo> info_serialization;
+  const void* info_ptr = reinterpret_cast<const void*>(info_msg.get());
+  info_serialization.serialize_message(info_ptr, &serialized_data_info);
+  size_t info_msg_size = serialized_data_info.get_rcl_serialized_message().buffer_length;
+  
+  
   TRACEPOINT(
     robotperf_image_input_cb_init,
     static_cast<const void *>(this),
     static_cast<const void *>(&(*image_msg)),
     static_cast<const void *>(&(*info_msg)),
     image_msg->header.stamp.nanosec,
-    image_msg->header.stamp.sec);
+    image_msg->header.stamp.sec,
+    image_msg_size,
+    info_msg_size);
 
   if (pub_image_.getNumSubscribers() < 1) {
     return;
@@ -78,7 +95,9 @@ void ImageInputComponent::imageCb(
     static_cast<const void *>(&(*image_msg)),
     static_cast<const void *>(&(*info_msg)),
     image_msg->header.stamp.nanosec,
-    image_msg->header.stamp.sec);
+    image_msg->header.stamp.sec,
+    image_msg_size,
+    info_msg_size);
 }
 
 }  // namespace perception
