@@ -30,15 +30,19 @@ void DisparityOutputComponent::disparityCb(
 {
   TRACEPOINT(
     robotperf_image_output_cb_init,
-    "Initializing image output callback",
     static_cast<const void *>(this),
-    static_cast<const void *>(&(*disparity_msg)));
+    static_cast<const void *>(&(*disparity_msg)),
+    nullptr,
+    disparity_msg->header.stamp.nanosec,
+    disparity_msg->header.stamp.sec);
 
   TRACEPOINT(
-    robotperf_image_output_cb_fini,
-    "Final image output callback",
+    robotperf_image_output_cb_fini,    
     static_cast<const void *>(this),
-    static_cast<const void *>(&(*disparity_msg)));
+    static_cast<const void *>(&(*disparity_msg)),
+    nullptr,
+    disparity_msg->header.stamp.nanosec,
+    disparity_msg->header.stamp.sec);
 
 }
 
