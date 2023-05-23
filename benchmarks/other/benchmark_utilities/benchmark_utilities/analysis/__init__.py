@@ -1407,8 +1407,8 @@ class BenchmarkAnalyzer:
         
         # # NOTE: we can particularizations for first_target and last_target
         # #       as needed, e.g.
-        # if self.benchmark_name == "a3_stereo_image_proc":
-        #     first_target = "robotperf_benchmarks:robotperf_image_input_cb_init"
+        if self.benchmark_name == "a4_depth_image_proc":
+            last_target = "robotperf_benchmarks:robotperf_pointcloud_output_cb_init"
         #
         # NOTE 2: find a way to parametrize this into the class
 
@@ -1757,7 +1757,6 @@ class BenchmarkAnalyzer:
         fig.update_yaxes(title_text = "Milliseconds")
         # fig.show()
         fig.write_image("/tmp/analysis/plot_barchart.png", width=1400, height=1000)
-
 
         # ///////////////////
         # Add results into robotperf/benchmarks repo
