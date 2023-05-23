@@ -30,4 +30,4 @@ protected:
 
 }  // namespace robotperf
 
-#endif  // ROBOTPER_AIAMOUTPUTPUT_COMPONENT_HPP_
+#endif  // ROBOTPERF_POINT_CLOUD_OUTPUT_COMPONENT_HPP_

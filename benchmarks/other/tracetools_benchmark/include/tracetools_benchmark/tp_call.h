@@ -122,6 +122,40 @@ TRACEPOINT_EVENT(
   )
 )
 
+TRACEPOINT_EVENT(
+  TRACEPOINT_PROVIDER,
+  robotperf_pointcloud_output_cb_init,
+  TP_ARGS(
+    const void *, pointcloud_output_node_arg,
+    const void *, pointcloud_output_pointcloud_msg_arg,
+    uint32_t, pointcloud_output_header_nsec_arg,
+    uint32_t, pointcloud_output_header_sec_arg),
+  TP_FIELDS(
+    ctf_integer_hex(const void *, pointcloud_output_node, pointcloud_output_node_arg)
+    ctf_integer_hex(const void *, pointcloud_output_pointcloud_msg, pointcloud_output_pointcloud_msg_arg)
+    ctf_integer(uint32_t, pointcloud_output_header_nsec, pointcloud_output_header_nsec_arg)
+    ctf_integer(uint32_t, pointcloud_output_header_sec, pointcloud_output_header_sec_arg)
+    ctf_string(version, tracetools_benchmark_VERSION)
+  )
+)
+
+TRACEPOINT_EVENT(
+  TRACEPOINT_PROVIDER,
+  robotperf_pointcloud_output_cb_fini,
+  TP_ARGS(
+    const void *, pointcloud_output_node_arg,
+    const void *, pointcloud_output_pointcloud_msg_arg,
+    uint32_t, pointcloud_output_header_nsec_arg,
+    uint32_t, pointcloud_output_header_sec_arg),
+  TP_FIELDS(
+    ctf_integer_hex(const void *, pointcloud_output_node, pointcloud_output_node_arg)
+    ctf_integer_hex(const void *, pointcloud_output_pointcloud_msg, pointcloud_output_pointcloud_msg_arg)
+    ctf_integer(uint32_t, pointcloud_output_header_nsec, pointcloud_output_header_nsec_arg)
+    ctf_integer(uint32_t, pointcloud_output_header_sec, pointcloud_output_header_sec_arg)
+    ctf_string(version, tracetools_benchmark_VERSION)
+  )
+)
+
 #endif  // _TRACETOOLS_BENCHMARK__TP_CALL_H_
 
 #include <lttng/tracepoint-event.h>

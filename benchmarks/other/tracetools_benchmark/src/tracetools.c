@@ -119,6 +119,36 @@ void TRACEPOINT(
     image_input_header_sec_arg);
 }
 
+void TRACEPOINT(
+  robotperf_pointcloud_output_cb_init,
+  const void * pointcloud_output_node,
+  const void * pointcloud_output_pointcloud_msg,
+  uint32_t pointcloud_output_header_nsec_arg,
+  uint32_t pointcloud_output_header_sec_arg)
+{
+  CONDITIONAL_TP(
+    robotperf_pointcloud_output_cb_init,
+    pointcloud_output_node,
+    pointcloud_output_pointcloud_msg,
+    pointcloud_output_header_nsec_arg,
+    pointcloud_output_header_sec_arg);
+}
+
+void TRACEPOINT(
+  robotperf_pointcloud_output_cb_fini,
+  const void * pointcloud_output_node,
+  const void * pointcloud_output_pointcloud_msg,
+  uint32_t pointcloud_output_header_nsec_arg,
+  uint32_t pointcloud_output_header_sec_arg)
+{
+  CONDITIONAL_TP(
+    robotperf_pointcloud_output_cb_fini,
+    pointcloud_output_node,
+    pointcloud_output_pointcloud_msg,
+    pointcloud_output_header_nsec_arg,
+    pointcloud_output_header_sec_arg);
+}
+
 #ifndef _WIN32
 # pragma GCC diagnostic pop
 #else

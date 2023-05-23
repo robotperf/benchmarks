@@ -29,16 +29,18 @@ void PointCloudOutputComponent::pointcloudCb(
   const sensor_msgs::msg::PointCloud2::SharedPtr point_cloud_msg)
 {
   TRACEPOINT(
-    robotperf_image_output_cb_init,
-    "Initializing point cloud output callback",
+    robotperf_pointcloud_output_cb_init,
     static_cast<const void *>(this),
-    static_cast<const void *>(&(*point_cloud_msg)));
+    static_cast<const void *>(&(*point_cloud_msg)),
+    point_cloud_msg->header.stamp.nanosec,
+    point_cloud_msg->header.stamp.sec);
 
   TRACEPOINT(
-    robotperf_image_output_cb_fini,
-    "Final point cloud output callback",
+    robotperf_pointcloud_output_cb_fini,
     static_cast<const void *>(this),
-    static_cast<const void *>(&(*point_cloud_msg)));
+    static_cast<const void *>(&(*point_cloud_msg)),
+    point_cloud_msg->header.stamp.nanosec,
+    point_cloud_msg->header.stamp.sec);
 
 }
 
