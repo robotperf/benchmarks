@@ -55,16 +55,24 @@ void ImageOutputComponent::imageCb(
 {
   //Serialize the Image and CameraInfo messages
   rclcpp::SerializedMessage serialized_data_img;
+  std::cout << serialized_data_img.size() << ' ' << serialized_data_img.capacity() << std::endl;
+  std::cout << serialized_data_img.size() << std::endl;
   rclcpp::Serialization<sensor_msgs::msg::Image> image_serialization;
   const void* image_ptr = reinterpret_cast<const void*>(image_msg.get());
   image_serialization.serialize_message(image_ptr, &serialized_data_img);
-  size_t image_msg_size = serialized_data_img.get_rcl_serialized_message().buffer_length;
+  size_t image_msg_size = serialized_data_img.size();
+  std::cout << serialized_data_img.size() << ' ' << serialized_data_img.capacity() << std::endl;
+  std::cout << serialized_data_img.size() << std::endl;
   
   rclcpp::SerializedMessage serialized_data_info;
+  std::cout << serialized_data_info.size() << ' ' << serialized_data_info.capacity() << std::endl;
+  std::cout << serialized_data_info.size() << std::endl;
   rclcpp::Serialization<sensor_msgs::msg::CameraInfo> info_serialization;
   const void* info_ptr = reinterpret_cast<const void*>(info_msg.get());
   info_serialization.serialize_message(info_ptr, &serialized_data_info);
-  size_t info_msg_size = serialized_data_info.get_rcl_serialized_message().buffer_length;
+  size_t info_msg_size = serialized_data_info.size();
+  std::cout << serialized_data_info.size() << ' ' << serialized_data_info.capacity() << std::endl;
+  std::cout << serialized_data_info.size() << std::endl;
 
   TRACEPOINT(
     robotperf_image_output_cb_init,
