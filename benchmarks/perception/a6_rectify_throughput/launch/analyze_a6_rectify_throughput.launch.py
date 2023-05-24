@@ -206,3 +206,4 @@ ba.add_target(
 #     }
 # )
 ba.analyze_latency('/home/amf/.ros/tracing/a6_rectify_throughput')
+ba.analyze_throughput('/home/amf/.ros/tracing/a6_rectify_throughput')

@@ -6,7 +6,7 @@ short: Perception rectify ROS Component.
 graph: ../../../imgs/a2_rectify_throughput.svg
 metric:
   metric: "throughput"
-  unit: "bytes/s"
+  unit: "Mbps"
 reproduction: |
   # Create a ROS 2 overlay workspace
   mkdir -p /tmp/benchmark_ws/src
