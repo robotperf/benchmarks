@@ -1162,6 +1162,7 @@ class BenchmarkAnalyzer:
         """
         image_pipeline_msg_sets_ns = []
         image_pipeline_msg_sets_bytes = []
+        image_pipeline_msg_sets_frames = []
         image_pipeline_msg_sets_msgs = []
         # if multidimensional:
         if type(image_pipeline_msg_sets[0]) == list:
@@ -1170,6 +1171,7 @@ class BenchmarkAnalyzer:
                 target_chain_ns = []
                 target_chain_bytes = []
                 target_chain_msgs = []
+                target_chain_frames = []
                 for msg_index in range(len(image_pipeline_msg_sets[set_index])):
                     target_chain_ns.append(
                         image_pipeline_msg_sets[set_index][
@@ -1186,6 +1188,10 @@ class BenchmarkAnalyzer:
                             msg_count += 1
                     target_chain_bytes.append(msg_size)
                     target_chain_msgs.append(msg_count)
+                    if msg_count > 0:
+                        target_chain_frames.append(1)
+                    else:
+                        target_chain_frames.append(0)
                 for msg_index in range(len(image_pipeline_msg_sets[set_index])):
                     if msg_index == 0:
                         previous = target_chain_ns[0]
@@ -1195,13 +1201,14 @@ class BenchmarkAnalyzer:
                 image_pipeline_msg_sets_ns.append(aux_set)
                 image_pipeline_msg_sets_bytes.append(target_chain_bytes)
                 image_pipeline_msg_sets_msgs.append(target_chain_msgs)
+                image_pipeline_msg_sets_frames.append(target_chain_frames)
 
-                
         else:  # not multidimensional
             aux_set = []
             target_chain_ns = []
             target_chain_bytes = []
             target_chain_msgs = []
+            target_chain_frames = []
             for msg_index in range(len(image_pipeline_msg_sets)):
                 target_chain_ns.append(
                     image_pipeline_msg_sets[msg_index].default_clock_snapshot.ns_from_origin
@@ -1216,6 +1223,10 @@ class BenchmarkAnalyzer:
                         msg_count += 1
                 target_chain_bytes.append(msg_size)
                 target_chain_msgs.append(msg_count)
+                if msg_count > 0:
+                    target_chain_frames.append(1)
+                else:
+                    target_chain_frames.append(0)
             for msg_index in range(len(image_pipeline_msg_sets)):
                 if msg_index == 0:
                     previous = target_chain_ns[0]
@@ -1225,19 +1236,24 @@ class BenchmarkAnalyzer:
             image_pipeline_msg_sets_ns.append(aux_set)
             image_pipeline_msg_sets_bytes.append(target_chain_bytes)
             image_pipeline_msg_sets_msgs.append(target_chain_msgs)
+            image_pipeline_msg_sets_frames.append(target_chain_frames)
         
         # Compute throughput from the output [-1]
-        image_pipeline_msg_sets_bitspers = []
+        image_pipeline_msg_sets_megabps = []
         image_pipeline_msg_sets_msgspers = []
+        image_pipeline_msg_sets_fps = []
         for i in range(len(image_pipeline_msg_sets_ns)):
             tot_lat = 0
-            for j in range(len(image_pipeline_msg_sets_ns[i])):
+            for j in range(1,len(image_pipeline_msg_sets_ns[i])-2):
                 tot_lat += image_pipeline_msg_sets_ns[i][j]
             
-            image_pipeline_msg_sets_bitspers.append(image_pipeline_msg_sets_bytes[i][-1]/tot_lat/8*1000)
-            image_pipeline_msg_sets_msgspers.append(image_pipeline_msg_sets_msgs[i][-1]/tot_lat/8*1000)
+            image_pipeline_msg_sets_megabps.append(image_pipeline_msg_sets_bytes[i][-2]/tot_lat/8/1e6*1000)
+            image_pipeline_msg_sets_msgspers.append(image_pipeline_msg_sets_msgs[i][-2]/tot_lat*1000)
+            image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_frames[i][-2]/tot_lat*1000)
 
-        return image_pipeline_msg_sets_ns, image_pipeline_msg_sets_bitspers, image_pipeline_msg_sets_msgspers
+        return image_pipeline_msg_sets_megabps, image_pipeline_msg_sets_fps, image_pipeline_msg_sets_msgspers
+    
+
 
     def barchart_data_latency(self, image_pipeline_msg_sets):
         """
@@ -1541,39 +1557,12 @@ class BenchmarkAnalyzer:
     
     def statistics_1d(self, image_pipeline_msg_sets_ms, verbose=False):
 
-        mean_ = self.mean(image_pipeline_msg_sets_ms)
-        rms_ = self.rms(image_pipeline_msg_sets_ms)
-        min_ = self.min(image_pipeline_msg_sets_ms)
-        max_ = self.max(image_pipeline_msg_sets_ms)
-
-        # first_target = "ros2:callback_end"
-        first_target = "robotperf_benchmarks:robotperf_image_input_cb_init"
-        last_target = "robotperf_benchmarks:robotperf_image_output_cb_init"
-        
-        # # NOTE: we can particularizations for first_target and last_target
-        # #       as needed, e.g.
-        # if self.benchmark_name == "a3_stereo_image_proc":
-        #     first_target = "robotperf_benchmarks:robotperf_image_input_cb_init"
-        #
-        # NOTE 2: find a way to parametrize this into the class
-
-        indices = [i for i in range(
-                    self.target_chain_dissambiguous.index(first_target),
-                    1 + self.target_chain_dissambiguous.index(last_target),
-                    )
-                ]
-
         mean_benchmark = self.mean(image_pipeline_msg_sets_ms)
         rms_benchmark = self.rms(image_pipeline_msg_sets_ms)
         max_benchmark = self.max(image_pipeline_msg_sets_ms)
         min_benchmark = self.min(image_pipeline_msg_sets_ms)
 
         if verbose:
-            print(color("mean: " + str(mean_), fg="yellow"))
-            print("rms: " + str(rms_))
-            print("min: " + str(min_))
-            print(color("max: " + str(max_), fg="red"))
-
             print(color("mean benchmark: " + str(mean_benchmark), fg="yellow"))
             print("rms benchmark: " + str(rms_benchmark))
             print("min benchmark: " + str(min_benchmark))
@@ -1584,10 +1573,6 @@ class BenchmarkAnalyzer:
             rms_benchmark,
             max_benchmark,
             min_benchmark,
-            mean_,
-            rms_,
-            max_,
-            min_,
         ]
 
 
@@ -1773,10 +1758,6 @@ class BenchmarkAnalyzer:
                 "Benchmark RMS",
                 "Benchmark Max ",
                 "Benchmark Min",
-                "Mean",
-                "RMS",
-                "Max",
-                "Min",
             ],
         )
 
@@ -2110,8 +2091,6 @@ class BenchmarkAnalyzer:
         # self.upload_results()  # performed in CI/CD pipelines instead
 
 
-
-    
     def analyze_throughput(self, tracepath=None):
         """Analyze throughput of the image pipeline
 
@@ -2120,24 +2099,26 @@ class BenchmarkAnalyzer:
                 Path of the CTF tracefiles. Defaults to None.
         """
         self.get_target_chain_traces(tracepath)        
-        barcharts_lat, barcharts_size, barcharts_count = self.barchart_data_throughput(self.image_pipeline_msg_sets)
+        barcharts_through_megabs, barcharts_through_fps, barcharts_through_msgss = self.barchart_data_throughput(self.image_pipeline_msg_sets)
         
-        self.print_markdown_table(
-            [barcharts_lat],
-            ["RobotPerf benchmark latency"],
-            from_baseline=False,
-            units='ms'
-        )
         self.print_markdown_table_1d(
-            [barcharts_size],
-            ["RobotPerf benchmark bytes"],
+            [barcharts_through_megabs],
+            ["RobotPerf throughput"],
             from_baseline=False,
-            units='bitspers'
+            units='Mbps'
         )
+
         self.print_markdown_table_1d(
-            [barcharts_count],
-            ["RobotPerf benchmark count"],
+            [barcharts_through_fps],
+            ["RobotPerf throughput"],
             from_baseline=False,
-            units='msgspers'
+            units='fps'
+        )
+
+        self.print_markdown_table_1d(
+            [barcharts_through_msgss],
+            ["RobotPerf throughput"],
+            from_baseline=False,
+            units='msgs/s'
         )
         

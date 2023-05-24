@@ -72,7 +72,6 @@ void ImageInputComponent::imageCb(
   info_serialization.serialize_message(info_ptr, &serialized_data_info);
   size_t info_msg_size = serialized_data_info.size();
   
-  
   TRACEPOINT(
     robotperf_image_input_cb_init,
     static_cast<const void *>(this),
