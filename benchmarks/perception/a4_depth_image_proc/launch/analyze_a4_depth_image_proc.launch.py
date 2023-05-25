@@ -41,6 +41,12 @@ target_chain = [
     'robotperf_benchmarks:robotperf_image_input_cb_fini',
     # 'ros2:callback_end',
     # "ros2:callback_start",
+    'ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_cb_init',
+    'ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_init',
+    'ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_fini',
+    'ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_cb_fini',
+    # "ros2:callback_end",
+    # "ros2:callback_start",
     'robotperf_benchmarks:robotperf_pointcloud_output_cb_init',
     'robotperf_benchmarks:robotperf_pointcloud_output_cb_fini',
     # "ros2:callback_end",
@@ -123,6 +129,72 @@ ba.add_target(
         "colors_fg_bokeh": "darkgray",
         "layer": "benchmark",
         "label_layer": 5,
+        "marker": "plus",
+    }
+)
+# ba.add_target(
+#     {
+#         "name": "ros2:callback_end",
+#         "name_disambiguous": "ros2:callback_end",
+#         "colors_fg": "blue",
+#         "colors_fg_bokeh": "gray",
+#         "layer": "rclcpp",
+#         "label_layer": 3,
+#         "marker": "diamond",
+#     }
+# )
+# ba.add_target(
+#     {
+#         "name": "ros2:callback_start",
+#         "name_disambiguous": "ros2:callback_start (3)",
+#         "colors_fg": "blue",
+#         "colors_fg_bokeh": "chartreuse",
+#         "layer": "rclcpp",
+#         "label_layer": 3,
+#         "marker": "diamond",
+#     }
+# )
+ba.add_target(
+    {
+        "name": "ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_cb_init",
+        "name_disambiguous": "ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_cb_init",
+        "colors_fg": "yellow",
+        "colors_fg_bokeh": "salmon",
+        "layer": "userland",
+        "label_layer": 4,
+        "marker": "plus",
+    }
+)
+ba.add_target(
+    {
+        "name": "ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_init",
+        "name_disambiguous": "ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_init",
+        "colors_fg": "red",
+        "colors_fg_bokeh": "darksalmon",
+        "layer": "userland",
+        "label_layer": 4,
+        "marker": "plus",
+    }
+)
+ba.add_target(
+    {
+        "name": "ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_fini",
+        "name_disambiguous": "ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_fini",
+        "colors_fg": "red",
+        "colors_fg_bokeh": "lightcoral",
+        "layer": "userland",
+        "label_layer": 4,
+        "marker": "plus",
+    }
+)
+ba.add_target(
+    {
+        "name": "ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_cb_fini",
+        "name_disambiguous": "ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_cb_fini",
+        "colors_fg": "yellow",
+        "colors_fg_bokeh": "darkred",
+        "layer": "userland",
+        "label_layer": 4,
         "marker": "plus",
     }
 )
