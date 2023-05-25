@@ -1642,28 +1642,21 @@ class BenchmarkAnalyzer:
         return outs, errs
 
     def get_target_chain_traces(self, trace_path):
-        if trace_path:
+        if not trace_path:
+            trace_path = "/tmp/analysis/trace"
+
+        if self.hardware_device_type == "cpu":
             # self.image_pipeline_msg_sets \
             #     = self.msgsets_from_trace(trace_path, True)
             self.image_pipeline_msg_sets \
                 = self.msgsets_from_trace_identifier(trace_path, debug=True)
-        else:
-            if self.hardware_device_type == "cpu":
-                # self.image_pipeline_msg_sets = self.msgsets_from_trace(
-                #     # os.getenv("HOME") + "/.ros/tracing/" + self.benchmark_name,
-                #     "/tmp/analysis/trace/trace_cpu_ctf",
-                #     True)
-                self.image_pipeline_msg_sets \
-                    = self.msgsets_from_trace_identifier(
-                        "/tmp/analysis/trace/trace_cpu_ctf", 
-                        debug=True)
-            elif self.hardware_device_type == "fpga":
-                # NOTE: can't use msgsets_from_trace_identifier because vtf traces
-                # won't have the unique identifier
-                self.image_pipeline_msg_sets = self.msgsets_from_ctf_vtf_traces(
-                    "/tmp/analysis/trace/trace_cpu_ctf",
-                    "/tmp/analysis/trace/trace_fpga_vtf_ctf_fix",
-                    True)
+        elif self.hardware_device_type == "fpga":
+            # NOTE: can't use msgsets_from_trace_identifier because vtf traces
+            # won't have the unique identifier
+            self.image_pipeline_msg_sets = self.msgsets_from_ctf_vtf_traces(
+                trace_path + "/trace_cpu_ctf",
+                trace_path + "/trace_fpga_vtf_ctf_fix",
+                True)
 
     def get_index_to_plot(self):
         """ Obtain the index to plot given a series of sets
@@ -1809,7 +1802,7 @@ class BenchmarkAnalyzer:
             tracepath (string, optional):
                 Path of the CTF tracefiles. Defaults to None.
         """
-        self.get_target_chain_traces(tracepath)        
+        self.get_target_chain_traces(tracepath)
         self.bar_charts()
         self.index_to_plot = self.get_index_to_plot()
         self.print_timing_pipeline()
