@@ -46,7 +46,7 @@ protected:
   // Create subscriber to Disparity image with callback function
   rclcpp::Subscription<stereo_msgs::msg::DisparityImage>::SharedPtr sub_disparity_;
 
-
+  size_t get_msg_size(stereo_msgs::msg::DisparityImage::ConstSharedPtr disparity_msg);
   void disparityCb(const stereo_msgs::msg::DisparityImage::SharedPtr disparity_msg);
 };
 

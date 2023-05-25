@@ -21,7 +21,6 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License. 
 */
-
 #include <rclcpp/rclcpp.hpp>
 #include <image_transport/image_transport.hpp>
 #include <sensor_msgs/msg/camera_info.hpp>
@@ -30,6 +29,7 @@ limitations under the License.
 
 #include "tracetools_benchmark/tracetools.h"
 #include "a3_stereo_image_proc/disparity_output_component.hpp"
+#include <rclcpp/serialization.hpp>
 
 #include "rclcpp_components/register_node_macro.hpp"
 
@@ -49,6 +49,16 @@ DisparityOutputComponent::DisparityOutputComponent(const rclcpp::NodeOptions & o
 
 }
 
+size_t DisparityOutputComponent::get_msg_size(stereo_msgs::msg::DisparityImage::ConstSharedPtr disparity_msg){
+  //Serialize the Image and CameraInfo messages
+  rclcpp::SerializedMessage serialized_data_disp_img;
+  rclcpp::Serialization<stereo_msgs::msg::DisparityImage> disp_image_serialization;
+  const void* disp_image_ptr = reinterpret_cast<const void*>(disparity_msg.get());
+  disp_image_serialization.serialize_message(disp_image_ptr, &serialized_data_disp_img);
+  size_t disparity_msg_size = serialized_data_disp_img.size();
+  return disparity_msg_size;
+}
+
 void DisparityOutputComponent::disparityCb(
   const stereo_msgs::msg::DisparityImage::SharedPtr disparity_msg)
 {
@@ -58,7 +68,9 @@ void DisparityOutputComponent::disparityCb(
     static_cast<const void *>(&(*disparity_msg)),
     nullptr,
     disparity_msg->header.stamp.nanosec,
-    disparity_msg->header.stamp.sec);
+    disparity_msg->header.stamp.sec,
+    get_msg_size(disparity_msg),
+    size_t(0));
 
   TRACEPOINT(
     robotperf_image_output_cb_fini,    
@@ -66,7 +78,9 @@ void DisparityOutputComponent::disparityCb(
     static_cast<const void *>(&(*disparity_msg)),
     nullptr,
     disparity_msg->header.stamp.nanosec,
-    disparity_msg->header.stamp.sec);
+    disparity_msg->header.stamp.sec,
+    get_msg_size(disparity_msg),
+    size_t(0));
 
 }
 
