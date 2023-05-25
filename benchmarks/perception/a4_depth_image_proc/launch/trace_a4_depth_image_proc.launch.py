@@ -88,7 +88,7 @@ def generate_launch_description():
                 namespace="benchmark",
                 package="depth_image_proc",
                 plugin="depth_image_proc::PointCloudXyzrgbNode",
-                name="depth_image_proc_disparity_node",
+                name="depth_image_to_pointcloud_node",
                 remappings=[
                     ('rgb/camera_info', '/input/rgb/camera_info'),
                     ('rgb/image_rect_color', '/input/rgb/image_rect_color'),
