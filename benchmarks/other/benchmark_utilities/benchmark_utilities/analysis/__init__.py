@@ -1193,10 +1193,10 @@ class BenchmarkAnalyzer:
                     else:
                         target_chain_frames.append(0)
                 for msg_index in range(len(image_pipeline_msg_sets[set_index])):
-                    if msg_index == 0:
+                    if msg_index == 0 and set_index == 0:
                         previous = target_chain_ns[0]
-                    else:
-                        previous = target_chain_ns[msg_index - 1]
+                    #else:
+                    #    previous = target_chain_ns[msg_index - 1]
                     aux_set.append((target_chain_ns[msg_index] - previous) / 1e6)
                 image_pipeline_msg_sets_ns.append(aux_set)
                 image_pipeline_msg_sets_bytes.append(target_chain_bytes)
@@ -1230,8 +1230,8 @@ class BenchmarkAnalyzer:
             for msg_index in range(len(image_pipeline_msg_sets)):
                 if msg_index == 0:
                     previous = target_chain_ns[0]
-                else:
-                    previous = target_chain_ns[msg_index - 1]
+                #else:
+                #    previous = target_chain_ns[msg_index - 1]
                 aux_set.append((target_chain_ns[msg_index] - previous) / 1e6)
             image_pipeline_msg_sets_ns.append(aux_set)
             image_pipeline_msg_sets_bytes.append(target_chain_bytes)
@@ -1243,23 +1243,28 @@ class BenchmarkAnalyzer:
         image_pipeline_msg_sets_msgspers = []
         image_pipeline_msg_sets_fps = []
 
+        
         if option == 'potential':
-            for i in range(len(image_pipeline_msg_sets_ns)):
-                tot_lat = 0
-                for j in range(1,len(image_pipeline_msg_sets_ns[i])-2):
-                    tot_lat += image_pipeline_msg_sets_ns[i][j]
-                image_pipeline_msg_sets_megabyps.append(image_pipeline_msg_sets_bytes[i][-2]/tot_lat/1e6*1e3)
-                image_pipeline_msg_sets_msgspers.append(image_pipeline_msg_sets_msgs[i][-2]/tot_lat*1e3)
-                image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_frames[i][-2]/tot_lat*1e3)
+            for set_idx in range(len(image_pipeline_msg_sets_ns)):
+                tot_lat = image_pipeline_msg_sets_ns[set_idx][-1] - image_pipeline_msg_sets_ns[set_idx][0]
+                #print('potential')
+                #print(tot_lat)
+                image_pipeline_msg_sets_megabyps.append(image_pipeline_msg_sets_bytes[set_idx][-2]/tot_lat/1e6*1e3)
+                image_pipeline_msg_sets_msgspers.append(image_pipeline_msg_sets_msgs[set_idx][-2]/tot_lat*1e3)
+                image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_frames[set_idx][-2]/tot_lat*1e3)
 
         elif option == 'real':
-            for i in range(len(image_pipeline_msg_sets_ns)):
-                tot_lat = 0
-                for j in range(len(image_pipeline_msg_sets_ns[i])):
-                    tot_lat += image_pipeline_msg_sets_ns[i][j]
-                image_pipeline_msg_sets_megabyps.append(image_pipeline_msg_sets_bytes[i][-2]/tot_lat/1e6*1e3)
-                image_pipeline_msg_sets_msgspers.append(image_pipeline_msg_sets_msgs[i][-2]/tot_lat*1e3)
-                image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_frames[i][-2]/tot_lat*1e3)
+            for set_idx in range(len(image_pipeline_msg_sets_ns)-1):
+                #print(image_pipeline_msg_sets_ns[set_idx])
+                tot_lat = image_pipeline_msg_sets_ns[set_idx+1][1] - image_pipeline_msg_sets_ns[set_idx][1]
+                #print('real')
+                #print(tot_lat)
+                image_pipeline_msg_sets_megabyps.append(image_pipeline_msg_sets_bytes[set_idx][-2]/tot_lat/1e6*1e3)
+                image_pipeline_msg_sets_msgspers.append(image_pipeline_msg_sets_msgs[set_idx][-2]/tot_lat*1e3)
+                image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_frames[set_idx][-2]/tot_lat*1e3)
+                #print(image_pipeline_msg_sets_frames[set_idx][-2]/tot_lat*1e3)
+            #print(image_pipeline_msg_sets_fps)
+            #print(np.mean(np.array(image_pipeline_msg_sets_fps)))
 
         return image_pipeline_msg_sets_megabyps, image_pipeline_msg_sets_fps
 
@@ -1277,7 +1282,7 @@ class BenchmarkAnalyzer:
             list: list of relative latencies, in ms
         """
         image_pipeline_msg_sets_ns = []
-        # if multidimensional:
+        # if multidimensional:list
         if type(image_pipeline_msg_sets[0]) == list:
             for set_index in range(len(image_pipeline_msg_sets)):
                 aux_set = []
