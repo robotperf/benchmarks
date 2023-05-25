@@ -1145,7 +1145,7 @@ class BenchmarkAnalyzer:
         # show(fig)  # show in browser    
         export_png(fig, filename="/tmp/analysis/plot_trace.png")
 
-    def barchart_data_throughput(self, image_pipeline_msg_sets):
+    def barchart_data_throughput(self, image_pipeline_msg_sets, option):
         """
         Converts a tracing message list into its corresponding 
         throughput list in bytes per second unit.
@@ -1239,20 +1239,29 @@ class BenchmarkAnalyzer:
             image_pipeline_msg_sets_frames.append(target_chain_frames)
         
         # Compute throughput from the output [-1]
-        image_pipeline_msg_sets_megabps = []
+        image_pipeline_msg_sets_megabyps = []
         image_pipeline_msg_sets_msgspers = []
         image_pipeline_msg_sets_fps = []
-        for i in range(len(image_pipeline_msg_sets_ns)):
-            tot_lat = 0
-            for j in range(1,len(image_pipeline_msg_sets_ns[i])-2):
-                tot_lat += image_pipeline_msg_sets_ns[i][j]
-            
-            image_pipeline_msg_sets_megabps.append(image_pipeline_msg_sets_bytes[i][-2]/tot_lat/8/1e6*1000)
-            image_pipeline_msg_sets_msgspers.append(image_pipeline_msg_sets_msgs[i][-2]/tot_lat*1000)
-            image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_frames[i][-2]/tot_lat*1000)
 
-        return image_pipeline_msg_sets_megabps, image_pipeline_msg_sets_fps, image_pipeline_msg_sets_msgspers
-    
+        if option == 'potential':
+            for i in range(len(image_pipeline_msg_sets_ns)):
+                tot_lat = 0
+                for j in range(1,len(image_pipeline_msg_sets_ns[i])-2):
+                    tot_lat += image_pipeline_msg_sets_ns[i][j]
+                image_pipeline_msg_sets_megabyps.append(image_pipeline_msg_sets_bytes[i][-2]/tot_lat/1e6*1e3)
+                image_pipeline_msg_sets_msgspers.append(image_pipeline_msg_sets_msgs[i][-2]/tot_lat*1e3)
+                image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_frames[i][-2]/tot_lat*1e3)
+
+        elif option == 'real':
+            for i in range(len(image_pipeline_msg_sets_ns)):
+                tot_lat = 0
+                for j in range(len(image_pipeline_msg_sets_ns[i])):
+                    tot_lat += image_pipeline_msg_sets_ns[i][j]
+                image_pipeline_msg_sets_megabyps.append(image_pipeline_msg_sets_bytes[i][-2]/tot_lat/1e6*1e3)
+                image_pipeline_msg_sets_msgspers.append(image_pipeline_msg_sets_msgs[i][-2]/tot_lat*1e3)
+                image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_frames[i][-2]/tot_lat*1e3)
+
+        return image_pipeline_msg_sets_megabyps, image_pipeline_msg_sets_fps
 
 
     def barchart_data_latency(self, image_pipeline_msg_sets):
@@ -2099,26 +2108,36 @@ class BenchmarkAnalyzer:
                 Path of the CTF tracefiles. Defaults to None.
         """
         self.get_target_chain_traces(tracepath)        
-        barcharts_through_megabs, barcharts_through_fps, barcharts_through_msgss = self.barchart_data_throughput(self.image_pipeline_msg_sets)
+        barcharts_through_megabys, barcharts_through_fps = self.barchart_data_throughput(self.image_pipeline_msg_sets, 'potential')
         
         self.print_markdown_table_1d(
-            [barcharts_through_megabs],
-            ["RobotPerf throughput"],
+            [barcharts_through_megabys],
+            ["RobotPerf potential throughput"],
             from_baseline=False,
-            units='Mbps'
+            units='MB/s'
         )
 
         self.print_markdown_table_1d(
             [barcharts_through_fps],
-            ["RobotPerf throughput"],
+            ["RobotPerf potential throughput"],
             from_baseline=False,
             units='fps'
         )
 
+        barcharts_through_megabys, barcharts_through_fps = self.barchart_data_throughput(self.image_pipeline_msg_sets, 'real')
+        
         self.print_markdown_table_1d(
-            [barcharts_through_msgss],
-            ["RobotPerf throughput"],
+            [barcharts_through_megabys],
+            ["RobotPerf real throughput"],
             from_baseline=False,
-            units='msgs/s'
+            units='MB/s'
         )
+
+        self.print_markdown_table_1d(
+            [barcharts_through_fps],
+            ["RobotPerf real throughput"],
+            from_baseline=False,
+            units='fps'
+        )
+
         
