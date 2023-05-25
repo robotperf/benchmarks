@@ -113,7 +113,7 @@ ba.add_target(
 ba.add_target(
     {
         "name": "robotperf_benchmarks:robotperf_image_input_cb_init",
-        "name_disambiguous": "robotperf_benchmarks:robotperf_image_input_cb_init",
+        "name_disambiguous": "robotperf_benchmarks:robotperf_image_input_cb_init (2)",
         "colors_fg": "blue",
         "colors_fg_bokeh": "silver",
         "layer": "userland",
@@ -124,7 +124,7 @@ ba.add_target(
 ba.add_target(
     {
         "name": "robotperf_benchmarks:robotperf_image_input_cb_fini",
-        "name_disambiguous": "robotperf_benchmarks:robotperf_image_input_cb_fini",
+        "name_disambiguous": "robotperf_benchmarks:robotperf_image_input_cb_fini (2)",
         "colors_fg": "blue",
         "colors_fg_bokeh": "darkgray",
         "layer": "benchmark",

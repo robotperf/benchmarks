@@ -1720,10 +1720,6 @@ class BenchmarkAnalyzer:
     def plot_latency_results(self):
         # Plot, either averages or latest, etc
 
-        # # TODO: the plotting code below doesn't work with a4_depth_image_proc
-        if self.benchmark_name == "a4_depth_image_proc":
-            sys.exit()
-
         image_pipeline_msg_sets_mean = pd.DataFrame(self.image_pipeline_msg_sets_barchart).mean()        
         image_pipeline_msg_sets_max = pd.DataFrame(self.image_pipeline_msg_sets_barchart).max()
         image_pipeline_msg_sets_index = pd.DataFrame(self.barchart_data(self.image_pipeline_msg_sets[self.index_to_plot])).transpose()[0]
