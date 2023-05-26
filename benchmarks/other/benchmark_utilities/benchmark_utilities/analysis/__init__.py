@@ -1164,6 +1164,7 @@ class BenchmarkAnalyzer:
         image_pipeline_msg_sets_bytes = []
         image_pipeline_msg_sets_frames = []
         image_pipeline_msg_sets_msgs = []
+        
         # if multidimensional:
         if type(image_pipeline_msg_sets[0]) == list:
             for set_index in range(len(image_pipeline_msg_sets)):
@@ -1172,6 +1173,7 @@ class BenchmarkAnalyzer:
                 target_chain_bytes = []
                 target_chain_msgs = []
                 target_chain_frames = []
+                
                 for msg_index in range(len(image_pipeline_msg_sets[set_index])):
                     target_chain_ns.append(
                         image_pipeline_msg_sets[set_index][
@@ -1192,11 +1194,9 @@ class BenchmarkAnalyzer:
                         target_chain_frames.append(1)
                     else:
                         target_chain_frames.append(0)
-                for msg_index in range(len(image_pipeline_msg_sets[set_index])):
+                for msg_index in range(len(image_pipeline_msg_sets[set_index])):                  
                     if msg_index == 0 and set_index == 0:
                         previous = target_chain_ns[0]
-                    #else:
-                    #    previous = target_chain_ns[msg_index - 1]
                     aux_set.append((target_chain_ns[msg_index] - previous) / 1e6)
                 image_pipeline_msg_sets_ns.append(aux_set)
                 image_pipeline_msg_sets_bytes.append(target_chain_bytes)
@@ -1230,8 +1230,6 @@ class BenchmarkAnalyzer:
             for msg_index in range(len(image_pipeline_msg_sets)):
                 if msg_index == 0:
                     previous = target_chain_ns[0]
-                #else:
-                #    previous = target_chain_ns[msg_index - 1]
                 aux_set.append((target_chain_ns[msg_index] - previous) / 1e6)
             image_pipeline_msg_sets_ns.append(aux_set)
             image_pipeline_msg_sets_bytes.append(target_chain_bytes)
@@ -1242,30 +1240,22 @@ class BenchmarkAnalyzer:
         image_pipeline_msg_sets_megabyps = []
         image_pipeline_msg_sets_msgspers = []
         image_pipeline_msg_sets_fps = []
-
         
         if option == 'potential':
             for set_idx in range(len(image_pipeline_msg_sets_ns)):
                 tot_lat = image_pipeline_msg_sets_ns[set_idx][-1] - image_pipeline_msg_sets_ns[set_idx][0]
-                #print('potential')
-                #print(tot_lat)
                 image_pipeline_msg_sets_megabyps.append(image_pipeline_msg_sets_bytes[set_idx][-2]/tot_lat/1e6*1e3)
                 image_pipeline_msg_sets_msgspers.append(image_pipeline_msg_sets_msgs[set_idx][-2]/tot_lat*1e3)
                 image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_frames[set_idx][-2]/tot_lat*1e3)
 
         elif option == 'real':
             for set_idx in range(len(image_pipeline_msg_sets_ns)-1):
-                #print(image_pipeline_msg_sets_ns[set_idx])
                 tot_lat = image_pipeline_msg_sets_ns[set_idx+1][1] - image_pipeline_msg_sets_ns[set_idx][1]
-                #print('real')
-                #print(tot_lat)
                 image_pipeline_msg_sets_megabyps.append(image_pipeline_msg_sets_bytes[set_idx][-2]/tot_lat/1e6*1e3)
                 image_pipeline_msg_sets_msgspers.append(image_pipeline_msg_sets_msgs[set_idx][-2]/tot_lat*1e3)
                 image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_frames[set_idx][-2]/tot_lat*1e3)
-                #print(image_pipeline_msg_sets_frames[set_idx][-2]/tot_lat*1e3)
-            #print(image_pipeline_msg_sets_fps)
-            #print(np.mean(np.aprint_markdown_table_1drray(image_pipeline_msg_sets_fps)))
-
+                
+                
         return image_pipeline_msg_sets_megabyps, image_pipeline_msg_sets_fps
 
 
@@ -1543,7 +1533,7 @@ class BenchmarkAnalyzer:
         rms_ = self.rms_sets(image_pipeline_msg_sets_ms)
         min_ = self.min_sets(image_pipeline_msg_sets_ms)
         max_ = self.max_sets(image_pipeline_msg_sets_ms)
-        median_ = self.median_sets(image_pipeline_msg_sets_ms)
+        #median_ = self.median_sets(image_pipeline_msg_sets_ms)
 
         # first_target = "ros2:callback_end"
         first_target = "robotperf_benchmarks:robotperf_image_input_cb_init"
@@ -1566,31 +1556,32 @@ class BenchmarkAnalyzer:
         rms_benchmark = self.rms_sets(image_pipeline_msg_sets_ms, indices)
         max_benchmark = self.max_sets(image_pipeline_msg_sets_ms, indices)
         min_benchmark = self.min_sets(image_pipeline_msg_sets_ms, indices)
-        median_benchmark = self.median_sets(image_pipeline_msg_sets_ms, indices)
+        #median_benchmark = self.median_sets(image_pipeline_msg_sets_ms, indices)
+        
         if verbose:
             print(color("mean: " + str(mean_), fg="yellow"))
             print("rms: " + str(rms_))
             print("min: " + str(min_))
             print(color("max: " + str(max_), fg="red"))
-            print(color("median: " + str(max_), fg="yellow"))
+            #print(color("median: " + str(max_), fg="yellow"))
 
             print(color("mean benchmark: " + str(mean_benchmark), fg="yellow"))
             print("rms benchmark: " + str(rms_benchmark))
             print("min benchmark: " + str(min_benchmark))
             print(color("max benchmark: " + str(max_benchmark), fg="red"))
-            print(color("median benchmark: " + str(max_benchmark), fg="yellow"))
+            #print(color("median benchmark: " + str(max_benchmark), fg="yellow"))
 
         return [
             mean_benchmark,
             rms_benchmark,
             max_benchmark,
             min_benchmark,
-            median_benchmark,
+            #median_benchmark,
             mean_,
             rms_,
             max_,
             min_,
-            median_,
+            #median_,
         ]
     
     def statistics_1d(self, image_pipeline_msg_sets_ms, verbose=False):
@@ -1599,25 +1590,25 @@ class BenchmarkAnalyzer:
         rms_benchmark = self.rms(image_pipeline_msg_sets_ms)
         max_benchmark = self.max(image_pipeline_msg_sets_ms)
         min_benchmark = self.min(image_pipeline_msg_sets_ms)
-        median_benchmark = self.median(image_pipeline_msg_sets_ms)
+        #median_benchmark = self.median(image_pipeline_msg_sets_ms)
 
         if verbose:
             print(color("mean benchmark: " + str(mean_benchmark), fg="yellow"))
             print("rms benchmark: " + str(rms_benchmark))
             print("min benchmark: " + str(min_benchmark))
             print(color("max benchmark: " + str(max_benchmark), fg="red"))
-            print(color("median benchmark: " + str(median_benchmark), fg="yellow"))
+            #print(color("median benchmark: " + str(median_benchmark), fg="yellow"))
 
         return [
             mean_benchmark,
             rms_benchmark,
             max_benchmark,
             min_benchmark,
-            median_benchmark,
+            #median_benchmark,
             '-',
             '-',
             '-',
-            '-',
+            #'-',
             '-'
         ]
 
@@ -1655,8 +1646,8 @@ class BenchmarkAnalyzer:
                 "---",
                 "---",
                 "---",
-                "---",
-                "---",
+                #"---",
+                #"---",
                 "---",
             ],
         )
@@ -1668,12 +1659,12 @@ class BenchmarkAnalyzer:
                 "Benchmark RMS",
                 "Benchmark Max ",
                 "Benchmark Min",
-                "Benchmark Median",
+                #"Benchmark Median",
                 "Mean",
                 "RMS",
                 "Max",
                 "Min",
-                "Median",
+                #"Median",
             ],
         )
 
@@ -1794,8 +1785,8 @@ class BenchmarkAnalyzer:
                 "---",
                 "---",
                 "---",
-                "---",
-                "---",
+                #"---",
+                #"---",
                 "---",
                 "---",
                 "---",
@@ -1810,8 +1801,8 @@ class BenchmarkAnalyzer:
                 "Benchmark RMS",
                 "Benchmark Max ",
                 "Benchmark Min",
-                "Benchmark Median",
-                " ",
+                #"Benchmark Median",
+                #" ",
                 " ",
                 " ",
                 " ",
