@@ -37,7 +37,7 @@ from ros2_benchmark import ROS2BenchmarkConfig, ROS2BenchmarkTest
 
 IMAGE_RESOLUTION = ImageResolution.HD
 # ROSBAG_PATH = '/tmp/benchmark_ws/src/rosbags/image'  # NOTE: hardcoded, modify accordingly
-ROSBAG_PATH = '/home/amf/benchmark_ws/src/rosbags/perception/image'
+ROSBAG_PATH = '/home/martinho/acceleration/benchmark_ws/src/rosbags/perception/image'
 
 def launch_setup(container_prefix, container_sigterm_timeout):
     """Generate launch description for benchmarking image_proc RectifyNode."""
@@ -47,7 +47,10 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         namespace=TestRectifyNode.generate_namespace(),
         package='image_proc',
         plugin='image_proc::RectifyNode',
-        remappings=[('image', 'image_raw')],
+        remappings=[
+            ("image", "/r2b/input"),
+            ("camera_info", "/r2b/camera_info"),
+        ],
     )
 
     data_loader_node = ComposableNode(
@@ -99,8 +102,8 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         plugin="robotperf::perception::ImageInputComponent",
         name="image_input_component",
         remappings=[
-            ("image", "input0"),
-            ("camera_info", "input1"),
+            ("image", "/r2b/image_raw"),
+            ("camera_info", "/r2b/camera_info"),
         ],
         extra_arguments=[{'use_intra_process_comms': True}],
     )
@@ -111,8 +114,8 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         plugin="robotperf::perception::ImageOutputComponent",
         name="image_output_component",
         remappings=[
-            ("image", "/benchmark/image_rect"),
-            ("camera_info", "/camera/camera_info"),
+            ("image", "/r2b/image_rect"),
+            ("camera_info", "/r2b/camera_info"),
         ],
         extra_arguments=[{'use_intra_process_comms': True}],
     )
