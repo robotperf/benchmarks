@@ -52,7 +52,7 @@ def generate_launch_description():
         # events_kernel=DEFAULT_EVENTS_KERNEL,
         # context_names=DEFAULT_CONTEXT,
     )
-
+ 
     perception_container = ComposableNodeContainer(
         name="perception_container",
         namespace="",
@@ -61,15 +61,24 @@ def generate_launch_description():
         composable_node_descriptions=[
             ComposableNode(
                 name='DataLoaderNode',
-                namespace=TestRectifyNode.generate_namespace(),
+                namespace="",
                 package='ros2_benchmark',
                 plugin='ros2_benchmark::DataLoaderNode',
+                # ###########
+                # input_data_path=ROSBAG_PATH,
+                # # Upper and lower bounds of peak throughput search window
+                # publisher_upper_frequency=30.0,
+                # publisher_lower_frequency=30.0,
+                # # The number of frames to be buffered
+                # playback_message_buffer_size=68,
+                # custom_report_info={'data_resolution': IMAGE_RESOLUTION},
+                # ########### 
                 remappings=[('camera/image_raw', 'data_loader/image'),
                             ('camera/camera_info', 'data_loader/camera_info')]
-            )
+            ),
             ComposableNode(
                 name='PlaybackNode',
-                namespace=TestRectifyNode.generate_namespace(),
+                namespace="",
                 package='ros2_benchmark',
                 plugin='ros2_benchmark::PlaybackNode',
                 parameters=[{
@@ -78,10 +87,10 @@ def generate_launch_description():
                         'sensor_msgs/msg/CameraInfo'],
                 }],
                 remappings=[('buffer/input0', 'data_loader/image'),
-                            ('input0', 'image_raw'),
+                            ('input0', 'camera/image_raw'),
                             ('buffer/input1', 'data_loader/camera_info'),
-                            ('input1', 'camera_info')],
-            )
+                            ('input1', 'camera/camera_info')],
+            ),
             ComposableNode(
                 package="a1_perception_2nodes",
                 plugin="robotperf::perception::ImageInputComponent",
