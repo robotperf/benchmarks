@@ -52,7 +52,7 @@ def generate_launch_description():
         # events_kernel=DEFAULT_EVENTS_KERNEL,
         # context_names=DEFAULT_CONTEXT,
     )
- 
+
     perception_container = ComposableNodeContainer(
         name="perception_container",
         namespace="",
