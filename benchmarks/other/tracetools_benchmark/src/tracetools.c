@@ -5,7 +5,7 @@
    @@@@@ @@  @@    @@@@
    @@@@@ @@  @@    @@@@ Copyright (c) 2023, Acceleration Robotics®
    @@@@@ @@  @@    @@@@ Author: Víctor Mayoral Vilches <victor@accelerationrobotics.com>
-   @@@@@ @@  @@    @@@@
+   @@@@@ @@  @@    @@@@ Author: Alejandra Martínez Fariña <alex@accelerationrobotics.com>
    @@@@@@@@@&@@@@@@@@@@
    @@@@@@@@@@@@@@@@@@@@
 
@@ -58,7 +58,9 @@ void TRACEPOINT(
   const void * image_input_image_msg_arg,
   const void * image_input_info_msg_arg,
   uint32_t image_input_header_nsec_arg,
-  uint32_t image_input_header_sec_arg)
+  uint32_t image_input_header_sec_arg,
+  size_t image_input_image_msg_size_arg,
+  size_t image_input_info_msg_size_arg)
 {
   CONDITIONAL_TP(
     robotperf_image_input_cb_init,
@@ -66,7 +68,9 @@ void TRACEPOINT(
     image_input_image_msg_arg,
     image_input_info_msg_arg,
     image_input_header_nsec_arg,
-    image_input_header_sec_arg);
+    image_input_header_sec_arg,
+    image_input_image_msg_size_arg,
+    image_input_info_msg_size_arg);
 }
 void TRACEPOINT(
   robotperf_image_input_cb_fini,
@@ -74,7 +78,9 @@ void TRACEPOINT(
   const void * image_input_image_msg_arg,
   const void * image_input_info_msg_arg,
   uint32_t image_input_header_nsec_arg,
-  uint32_t image_input_header_sec_arg)
+  uint32_t image_input_header_sec_arg,
+  size_t image_input_image_msg_size_arg,
+  size_t image_input_info_msg_size_arg)
 {
   CONDITIONAL_TP(
     robotperf_image_input_cb_fini,
@@ -82,7 +88,9 @@ void TRACEPOINT(
     image_input_image_msg_arg,
     image_input_info_msg_arg,
     image_input_header_nsec_arg,
-    image_input_header_sec_arg);
+    image_input_header_sec_arg,
+    image_input_image_msg_size_arg,
+    image_input_info_msg_size_arg);
 }
 
 // image_output
@@ -92,7 +100,9 @@ void TRACEPOINT(
   const void * image_output_image_msg_arg,
   const void * image_output_info_msg_arg,
   uint32_t image_input_header_nsec_arg,
-  uint32_t image_input_header_sec_arg)
+  uint32_t image_input_header_sec_arg,
+  size_t image_output_image_msg_size_arg,
+  size_t image_output_info_msg_size_arg)
 {
   CONDITIONAL_TP(
     robotperf_image_output_cb_init,
@@ -100,7 +110,9 @@ void TRACEPOINT(
     image_output_image_msg_arg,
     image_output_info_msg_arg,
     image_input_header_nsec_arg,
-    image_input_header_sec_arg);
+    image_input_header_sec_arg,
+    image_output_image_msg_size_arg,
+    image_output_info_msg_size_arg);
 }
 void TRACEPOINT(
   robotperf_image_output_cb_fini,
@@ -108,7 +120,9 @@ void TRACEPOINT(
   const void * image_output_image_msg_arg,
   const void * image_output_info_msg_arg,
   uint32_t image_input_header_nsec_arg,
-  uint32_t image_input_header_sec_arg)
+  uint32_t image_input_header_sec_arg,
+  size_t image_output_image_msg_size_arg,
+  size_t image_output_info_msg_size_arg)
 {
   CONDITIONAL_TP(
     robotperf_image_output_cb_fini,
@@ -116,7 +130,9 @@ void TRACEPOINT(
     image_output_image_msg_arg,
     image_output_info_msg_arg,
     image_input_header_nsec_arg,
-    image_input_header_sec_arg);
+    image_input_header_sec_arg,
+    image_output_image_msg_size_arg,
+    image_output_info_msg_size_arg);
 }
 
 #ifndef _WIN32
