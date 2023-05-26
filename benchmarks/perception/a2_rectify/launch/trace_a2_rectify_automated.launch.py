@@ -5,7 +5,7 @@
 #    @@@@@ @@  @@    @@@@
 #    @@@@@ @@  @@    @@@@ Copyright (c) 2023, Acceleration Robotics®
 #    @@@@@ @@  @@    @@@@ Author: Víctor Mayoral Vilches <victor@accelerationrobotics.com>
-#    @@@@@ @@  @@    @@@@ Author: Alejandra Martínez Fariña <alex@accelerationrobotics.com>
+#    @@@@@ @@  @@    @@@@
 #    @@@@@@@@@&@@@@@@@@@@
 #    @@@@@@@@@@@@@@@@@@@@
 #
@@ -35,7 +35,7 @@ from tracetools_trace.tools.names import DEFAULT_CONTEXT
 def generate_launch_description():
      # Trace
     trace = Trace(
-        session_name="a6_rectify_throughput",
+        session_name="a2_rectify",
         events_ust=[
             "robotperf_benchmarks:*",
             "ros2_image_pipeline:*",
@@ -60,6 +60,29 @@ def generate_launch_description():
         executable="component_container",
         composable_node_descriptions=[
             ComposableNode(
+                name='DataLoaderNode',
+                namespace=TestRectifyNode.generate_namespace(),
+                package='ros2_benchmark',
+                plugin='ros2_benchmark::DataLoaderNode',
+                remappings=[('camera/image_raw', 'data_loader/image'),
+                            ('camera/camera_info', 'data_loader/camera_info')]
+            )
+            ComposableNode(
+                name='PlaybackNode',
+                namespace=TestRectifyNode.generate_namespace(),
+                package='ros2_benchmark',
+                plugin='ros2_benchmark::PlaybackNode',
+                parameters=[{
+                    'data_formats': [
+                        'sensor_msgs/msg/Image',
+                        'sensor_msgs/msg/CameraInfo'],
+                }],
+                remappings=[('buffer/input0', 'data_loader/image'),
+                            ('input0', 'image_raw'),
+                            ('buffer/input1', 'data_loader/camera_info'),
+                            ('input1', 'camera_info')],
+            )
+            ComposableNode(
                 package="a1_perception_2nodes",
                 plugin="robotperf::perception::ImageInputComponent",
                 name="image_input_component",
@@ -80,7 +103,6 @@ def generate_launch_description():
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],
             ),
-
             ComposableNode(
                 package="a1_perception_2nodes",
                 plugin="robotperf::perception::ImageOutputComponent",
@@ -99,5 +121,5 @@ def generate_launch_description():
         # LTTng tracing
         trace,
         # image pipeline
-        perception_container
+        perception_container        
     ])

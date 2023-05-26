@@ -205,5 +205,5 @@ ba.add_target(
 #         "marker": "diamond",
 #     }
 # )
-ba.analyze_latency('/home/amf/.ros/tracing/a6_rectify_throughput')
-ba.analyze_throughput('/home/amf/.ros/tracing/a6_rectify_throughput')
+ba.analyze_latency()
+ba.analyze_throughput()

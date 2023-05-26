@@ -28,6 +28,7 @@
   <depend>lttng-tools</depend>
   <depend>liblttng-ust-dev</depend>
   <depend>babeltrace</depend>
+  <depend>a1_perception_2nodes</depend>
   <!-- <depend>python3-bt2</depend> -->
 
   <test_depend>ament_lint_auto</test_depend>

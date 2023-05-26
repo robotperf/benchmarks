@@ -31,8 +31,8 @@ from ros2_benchmark import ImageResolution
 from ros2_benchmark import ROS2BenchmarkConfig, ROS2BenchmarkTest
 
 IMAGE_RESOLUTION = ImageResolution.HD
-ROSBAG_PATH = '/tmp/benchmark_ws/src/rosbags/image'  # NOTE: hardcoded, modify accordingly
-# ROSBAG_PATH = '/tmp/rosbags/perception/image'
+# ROSBAG_PATH = '/tmp/benchmark_ws/src/rosbags/image'  # NOTE: hardcoded, modify accordingly
+ROSBAG_PATH = '/tmp/benchmark_ws/src/rosbags/perception/image'
 
 def launch_setup(container_prefix, container_sigterm_timeout):
     """Generate launch description for benchmarking image_proc RectifyNode."""
@@ -146,7 +146,7 @@ class TestRectifyNode(ROS2BenchmarkTest):
 def generate_test_description():
     return TestRectifyNode.generate_test_description_with_nsys(launch_setup)
 
-# # added to comply with ROS 2 Launch system
-# def generate_launch_description():
-#     # return LaunchDescription()
-#     return TestRectifyNode.generate_test_description_with_nsys(launch_setup)
+# added to comply with ROS 2 Launch system
+def generate_launch_description():
+    # return LaunchDescription()
+    return TestRectifyNode.generate_test_description_with_nsys(launch_setup)

@@ -30,18 +30,18 @@ set(node_plugins "")
 # see https://archive.eclipse.org/tracecompass/doc/stable/org.eclipse.tracecompass.doc.user/LTTng-UST-Analyses.html#Flame_Chart_View
 set(CMAKE_CXX_FLAGS "-g -O2 -finstrument-functions")
 
-# Nodes built as "components"
-ament_auto_add_library(image_input_component SHARED src/image_input_component.cpp)
-ament_target_dependencies(image_input_component tracetools_benchmark image_transport)
-target_compile_definitions(image_input_component PRIVATE "COMPOSITION_BUILDING_DLL")
-rclcpp_components_register_nodes(image_input_component "robotperf::perception::ImageInputComponent")
-set(node_plugins "${node_plugins}robotperf::perception::ImageInputComponent;$<TARGET_FILE:image_input_component>\n")
+# # Nodes built as "components"
+# ament_auto_add_library(image_input_component SHARED src/image_input_component.cpp)
+# ament_target_dependencies(image_input_component tracetools_benchmark image_transport)
+# target_compile_definitions(image_input_component PRIVATE "COMPOSITION_BUILDING_DLL")
+# rclcpp_components_register_nodes(image_input_component "robotperf::perception::ImageInputComponent")
+# set(node_plugins "${node_plugins}robotperf::perception::ImageInputComponent;$<TARGET_FILE:image_input_component>\n")
 
-ament_auto_add_library(image_output_component SHARED src/image_output_component.cpp)
-ament_target_dependencies(image_output_component tracetools_benchmark image_transport)
-target_compile_definitions(image_output_component PRIVATE "COMPOSITION_BUILDING_DLL")
-rclcpp_components_register_nodes(image_output_component "robotperf::perception::ImageOutputComponent")
-set(node_plugins "${node_plugins}robotperf::perception::ImageOutputComponent;$<TARGET_FILE:image_output_component>\n")
+# ament_auto_add_library(image_output_component SHARED src/image_output_component.cpp)
+# ament_target_dependencies(image_output_component tracetools_benchmark image_transport)
+# target_compile_definitions(image_output_component PRIVATE "COMPOSITION_BUILDING_DLL")
+# rclcpp_components_register_nodes(image_output_component "robotperf::perception::ImageOutputComponent")
+# set(node_plugins "${node_plugins}robotperf::perception::ImageOutputComponent;$<TARGET_FILE:image_output_component>\n")
 
 # install(
 #   TARGETS ${install_targets}
