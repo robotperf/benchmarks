@@ -1264,7 +1264,7 @@ class BenchmarkAnalyzer:
                 image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_frames[set_idx][-2]/tot_lat*1e3)
                 #print(image_pipeline_msg_sets_frames[set_idx][-2]/tot_lat*1e3)
             #print(image_pipeline_msg_sets_fps)
-            #print(np.mean(np.array(image_pipeline_msg_sets_fps)))
+            #print(np.mean(np.aprint_markdown_table_1drray(image_pipeline_msg_sets_fps)))
 
         return image_pipeline_msg_sets_megabyps, image_pipeline_msg_sets_fps
 
@@ -1378,6 +1378,9 @@ class BenchmarkAnalyzer:
 
     def min(self, list):
         return np.min(np.array(list))
+    
+    def median(self, list):
+        return np.median(np.array(list))
 
 
     def rms_sets(self, image_pipeline_msg_sets, indices=None):
@@ -1448,6 +1451,22 @@ class BenchmarkAnalyzer:
         else:
             total_in_sets = [sum(set) for set in image_pipeline_msg_sets]
             return self.min(total_in_sets)
+        
+    def median_sets(self, image_pipeline_msg_sets, indices=None):
+        """
+
+        """
+        if indices:
+            with_indices_sets = []
+            for set in image_pipeline_msg_sets:
+                indices_sum = 0
+                for i in indices:
+                    indices_sum += set[i]
+                with_indices_sets.append(indices_sum)
+            return self.median(with_indices_sets)
+        else:
+            total_in_sets = [sum(set) for set in image_pipeline_msg_sets]
+            return self.median(total_in_sets)
 
 
     def print_timeline_average(self, image_pipeline_msg_sets):
@@ -1524,6 +1543,7 @@ class BenchmarkAnalyzer:
         rms_ = self.rms_sets(image_pipeline_msg_sets_ms)
         min_ = self.min_sets(image_pipeline_msg_sets_ms)
         max_ = self.max_sets(image_pipeline_msg_sets_ms)
+        median_ = self.median_sets(image_pipeline_msg_sets_ms)
 
         # first_target = "ros2:callback_end"
         first_target = "robotperf_benchmarks:robotperf_image_input_cb_init"
@@ -1546,27 +1566,31 @@ class BenchmarkAnalyzer:
         rms_benchmark = self.rms_sets(image_pipeline_msg_sets_ms, indices)
         max_benchmark = self.max_sets(image_pipeline_msg_sets_ms, indices)
         min_benchmark = self.min_sets(image_pipeline_msg_sets_ms, indices)
-
+        median_benchmark = self.median_sets(image_pipeline_msg_sets_ms, indices)
         if verbose:
             print(color("mean: " + str(mean_), fg="yellow"))
             print("rms: " + str(rms_))
             print("min: " + str(min_))
             print(color("max: " + str(max_), fg="red"))
+            print(color("median: " + str(max_), fg="yellow"))
 
             print(color("mean benchmark: " + str(mean_benchmark), fg="yellow"))
             print("rms benchmark: " + str(rms_benchmark))
             print("min benchmark: " + str(min_benchmark))
             print(color("max benchmark: " + str(max_benchmark), fg="red"))
+            print(color("median benchmark: " + str(max_benchmark), fg="yellow"))
 
         return [
             mean_benchmark,
             rms_benchmark,
             max_benchmark,
             min_benchmark,
+            median_benchmark,
             mean_,
             rms_,
             max_,
             min_,
+            median_,
         ]
     
     def statistics_1d(self, image_pipeline_msg_sets_ms, verbose=False):
@@ -1575,18 +1599,26 @@ class BenchmarkAnalyzer:
         rms_benchmark = self.rms(image_pipeline_msg_sets_ms)
         max_benchmark = self.max(image_pipeline_msg_sets_ms)
         min_benchmark = self.min(image_pipeline_msg_sets_ms)
+        median_benchmark = self.median(image_pipeline_msg_sets_ms)
 
         if verbose:
             print(color("mean benchmark: " + str(mean_benchmark), fg="yellow"))
             print("rms benchmark: " + str(rms_benchmark))
             print("min benchmark: " + str(min_benchmark))
             print(color("max benchmark: " + str(max_benchmark), fg="red"))
+            print(color("median benchmark: " + str(median_benchmark), fg="yellow"))
 
         return [
             mean_benchmark,
             rms_benchmark,
             max_benchmark,
             min_benchmark,
+            median_benchmark,
+            '-',
+            '-',
+            '-',
+            '-',
+            '-'
         ]
 
 
@@ -1624,6 +1656,8 @@ class BenchmarkAnalyzer:
                 "---",
                 "---",
                 "---",
+                "---",
+                "---",
             ],
         )
         list_statistics.insert(
@@ -1634,10 +1668,12 @@ class BenchmarkAnalyzer:
                 "Benchmark RMS",
                 "Benchmark Max ",
                 "Benchmark Min",
+                "Benchmark Median",
                 "Mean",
                 "RMS",
                 "Max",
                 "Min",
+                "Median",
             ],
         )
 
@@ -1762,6 +1798,8 @@ class BenchmarkAnalyzer:
                 "---",
                 "---",
                 "---",
+                "---",
+                "---",
             ],
         )
         list_statistics.insert(
@@ -1772,6 +1810,12 @@ class BenchmarkAnalyzer:
                 "Benchmark RMS",
                 "Benchmark Max ",
                 "Benchmark Min",
+                "Benchmark Median",
+                " ",
+                " ",
+                " ",
+                " ",
+                " ",
             ],
         )
 
@@ -2128,7 +2172,7 @@ class BenchmarkAnalyzer:
             from_baseline=False,
             units='fps'
         )
-
+        
         barcharts_through_megabys, barcharts_through_fps = self.barchart_data_throughput(self.image_pipeline_msg_sets, 'real')
         
         self.print_markdown_table_1d(
@@ -2138,6 +2182,7 @@ class BenchmarkAnalyzer:
             units='MB/s'
         )
 
+
         self.print_markdown_table_1d(
             [barcharts_through_fps],
             ["RobotPerf real throughput"],
@@ -2145,4 +2190,5 @@ class BenchmarkAnalyzer:
             units='fps'
         )
 
+    
         
