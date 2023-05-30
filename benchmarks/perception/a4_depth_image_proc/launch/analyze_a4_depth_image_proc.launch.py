@@ -255,3 +255,4 @@ ba.add_target(
 # )
 
 ba.analyze_latency()
+ba.analyze_throughput()
