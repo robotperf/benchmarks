@@ -44,17 +44,6 @@ OPTION = 'without_monitor_node'
 def launch_setup(container_prefix, container_sigterm_timeout):
     """Generate launch description for benchmarking image_proc RectifyNode."""
 
-    rectify_node = ComposableNode(
-        name='RectifyNode',
-        namespace=TestRectifyNode.generate_namespace(),
-        package='image_proc',
-        plugin='image_proc::RectifyNode',
-        remappings=[
-            ("image", "/r2b/input"),
-            ("camera_info", "/r2b/camera_info"),
-        ],
-    )
-
     data_loader_node = ComposableNode(
         name='DataLoaderNode',
         namespace=TestRectifyNode.generate_namespace(),
@@ -85,19 +74,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
                     # ('buffer/input1', 'buffer/camera_info'),
                     # ('input1', 'camera_info')],                    
     )
-    '''
-    monitor_node = ComposableNode(
-        name='MonitorNode',
-        namespace=TestRectifyNode.generate_namespace(),
-        package='ros2_benchmark',
-        plugin='ros2_benchmark::MonitorNode',
-        parameters=[{
-            'monitor_data_format': 'sensor_msgs/msg/Image',
-        }],
-        remappings=[
-            ('output', 'image_rect')],
-    )
-    '''
+
     input_node = ComposableNode(
         package="a1_perception_2nodes",
         namespace=TestRectifyNode.generate_namespace(),
@@ -108,6 +85,17 @@ def launch_setup(container_prefix, container_sigterm_timeout):
             ("camera_info", "/r2b/camera_info"),
         ],
         extra_arguments=[{'use_intra_process_comms': True}],
+    )
+
+    rectify_node = ComposableNode(
+        name='RectifyNode',
+        namespace=TestRectifyNode.generate_namespace(),
+        package='image_proc',
+        plugin='image_proc::RectifyNode',
+        remappings=[
+            ("image", "/r2b/input"),
+            ("camera_info", "/r2b/camera_info"),
+        ],
     )
 
     output_node = ComposableNode(
@@ -134,9 +122,8 @@ def launch_setup(container_prefix, container_sigterm_timeout):
             # prep_resize_node,
             playback_node,
             input_node,
-            output_node,
-            #monitor_node,
-            rectify_node
+            rectify_node,
+            output_node            
         ],
         output='screen'
     )
