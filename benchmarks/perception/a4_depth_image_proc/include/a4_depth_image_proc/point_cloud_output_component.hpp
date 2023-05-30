@@ -22,6 +22,7 @@ protected:
   // Create subscriber to Disparity image with callback function
   rclcpp::Subscription<sensor_msgs::msg::PointCloud2>::SharedPtr sub_point_cloud_;
 
+  size_t get_msg_size(sensor_msgs::msg::PointCloud2::ConstSharedPtr point_cloud_msg);
 
   void pointcloudCb(const sensor_msgs::msg::PointCloud2::SharedPtr point_cloud_msg);
 };

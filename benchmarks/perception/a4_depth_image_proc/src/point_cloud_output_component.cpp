@@ -1,4 +1,5 @@
 #include <rclcpp/rclcpp.hpp>
+#include <rclcpp/serialization.hpp>
 #include <image_transport/image_transport.hpp>
 #include <sensor_msgs/msg/camera_info.hpp>
 #include <sensor_msgs/msg/image.hpp>
@@ -25,6 +26,16 @@ PointCloudOutputComponent::PointCloudOutputComponent(const rclcpp::NodeOptions &
 
 }
 
+size_t PointCloudOutputComponent::get_msg_size(sensor_msgs::msg::PointCloud2::ConstSharedPtr point_cloud_msg){
+  //Serialize the PointCloud2 messages
+  rclcpp::SerializedMessage serialized_data_point_cloud;
+  rclcpp::Serialization<sensor_msgs::msg::PointCloud2> point_cloud_serialization;
+  const void* point_cloud_ptr = reinterpret_cast<const void*>(point_cloud_msg.get());
+  point_cloud_serialization.serialize_message(point_cloud_ptr, &serialized_data_point_cloud);
+  size_t point_cloud_msg_size = serialized_data_point_cloud.size();
+  return point_cloud_msg_size;
+}
+
 void PointCloudOutputComponent::pointcloudCb(
   const sensor_msgs::msg::PointCloud2::SharedPtr point_cloud_msg)
 {
@@ -33,14 +44,16 @@ void PointCloudOutputComponent::pointcloudCb(
     static_cast<const void *>(this),
     static_cast<const void *>(&(*point_cloud_msg)),
     point_cloud_msg->header.stamp.nanosec,
-    point_cloud_msg->header.stamp.sec);
+    point_cloud_msg->header.stamp.sec,
+    get_msg_size(point_cloud_msg));
 
   TRACEPOINT(
     robotperf_pointcloud_output_cb_fini,
     static_cast<const void *>(this),
     static_cast<const void *>(&(*point_cloud_msg)),
     point_cloud_msg->header.stamp.nanosec,
-    point_cloud_msg->header.stamp.sec);
+    point_cloud_msg->header.stamp.sec,
+    get_msg_size(point_cloud_msg));
 
 }
 
