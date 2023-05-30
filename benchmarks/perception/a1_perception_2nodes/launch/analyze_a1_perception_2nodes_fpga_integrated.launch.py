@@ -31,7 +31,7 @@ def generate_launch_description():
     return LaunchDescription()
 
 
-ba = BenchmarkAnalyzer("a1_perception_2nodes")
+ba = BenchmarkAnalyzer("a1_perception_2nodes_fpga_integrated")
 
 # add parameters for analyzing the traces
 ## using message header id
@@ -42,12 +42,8 @@ target_chain = [
     "ros2_image_pipeline:image_proc_rectify_init",  # 3
     "ros2_image_pipeline:image_proc_rectify_fini",  # 4
     "ros2_image_pipeline:image_proc_rectify_cb_fini",  # 5
-    "ros2_image_pipeline:image_proc_resize_cb_init",  # 6
-    "ros2_image_pipeline:image_proc_resize_init",  # 7
-    "ros2_image_pipeline:image_proc_resize_fini",  # 8
-    "ros2_image_pipeline:image_proc_resize_cb_fini",  # 9
-    "robotperf_benchmarks:robotperf_image_output_cb_init",  # 10
-    "robotperf_benchmarks:robotperf_image_output_cb_fini",  # 11
+    "robotperf_benchmarks:robotperf_image_output_cb_init",  # 6
+    "robotperf_benchmarks:robotperf_image_output_cb_fini",  # 7
 ]
 
 ba.add_target(
@@ -118,50 +114,6 @@ ba.add_target(
 )
 ba.add_target(
     {
-        "name": "ros2_image_pipeline:image_proc_resize_cb_init",
-        "name_disambiguous": "ros2_image_pipeline:image_proc_resize_cb_init",
-        "colors_fg": "yellow",
-        "colors_fg_bokeh": "thistle",
-        "layer": "userland",
-        "label_layer": 4,
-        "marker": "plus",
-    }
-)
-ba.add_target(
-    {
-        "name": "ros2_image_pipeline:image_proc_resize_init",
-        "name_disambiguous": "ros2_image_pipeline:image_proc_resize_init",
-        "colors_fg": "red",
-        "colors_fg_bokeh": "plum",
-        "layer": "userland",
-        "label_layer": 4,
-        "marker": "plus",
-    }
-)
-ba.add_target(
-    {
-        "name": "ros2_image_pipeline:image_proc_resize_fini",
-        "name_disambiguous": "ros2_image_pipeline:image_proc_resize_fini",
-        "colors_fg": "red",
-        "colors_fg_bokeh": "fuchsia",
-        "layer": "userland",
-        "label_layer": 4,
-        "marker": "plus",
-    }
-)
-ba.add_target(
-    {
-        "name": "ros2_image_pipeline:image_proc_resize_cb_fini",
-        "name_disambiguous": "ros2_image_pipeline:image_proc_resize_cb_fini",
-        "colors_fg": "yellow",
-        "colors_fg_bokeh": "indigo",
-        "layer": "userland",
-        "label_layer": 4,
-        "marker": "plus",
-    }
-)
-ba.add_target(
-    {
         "name": "robotperf_benchmarks:robotperf_image_output_cb_init",
         "name_disambiguous": "robotperf_benchmarks:robotperf_image_output_cb_init",
         "colors_fg": "blue",
@@ -183,4 +135,4 @@ ba.add_target(
     }
 )
 
-ba.analyze_latency(tracepath="")
+ba.analyze_latency(tracepath="/tmp/benchmark_ws/src/benchmarks/trace_offload/trace_cpu_ctf")

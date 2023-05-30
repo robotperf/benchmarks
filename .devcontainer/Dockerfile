@@ -8,7 +8,8 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         ros-humble-cyclonedds* net-tools less python3 python3-pip \
         python3-tk software-properties-common vim babeltrace2 \
         python3-babeltrace ros-humble-stereo-image-proc \
-        ros-humble-theora-image-transport ros-humble-gazebo-msgs
+        ros-humble-theora-image-transport ros-humble-gazebo-msgs \
+        ros-humble-rqt*
 
 RUN pip3 install wasabi bokeh==2.4.3 selenium plotly kaleido arrow
 RUN pip3 install xacro

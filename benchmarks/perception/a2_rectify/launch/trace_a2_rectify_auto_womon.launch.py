@@ -4,9 +4,9 @@
 #    @@@@@ @@  @@    @@@@
 #    @@@@@ @@  @@    @@@@
 #    @@@@@ @@  @@    @@@@ Copyright (c) 2023, Acceleration Robotics®
-#    @@@@@ @@  @@    @@@@ Author: Víctor Mayoral Vilches <victor@accelerationrobotics.com>
-#    @@@@@ @@  @@    @@@@ Author: Martiño Crespo Álvarez <martinho@accelerationrobotics.com>
 #    @@@@@ @@  @@    @@@@ Author: Alejandra Martínez Fariña <alex@accelerationrobotics.com>
+#    @@@@@ @@  @@    @@@@ 
+#    @@@@@ @@  @@    @@@@ 
 #    @@@@@@@@@&@@@@@@@@@@
 #    @@@@@@@@@@@@@@@@@@@@
 #
@@ -27,12 +27,17 @@ from launch_ros.actions import ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
 from launch import LaunchDescription
 
+from tracetools_launch.action import Trace
+from tracetools_trace.tools.names import DEFAULT_EVENTS_ROS
+from tracetools_trace.tools.names import DEFAULT_EVENTS_KERNEL
+from tracetools_trace.tools.names import DEFAULT_CONTEXT
+
 from ros2_benchmark import ImageResolution
 from ros2_benchmark import ROS2BenchmarkConfig, ROS2BenchmarkTest
 
 IMAGE_RESOLUTION = ImageResolution.HD
 # ROSBAG_PATH = '/tmp/benchmark_ws/src/rosbags/image'  # NOTE: hardcoded, modify accordingly
-ROSBAG_PATH = '/tmp/benchmark_ws/src/rosbags/perception/image'
+ROSBAG_PATH = '/home/amf/benchmark_ws/src/rosbags/perception/image'
 
 def launch_setup(container_prefix, container_sigterm_timeout):
     """Generate launch description for benchmarking image_proc RectifyNode."""
@@ -42,7 +47,10 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         namespace=TestRectifyNode.generate_namespace(),
         package='image_proc',
         plugin='image_proc::RectifyNode',
-        remappings=[('image', 'image_raw')],
+        remappings=[
+            ("image", "/r2b/input"),
+            ("camera_info", "/r2b/camera_info"),
+        ],
     )
 
     data_loader_node = ComposableNode(
@@ -75,7 +83,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
                     # ('buffer/input1', 'buffer/camera_info'),
                     # ('input1', 'camera_info')],                    
     )
-
+    '''
     monitor_node = ComposableNode(
         name='MonitorNode',
         namespace=TestRectifyNode.generate_namespace(),
@@ -86,6 +94,30 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         }],
         remappings=[
             ('output', 'image_rect')],
+    )
+    '''
+    input_node = ComposableNode(
+        package="a1_perception_2nodes",
+        namespace=TestRectifyNode.generate_namespace(),
+        plugin="robotperf::perception::ImageInputComponent",
+        name="image_input_component",
+        remappings=[
+            ("image", "/r2b/image_raw"),
+            ("camera_info", "/r2b/camera_info"),
+        ],
+        extra_arguments=[{'use_intra_process_comms': True}],
+    )
+
+    output_node = ComposableNode(
+        package="a1_perception_2nodes",
+        namespace=TestRectifyNode.generate_namespace(),
+        plugin="robotperf::perception::ImageOutputComponent",
+        name="image_output_component",
+        remappings=[
+            ("image", "/r2b/image_rect"),
+            ("camera_info", "/r2b/camera_info"),
+        ],
+        extra_arguments=[{'use_intra_process_comms': True}],
     )
 
     composable_node_container = ComposableNodeContainer(
@@ -99,7 +131,9 @@ def launch_setup(container_prefix, container_sigterm_timeout):
             data_loader_node,
             # prep_resize_node,
             playback_node,
-            monitor_node,
+            input_node,
+            output_node,
+            #monitor_node,
             rectify_node
         ],
         output='screen'
@@ -120,33 +154,62 @@ class TestRectifyNode(ROS2BenchmarkTest):
         publisher_lower_frequency=30.0,
         # The number of frames to be buffered
         playback_message_buffer_size=68,
-        custom_report_info={'data_resolution': IMAGE_RESOLUTION}
+        custom_report_info={'data_resolution': IMAGE_RESOLUTION},
+        option = 'without_monitor_node'
     )
-
+    
     def test_benchmark(self):
         json_file_path = self.run_benchmark()
-        # Open the file and load the JSON content into a Python dictionary
-        with open(json_file_path, 'r') as f:
-            data = json.load(f)
-        # Extract the desired fields
-        mean_latency = data.get("BasicPerformanceMetrics.MEAN_LATENCY")
-        max_latency = data.get("BasicPerformanceMetrics.MAX_LATENCY")
-        min_latency = data.get("BasicPerformanceMetrics.MIN_LATENCY")
-        rms_latency = data.get("BasicPerformanceMetrics.RMS_LATENCY")
-        frames_sent = int(data.get("BasicPerformanceMetrics.NUM_FRAMES_SENT"))
-        frames_missed = int(data.get("BasicPerformanceMetrics.NUM_MISSED_FRAMES"))               
+        
+        if self.config.option == 'with_monitor_node':
+            # Open the file and load the JSON content into a Python dictionary
+            with open(json_file_path, 'r') as f:
+                data = json.load(f)
+            # Extract the desired fields
+            
+            mean_latency = data.get("BasicPerformanceMetrics.MEAN_LATENCY")
+            max_latency = data.get("BasicPerformanceMetrics.MAX_LATENCY")
+            min_latency = data.get("BasicPerformanceMetrics.MIN_LATENCY")
+            rms_latency = data.get("BasicPerformanceMetrics.RMS_LATENCY")
+            frames_sent = int(data.get("BasicPerformanceMetrics.NUM_FRAMES_SENT"))
+            frames_missed = int(data.get("BasicPerformanceMetrics.NUM_MISSED_FRAMES"))               
 
-        str_out =  "|     | Benchmark Mean | Benchmark RMS | Benchmark Max  | Benchmark Min | Lost Messages |\n"
-        str_out += "| --- | -------------- | ------------- | -------------- | ------------- | --------------|\n"
-        str_out += "| ros2_benchmark | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | {:.2f} % |\n".format(
-            mean_latency, rms_latency, max_latency, min_latency, (frames_missed/frames_sent)*100)
-        print(str_out)
+            str_out =  "|     | Benchmark Mean | Benchmark RMS | Benchmark Max  | Benchmark Min | Lost Messages |\n"
+            str_out += "| --- | -------------- | ------------- | -------------- | ------------- | --------------|\n"
+            str_out += "| ros2_benchmark | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | {:.2f} % |\n".format(
+                mean_latency, rms_latency, max_latency, min_latency, (frames_missed/frames_sent)*100)
+            print(str_out)
+        
+    
 
 
 def generate_test_description():
     return TestRectifyNode.generate_test_description_with_nsys(launch_setup)
 
-# added to comply with ROS 2 Launch system
 def generate_launch_description():
-    # return LaunchDescription()
-    return TestRectifyNode.generate_test_description_with_nsys(launch_setup)
+     # Trace
+    trace = Trace(
+        session_name="a2_rectify",
+        events_ust=[
+            "robotperf_benchmarks:*",
+            "ros2_image_pipeline:*",
+            "ros2:*"
+            # "lttng_ust_cyg_profile*",
+            # "lttng_ust_statedump*",
+            # "liblttng-ust-libc-wrapper",
+        ]
+        + DEFAULT_EVENTS_ROS,
+        context_fields={
+                'kernel': [],
+                'userspace': ['vpid', 'vtid', 'procname'],
+        },
+        # events_kernel=DEFAULT_EVENTS_KERNEL,
+        # context_names=DEFAULT_CONTEXT,
+    )
+ 
+    
+
+    return LaunchDescription([
+        # LTTng tracing
+        trace,
+    ])

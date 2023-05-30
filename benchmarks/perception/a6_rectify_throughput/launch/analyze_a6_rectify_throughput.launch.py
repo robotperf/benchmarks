@@ -6,7 +6,7 @@
 #    @@@@@ @@  @@    @@@@ Copyright (c) 2023, Acceleration Robotics®
 #    @@@@@ @@  @@    @@@@ Author: Víctor Mayoral Vilches <victor@accelerationrobotics.com>
 #    @@@@@ @@  @@    @@@@ Author: Martiño Crespo <martinho@accelerationrobotics.com>
-#    @@@@@ @@  @@    @@@@
+#    @@@@@ @@  @@    @@@@ Author: Alejandra Martínez Fariña <alex@accelerationrobotics.com>
 #    @@@@@@@@@&@@@@@@@@@@
 #    @@@@@@@@@@@@@@@@@@@@
 #
@@ -31,25 +31,37 @@ def generate_launch_description():
     return LaunchDescription()
 
 
-ba = BenchmarkAnalyzer("a1_perception_2nodes")
+ba = BenchmarkAnalyzer("a6_rectify_throughput")
 
-# add parameters for analyzing the traces
-## using message header id
 target_chain = [
-    "robotperf_benchmarks:robotperf_image_input_cb_init",  # 0
-    "robotperf_benchmarks:robotperf_image_input_cb_fini",  # 1
-    "ros2_image_pipeline:image_proc_rectify_cb_init",  # 2
-    "ros2_image_pipeline:image_proc_rectify_init",  # 3
-    "ros2_image_pipeline:image_proc_rectify_fini",  # 4
-    "ros2_image_pipeline:image_proc_rectify_cb_fini",  # 5
-    "ros2_image_pipeline:image_proc_resize_cb_init",  # 6
-    "ros2_image_pipeline:image_proc_resize_init",  # 7
-    "ros2_image_pipeline:image_proc_resize_fini",  # 8
-    "ros2_image_pipeline:image_proc_resize_cb_fini",  # 9
-    "robotperf_benchmarks:robotperf_image_output_cb_init",  # 10
-    "robotperf_benchmarks:robotperf_image_output_cb_fini",  # 11
+    # "ros2:callback_start",
+    "robotperf_benchmarks:robotperf_image_input_cb_init",
+    "robotperf_benchmarks:robotperf_image_input_cb_fini",
+    # "ros2:callback_end",
+    # "ros2:callback_start",
+    "ros2_image_pipeline:image_proc_rectify_cb_init",
+    "ros2_image_pipeline:image_proc_rectify_init",
+    "ros2_image_pipeline:image_proc_rectify_fini",
+    "ros2_image_pipeline:image_proc_rectify_cb_fini",
+    # "ros2:callback_end",
+    # "ros2:callback_start",
+    "robotperf_benchmarks:robotperf_image_output_cb_init",
+    "robotperf_benchmarks:robotperf_image_output_cb_fini",
+    # "ros2:callback_end",
 ]
 
+# # add parameters for analyzing the traces
+# ba.add_target(
+#     {
+#         "name": "ros2:callback_start",
+#         "name_disambiguous": "ros2:callback_start",
+#         "colors_fg": "blue",
+#         "colors_fg_bokeh": "lightgray",
+#         "layer": "rclcpp",
+#         "label_layer": 3,
+#         "marker": "diamond",
+#     }
+# )
 ba.add_target(
     {
         "name": "robotperf_benchmarks:robotperf_image_input_cb_init",
@@ -72,6 +84,28 @@ ba.add_target(
         "marker": "plus",
     }
 )
+# ba.add_target(
+#     {
+#         "name": "ros2:callback_end",
+#         "name_disambiguous": "ros2:callback_end",
+#         "colors_fg": "blue",
+#         "colors_fg_bokeh": "gray",
+#         "layer": "rclcpp",
+#         "label_layer": 3,
+#         "marker": "diamond",
+#     }
+# )
+# ba.add_target(
+#     {
+#         "name": "ros2:callback_start",
+#         "name_disambiguous": "ros2:callback_start (2)",
+#         "colors_fg": "blue",
+#         "colors_fg_bokeh": "lightsalmon",
+#         "layer": "rclcpp",
+#         "label_layer": 3,
+#         "marker": "diamond",
+#     }
+# )
 ba.add_target(
     {
         "name": "ros2_image_pipeline:image_proc_rectify_cb_init",
@@ -116,50 +150,28 @@ ba.add_target(
         "marker": "plus",
     }
 )
-ba.add_target(
-    {
-        "name": "ros2_image_pipeline:image_proc_resize_cb_init",
-        "name_disambiguous": "ros2_image_pipeline:image_proc_resize_cb_init",
-        "colors_fg": "yellow",
-        "colors_fg_bokeh": "thistle",
-        "layer": "userland",
-        "label_layer": 4,
-        "marker": "plus",
-    }
-)
-ba.add_target(
-    {
-        "name": "ros2_image_pipeline:image_proc_resize_init",
-        "name_disambiguous": "ros2_image_pipeline:image_proc_resize_init",
-        "colors_fg": "red",
-        "colors_fg_bokeh": "plum",
-        "layer": "userland",
-        "label_layer": 4,
-        "marker": "plus",
-    }
-)
-ba.add_target(
-    {
-        "name": "ros2_image_pipeline:image_proc_resize_fini",
-        "name_disambiguous": "ros2_image_pipeline:image_proc_resize_fini",
-        "colors_fg": "red",
-        "colors_fg_bokeh": "fuchsia",
-        "layer": "userland",
-        "label_layer": 4,
-        "marker": "plus",
-    }
-)
-ba.add_target(
-    {
-        "name": "ros2_image_pipeline:image_proc_resize_cb_fini",
-        "name_disambiguous": "ros2_image_pipeline:image_proc_resize_cb_fini",
-        "colors_fg": "yellow",
-        "colors_fg_bokeh": "indigo",
-        "layer": "userland",
-        "label_layer": 4,
-        "marker": "plus",
-    }
-)
+# ba.add_target(
+#     {
+#         "name": "ros2:callback_end",
+#         "name_disambiguous": "ros2:callback_end (2)",
+#         "colors_fg": "blue",
+#         "colors_fg_bokeh": "red",
+#         "layer": "rclcpp",
+#         "label_layer": 3,
+#         "marker": "diamond",
+#     }
+# )
+# ba.add_target(
+#     {
+#         "name": "ros2:callback_start",
+#         "name_disambiguous": "ros2:callback_start (3)",
+#         "colors_fg": "blue",
+#         "colors_fg_bokeh": "chartreuse",
+#         "layer": "rclcpp",
+#         "label_layer": 3,
+#         "marker": "diamond",
+#     }
+# )
 ba.add_target(
     {
         "name": "robotperf_benchmarks:robotperf_image_output_cb_init",
@@ -182,5 +194,16 @@ ba.add_target(
         "marker": "plus",
     }
 )
-
-ba.analyze_latency(tracepath="")
+# ba.add_target(
+#     {
+#         "name": "ros2:callback_end",
+#         "name_disambiguous": "ros2:callback_end ()",
+#         "colors_fg": "blue",
+#         "colors_fg_bokeh": "cornflowerblue",
+#         "layer": "rclcpp",
+#         "label_layer": 3,
+#         "marker": "diamond",
+#     }
+# )
+ba.analyze_latency()
+ba.analyze_throughput()

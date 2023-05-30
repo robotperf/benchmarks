@@ -45,7 +45,8 @@
 				"ms-toolsai.jupyter",
 				"ms-python.vscode-pylance",
 				"ms-vscode.cmake-tools",
-				"GitHub.copilot"
+				// "GitHub.copilot",
+				"GitHub.copilot-nightly"
 			]
 		}
 	},

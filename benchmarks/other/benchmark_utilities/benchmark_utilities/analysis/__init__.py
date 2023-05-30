@@ -2,6 +2,7 @@
 #
 # Written by Víctor Mayoral Vilches <victor@accelerationrobotics.com>
 # Written by Martiño Crespo <martinho@accelerationrobotics.com>
+# Written by Alejandra Martínez Fariña <alex@accelerationrobotics.com>
 # Licensed under the Apache License, Version 2.0
 
 import bt2
@@ -1144,7 +1145,121 @@ class BenchmarkAnalyzer:
         # show(fig)  # show in browser    
         export_png(fig, filename="/tmp/analysis/plot_trace.png")
 
-    def barchart_data(self, image_pipeline_msg_sets):
+    def barchart_data_throughput(self, image_pipeline_msg_sets, option):
+        """
+        Converts a tracing message list into its corresponding 
+        throughput list in bytes per second unit.
+        - latency is measured relative (to the previous tracepoint) in
+        millisecond units.
+        - size is measured in bytes
+        - count is measured in number messages
+
+        Args:
+            image_pipeline_msg_sets ([type]): [description]
+
+        Returns:
+            list: list of throughput in bytes/s
+        """
+        image_pipeline_msg_sets_ns = []
+        image_pipeline_msg_sets_bytes = []
+        image_pipeline_msg_sets_frames = []
+        image_pipeline_msg_sets_msgs = []
+        
+        # if multidimensional:
+        if type(image_pipeline_msg_sets[0]) == list:
+            for set_index in range(len(image_pipeline_msg_sets)):
+                aux_set = []
+                target_chain_ns = []
+                target_chain_bytes = []
+                target_chain_msgs = []
+                target_chain_frames = []
+                
+                for msg_index in range(len(image_pipeline_msg_sets[set_index])):
+                    target_chain_ns.append(
+                        image_pipeline_msg_sets[set_index][
+                            msg_index
+                        ].default_clock_snapshot.ns_from_origin
+                    )
+                    # search for message sizes
+                    msg_size = 0
+                    msg_count = 0
+                    payload_fields = image_pipeline_msg_sets[set_index][msg_index].event.payload_field
+                    for field_name, field_value in payload_fields.items():
+                        if "msg_size" in field_name:
+                            msg_size += image_pipeline_msg_sets[set_index][msg_index].event.payload_field[field_name]
+                            msg_count += 1
+                    target_chain_bytes.append(msg_size)
+                    target_chain_msgs.append(msg_count)
+                    if msg_count > 0:
+                        target_chain_frames.append(1)
+                    else:
+                        target_chain_frames.append(0)
+                for msg_index in range(len(image_pipeline_msg_sets[set_index])):                  
+                    if msg_index == 0 and set_index == 0:
+                        previous = target_chain_ns[0]
+                    aux_set.append((target_chain_ns[msg_index] - previous) / 1e6)
+                image_pipeline_msg_sets_ns.append(aux_set)
+                image_pipeline_msg_sets_bytes.append(target_chain_bytes)
+                image_pipeline_msg_sets_msgs.append(target_chain_msgs)
+                image_pipeline_msg_sets_frames.append(target_chain_frames)
+
+        else:  # not multidimensional
+            aux_set = []
+            target_chain_ns = []
+            target_chain_bytes = []
+            target_chain_msgs = []
+            target_chain_frames = []
+            for msg_index in range(len(image_pipeline_msg_sets)):
+                target_chain_ns.append(
+                    image_pipeline_msg_sets[msg_index].default_clock_snapshot.ns_from_origin
+                )
+                # search for message sizes
+                msg_size = 0
+                msg_count = 0
+                payload_fields = image_pipeline_msg_sets[msg_index].event.payload_field
+                for field_name, field_value in payload_fields.items():
+                    if "msg_size" in field_name:
+                        msg_size += image_pipeline_msg_sets[msg_index].event.payload_field[field_name]
+                        msg_count += 1
+                target_chain_bytes.append(msg_size)
+                target_chain_msgs.append(msg_count)
+                if msg_count > 0:
+                    target_chain_frames.append(1)
+                else:
+                    target_chain_frames.append(0)
+            for msg_index in range(len(image_pipeline_msg_sets)):
+                if msg_index == 0:
+                    previous = target_chain_ns[0]
+                aux_set.append((target_chain_ns[msg_index] - previous) / 1e6)
+            image_pipeline_msg_sets_ns.append(aux_set)
+            image_pipeline_msg_sets_bytes.append(target_chain_bytes)
+            image_pipeline_msg_sets_msgs.append(target_chain_msgs)
+            image_pipeline_msg_sets_frames.append(target_chain_frames)
+        
+        # Compute throughput from the output [-1]
+        image_pipeline_msg_sets_megabyps = []
+        image_pipeline_msg_sets_msgspers = []
+        image_pipeline_msg_sets_fps = []
+        
+        if option == 'potential':
+            for set_idx in range(len(image_pipeline_msg_sets_ns)):
+                tot_lat = image_pipeline_msg_sets_ns[set_idx][-1] - image_pipeline_msg_sets_ns[set_idx][0]
+                image_pipeline_msg_sets_megabyps.append(image_pipeline_msg_sets_bytes[set_idx][-2]/tot_lat/1e6*1e3)
+                image_pipeline_msg_sets_msgspers.append(image_pipeline_msg_sets_msgs[set_idx][-2]/tot_lat*1e3)
+                image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_frames[set_idx][-2]/tot_lat*1e3)
+
+        elif option == 'real':
+            for set_idx in range(len(image_pipeline_msg_sets_ns)-1):
+                tot_lat = image_pipeline_msg_sets_ns[set_idx+1][1] - image_pipeline_msg_sets_ns[set_idx][1]
+                image_pipeline_msg_sets_megabyps.append(image_pipeline_msg_sets_bytes[set_idx][-2]/tot_lat/1e6*1e3)
+                image_pipeline_msg_sets_msgspers.append(image_pipeline_msg_sets_msgs[set_idx][-2]/tot_lat*1e3)
+                image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_frames[set_idx][-2]/tot_lat*1e3)
+                
+                
+        return image_pipeline_msg_sets_megabyps, image_pipeline_msg_sets_fps
+
+
+    def barchart_data_latency(self, image_pipeline_msg_sets):
         """
         Converts a tracing message list into its corresponding
         relative (to the previous tracepoint) latency list in
@@ -1157,7 +1272,7 @@ class BenchmarkAnalyzer:
             list: list of relative latencies, in ms
         """
         image_pipeline_msg_sets_ns = []
-        # if multidimensional:
+        # if multidimensional:list
         if type(image_pipeline_msg_sets[0]) == list:
             for set_index in range(len(image_pipeline_msg_sets)):
                 aux_set = []
@@ -1191,7 +1306,6 @@ class BenchmarkAnalyzer:
             image_pipeline_msg_sets_ns.append(aux_set)
 
         return image_pipeline_msg_sets_ns
-
 
     def print_timeline(self, image_pipeline_msg_sets):
 
@@ -1254,6 +1368,9 @@ class BenchmarkAnalyzer:
 
     def min(self, list):
         return np.min(np.array(list))
+    
+    def median(self, list):
+        return np.median(np.array(list))
 
 
     def rms_sets(self, image_pipeline_msg_sets, indices=None):
@@ -1324,6 +1441,22 @@ class BenchmarkAnalyzer:
         else:
             total_in_sets = [sum(set) for set in image_pipeline_msg_sets]
             return self.min(total_in_sets)
+        
+    def median_sets(self, image_pipeline_msg_sets, indices=None):
+        """
+
+        """
+        if indices:
+            with_indices_sets = []
+            for set in image_pipeline_msg_sets:
+                indices_sum = 0
+                for i in indices:
+                    indices_sum += set[i]
+                with_indices_sets.append(indices_sum)
+            return self.median(with_indices_sets)
+        else:
+            total_in_sets = [sum(set) for set in image_pipeline_msg_sets]
+            return self.median(total_in_sets)
 
 
     def print_timeline_average(self, image_pipeline_msg_sets):
@@ -1400,6 +1533,7 @@ class BenchmarkAnalyzer:
         rms_ = self.rms_sets(image_pipeline_msg_sets_ms)
         min_ = self.min_sets(image_pipeline_msg_sets_ms)
         max_ = self.max_sets(image_pipeline_msg_sets_ms)
+        #median_ = self.median_sets(image_pipeline_msg_sets_ms)
 
         # first_target = "ros2:callback_end"
         first_target = "robotperf_benchmarks:robotperf_image_input_cb_init"
@@ -1422,35 +1556,68 @@ class BenchmarkAnalyzer:
         rms_benchmark = self.rms_sets(image_pipeline_msg_sets_ms, indices)
         max_benchmark = self.max_sets(image_pipeline_msg_sets_ms, indices)
         min_benchmark = self.min_sets(image_pipeline_msg_sets_ms, indices)
-
+        #median_benchmark = self.median_sets(image_pipeline_msg_sets_ms, indices)
+        
         if verbose:
             print(color("mean: " + str(mean_), fg="yellow"))
             print("rms: " + str(rms_))
             print("min: " + str(min_))
             print(color("max: " + str(max_), fg="red"))
+            #print(color("median: " + str(max_), fg="yellow"))
 
             print(color("mean benchmark: " + str(mean_benchmark), fg="yellow"))
             print("rms benchmark: " + str(rms_benchmark))
             print("min benchmark: " + str(min_benchmark))
             print(color("max benchmark: " + str(max_benchmark), fg="red"))
+            #print(color("median benchmark: " + str(max_benchmark), fg="yellow"))
 
         return [
             mean_benchmark,
             rms_benchmark,
             max_benchmark,
             min_benchmark,
+            #median_benchmark,
             mean_,
             rms_,
             max_,
             min_,
+            #median_,
+        ]
+    
+    def statistics_1d(self, image_pipeline_msg_sets_ms, verbose=False):
+
+        mean_benchmark = self.mean(image_pipeline_msg_sets_ms)
+        rms_benchmark = self.rms(image_pipeline_msg_sets_ms)
+        max_benchmark = self.max(image_pipeline_msg_sets_ms)
+        min_benchmark = self.min(image_pipeline_msg_sets_ms)
+        #median_benchmark = self.median(image_pipeline_msg_sets_ms)
+
+        if verbose:
+            print(color("mean benchmark: " + str(mean_benchmark), fg="yellow"))
+            print("rms benchmark: " + str(rms_benchmark))
+            print("min benchmark: " + str(min_benchmark))
+            print(color("max benchmark: " + str(max_benchmark), fg="red"))
+            #print(color("median benchmark: " + str(median_benchmark), fg="yellow"))
+
+        return [
+            mean_benchmark,
+            rms_benchmark,
+            max_benchmark,
+            min_benchmark,
+            #median_benchmark,
+            '-',
+            '-',
+            '-',
+            #'-',
+            '-'
         ]
 
 
-    def print_markdown_table(self, list_sets, list_sets_names, from_baseline=True):
+    def print_markdown_table(self, list_sets, list_sets_names, from_baseline=True, units='ms'):
         """
         Creates a markdown table from a list of sets
 
-        :param: list_sets: list of processed data (resulting from barchart_data) to display
+        :param: list_sets: list of processed data (resulting from barchart_data_latency) to display
         :param: list_sets_names: list of names to display
         :param: from_baseline: whether to show % from baseline
 
@@ -1479,6 +1646,8 @@ class BenchmarkAnalyzer:
                 "---",
                 "---",
                 "---",
+                #"---",
+                #"---",
                 "---",
             ],
         )
@@ -1490,10 +1659,12 @@ class BenchmarkAnalyzer:
                 "Benchmark RMS",
                 "Benchmark Max ",
                 "Benchmark Min",
+                #"Benchmark Median",
                 "Mean",
                 "RMS",
                 "Max",
                 "Min",
+                #"Median",
             ],
         )
 
@@ -1518,7 +1689,7 @@ class BenchmarkAnalyzer:
                         if from_baseline:
                             if row[element_index] > baseline[element_index]:
                                 row_str += (
-                                    "**{:.2f}** ms".format(row[element_index])
+                                    "**{:.2f} {}**".format(row[element_index], units)
                                     + " (:small_red_triangle_down: `"
                                     + "{:.2f}".format(
                                         self.get_change(row[element_index], baseline[element_index])
@@ -1527,7 +1698,8 @@ class BenchmarkAnalyzer:
                                 )
                             else:
                                 row_str += (
-                                    "**{:.2f}** ms".format(row[element_index])
+                                    "**{:.2f} {}**".format(row[element_index], units)
+                                    + "{}**".format(units) 
                                     + " (`"
                                     + "{:.2f}".format(
                                         self.get_change(row[element_index], baseline[element_index])
@@ -1535,7 +1707,7 @@ class BenchmarkAnalyzer:
                                     + "`%) | "
                                 )
                         else:
-                            row_str += ("**{:.2f}** ms".format(row[element_index]) + " | ")
+                            row_str += ("**{:.2f} {}**".format(row[element_index], units) + " | ")
                     else:
                         row_str += row[element_index] + " | "
 
@@ -1545,7 +1717,7 @@ class BenchmarkAnalyzer:
                         if from_baseline:
                             if row[element_index] > baseline[element_index]:
                                 row_str += (
-                                    "{:.2f} ms".format(row[element_index])
+                                    "{:.2f} {}".format(row[element_index], units) 
                                     + " (:small_red_triangle_down: `"
                                     + "{:.2f}".format(
                                         self.get_change(row[element_index], baseline[element_index])
@@ -1554,7 +1726,7 @@ class BenchmarkAnalyzer:
                                 )
                             else:
                                 row_str += (
-                                    "{:.2f} ms".format(row[element_index])
+                                    "{:.2f} {}".format(row[element_index], units) 
                                     + " (`"
                                     + "{:.2f}".format(
                                         self.get_change(row[element_index], baseline[element_index])
@@ -1562,7 +1734,7 @@ class BenchmarkAnalyzer:
                                     + "`%) | "
                                 )
                         else:
-                            row_str += ("{:.2f} ms".format(row[element_index]) + " | ")
+                            row_str += ("{:.2f} {}".format(row[element_index], units) + " | ")
 
                     else:
                         row_str += row[element_index] + " | "
@@ -1570,18 +1742,161 @@ class BenchmarkAnalyzer:
             print(row_str)
 
             # if count == 2:
-            #     row = "|" + "|".join("**{:.2f}** ms".format(row[element_index]) + " (`"
+            #     row = "|" + "|".join("**{:.2f}**".format(row[element_index]) + " (`"
             #             + "{:.2f}".format(self.get_change(row[element_index], baseline[element_index])) + "`%)"
             #         if type(row[element_index]) != str
             #         else row[element_index]
             #             for element_index in range(len(row))) + "|"
             # else:
-            #     row = "|" + "|".join("{:.2f} ms".format(row[element_index]) + " (`"
+            #     row = "|" + "|".join("{:.2f}".format(row[element_index]) + " (`"
             #             + "{:.2f}".format(self.get_change(row[element_index], baseline[element_index])) + "`%)"
             #         if type(row[element_index]) != str else row[element_index]
             #             for element_index in range(len(row))) + "|"
             # count += 1
             # print(row)
+
+    def print_markdown_table_1d(self, list_sets, list_sets_names, from_baseline=True, units='ms'):
+        """
+        Creates a markdown table from a list of sets
+
+        :param: list_sets: list of processed data (resulting from barchart_data_latency) to display
+        :param: list_sets_names: list of names to display
+        :param: from_baseline: whether to show % from baseline
+
+        NOTE: assumes base is always the first set in list_sets, which
+        is then used to calculate % of change.
+        """
+
+        list_statistics = []
+        # generate statistics
+        for sets in list_sets:
+            list_statistics.append(self.statistics_1d(sets))
+
+        # Add name to each statistics list
+        for stat_list_index in range(len(list_statistics)):
+            list_statistics[stat_list_index].insert(0, list_sets_names[stat_list_index])
+
+        # add headers
+        list_statistics.insert(
+            0,
+            [
+                "---",
+                "---",
+                "---",
+                "---",
+                "---",
+                #"---",
+                #"---",
+                "---",
+                "---",
+                "---",
+                "---",
+            ],
+        )
+        list_statistics.insert(
+            0,
+            [
+                " ",
+                "Benchmark Mean",
+                "Benchmark RMS",
+                "Benchmark Max ",
+                "Benchmark Min",
+                #"Benchmark Median",
+                #" ",
+                " ",
+                " ",
+                " ",
+                " ",
+            ],
+        )
+
+        baseline = list_statistics[2]  # baseline for %
+
+        # add missing messages at the end
+        # NOTE: programmed for only 1 initial list_statistics, if more provided
+        # consider extending the self.lost_msgs to a list
+        if len(list_statistics) == 3:  # 1 initial, +2 headers
+            list_statistics[0].append("Lost Messages")
+            list_statistics[1].append("---")
+            list_statistics[2].append("{:.2f} %".format((self.lost_msgs/len(self.image_pipeline_msg_sets))*100))
+
+        length_list = [len(row) for row in list_statistics]
+        column_width = max(length_list)
+        count = 0
+        for row in list_statistics:
+            row_str = " | "
+            if count == 2:
+                for element_index in range(len(row)):
+                    if type(row[element_index]) != str:
+                        if from_baseline:
+                            if row[element_index] > baseline[element_index]:
+                                row_str += (
+                                    "**{:.2f} {}**".format(row[element_index], units)
+                                    + " (:small_red_triangle_down: `"
+                                    + "{:.2f}".format(
+                                        self.get_change(row[element_index], baseline[element_index])
+                                    )
+                                    + "`%) | "
+                                )
+                            else:
+                                row_str += (
+                                    "**{:.2f} {}**".format(row[element_index], units)
+                                    + "{}**".format(units) 
+                                    + " (`"
+                                    + "{:.2f}".format(
+                                        self.get_change(row[element_index], baseline[element_index])
+                                    )
+                                    + "`%) | "
+                                )
+                        else:
+                            row_str += ("**{:.2f} {}**".format(row[element_index], units) + " | ")
+                    else:
+                        row_str += row[element_index] + " | "
+
+            else:
+                for element_index in range(len(row)):
+                    if type(row[element_index]) != str:
+                        if from_baseline:
+                            if row[element_index] > baseline[element_index]:
+                                row_str += (
+                                    "{:.2f} {}".format(row[element_index], units) 
+                                    + " (:small_red_triangle_down: `"
+                                    + "{:.2f}".format(
+                                        self.get_change(row[element_index], baseline[element_index])
+                                    )
+                                    + "`%) | "
+                                )
+                            else:
+                                row_str += (
+                                    "{:.2f} {}".format(row[element_index], units) 
+                                    + " (`"
+                                    + "{:.2f}".format(
+                                        self.get_change(row[element_index], baseline[element_index])
+                                    )
+                                    + "`%) | "
+                                )
+                        else:
+                            row_str += ("{:.2f} {}".format(row[element_index], units) + " | ")
+
+                    else:
+                        row_str += row[element_index] + " | "
+            count += 1
+            print(row_str)
+
+            # if count == 2:
+            #     row = "|" + "|".join("**{:.2f}**".format(row[element_index]) + " (`"
+            #             + "{:.2f}".format(self.get_change(row[element_index], baseline[element_index])) + "`%)"
+            #         if type(row[element_index]) != str
+            #         else row[element_index]
+            #             for element_index in range(len(row))) + "|"
+            # else:
+            #     row = "|" + "|".join("{:.2f}".format(row[element_index]) + " (`"
+            #             + "{:.2f}".format(self.get_change(row[element_index], baseline[element_index])) + "`%)"
+            #         if type(row[element_index]) != str else row[element_index]
+            #             for element_index in range(len(row))) + "|"
+            # count += 1
+            # print(row)
+
 
 
     def results(self, sets):
@@ -1642,30 +1957,23 @@ class BenchmarkAnalyzer:
         return outs, errs
 
     def get_target_chain_traces(self, trace_path):
-        if trace_path:
+        if not trace_path:
+            trace_path = "/tmp/analysis/trace"
+
+        if self.hardware_device_type == "cpu":
             # self.image_pipeline_msg_sets \
             #     = self.msgsets_from_trace(trace_path, True)
             self.image_pipeline_msg_sets \
                 = self.msgsets_from_trace_identifier(trace_path, debug=True)
-        else:
-            if self.hardware_device_type == "cpu":
-                # self.image_pipeline_msg_sets = self.msgsets_from_trace(
-                #     # os.getenv("HOME") + "/.ros/tracing/" + self.benchmark_name,
-                #     "/tmp/analysis/trace/trace_cpu_ctf",
-                #     True)
-                self.image_pipeline_msg_sets \
-                    = self.msgsets_from_trace_identifier(
-                        "/tmp/analysis/trace/trace_cpu_ctf", 
-                        debug=True)
-            elif self.hardware_device_type == "fpga":
-                # NOTE: can't use msgsets_from_trace_identifier because vtf traces
-                # won't have the unique identifier
-                self.image_pipeline_msg_sets = self.msgsets_from_ctf_vtf_traces(
-                    "/tmp/analysis/trace/trace_cpu_ctf",
-                    "/tmp/analysis/trace/trace_fpga_vtf_ctf_fix",
-                    True)
+        elif self.hardware_device_type == "fpga":
+            # NOTE: can't use msgsets_from_trace_identifier because vtf traces
+            # won't have the unique identifier
+            self.image_pipeline_msg_sets = self.msgsets_from_ctf_vtf_traces(
+                trace_path + "/trace_cpu_ctf",
+                trace_path + "/trace_fpga_vtf_ctf_fix",
+                True)
 
-    def get_index_to_plot(self):
+    def get_index_to_plot_latency(self):
         """ Obtain the index to plot given a series of sets
 
         # Implementation 1
@@ -1714,15 +2022,16 @@ class BenchmarkAnalyzer:
         elif self.benchmark_name == "a1_perception_2nodes_fpga":
             self.traces_fpga(msg_set)
 
-    def bar_charts(self):
-        self.image_pipeline_msg_sets_barchart = self.barchart_data(self.image_pipeline_msg_sets)
+    def bar_charts_latency(self):
+        self.image_pipeline_msg_sets_barchart = self.barchart_data_latency(self.image_pipeline_msg_sets)
+
 
     def plot_latency_results(self):
         # Plot, either averages or latest, etc
 
         image_pipeline_msg_sets_mean = pd.DataFrame(self.image_pipeline_msg_sets_barchart).mean()        
         image_pipeline_msg_sets_max = pd.DataFrame(self.image_pipeline_msg_sets_barchart).max()
-        image_pipeline_msg_sets_index = pd.DataFrame(self.barchart_data(self.image_pipeline_msg_sets[self.index_to_plot])).transpose()[0]
+        image_pipeline_msg_sets_index = pd.DataFrame(self.barchart_data_latency(self.image_pipeline_msg_sets[self.index_to_plot])).transpose()[0]
         image_pipeline_msg_sets_index = image_pipeline_msg_sets_index.rename(None)
 
         df_mean = pd.concat(
@@ -1805,14 +2114,60 @@ class BenchmarkAnalyzer:
                 Path of the CTF tracefiles. Defaults to None.
         """
         self.get_target_chain_traces(tracepath)        
-        self.bar_charts()
-        self.index_to_plot = self.get_index_to_plot()
+        self.bar_charts_latency()
+        self.index_to_plot = self.get_index_to_plot_latency()
         self.print_timing_pipeline()
         self.draw_tracepoints()
         self.print_markdown_table(
             [self.image_pipeline_msg_sets_barchart],
             ["RobotPerf benchmark"],
-            from_baseline=False
+            from_baseline=False,
+            units='ms'
         )
         self.plot_latency_results()
         # self.upload_results()  # performed in CI/CD pipelines instead
+
+
+    def analyze_throughput(self, tracepath=None):
+        """Analyze throughput of the image pipeline
+
+        Args:
+            tracepath (string, optional):
+                Path of the CTF tracefiles. Defaults to None.
+        """
+        self.get_target_chain_traces(tracepath)        
+        barcharts_through_megabys, barcharts_through_fps = self.barchart_data_throughput(self.image_pipeline_msg_sets, 'potential')
+        
+        self.print_markdown_table_1d(
+            [barcharts_through_megabys],
+            ["RobotPerf potential throughput"],
+            from_baseline=False,
+            units='MB/s'
+        )
+
+        self.print_markdown_table_1d(
+            [barcharts_through_fps],
+            ["RobotPerf potential throughput"],
+            from_baseline=False,
+            units='fps'
+        )
+        
+        barcharts_through_megabys, barcharts_through_fps = self.barchart_data_throughput(self.image_pipeline_msg_sets, 'real')
+        
+        self.print_markdown_table_1d(
+            [barcharts_through_megabys],
+            ["RobotPerf real throughput"],
+            from_baseline=False,
+            units='MB/s'
+        )
+
+
+        self.print_markdown_table_1d(
+            [barcharts_through_fps],
+            ["RobotPerf real throughput"],
+            from_baseline=False,
+            units='fps'
+        )
+
+    
+        
