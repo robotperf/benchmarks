@@ -4,9 +4,9 @@
 #    @@@@@ @@  @@    @@@@
 #    @@@@@ @@  @@    @@@@
 #    @@@@@ @@  @@    @@@@ Copyright (c) 2023, Acceleration Robotics®
-#    @@@@@ @@  @@    @@@@ Author: Víctor Mayoral Vilches <victor@accelerationrobotics.com>
-#    @@@@@ @@  @@    @@@@ Author: Martiño Crespo Álvarez <martinho@accelerationrobotics.com>
 #    @@@@@ @@  @@    @@@@ Author: Alejandra Martínez Fariña <alex@accelerationrobotics.com>
+#    @@@@@ @@  @@    @@@@ Author: Martiño Crespo Álvarez <martinho@accelerationrobotics.com>
+#    @@@@@ @@  @@    @@@@ 
 #    @@@@@@@@@&@@@@@@@@@@
 #    @@@@@@@@@@@@@@@@@@@@
 #
@@ -37,7 +37,7 @@ from ros2_benchmark import ROS2BenchmarkConfig, ROS2BenchmarkTest
 
 IMAGE_RESOLUTION = ImageResolution.HD
 # ROSBAG_PATH = '/tmp/benchmark_ws/src/rosbags/image'  # NOTE: hardcoded, modify accordingly
-ROSBAG_PATH = '/home/martinho/acceleration/benchmark_ws/src/rosbags/perception/image'
+ROSBAG_PATH = '/home/amf/benchmark_ws/src/rosbags/perception/image'
 
 def launch_setup(container_prefix, container_sigterm_timeout):
     """Generate launch description for benchmarking image_proc RectifyNode."""
@@ -154,27 +154,30 @@ class TestRectifyNode(ROS2BenchmarkTest):
         publisher_lower_frequency=30.0,
         # The number of frames to be buffered
         playback_message_buffer_size=68,
-        custom_report_info={'data_resolution': IMAGE_RESOLUTION}
+        custom_report_info={'data_resolution': IMAGE_RESOLUTION},
+        option = 'with_monitor_node'
     )
 
     def test_benchmark(self):
         json_file_path = self.run_benchmark()
-        # Open the file and load the JSON content into a Python dictionary
-        with open(json_file_path, 'r') as f:
-            data = json.load(f)
-        # Extract the desired fields
-        mean_latency = data.get("BasicPerformanceMetrics.MEAN_LATENCY")
-        max_latency = data.get("BasicPerformanceMetrics.MAX_LATENCY")
-        min_latency = data.get("BasicPerformanceMetrics.MIN_LATENCY")
-        rms_latency = data.get("BasicPerformanceMetrics.RMS_LATENCY")
-        frames_sent = int(data.get("BasicPerformanceMetrics.NUM_FRAMES_SENT"))
-        frames_missed = int(data.get("BasicPerformanceMetrics.NUM_MISSED_FRAMES"))               
+        
+        if self.config.option == 'with_monitor_node':
+            # Open the file and load the JSON content into a Python dictionary
+            with open(json_file_path, 'r') as f:
+                data = json.load(f)
+            # Extract the desired fields
+            mean_latency = data.get("BasicPerformanceMetrics.MEAN_LATENCY")
+            max_latency = data.get("BasicPerformanceMetrics.MAX_LATENCY")
+            min_latency = data.get("BasicPerformanceMetrics.MIN_LATENCY")
+            rms_latency = data.get("BasicPerformanceMetrics.RMS_LATENCY")
+            frames_sent = int(data.get("BasicPerformanceMetrics.NUM_FRAMES_SENT"))
+            frames_missed = int(data.get("BasicPerformanceMetrics.NUM_MISSED_FRAMES"))               
 
-        str_out =  "|     | Benchmark Mean | Benchmark RMS | Benchmark Max  | Benchmark Min | Lost Messages |\n"
-        str_out += "| --- | -------------- | ------------- | -------------- | ------------- | --------------|\n"
-        str_out += "| ros2_benchmark | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | {:.2f} % |\n".format(
-            mean_latency, rms_latency, max_latency, min_latency, (frames_missed/frames_sent)*100)
-        print(str_out)
+            str_out =  "|     | Benchmark Mean | Benchmark RMS | Benchmark Max  | Benchmark Min | Lost Messages |\n"
+            str_out += "| --- | -------------- | ------------- | -------------- | ------------- | --------------|\n"
+            str_out += "| ros2_benchmark | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | {:.2f} % |\n".format(
+                mean_latency, rms_latency, max_latency, min_latency, (frames_missed/frames_sent)*100)
+            print(str_out)
 
 
 def generate_test_description():

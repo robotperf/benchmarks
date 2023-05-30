@@ -206,4 +206,5 @@ ba.add_target(
 #     }
 # )
 
-ba.analyze_throughput("/home/martinho/.ros/tracing/a2_rectify_nvidia")
+ba.analyze_latency("/home/amf/.ros/tracing/a2_rectify_nvidia")
+ba.analyze_throughput("/home/amf/.ros/tracing/a2_rectify_nvidia")
