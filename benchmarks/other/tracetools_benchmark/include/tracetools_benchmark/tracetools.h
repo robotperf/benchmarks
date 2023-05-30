@@ -176,13 +176,15 @@ DECLARE_TRACEPOINT(
  * \param[in] pointcloud_output_pointcloud_msg pointcloud ROS message stored as sensor_msgs::msg::PointCloud2::ConstSharedPtr
  * \param[in] image_input_header_nsec_arg nanosec field of the header (std_msgs/Header) of sensor_msgs::msg::PointCloud2's ROS message 
  * \param[in] image_input_header_sec_arg sec field of the header (std_msgs/Header) of sensor_msgs::msg::PointCloud2's ROS message 
+ * \param[in] pointcloud_output_msg_size size of pointcloud ROS message stored as bytes
  */
 DECLARE_TRACEPOINT(
   robotperf_pointcloud_output_cb_init,
   const void * pointcloud_output_node,
   const void * pointcloud_output_pointcloud_msg,
   uint32_t image_input_header_nsec_arg,
-  uint32_t image_input_header_sec_arg)
+  uint32_t image_input_header_sec_arg,
+  size_t pointcloud_output_msg_size)
 
 /// `robotperf_pointcloud_output_cb_init`
 /**
@@ -194,13 +196,15 @@ DECLARE_TRACEPOINT(
  * \param[in] pointcloud_output_pointcloud_msg pointcloud ROS message stored as sensor_msgs::msg::PointCloud2::ConstSharedPtr
  * \param[in] image_input_header_nsec_arg nanosec field of the header (std_msgs/Header) of sensor_msgs::msg::PointCloud2's ROS message 
  * \param[in] image_input_header_sec_arg sec field of the header (std_msgs/Header) of sensor_msgs::msg::PointCloud2's ROS message 
+ * \param[in] pointcloud_output_msg_size size of pointcloud ROS message stored as bytes
  */
 DECLARE_TRACEPOINT(
   robotperf_pointcloud_output_cb_fini,
   const void * pointcloud_output_node,
   const void * pointcloud_output_pointcloud_msg,
   uint32_t image_input_header_nsec_arg,
-  uint32_t image_input_header_sec_arg)
+  uint32_t image_input_header_sec_arg,
+  size_t pointcloud_output_msg_size)
 
 #ifdef __cplusplus
 }

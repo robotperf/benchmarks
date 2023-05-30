@@ -145,12 +145,14 @@ TRACEPOINT_EVENT(
     const void *, pointcloud_output_node_arg,
     const void *, pointcloud_output_pointcloud_msg_arg,
     uint32_t, image_input_header_nsec_arg,
-    uint32_t, image_input_header_sec_arg),
+    uint32_t, image_input_header_sec_arg,
+    size_t, pointcloud_output_msg_size_arg),
   TP_FIELDS(
     ctf_integer_hex(const void *, pointcloud_output_node, pointcloud_output_node_arg)
     ctf_integer_hex(const void *, pointcloud_output_pointcloud_msg, pointcloud_output_pointcloud_msg_arg)
     ctf_integer(uint32_t, image_input_header_nsec, image_input_header_nsec_arg)
     ctf_integer(uint32_t, image_input_header_sec, image_input_header_sec_arg)
+    ctf_integer(size_t, pointcloud_output_msg_size, pointcloud_output_msg_size_arg)
     ctf_string(version, tracetools_benchmark_VERSION)
   )
 )
@@ -162,12 +164,14 @@ TRACEPOINT_EVENT(
     const void *, pointcloud_output_node_arg,
     const void *, pointcloud_output_pointcloud_msg_arg,
     uint32_t, image_input_header_nsec_arg,
-    uint32_t, image_input_header_sec_arg),
+    uint32_t, image_input_header_sec_arg,
+    size_t, pointcloud_output_msg_size_arg),
   TP_FIELDS(
     ctf_integer_hex(const void *, pointcloud_output_node, pointcloud_output_node_arg)
     ctf_integer_hex(const void *, pointcloud_output_pointcloud_msg, pointcloud_output_pointcloud_msg_arg)
     ctf_integer(uint32_t, image_input_header_nsec, image_input_header_nsec_arg)
     ctf_integer(uint32_t, image_input_header_sec, image_input_header_sec_arg)
+    ctf_integer(size_t, pointcloud_output_msg_size, pointcloud_output_msg_size_arg)
     ctf_string(version, tracetools_benchmark_VERSION)
   )
 )
