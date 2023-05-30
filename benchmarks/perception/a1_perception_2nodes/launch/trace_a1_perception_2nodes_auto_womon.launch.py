@@ -38,22 +38,11 @@ from ros2_benchmark import ROS2BenchmarkConfig, ROS2BenchmarkTest
 IMAGE_RESOLUTION = ImageResolution.HD
 # ROSBAG_PATH = '/tmp/benchmark_ws/src/rosbags/image'  # NOTE: hardcoded, modify accordingly
 ROSBAG_PATH = '/home/amf/benchmark_ws/src/rosbags/perception/image'
-SESSION_NAME = 'a2_rectify_auto_womon'
+SESSION_NAME = 'a1_perception_2nodes_auto_womon'
 OPTION = 'without_monitor_node'
 
 def launch_setup(container_prefix, container_sigterm_timeout):
     """Generate launch description for benchmarking image_proc RectifyNode."""
-
-    rectify_node = ComposableNode(
-        name='RectifyNode',
-        namespace=TestRectifyNode.generate_namespace(),
-        package='image_proc',
-        plugin='image_proc::RectifyNode',
-        remappings=[
-            ("image", "/r2b/input"),
-            ("camera_info", "/r2b/camera_info"),
-        ],
-    )
 
     data_loader_node = ComposableNode(
         name='DataLoaderNode',
@@ -85,19 +74,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
                     # ('buffer/input1', 'buffer/camera_info'),
                     # ('input1', 'camera_info')],                    
     )
-    '''
-    monitor_node = ComposableNode(
-        name='MonitorNode',
-        namespace=TestRectifyNode.generate_namespace(),
-        package='ros2_benchmark',
-        plugin='ros2_benchmark::MonitorNode',
-        parameters=[{
-            'monitor_data_format': 'sensor_msgs/msg/Image',
-        }],
-        remappings=[
-            ('output', 'image_rect')],
-    )
-    '''
+
     input_node = ComposableNode(
         package="a1_perception_2nodes",
         namespace=TestRectifyNode.generate_namespace(),
@@ -110,17 +87,48 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         extra_arguments=[{'use_intra_process_comms': True}],
     )
 
+    rectify_node = ComposableNode(
+        name='RectifyNode',
+        namespace=TestRectifyNode.generate_namespace(),
+        package='image_proc',
+        plugin='image_proc::RectifyNode',
+        remappings=[
+            ("image", "/r2b/input"),
+            ("camera_info", "/r2b/camera_info"),
+        ],
+    )
+
+    resize_node = ComposableNode(
+        name="ResizeNode",
+        namespace=TestRectifyNode.generate_namespace(),
+        package="image_proc",
+        plugin="image_proc::ResizeNode",
+        remappings=[
+            ("camera_info", "/r2b/camera_info"),
+            ("image", "/r2b/image_rect"),
+            ("resize", "resize"),
+        ],
+        parameters=[
+            {
+                "scale_height": 2.0,
+                "scale_width": 2.0,
+            }
+        ],
+        extra_arguments=[{'use_intra_process_comms': True}],
+    )
+
     output_node = ComposableNode(
         package="a1_perception_2nodes",
         namespace=TestRectifyNode.generate_namespace(),
         plugin="robotperf::perception::ImageOutputComponent",
         name="image_output_component",
         remappings=[
-            ("image", "/r2b/image_rect"),
+            ("image", "/r2b/resize"),
             ("camera_info", "/r2b/camera_info"),
         ],
         extra_arguments=[{'use_intra_process_comms': True}],
     )
+
 
     composable_node_container = ComposableNodeContainer(
         name='container',
@@ -134,9 +142,9 @@ def launch_setup(container_prefix, container_sigterm_timeout):
             # prep_resize_node,
             playback_node,
             input_node,
-            output_node,
-            #monitor_node,
-            rectify_node
+            rectify_node,
+            resize_node,
+            output_node  
         ],
         output='screen'
     )
@@ -145,11 +153,11 @@ def launch_setup(container_prefix, container_sigterm_timeout):
 
 
 class TestRectifyNode(ROS2BenchmarkTest):
-    """Performance test for image_proc RectifyNode."""
+    """Performance test for image_proc RectifyNode and ResizeNode."""
 
     # Custom configurations
     config = ROS2BenchmarkConfig(
-        benchmark_name='image_proc::RectifyNode Benchmark',
+        benchmark_name='image_proc::RectifyNodeResizeNode Benchmark',
         input_data_path=ROSBAG_PATH,
         # Upper and lower bounds of peak throughput search window
         publisher_upper_frequency=30.0,
@@ -160,7 +168,7 @@ class TestRectifyNode(ROS2BenchmarkTest):
         option = OPTION,
         session_name = SESSION_NAME
     )
-    
+
     def test_benchmark(self):
         json_file_path = self.run_benchmark()
         
@@ -169,7 +177,6 @@ class TestRectifyNode(ROS2BenchmarkTest):
             with open(json_file_path, 'r') as f:
                 data = json.load(f)
             # Extract the desired fields
-            
             mean_latency = data.get("BasicPerformanceMetrics.MEAN_LATENCY")
             max_latency = data.get("BasicPerformanceMetrics.MAX_LATENCY")
             min_latency = data.get("BasicPerformanceMetrics.MIN_LATENCY")
@@ -182,9 +189,10 @@ class TestRectifyNode(ROS2BenchmarkTest):
             str_out += "| ros2_benchmark | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | {:.2f} % |\n".format(
                 mean_latency, rms_latency, max_latency, min_latency, (frames_missed/frames_sent)*100)
             print(str_out)
-        
-    
 
 
 def generate_test_description():
     return TestRectifyNode.generate_test_description_with_nsys(launch_setup)
+
+
+

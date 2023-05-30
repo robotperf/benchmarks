@@ -31,7 +31,7 @@ def generate_launch_description():
     return LaunchDescription()
 
 
-ba = BenchmarkAnalyzer("a2_rectify_nvidia")
+ba = BenchmarkAnalyzer("a2_rectify_auto")
 
 target_chain = [
     # "ros2:callback_start",
@@ -206,5 +206,5 @@ ba.add_target(
 #     }
 # )
 
-ba.analyze_latency("/home/amf/.ros/tracing/a2_rectify_nvidia")
-ba.analyze_throughput("/home/amf/.ros/tracing/a2_rectify_nvidia")
+ba.analyze_latency("/home/amf/.ros/tracing/a2_rectify_auto_wmon")
+ba.analyze_throughput("/home/amf/.ros/tracing/a2_rectify_auto_wmon")

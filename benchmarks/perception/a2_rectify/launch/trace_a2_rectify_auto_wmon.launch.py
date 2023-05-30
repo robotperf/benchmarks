@@ -38,6 +38,8 @@ from ros2_benchmark import ROS2BenchmarkConfig, ROS2BenchmarkTest
 IMAGE_RESOLUTION = ImageResolution.HD
 # ROSBAG_PATH = '/tmp/benchmark_ws/src/rosbags/image'  # NOTE: hardcoded, modify accordingly
 ROSBAG_PATH = '/home/amf/benchmark_ws/src/rosbags/perception/image'
+SESSION_NAME = 'a2_rectify_auto_wmon'
+OPTION = 'with_monitor_node'
 
 def launch_setup(container_prefix, container_sigterm_timeout):
     """Generate launch description for benchmarking image_proc RectifyNode."""
@@ -155,7 +157,8 @@ class TestRectifyNode(ROS2BenchmarkTest):
         # The number of frames to be buffered
         playback_message_buffer_size=68,
         custom_report_info={'data_resolution': IMAGE_RESOLUTION},
-        option = 'with_monitor_node'
+        option = OPTION,
+        session_name = SESSION_NAME
     )
 
     def test_benchmark(self):
@@ -183,30 +186,3 @@ class TestRectifyNode(ROS2BenchmarkTest):
 def generate_test_description():
     return TestRectifyNode.generate_test_description_with_nsys(launch_setup)
 
-def generate_launch_description():
-     # Trace
-    trace = Trace(
-        session_name="a2_rectify",
-        events_ust=[
-            "robotperf_benchmarks:*",
-            "ros2_image_pipeline:*",
-            "ros2:*"
-            # "lttng_ust_cyg_profile*",
-            # "lttng_ust_statedump*",
-            # "liblttng-ust-libc-wrapper",
-        ]
-        + DEFAULT_EVENTS_ROS,
-        context_fields={
-                'kernel': [],
-                'userspace': ['vpid', 'vtid', 'procname'],
-        },
-        # events_kernel=DEFAULT_EVENTS_KERNEL,
-        # context_names=DEFAULT_CONTEXT,
-    )
- 
-    
-
-    return LaunchDescription([
-        # LTTng tracing
-        trace,
-    ])

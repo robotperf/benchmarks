@@ -6,7 +6,7 @@
 #    @@@@@ @@  @@    @@@@ Copyright (c) 2023, Acceleration Robotics®
 #    @@@@@ @@  @@    @@@@ Author: Víctor Mayoral Vilches <victor@accelerationrobotics.com>
 #    @@@@@ @@  @@    @@@@ Author: Martiño Crespo <martinho@accelerationrobotics.com>
-#    @@@@@ @@  @@    @@@@
+#    @@@@@ @@  @@    @@@@ Author: Alejandra Martínez Fariña <alex@accelerationrobotics.com>
 #    @@@@@@@@@&@@@@@@@@@@
 #    @@@@@@@@@@@@@@@@@@@@
 #
@@ -31,7 +31,7 @@ def generate_launch_description():
     return LaunchDescription()
 
 
-ba = BenchmarkAnalyzer("a1_perception_2nodes")
+ba = BenchmarkAnalyzer("a1_perception_2nodes_auto_womon")
 
 # add parameters for analyzing the traces
 ## using message header id
@@ -183,5 +183,5 @@ ba.add_target(
     }
 )
 
-ba.analyze_latency(tracepath="/home/amf/.ros/tracing/a1_perception_2nodes")
-ba.analyze_throughput(tracepath="/home/amf/.ros/tracing/a1_perception_2nodes")
+ba.analyze_latency(tracepath="/home/amf/.ros/tracing/a1_perception_2nodes_auto_womon")
+ba.analyze_throughput(tracepath="/home/amf/.ros/tracing/a1_perception_2nodes_auto_womon")
