@@ -1546,7 +1546,7 @@ class BenchmarkAnalyzer:
         
         # # NOTE: we can particularizations for first_target and last_target
         # #       as needed, e.g.
-        if self.benchmark_name == "a4_depth_image_proc":
+        if "a4" in self.benchmark_name:
             last_target = "robotperf_benchmarks:robotperf_pointcloud_output_cb_init"
         #
         # NOTE 2: find a way to parametrize this into the class
