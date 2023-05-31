@@ -33,6 +33,8 @@ from bokeh.models import (
 )
 from bokeh.models.annotations import Label
 
+import sys
+import argparse
 # color("{:02x}".format(x), fg=16, bg="green")
 # debug = True  # debug flag, set to True if desired
 
@@ -41,6 +43,9 @@ class BenchmarkAnalyzer:
     def __init__(self, benchmark_name, hardware_device_type="cpu"):
         self.benchmark_name = benchmark_name
         self.hardware_device_type = hardware_device_type
+
+        print(benchmark_name)
+        print(hardware_device_type)
 
         # initialize arrays where tracing configuration will be stored
         self.target_chain = []
@@ -2175,4 +2180,3 @@ class BenchmarkAnalyzer:
         )
 
     
-        
