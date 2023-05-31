@@ -25,19 +25,12 @@
 import json
 from launch_ros.actions import ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
-from launch import LaunchDescription
-
-from tracetools_launch.action import Trace
-from tracetools_trace.tools.names import DEFAULT_EVENTS_ROS
-from tracetools_trace.tools.names import DEFAULT_EVENTS_KERNEL
-from tracetools_trace.tools.names import DEFAULT_CONTEXT
 
 from ros2_benchmark import ImageResolution
 from ros2_benchmark import ROS2BenchmarkConfig, ROS2BenchmarkTest
 
 IMAGE_RESOLUTION = ImageResolution.HD
-# ROSBAG_PATH = '/tmp/benchmark_ws/src/rosbags/image'  # NOTE: hardcoded, modify accordingly
-ROSBAG_PATH = '/home/amf/benchmark_ws/src/rosbags/perception/image'
+ROSBAG_PATH = '/home/amf/benchmark_ws/src/rosbags/perception/image' # NOTE: hardcoded, modify accordingly
 SESSION_NAME = 'a2_rectify_auto_womon'
 OPTION = 'without_monitor_node'
 
@@ -49,8 +42,6 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         namespace=TestRectifyNode.generate_namespace(),
         package='ros2_benchmark',
         plugin='ros2_benchmark::DataLoaderNode',
-        # remappings=[('hawk_0_left_rgb_image', 'data_loader/image'),
-        #             ('hawk_0_left_rgb_camera_info', 'data_loader/camera_info')]
         remappings=[('camera/image_raw', 'data_loader/image'),
                     ('camera/camera_info', 'data_loader/camera_info')]                    
     )
@@ -67,17 +58,13 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         }],
         remappings=[('buffer/input0', 'data_loader/image'),
                     ('input0', 'image_raw'),
-        # remappings=[('buffer/input0', 'buffer/image'),
-        #             ('input0', 'image_raw'),
                     ('buffer/input1', 'data_loader/camera_info'),
-                    ('input1', 'camera_info')],
-                    # ('buffer/input1', 'buffer/camera_info'),
-                    # ('input1', 'camera_info')],                    
+                    ('input1', 'camera_info')],               
     )
 
     input_node = ComposableNode(
         package="a1_perception_2nodes",
-        namespace=TestRectifyNode.generate_namespace(),
+        namespace="robotperf",
         plugin="robotperf::perception::ImageInputComponent",
         name="image_input_component",
         remappings=[
@@ -89,22 +76,22 @@ def launch_setup(container_prefix, container_sigterm_timeout):
 
     rectify_node = ComposableNode(
         name='RectifyNode',
-        namespace=TestRectifyNode.generate_namespace(),
+        namespace="robotperf/benchmark",
         package='image_proc',
         plugin='image_proc::RectifyNode',
         remappings=[
-            ("image", "/r2b/input"),
+            ("image", "/robotperf/input"),
             ("camera_info", "/r2b/camera_info"),
         ],
     )
 
     output_node = ComposableNode(
         package="a1_perception_2nodes",
-        namespace=TestRectifyNode.generate_namespace(),
+        namespace="robotperf",
         plugin="robotperf::perception::ImageOutputComponent",
         name="image_output_component",
         remappings=[
-            ("image", "/r2b/image_rect"),
+            ("image", "/robotperf/benchmark/image_rect"),
             ("camera_info", "/r2b/camera_info"),
         ],
         extra_arguments=[{'use_intra_process_comms': True}],

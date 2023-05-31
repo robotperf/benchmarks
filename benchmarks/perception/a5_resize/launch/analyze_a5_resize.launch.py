@@ -189,4 +189,6 @@ ba.add_target(
 #     }
 # )
 
-ba.analyze_latency()
+
+ba.analyze_latency("/home/amf/.ros/tracing/a5_resize")
+ba.analyze_throughput("/home/amf/.ros/tracing/a5_resize")

@@ -30,8 +30,7 @@ from ros2_benchmark import ImageResolution
 from ros2_benchmark import ROS2BenchmarkConfig, ROS2BenchmarkTest
 
 IMAGE_RESOLUTION = ImageResolution.HD
-# ROSBAG_PATH = '/tmp/benchmark_ws/src/rosbags/image'  # NOTE: hardcoded, modify accordingly
-ROSBAG_PATH = '/home/amf/benchmark_ws/src/rosbags/perception/image3'
+ROSBAG_PATH = '/home/amf/benchmark_ws/src/rosbags/perception/image3' # NOTE: hardcoded, modify accordingly
 SESSION_NAME = 'a3_stereo_image_proc_auto_womon'
 OPTION = 'without_monitor_node'
 
@@ -43,8 +42,6 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         namespace=TestDisparityNode.generate_namespace(),
         package='ros2_benchmark',
         plugin='ros2_benchmark::DataLoaderNode',
-        # remappings=[('hawk_0_left_rgb_image', 'data_loader/image'),
-        #             ('hawk_0_left_rgb_camera_info', 'data_loader/camera_info')]
         remappings=[('left_camera/image_raw', 'data_loader/left_camera/image'),
                     ('left_camera/camera_info', 'data_loader/left_camera/camera_info'),
                     ('right_camera/image_raw', 'data_loader/right_camera/image'),
@@ -75,11 +72,11 @@ def launch_setup(container_prefix, container_sigterm_timeout):
 
     input_node_left = ComposableNode(
         package="a1_perception_2nodes",
-        namespace=TestDisparityNode.generate_namespace(),
+        namespace="robotperf",
         plugin="robotperf::perception::ImageInputComponent",
         name="image_input_component",
         parameters=[
-            {"input_topic_name":"/input/left_input/left_image_raw"}
+            {"input_topic_name":"/robotperf/left_input/left_image_raw"}
         ],
         remappings=[
             ("image", "/r2b/left_camera/image_raw"),
@@ -90,11 +87,11 @@ def launch_setup(container_prefix, container_sigterm_timeout):
 
     input_node_right = ComposableNode(
         package="a1_perception_2nodes",
-        namespace=TestDisparityNode.generate_namespace(),
+        namespace="robotperf",
         plugin="robotperf::perception::ImageInputComponent",
         name="image_input_component",
         parameters=[
-            {"input_topic_name":"/input/right_input/right_image_raw"}
+            {"input_topic_name":"/robotperf/right_input/right_image_raw"}
         ],
         remappings=[
             ("image", "/r2b/right_camera/image_raw"),
@@ -104,24 +101,27 @@ def launch_setup(container_prefix, container_sigterm_timeout):
     )
 
     disparity_node = ComposableNode(
-        namespace="benchmark",
+        namespace="robotperf/benchmark",
         package="stereo_image_proc",
         plugin="stereo_image_proc::DisparityNode",
         name="disparity_node",
         remappings=[
-            ('left/camera_info', '/input/left_input/camera_info'),
-            ('left/image_rect', '/input/left_input/left_image_raw'),
-            ('right/camera_info', '/input/right_input/camera_info'),
-            ('right/image_rect', '/input/right_input/right_image_raw'),                    
+            ('left/camera_info', '/robotperf/left_input/camera_info'),
+            ('left/image_rect', '/robotperf/left_input/left_image_raw'),
+            ('right/camera_info', '/robotperf/right_input/camera_info'),
+            ('right/image_rect', '/robotperf/right_input/right_image_raw'),                    
         ],
         extra_arguments=[{'use_intra_process_comms': True}],
     )
 
     output_node = ComposableNode(
         package="a3_stereo_image_proc",
-        namespace=TestDisparityNode.generate_namespace(),
+        namespace="robotperf",
         plugin="robotperf::perception::DisparityOutputComponent",
         name="disparity_output_component",
+        parameters=[
+            {"output_topic_name":"/robotperf/benchmark/disparity"}
+        ],
         extra_arguments=[{'use_intra_process_comms': True}],
     )
 

@@ -116,4 +116,5 @@ ba.add_target(
     }
 )
 
-ba.analyze_latency()
+ba.analyze_latency(tracepath="/home/amf/.ros/tracing/a3_stereo_image_proc")
+ba.analyze_throughput(tracepath="/home/amf/.ros/tracing/a3_stereo_image_proc")
