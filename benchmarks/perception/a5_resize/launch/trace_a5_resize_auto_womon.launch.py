@@ -100,7 +100,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         plugin="robotperf::perception::ImageOutputComponent",
         name="image_output_component",
         remappings=[
-            ("image", "/robotperf/benchmark//resize"),
+            ("image", "/robotperf/benchmark/resize"),
             ("camera_info", "/r2b/camera_info"),
         ],
         extra_arguments=[{'use_intra_process_comms': True}],
