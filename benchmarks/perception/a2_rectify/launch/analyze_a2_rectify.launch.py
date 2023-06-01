@@ -206,4 +206,4 @@ ba.add_target(
 #     }
 # )
 
-ba.analyze_latency()
+ba.analyze_latency("/home/amf/.ros/tracing/a2_rectify")

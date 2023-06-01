@@ -54,18 +54,22 @@ def main(argv):
     ba = BenchmarkAnalyzer(benchmark_name, hardware_device_type)
 
     if hardware_device_type == 'cpu':
-        # # add parameters for analyzing the traces
-        # ba.add_target(
-        #     {
-        #         "name": "ros2:callback_start",
-        #         "name_disambiguous": "ros2:callback_start",
-        #         "colors_fg": "blue",
-        #         "colors_fg_bokeh": "lightgray",
-        #         "layer": "rclcpp",
-        #         "label_layer": 3,
-        #         "marker": "diamond",
-        #     }
-        # )
+        target_chain = [
+        # "ros2:callback_start",
+        'robotperf_benchmarks:robotperf_image_input_cb_init',
+        'robotperf_benchmarks:robotperf_image_input_cb_fini',
+        # 'ros2:callback_end',
+        # 'ros2:callback_start',
+        'robotperf_benchmarks:robotperf_image_input_cb_init',
+        'robotperf_benchmarks:robotperf_image_input_cb_fini',
+        # 'ros2:callback_end',
+        # "ros2:callback_start",
+        'robotperf_benchmarks:robotperf_image_output_cb_init',
+        'robotperf_benchmarks:robotperf_image_output_cb_fini',
+        # "ros2:callback_end",
+        ]
+
+        # add parameters for analyzing the traces
         ba.add_target(
             {
                 "name": "robotperf_benchmarks:robotperf_image_input_cb_init",
@@ -88,34 +92,12 @@ def main(argv):
                 "marker": "plus",
             }
         )
-        # ba.add_target(
-        #     {
-        #         "name": "ros2:callback_end",
-        #         "name_disambiguous": "ros2:callback_end",
-        #         "colors_fg": "blue",
-        #         "colors_fg_bokeh": "gray",
-        #         "layer": "rclcpp",
-        #         "label_layer": 3,
-        #         "marker": "diamond",
-        #     }
-        # )
-        # ba.add_target(
-        #     {
-        #         "name": "ros2:callback_start",
-        #         "name_disambiguous": "ros2:callback_start (2)",
-        #         "colors_fg": "blue",
-        #         "colors_fg_bokeh": "lavender",
-        #         "layer": "rclcpp",
-        #         "label_layer": 3,
-        #         "marker": "diamond",
-        #     }
-        # )
         ba.add_target(
             {
-                "name": "ros2_image_pipeline:image_proc_resize_cb_init",
-                "name_disambiguous": "ros2_image_pipeline:image_proc_resize_cb_init",
+                "name": "robotperf_benchmarks:robotperf_image_input_cb_init",
+                "name_disambiguous": "robotperf_benchmarks:robotperf_image_input_cb_init (2)",
                 "colors_fg": "yellow",
-                "colors_fg_bokeh": "thistle",
+                "colors_fg_bokeh": "salmon",
                 "layer": "userland",
                 "label_layer": 4,
                 "marker": "plus",
@@ -123,65 +105,21 @@ def main(argv):
         )
         ba.add_target(
             {
-                "name": "ros2_image_pipeline:image_proc_resize_init",
-                "name_disambiguous": "ros2_image_pipeline:image_proc_resize_init",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "plum",
-                "layer": "userland",
-                "label_layer": 4,
-                "marker": "plus",
-            }
-        )
-        ba.add_target(
-            {
-                "name": "ros2_image_pipeline:image_proc_resize_fini",
-                "name_disambiguous": "ros2_image_pipeline:image_proc_resize_fini",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "fuchsia",
-                "layer": "userland",
-                "label_layer": 4,
-                "marker": "plus",
-            }
-        )
-        ba.add_target(
-            {
-                "name": "ros2_image_pipeline:image_proc_resize_cb_fini",
-                "name_disambiguous": "ros2_image_pipeline:image_proc_resize_cb_fini",
+                "name": "robotperf_benchmarks:robotperf_image_input_cb_fini",
+                "name_disambiguous": "robotperf_benchmarks:robotperf_image_input_cb_fini (2)",
                 "colors_fg": "yellow",
-                "colors_fg_bokeh": "indigo",
-                "layer": "userland",
-                "label_layer": 4,
+                "colors_fg_bokeh": "darksalmon",
+                "layer": "benchmark",
+                "label_layer": 5,
                 "marker": "plus",
             }
         )
-        # ba.add_target(
-        #     {
-        #         "name": "ros2:callback_end",
-        #         "name_disambiguous": "ros2:callback_end (2)",
-        #         "colors_fg": "blue",
-        #         "colors_fg_bokeh": "mediumslateblue",
-        #         "layer": "rclcpp",
-        #         "label_layer": 3,
-        #         "marker": "diamond",
-        #     }
-        # )
-        # ba.add_target(
-        #     {
-        #         "name": "ros2:callback_start",
-        #         "name_disambiguous": "ros2:callback_start (3)",
-        #         "colors_fg": "blue",
-        #         "colors_fg_bokeh": "chartreuse",
-        #         "layer": "rclcpp",
-        #         "label_layer": 3,
-        #         "marker": "diamond",
-        #     }
-        # )
         ba.add_target(
             {
                 "name": "robotperf_benchmarks:robotperf_image_output_cb_init",
                 "name_disambiguous": "robotperf_benchmarks:robotperf_image_output_cb_init",
-                "colors_fg": "blue",
-                "colors_fg_bokeh": "chocolate",
+                "colors_fg": "red",
+                "colors_fg_bokeh": "red",
                 "layer": "benchmark",
                 "label_layer": 5,
                 "marker": "plus",
@@ -191,24 +129,13 @@ def main(argv):
             {
                 "name": "robotperf_benchmarks:robotperf_image_output_cb_fini",
                 "name_disambiguous": "robotperf_benchmarks:robotperf_image_output_cb_fini",
-                "colors_fg": "blue",
-                "colors_fg_bokeh": "coral",
+                "colors_fg": "red",
+                "colors_fg_bokeh": "lavender",
                 "layer": "userland",
                 "label_layer": 4,
                 "marker": "plus",
             }
         )
-        # ba.add_target(
-        #     {
-        #         "name": "ros2:callback_end",
-        #         "name_disambiguous": "ros2:callback_end (3)",
-        #         "colors_fg": "blue",
-        #         "colors_fg_bokeh": "cornflowerblue",
-        #         "layer": "rclcpp",
-        #         "label_layer": 3,
-        #         "marker": "diamond",
-        #     }
-        # )
     else:
         print('The hardware device type ' + hardware_device_type + ' is not yet implemented\n')
 
@@ -225,7 +152,7 @@ def generate_launch_description():
     # Declare the launch arguments
     benchmark_name_arg = DeclareLaunchArgument(
         'benchmark_name',
-        default_value='a5_resize',
+        default_value='a3_stereo_image_proc',
         description='Name for the benchmark'
     )
 
@@ -253,7 +180,7 @@ def generate_launch_description():
     # Define the ExecuteProcess action to run the Python script
     analyzer = ExecuteProcess(
         cmd=[
-            'python3', "src/benchmarks/benchmarks/perception/a5_resize/launch/analyze_a5_resize_amf.launch.py",
+            'python3', "src/benchmarks/benchmarks/perception/a3_stereo_image_proc/launch/analyze_a3_stereo_image_proc_amf.launch.py",
             '--benchmark_name', LaunchConfiguration('benchmark_name'),
             '--hardware_device_type', LaunchConfiguration('hardware_device_type'),
             '--trace_path', LaunchConfiguration('trace_path'),

@@ -54,6 +54,23 @@ def main(argv):
     ba = BenchmarkAnalyzer(benchmark_name, hardware_device_type)
 
     if hardware_device_type == 'cpu':
+        target_chain = [
+        # "ros2:callback_start",
+        "robotperf_benchmarks:robotperf_image_input_cb_init",
+        "robotperf_benchmarks:robotperf_image_input_cb_fini",
+        # "ros2:callback_end",
+        # "ros2:callback_start",
+        "ros2_image_pipeline:image_proc_rectify_cb_init",
+        "ros2_image_pipeline:image_proc_rectify_init",
+        "ros2_image_pipeline:image_proc_rectify_fini",
+        "ros2_image_pipeline:image_proc_rectify_cb_fini",
+        # "ros2:callback_end",
+        # "ros2:callback_start",
+        "robotperf_benchmarks:robotperf_image_output_cb_init",
+        "robotperf_benchmarks:robotperf_image_output_cb_fini",
+        # "ros2:callback_end",
+        ]
+
         # # add parameters for analyzing the traces
         # ba.add_target(
         #     {
@@ -104,7 +121,7 @@ def main(argv):
         #         "name": "ros2:callback_start",
         #         "name_disambiguous": "ros2:callback_start (2)",
         #         "colors_fg": "blue",
-        #         "colors_fg_bokeh": "lavender",
+        #         "colors_fg_bokeh": "lightsalmon",
         #         "layer": "rclcpp",
         #         "label_layer": 3,
         #         "marker": "diamond",
@@ -112,10 +129,10 @@ def main(argv):
         # )
         ba.add_target(
             {
-                "name": "ros2_image_pipeline:image_proc_resize_cb_init",
-                "name_disambiguous": "ros2_image_pipeline:image_proc_resize_cb_init",
+                "name": "ros2_image_pipeline:image_proc_rectify_cb_init",
+                "name_disambiguous": "ros2_image_pipeline:image_proc_rectify_cb_init",
                 "colors_fg": "yellow",
-                "colors_fg_bokeh": "thistle",
+                "colors_fg_bokeh": "salmon",
                 "layer": "userland",
                 "label_layer": 4,
                 "marker": "plus",
@@ -123,10 +140,10 @@ def main(argv):
         )
         ba.add_target(
             {
-                "name": "ros2_image_pipeline:image_proc_resize_init",
-                "name_disambiguous": "ros2_image_pipeline:image_proc_resize_init",
+                "name": "ros2_image_pipeline:image_proc_rectify_init",
+                "name_disambiguous": "ros2_image_pipeline:image_proc_rectify_init",
                 "colors_fg": "red",
-                "colors_fg_bokeh": "plum",
+                "colors_fg_bokeh": "darksalmon",
                 "layer": "userland",
                 "label_layer": 4,
                 "marker": "plus",
@@ -134,10 +151,10 @@ def main(argv):
         )
         ba.add_target(
             {
-                "name": "ros2_image_pipeline:image_proc_resize_fini",
-                "name_disambiguous": "ros2_image_pipeline:image_proc_resize_fini",
+                "name": "ros2_image_pipeline:image_proc_rectify_fini",
+                "name_disambiguous": "ros2_image_pipeline:image_proc_rectify_fini",
                 "colors_fg": "red",
-                "colors_fg_bokeh": "fuchsia",
+                "colors_fg_bokeh": "lightcoral",
                 "layer": "userland",
                 "label_layer": 4,
                 "marker": "plus",
@@ -145,10 +162,10 @@ def main(argv):
         )
         ba.add_target(
             {
-                "name": "ros2_image_pipeline:image_proc_resize_cb_fini",
-                "name_disambiguous": "ros2_image_pipeline:image_proc_resize_cb_fini",
+                "name": "ros2_image_pipeline:image_proc_rectify_cb_fini",
+                "name_disambiguous": "ros2_image_pipeline:image_proc_rectify_cb_fini",
                 "colors_fg": "yellow",
-                "colors_fg_bokeh": "indigo",
+                "colors_fg_bokeh": "darkred",
                 "layer": "userland",
                 "label_layer": 4,
                 "marker": "plus",
@@ -159,7 +176,7 @@ def main(argv):
         #         "name": "ros2:callback_end",
         #         "name_disambiguous": "ros2:callback_end (2)",
         #         "colors_fg": "blue",
-        #         "colors_fg_bokeh": "mediumslateblue",
+        #         "colors_fg_bokeh": "red",
         #         "layer": "rclcpp",
         #         "label_layer": 3,
         #         "marker": "diamond",
@@ -201,7 +218,7 @@ def main(argv):
         # ba.add_target(
         #     {
         #         "name": "ros2:callback_end",
-        #         "name_disambiguous": "ros2:callback_end (3)",
+        #         "name_disambiguous": "ros2:callback_end ()",
         #         "colors_fg": "blue",
         #         "colors_fg_bokeh": "cornflowerblue",
         #         "layer": "rclcpp",
@@ -225,7 +242,7 @@ def generate_launch_description():
     # Declare the launch arguments
     benchmark_name_arg = DeclareLaunchArgument(
         'benchmark_name',
-        default_value='a5_resize',
+        default_value='a6_rectify_throughput',
         description='Name for the benchmark'
     )
 
@@ -253,7 +270,7 @@ def generate_launch_description():
     # Define the ExecuteProcess action to run the Python script
     analyzer = ExecuteProcess(
         cmd=[
-            'python3', "src/benchmarks/benchmarks/perception/a5_resize/launch/analyze_a5_resize_amf.launch.py",
+            'python3', "src/benchmarks/benchmarks/perception/a6_rectify_throughput/launch/analyze_a6_rectify_throughput_amf.launch.py",
             '--benchmark_name', LaunchConfiguration('benchmark_name'),
             '--hardware_device_type', LaunchConfiguration('hardware_device_type'),
             '--trace_path', LaunchConfiguration('trace_path'),
