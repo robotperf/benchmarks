@@ -57,7 +57,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         remappings=[('camera/image_raw', 'data_loader/image'),
                     ('camera/camera_info', 'data_loader/camera_info'),
                     ('camera/depth/image_raw', 'data_loader/depth/image'),
-                    ('camera/depth/camera_info', 'data_loader/depth/camera_info')]                    
+                    ('camera/depth/camera_info', 'data_loader/depth/camera_info')]                   
     )
 
     playback_node = ComposableNode(
@@ -73,23 +73,24 @@ def launch_setup(container_prefix, container_sigterm_timeout):
                 'sensor_msgs/msg/CameraInfo'],
         }],
         remappings=[('buffer/input0', 'data_loader/depth/image'),
-                    ('input0', '/camera/depth/image_raw'),
+                    ('input0', 'camera/depth/image_raw'),
                     ('buffer/input1', 'data_loader/depth/camera_info'),
-                    ('input1', '/camera/depth/camera_info'),
+                    ('input1', 'camera/depth/camera_info'),
                     ('buffer/input2', 'data_loader/image'),
-                    ('input2', '/camera/image_raw'),
+                    ('input2', 'camera/image_raw'),
                     ('buffer/input3', 'data_loader/camera_info'),
-                    ('input3', '/camera/camera_info')],                  
+                    ('input3', 'camera/camera_info')],                  
     )
 
     rectify_image_node = ComposableNode(
         package='image_proc',
         plugin='image_proc::RectifyNode',
+        namespace='robotperf/preprocessing',
         name='rectify_color_node',
         remappings=[
-            ('image', '/camera/image_raw'),
-            ('camera_info', "/camera/camera_info"),
-            ('image_rect', '/rgb/image_rect_color')
+            ('image', '/r2b/camera/image_raw'),
+            ('camera_info', '/r2b/camera/camera_info'),
+            ('image_rect', '/robotperf/preprocessing/rgb/image_rect_color')
         ],
         extra_arguments=[{'use_intra_process_comms': True}],
     )
@@ -97,11 +98,12 @@ def launch_setup(container_prefix, container_sigterm_timeout):
     rectify_depth_node = ComposableNode(
         package='image_proc',
         plugin='image_proc::RectifyNode',
+        namespace='robotperf/preprocessing',
         name='rectify_depth_node',
         remappings=[
-            ('image', '/camera/depth/image_raw'),
-            ('camera_info', "/camera/depth/camera_info"),
-            ('image_rect', '/depth_registered/image_rect')
+            ('image', '/r2b/camera/depth/image_raw'),
+            ('camera_info', '/r2b/camera/depth/camera_info'),
+            ('image_rect', '/robotperf/preprocessing/depth_registered/image_rect')
         ],
         extra_arguments=[{'use_intra_process_comms': True}],
     )
@@ -109,13 +111,14 @@ def launch_setup(container_prefix, container_sigterm_timeout):
     input_image_node = ComposableNode(
         package="a1_perception_2nodes",
         plugin="robotperf::perception::ImageInputComponent",
+        namespace='robotperf',
         name="image_input_component",
         parameters=[
-            {"input_topic_name":"/input/rgb/image_rect_color"}
+            {"input_topic_name":"/robotperf/input_rgb/image_rect_color"}
         ],
         remappings=[
-            ("image", "/rgb/image_rect_color"),
-            ("camera_info", "/camera/camera_info"),
+            ("image", "/robotperf/preprocessing/rgb/image_rect_color"),
+            ("camera_info", "/r2b/camera/camera_info"),
         ],
         extra_arguments=[{'use_intra_process_comms': True}],
     )
@@ -123,34 +126,39 @@ def launch_setup(container_prefix, container_sigterm_timeout):
     input_depth_node = ComposableNode(
         package="a1_perception_2nodes",
         plugin="robotperf::perception::ImageInputComponent",
+        namespace='robotperf',
         name="image_input_component",
         parameters=[
-            {"input_topic_name":"/input/depth_registered/image_rect"}
+            {"input_topic_name":"/robotperf/input_depth_registered/image_rect"}
         ],
         remappings=[
-            ("image", "/depth_registered/image_rect"),
-            ("camera_info", "/camera/depth/camera_info"),
+            ("image", "/robotperf/preprocessing/depth_registered/image_rect"),
+            ("camera_info", "/r2b/camera/depth/camera_info"),
         ],
         extra_arguments=[{'use_intra_process_comms': True}],
     )
 
     rgbd_to_pointcloud_node = ComposableNode(
-        namespace="benchmark",
+        namespace="robotperf/benchmark",
         package="depth_image_proc",
         plugin="depth_image_proc::PointCloudXyzrgbNode",
         name="depth_image_to_pointcloud_node",
         remappings=[
-            ('rgb/camera_info', '/input/rgb/camera_info'),
-            ('rgb/image_rect_color', '/input/rgb/image_rect_color'),
-            ('depth_registered/image_rect', '/input/depth_registered/image_rect')
-        ],               
+            ('rgb/camera_info', '/robotperf/input_rgb/camera_info'),
+            ('rgb/image_rect_color', '/robotperf/input_rgb/image_rect_color'),
+            ('depth_registered/image_rect', '/robotperf/input_depth_registered/image_rect')
+        ],                
         extra_arguments=[{'use_intra_process_comms': True}],
     )
 
     output_pointcloud_node = ComposableNode(
         package="a4_depth_image_proc",
         plugin="robotperf::perception::PointCloudOutputComponent",
+        namespace='robotperf',
         name="point_cloud_output_component",
+        parameters=[
+            {"output_topic_name":"/robotperf/benchmark/points"}
+        ],
         extra_arguments=[{'use_intra_process_comms': True}],
     )
 
@@ -164,7 +172,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
             'qos_type': 'sensor'
         }],
         remappings=[
-            ('output', '/benchmark/points')],
+            ('output', '/robotperf/benchmark/points')],
     )
 
     composable_node_container = ComposableNodeContainer(

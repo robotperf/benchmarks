@@ -1963,7 +1963,7 @@ class BenchmarkAnalyzer:
 
     def get_target_chain_traces(self, trace_path):
         if not trace_path:
-            trace_path = "/tmp/analysis/trace"
+            trace_path = "/home/martinho/.ros/tracing/a4_depth_image_proc"
 
         if self.hardware_device_type == "cpu":
             # self.image_pipeline_msg_sets \

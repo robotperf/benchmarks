@@ -118,7 +118,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         ],
         remappings=[
             ("image", "/robotperf/preprocessing/rgb/image_rect_color"),
-            ("camera_info", "/robotperf/preprocessing/camera/camera_info"),
+            ("camera_info", "/r2b/camera/camera_info"),
         ],
         extra_arguments=[{'use_intra_process_comms': True}],
     )
@@ -133,7 +133,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         ],
         remappings=[
             ("image", "/robotperf/preprocessing/depth_registered/image_rect"),
-            ("camera_info", "/robotperf/preprocessing/camera/depth/camera_info"),
+            ("camera_info", "/r2b/camera/depth/camera_info"),
         ],
         extra_arguments=[{'use_intra_process_comms': True}],
     )
