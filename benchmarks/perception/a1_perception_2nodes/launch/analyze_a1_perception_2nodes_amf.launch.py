@@ -37,7 +37,6 @@ def main(argv):
     
     # Parse the command-line arguments
     parser = argparse.ArgumentParser()
-    parser.add_argument('--benchmark_name', type=str, help='Name for the benchmark', default ='benchmark')
     parser.add_argument('--hardware_device_type', type=str, help='Hardware Device Type (e.g. cpu or fpga)', default ='cpu')
     parser.add_argument('--trace_path', type=str, help='Path to trace files (e.g. /tmp/analysis/trace)', default = '/tmp/analysis/trace')
     parser.add_argument('--metrics', type=str, help='List of metrics to be analyzed (e.g. latency and/or throughput)', default = ['latency'])
@@ -45,7 +44,6 @@ def main(argv):
     args = parser.parse_args(argv)
 
     # Get the values of the arguments
-    benchmark_name = args.benchmark_name
     hardware_device_type = args.hardware_device_type
     trace_path = args.trace_path
     metrics_string = args.metrics
@@ -54,7 +52,7 @@ def main(argv):
     integrated = args.integrated
 
     # Instantiate the class
-    ba = BenchmarkAnalyzer(benchmark_name, hardware_device_type)
+    ba = BenchmarkAnalyzer('a1_perception_2nodes', hardware_device_type)
 
     if hardware_device_type == 'cpu':
         # add parameters for analyzing the traces
@@ -630,12 +628,6 @@ def main(argv):
   
 def generate_launch_description():
     # Declare the launch arguments
-    benchmark_name_arg = DeclareLaunchArgument(
-        'benchmark_name',
-        default_value='a1_perception_2nodes',
-        description='Name for the benchmark'
-    )
-
     hardware_device_type_arg = DeclareLaunchArgument(
         'hardware_device_type',
         default_value='cpu',
@@ -667,7 +659,6 @@ def generate_launch_description():
     analyzer = ExecuteProcess(
         cmd=[
             'python3', "src/benchmarks/benchmarks/perception/a1_perception_2nodes/launch/analyze_a1_perception_2nodes_amf.launch.py",
-            '--benchmark_name', LaunchConfiguration('benchmark_name'),
             '--hardware_device_type', LaunchConfiguration('hardware_device_type'),
             '--trace_path', LaunchConfiguration('trace_path'),
             '--metrics', LaunchConfiguration('metrics'),
@@ -676,7 +667,6 @@ def generate_launch_description():
     )
 
     # Add the declared launch arguments to the launch description
-    ld.add_action(benchmark_name_arg)
     ld.add_action(hardware_device_type_arg)
     ld.add_action(trace_path_arg)
     ld.add_action(metrics_arg)
