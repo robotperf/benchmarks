@@ -44,9 +44,6 @@ class BenchmarkAnalyzer:
         self.benchmark_name = benchmark_name
         self.hardware_device_type = hardware_device_type
 
-        print(benchmark_name)
-        print(hardware_device_type)
-
         # initialize arrays where tracing configuration will be stored
         self.target_chain = []
         self.target_chain_dissambiguous = []
@@ -1963,7 +1960,7 @@ class BenchmarkAnalyzer:
 
     def get_target_chain_traces(self, trace_path):
         if not trace_path:
-            trace_path = "/home/martinho/.ros/tracing/a4_depth_image_proc"
+            trace_path = "/tmp/analysis/trace"
 
         if self.hardware_device_type == "cpu":
             # self.image_pipeline_msg_sets \
