@@ -40,8 +40,8 @@ from launch.substitutions import LaunchConfiguration
 
 IMAGE_RESOLUTION = ImageResolution.HD
 # ROSBAG_PATH = '/tmp/benchmark_ws/src/rosbags/image'  # NOTE: hardcoded, modify accordingly
-ROSBAG_PATH = '/home/martinho/acceleration/benchmark_ws/src/rosbags/perception/depth_image1'
-SESSION_NAME = 'a4_depth_image_proc_auto_wmon'
+ROSBAG_PATH = '/home/amf/benchmark_ws/src/rosbags/perception/depth_image1'
+SESSION_NAME = 'a4_depth_image_proc_auto_123'
 OPTION = 'with_monitor_node'
 
 def launch_setup(container_prefix, container_sigterm_timeout):
@@ -175,14 +175,8 @@ def launch_setup(container_prefix, container_sigterm_timeout):
             ('output', '/robotperf/benchmark/points')],
     )
 
-    composable_node_container = ComposableNodeContainer(
-        name='container',
-        namespace=TestRectifyNode.generate_namespace(),
-        package='rclcpp_components',
-        executable='component_container_mt',
-        prefix=container_prefix,
-        sigterm_timeout=container_sigterm_timeout,
-        composable_node_descriptions=[
+    if OPTION == 'with_monitor_node':
+        composable_node_descriptions_option=[
             data_loader_node,
             playback_node,
             rectify_image_node,
@@ -192,7 +186,27 @@ def launch_setup(container_prefix, container_sigterm_timeout):
             rgbd_to_pointcloud_node,
             output_pointcloud_node,
             monitor_node
-        ],
+        ]
+    else:
+        composable_node_descriptions_option=[
+            data_loader_node,
+            playback_node,
+            rectify_image_node,
+            rectify_depth_node,
+            input_image_node,
+            input_depth_node,
+            rgbd_to_pointcloud_node,
+            output_pointcloud_node,
+        ]
+
+    composable_node_container = ComposableNodeContainer(
+        name='container',
+        namespace=TestRectifyNode.generate_namespace(),
+        package='rclcpp_components',
+        executable='component_container_mt',
+        prefix=container_prefix,
+        sigterm_timeout=container_sigterm_timeout,
+        composable_node_descriptions=composable_node_descriptions_option,
         output='screen'
     )
 
