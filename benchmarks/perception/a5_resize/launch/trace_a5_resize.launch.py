@@ -61,6 +61,7 @@ def generate_launch_description():
         composable_node_descriptions=[
             ComposableNode(
                 package="a1_perception_2nodes",
+                namespace="robotperf",
                 plugin="robotperf::perception::ImageInputComponent",
                 name="image_input_component",
                 remappings=[
@@ -70,14 +71,14 @@ def generate_launch_description():
                 extra_arguments=[{'use_intra_process_comms': True}],
             ),
             ComposableNode(
-                namespace="benchmark",
+                namespace="robotperf/benchmark",
                 package="image_proc",
                 plugin="image_proc::ResizeNode",
                 name="resize_node",
                 remappings=[
                     ("camera_info", "/camera/camera_info"),
-                    ("image", "/input"),
-                    ("resize", "resize"),
+                    ("image", "/robotperf/input"),
+                    ("resize", "/robotperf/benchmark/resize"),
                 ],
                 parameters=[
                     {
@@ -90,9 +91,10 @@ def generate_launch_description():
             ComposableNode(
                 package="a1_perception_2nodes",
                 plugin="robotperf::perception::ImageOutputComponent",
+                namespace="robotperf",
                 name="image_output_component",
                 remappings=[
-                    ("image", "/benchmark/resize"),
+                    ("image", "/robotperf/benchmark/resize"),
                     ("camera_info", "/camera/camera_info"),
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],

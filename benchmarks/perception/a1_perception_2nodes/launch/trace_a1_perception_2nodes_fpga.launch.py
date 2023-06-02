@@ -59,6 +59,7 @@ def generate_launch_description():
             ComposableNode(
                 package="a1_perception_2nodes",
                 plugin="robotperf::perception::ImageInputComponent",
+                namespace="robotperf",
                 name="image_input_component",
                 remappings=[
                     ("image", "/camera/image_raw"),
@@ -67,26 +68,26 @@ def generate_launch_description():
                 extra_arguments=[{'use_intra_process_comms': True}],
             ),
             ComposableNode(
-                namespace="benchmark",
+                namespace="robotperf/benchmark",
                 package="image_proc",
                 plugin="image_proc::RectifyNodeFPGA",
                 name="rectify_node_fpga",
                 remappings=[
-                    ("image", "/input"),
+                    ("image", "/robotperf/input"),
                     ("camera_info", "/camera/camera_info"),
-                    ("image_rect", "image_rect"),
+                    ("image_rect", "/robotperf/benchmark/image_rect"),
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],
             ),
             ComposableNode(
-                namespace="benchmark",
+                namespace="robotperf/benchmark",
                 package="image_proc",
                 plugin="image_proc::ResizeNodeFPGA",
                 name="resize_node_fpga",
                 remappings=[
                     ("camera_info", "/camera/camera_info"),
-                    ("image", "/benchmark/image_rect"),
-                    ("resize", "resize"),
+                    ("image", "/robotperf/benchmark/image_rect"),
+                    ("resize", "/robotperf/benchmark/resize"),
                 ],
                 parameters=[
                     {
@@ -100,8 +101,9 @@ def generate_launch_description():
                 package="a1_perception_2nodes",
                 plugin="robotperf::perception::ImageOutputComponent",
                 name="image_output_component",
+                namespace="robotperf",
                 remappings=[
-                    ("image", "/benchmark/resize"),
+                    ("image", "/robotperf/benchmark/resize"),
                     ("camera_info", "/camera/camera_info"),
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],

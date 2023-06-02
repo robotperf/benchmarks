@@ -25,17 +25,163 @@
 import json
 from launch_ros.actions import ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
-
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument, ExecuteProcess
+from launch.actions import IncludeLaunchDescription
+from launch.launch_description_sources import AnyLaunchDescriptionSource
+from launch.conditions import IfCondition
+from launch.substitutions import LaunchConfiguration, PythonExpression
+from launch.conditions import LaunchConfigurationEquals
 from ros2_benchmark import ImageResolution
 from ros2_benchmark import ROS2BenchmarkConfig, ROS2BenchmarkTest
+from tracetools_launch.action import Trace
+from tracetools_trace.tools.names import DEFAULT_EVENTS_ROS
+from tracetools_trace.tools.names import DEFAULT_EVENTS_KERNEL
+from tracetools_trace.tools.names import DEFAULT_CONTEXT
 
+import sys
+import argparse
+
+BENCHMARK_NAME = None
 IMAGE_RESOLUTION = ImageResolution.HD
-ROSBAG_PATH = '/home/amf/benchmark_ws/src/rosbags/perception/image' #  NOTE: hardcoded, modify accordingly
-SESSION_NAME = 'a5_resize_auto_wmon'
-OPTION = 'with_monitor_node'
+ROSBAG_PATH = None
+SESSION_NAME = None
+OPTION = None
 
-def launch_setup(container_prefix, container_sigterm_timeout):
+def main(argv):
+    print('It entered the main')
+    # Parse the command-line arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--benchmark_name', type=str, help='Name for the benchmark', default ='benchmark')
+    parser.add_argument('--hardware_device_type', type=str, help='Hardware Device Type (e.g. cpu or fpga)', default ='cpu')
+    parser.add_argument('--trace_file_name', type=str, help='Name for the benchmark tracing files. It will be needed in the analyze file to provide the path.', default = 'session_name')
+    parser.add_argument('--data_source', type=str, help='Type of data source (auto or manual). Use auto for automatically launching a ros2 bag with ros2_benchmark. Use manual for manually launching a ros2 bag or for real time robots.', default = ['auto'])
+    parser.add_argument('--monitor_node', type=bool, help='Only for auto data source. Include the monitor_node or not.', default = True)
+    parser.add_argument('--ros_bag_path', type=bool, help='Only for auto data source. Path to the ros bag file.', default = '/home/amf/benchmark_ws/src/rosbags/perception/image')
+    args = parser.parse_args(argv)
+
+    # Get the values of the arguments
+    BENCHMARK_NAME = args.benchmark_name
+    hardware_device_type = args.hardware_device_type
+    SESSION_NAME = args.trace_file_name #'a5_resize_auto_wmon'
+    data_source = args.data_source
+    monitor_node = args.monitor_node
+    ROSBAG_PATH = args.ros_bag_path #'/home/amf/benchmark_ws/src/rosbags/perception/image' #  NOTE: hardcoded, modify accordingly
+    
+    if monitor_node:
+        OPTION = 'with_monitor_node'
+    else:
+        OPTION = 'without_monitor_node'
+
+    if data_source == 'auto':
+        TestResizeNode.generate_test_description_with_nsys(launch_auto_setup)
+    
+    
+def launch_manual_setup():
+    print('It entered the launch manual setup')
+    # Trace
+    trace = Trace(
+        session_name="a5_resize",
+        events_ust=[
+            "robotperf_benchmarks:*",
+            "ros2_image_pipeline:*",
+            "ros2:*"
+            # "lttng_ust_cyg_profile*",
+            # "lttng_ust_statedump*",
+            # "liblttng-ust-libc-wrapper",
+        ]
+        + DEFAULT_EVENTS_ROS,
+        context_fields={
+                'kernel': [],
+                'userspace': ['vpid', 'vtid', 'procname'],
+        },
+        # events_kernel=DEFAULT_EVENTS_KERNEL,
+        # context_names=DEFAULT_CONTEXT,
+    )
+ 
+    perception_container = ComposableNodeContainer(
+        name="perception_container",
+        namespace="",
+        package="rclcpp_components",
+        executable="component_container",
+        composable_node_descriptions=[
+            ComposableNode(
+                package="a1_perception_2nodes",
+                plugin="robotperf::perception::ImageInputComponent",
+                name="image_input_component",
+                remappings=[
+                    ("image", "/camera/image_raw"),
+                    ("camera_info", "/camera/camera_info"),
+                ],
+                extra_arguments=[{'use_intra_process_comms': True}],
+            ),
+            ComposableNode(
+                namespace="benchmark",
+                package="image_proc",
+                plugin="image_proc::ResizeNode",
+                name="resize_node",
+                remappings=[
+                    ("camera_info", "/camera/camera_info"),
+                    ("image", "/input"),
+                    ("resize", "resize"),
+                ],
+                parameters=[
+                    {
+                        "scale_height": 2.0,
+                        "scale_width": 2.0,
+                    }
+                ],
+                extra_arguments=[{'use_intra_process_comms': True}],
+            ),
+            ComposableNode(
+                package="a1_perception_2nodes",
+                plugin="robotperf::perception::ImageOutputComponent",
+                name="image_output_component",
+                remappings=[
+                    ("image", "/benchmark/resize"),
+                    ("camera_info", "/camera/camera_info"),
+                ],
+                extra_arguments=[{'use_intra_process_comms': True}],
+            ),
+        ],
+        output="screen",
+    )
+    return [trace, perception_container]
+
+def launch_auto_setup(container_prefix='', container_sigterm_timeout=5):
+    print('It entered the launch auto setup')
     """Generate launch description for benchmarking image_proc RectifyNode."""
+
+    # Declare the launch arguments
+    hardware_device_type_arg = DeclareLaunchArgument(
+        'hardware_device_type',
+        default_value='cpu',
+        description='Hardware Device Type (e.g. cpu or fpga)'
+    )
+
+    trace_file_name_arg = DeclareLaunchArgument(
+        'trace_file_name',
+        default_value='a5_resize',
+        description='Name for the benchmark tracing files. It will be needed in the analyze file to provide the path.'
+    )
+
+    data_source_arg = DeclareLaunchArgument(
+        'data_source',
+        default_value='true',
+        description='Type of data source (auto or manual). Use auto for automatically launching a ros2 bag with ros2_benchmark. Use manual for manually launching a ros2 bag or for real time robots.'
+    )
+
+    monitor_node_arg = DeclareLaunchArgument(
+        'monitor_node',
+        default_value= 'true',
+        description='Only for auto data source. Include the monitor_node or not.'
+    )
+
+    ros_bag_path_arg = DeclareLaunchArgument(
+        'ros_bag_path',
+        default_value='/home/amf/benchmark_ws/src/rosbags/perception/image',
+        description='Only for auto data source. Path to the ros bag file.'
+    )
 
     data_loader_node = ComposableNode(
         name='DataLoaderNode',
@@ -137,7 +283,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         output='screen'
     )
 
-    return [composable_node_container]
+    return [composable_node_container, hardware_device_type_arg, trace_file_name_arg, data_source_arg, monitor_node_arg, ros_bag_path_arg]
 
 
 class TestResizeNode(ROS2BenchmarkTest):
@@ -145,7 +291,7 @@ class TestResizeNode(ROS2BenchmarkTest):
 
     # Custom configurations
     config = ROS2BenchmarkConfig(
-        benchmark_name='image_proc::RectifyNode Benchmark',
+        benchmark_name= BENCHMARK_NAME,
         input_data_path=ROSBAG_PATH,
         # Upper and lower bounds of peak throughput search window
         publisher_upper_frequency=30.0,
@@ -180,5 +326,86 @@ class TestResizeNode(ROS2BenchmarkTest):
 
 
 def generate_test_description():
-    return TestResizeNode.generate_test_description_with_nsys(launch_setup)
+    print('It entered the generate test description')  
+    return TestResizeNode.generate_test_description_with_nsys(launch_auto_setup)
 
+def generate_launch_description():
+    print('It entered the generate launch description')
+    # Declare the launch arguments
+    hardware_device_type_arg = DeclareLaunchArgument(
+        'hardware_device_type',
+        default_value='cpu',
+        description='Hardware Device Type (e.g. cpu or fpga)'
+    )
+
+    trace_file_name_arg = DeclareLaunchArgument(
+        'trace_file_name',
+        default_value='a5_resize',
+        description='Name for the benchmark tracing files. It will be needed in the analyze file to provide the path.'
+    )
+
+    data_source_arg = DeclareLaunchArgument(
+        'data_source',
+        default_value='true',
+        description='Type of data source (auto or manual). Use auto for automatically launching a ros2 bag with ros2_benchmark. Use manual for manually launching a ros2 bag or for real time robots.'
+    )
+
+    monitor_node_arg = DeclareLaunchArgument(
+        'monitor_node',
+        default_value= 'true',
+        description='Only for auto data source. Include the monitor_node or not.'
+    )
+
+    ros_bag_path_arg = DeclareLaunchArgument(
+        'ros_bag_path',
+        default_value='/home/amf/benchmark_ws/src/rosbags/perception/image',
+        description='Only for auto data source. Path to the ros bag file.'
+    )
+
+    # Create the launch description
+    ld = LaunchDescription()
+
+    # Add the declared launch arguments to the launch description
+    ld.add_action(hardware_device_type_arg)
+    ld.add_action(trace_file_name_arg)
+    ld.add_action(data_source_arg)
+    ld.add_action(monitor_node_arg)
+    ld.add_action(ros_bag_path_arg)
+
+    #print(PythonExpression(data_source_arg, '== true'))
+    #print(LaunchConfiguration('data_source') == 'false')
+
+    if LaunchConfiguration('data_source') == 'manual':
+        # Define the nodes for the 'manual' data source ============================
+        list_manual_nodes = launch_manual_setup()
+        for node in list_manual_nodes:
+            ld.add_action(node)
+    #elif LaunchConfiguration('data_source') == 'auto':
+    #    list_auto_nodes = generate_test_description()
+    #    ld.add_action(list_auto_nodes)
+
+    
+    # end 'manual' ============================================================
+
+    # Define the nodes for the 'auto' data source ========================
+    # Define the ExecuteProcess action to run the Python script
+    
+    launch_test_action = ExecuteProcess(
+        cmd=['launch_test', "src/benchmarks/benchmarks/perception/a5_resize/launch/trace_a5_resize_amf.launch.py",
+            'hardware_device_type:=',LaunchConfiguration('hardware_device_type'),
+            'trace_file_name:=',LaunchConfiguration('trace_file_name'),
+            'data_source:=',LaunchConfiguration('data_source'),
+            'monitor_node:=',LaunchConfiguration('monitor_node'),
+            'ros_bag_path:=',LaunchConfiguration('ros_bag_path')],
+        output='screen'
+    )
+    # end 'auto' ========================================
+    
+    # Add the ExecuteProcess action to the launch description
+    ld.add_action(launch_test_action)
+    
+    return ld
+
+if __name__ == '__main__':
+    main(sys.argv[1:])
+    #generate_test_description()
