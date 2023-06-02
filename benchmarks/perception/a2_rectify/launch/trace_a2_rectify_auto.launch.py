@@ -5,7 +5,7 @@
 #    @@@@@ @@  @@    @@@@
 #    @@@@@ @@  @@    @@@@ Copyright (c) 2023, Acceleration Robotics®
 #    @@@@@ @@  @@    @@@@ Author: Alejandra Martínez Fariña <alex@accelerationrobotics.com>
-#    @@@@@ @@  @@    @@@@ 
+#    @@@@@ @@  @@    @@@@ Author: Martiño Crespo Álvarez <martinho@accelerationrobotics.com>
 #    @@@@@ @@  @@    @@@@ 
 #    @@@@@@@@@&@@@@@@@@@@
 #    @@@@@@@@@@@@@@@@@@@@
@@ -30,8 +30,8 @@ from ros2_benchmark import ImageResolution
 from ros2_benchmark import ROS2BenchmarkConfig, ROS2BenchmarkTest
 
 IMAGE_RESOLUTION = ImageResolution.HD
-ROSBAG_PATH = '/home/amf/benchmark_ws/src/rosbags/perception/image' #  NOTE: hardcoded, modify accordingly
-SESSION_NAME = 'a5_resize_auto_wmon'
+ROSBAG_PATH = '/home/amf/benchmark_ws/src/rosbags/perception/image' # NOTE: hardcoded, modify accordingly
+SESSION_NAME = 'a2_rectify_auto_wmon'
 OPTION = 'with_monitor_node'
 
 def launch_setup(container_prefix, container_sigterm_timeout):
@@ -39,7 +39,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
 
     data_loader_node = ComposableNode(
         name='DataLoaderNode',
-        namespace=TestResizeNode.generate_namespace(),
+        namespace=TestRectifyNode.generate_namespace(),
         package='ros2_benchmark',
         plugin='ros2_benchmark::DataLoaderNode',
         remappings=[('camera/image_raw', 'data_loader/image'),
@@ -48,7 +48,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
 
     playback_node = ComposableNode(
         name='PlaybackNode',
-        namespace=TestResizeNode.generate_namespace(),
+        namespace=TestRectifyNode.generate_namespace(),
         package='ros2_benchmark',
         plugin='ros2_benchmark::PlaybackNode',
         parameters=[{
@@ -59,7 +59,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         remappings=[('buffer/input0', 'data_loader/image'),
                     ('input0', 'image_raw'),
                     ('buffer/input1', 'data_loader/camera_info'),
-                    ('input1', 'camera_info')],                  
+                    ('input1', 'camera_info')],              
     )
 
     input_node = ComposableNode(
@@ -74,24 +74,15 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         extra_arguments=[{'use_intra_process_comms': True}],
     )
 
-
-    resize_node = ComposableNode(
+    rectify_node = ComposableNode(
+        name='RectifyNode',
         namespace="robotperf/benchmark",
-        package="image_proc",
-        plugin="image_proc::ResizeNode",
-        name="resize_node",
+        package='image_proc',
+        plugin='image_proc::RectifyNode',
         remappings=[
-            ("camera_info", "/r2b/camera_info"),
             ("image", "/robotperf/input"),
-            ("resize", "/robotperf/benchmark/resize"),
+            ("camera_info", "/r2b/camera_info"),
         ],
-        parameters=[
-            {
-                "scale_height": 2.0,
-                "scale_width": 2.0,
-            }
-        ],
-        extra_arguments=[{'use_intra_process_comms': True}],
     )
 
     output_node = ComposableNode(
@@ -100,7 +91,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         plugin="robotperf::perception::ImageOutputComponent",
         name="image_output_component",
         remappings=[
-            ("image", "/robotperf/benchmark/resize"),
+            ("image", "/robotperf/benchmark/image_rect"),
             ("camera_info", "/r2b/camera_info"),
         ],
         extra_arguments=[{'use_intra_process_comms': True}],
@@ -108,39 +99,51 @@ def launch_setup(container_prefix, container_sigterm_timeout):
 
     monitor_node = ComposableNode(
         name='MonitorNode',
-        namespace=TestResizeNode.generate_namespace(),
+        namespace=TestRectifyNode.generate_namespace(),
         package='ros2_benchmark',
         plugin='ros2_benchmark::MonitorNode',
         parameters=[{
             'monitor_data_format': 'sensor_msgs/msg/Image',
         }],
         remappings=[
-            ('output', '/robotperf/benchmark/resize')],
+            ('output', '/robotperf/benchmark/image_rect')],
     )
 
-    composable_node_container = ComposableNodeContainer(
-        name='container',
-        namespace=TestResizeNode.generate_namespace(),
-        package='rclcpp_components',
-        executable='component_container_mt',
-        prefix=container_prefix,
-        sigterm_timeout=container_sigterm_timeout,
-        composable_node_descriptions=[
+    if OPTION == 'with_monitor_node':
+        composable_node_descriptions_option=[
             data_loader_node,
             # prep_resize_node,
             playback_node,
             input_node,
-            resize_node,
+            rectify_node,
             output_node,
             monitor_node            
-        ],
+        ]
+    else:
+        composable_node_descriptions_option=[
+            data_loader_node,
+            # prep_resize_node,
+            playback_node,
+            input_node,
+            rectify_node,
+            output_node,            
+        ]
+
+    composable_node_container = ComposableNodeContainer(
+        name='container',
+        namespace=TestRectifyNode.generate_namespace(),
+        package='rclcpp_components',
+        executable='component_container_mt',
+        prefix=container_prefix,
+        sigterm_timeout=container_sigterm_timeout,
+        composable_node_descriptions=composable_node_descriptions_option,
         output='screen'
     )
 
     return [composable_node_container]
 
 
-class TestResizeNode(ROS2BenchmarkTest):
+class TestRectifyNode(ROS2BenchmarkTest):
     """Performance test for image_proc RectifyNode."""
 
     # Custom configurations
@@ -180,5 +183,5 @@ class TestResizeNode(ROS2BenchmarkTest):
 
 
 def generate_test_description():
-    return TestResizeNode.generate_test_description_with_nsys(launch_setup)
+    return TestRectifyNode.generate_test_description_with_nsys(launch_setup)
 
