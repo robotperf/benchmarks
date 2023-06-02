@@ -166,6 +166,46 @@ DECLARE_TRACEPOINT(
   size_t image_output_image_msg_size,
   size_t image_output_info_msg_size)
 
+/// `robotperf_pointcloud_output_cb_init`
+/**
+ * Tracepoint while initiating the callback of robotperf::perception::PointCloudOutputComponent component
+ *
+ * Notes the `tracetools_benchmark` version automatically.
+ *
+ * \param[in] pointcloud_output_node rclcpp::node::Node subject to the callback
+ * \param[in] pointcloud_output_pointcloud_msg pointcloud ROS message stored as sensor_msgs::msg::PointCloud2::ConstSharedPtr
+ * \param[in] image_input_header_nsec_arg nanosec field of the header (std_msgs/Header) of sensor_msgs::msg::PointCloud2's ROS message 
+ * \param[in] image_input_header_sec_arg sec field of the header (std_msgs/Header) of sensor_msgs::msg::PointCloud2's ROS message 
+ * \param[in] pointcloud_output_msg_size size of pointcloud ROS message stored as bytes
+ */
+DECLARE_TRACEPOINT(
+  robotperf_pointcloud_output_cb_init,
+  const void * pointcloud_output_node,
+  const void * pointcloud_output_pointcloud_msg,
+  uint32_t image_input_header_nsec_arg,
+  uint32_t image_input_header_sec_arg,
+  size_t pointcloud_output_msg_size)
+
+/// `robotperf_pointcloud_output_cb_init`
+/**
+ * Tracepoint while finishing the callback of robotperf::perception::PointCloudOutputComponent component
+ *
+ * Notes the `tracetools_benchmark` version automatically.
+ *
+ * \param[in] pointcloud_output_node rclcpp::node::Node subject to the callback
+ * \param[in] pointcloud_output_pointcloud_msg pointcloud ROS message stored as sensor_msgs::msg::PointCloud2::ConstSharedPtr
+ * \param[in] image_input_header_nsec_arg nanosec field of the header (std_msgs/Header) of sensor_msgs::msg::PointCloud2's ROS message 
+ * \param[in] image_input_header_sec_arg sec field of the header (std_msgs/Header) of sensor_msgs::msg::PointCloud2's ROS message 
+ * \param[in] pointcloud_output_msg_size size of pointcloud ROS message stored as bytes
+ */
+DECLARE_TRACEPOINT(
+  robotperf_pointcloud_output_cb_fini,
+  const void * pointcloud_output_node,
+  const void * pointcloud_output_pointcloud_msg,
+  uint32_t image_input_header_nsec_arg,
+  uint32_t image_input_header_sec_arg,
+  size_t pointcloud_output_msg_size)
+
 #ifdef __cplusplus
 }
 #endif
