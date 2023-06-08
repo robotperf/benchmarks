@@ -264,9 +264,17 @@ class BenchmarkAnalyzer:
         """
         Returns ROS message header timestamp as unique identifier
         from a CTF msg
-        """        
-        id_nanosecs = msg.event.payload_field["image_input_header_nsec"]
-        id_sec = msg.event.payload_field["image_input_header_sec"]
+        """    
+        payload_fields = msg.event.payload_field
+        for field_name, field_value in payload_fields.items():
+            if "header_nsec" in field_name:
+                id_nanosecs = msg.event.payload_field[field_name]
+            elif "header_sec" in field_name:    
+                id_sec = msg.event.payload_field[field_name]
+            
+                                
+        # id_nanosecs = msg.event.payload_field["image_input_header_nsec"]
+        # id_sec = msg.event.payload_field["image_input_header_sec"]
 
         id = id_sec + id_nanosecs/1e9
         return id
@@ -1147,6 +1155,85 @@ class BenchmarkAnalyzer:
         # show(fig)  # show in browser    
         export_png(fig, filename="/tmp/analysis/plot_trace.png")
 
+    def barchart_data_power(self, image_pipeline_msg_sets):
+        """
+        Converts a tracing message list into its corresponding 
+        power list in watss.
+
+        Args:
+            image_pipeline_msg_sets ([type]): [description]
+
+        Returns:
+            list: list of throughput in bytes/s
+        """
+        image_pipeline_msg_sets_ns = []
+        image_pipeline_msg_sets_watts = []
+        image_pipeline_msg_sets_joules = []
+        image_pipeline_msg_sets_seconds = []
+        total_watts = 0
+        total_joules = 0
+        total_seconds = 0
+        
+        # if multidimensional:
+        if type(image_pipeline_msg_sets[0]) == list:
+            for set_index in range(len(image_pipeline_msg_sets)):
+                target_chain_watts = []
+                # target_chain_joules = []
+                # target_chain_seconds = []
+                
+                for msg_index in range(len(image_pipeline_msg_sets[set_index])):
+                    payload_fields = image_pipeline_msg_sets[set_index][msg_index].event.payload_field
+                    for field_name, field_value in payload_fields.items():
+                        if "msg_power" in field_name:
+                            watts = image_pipeline_msg_sets[set_index][msg_index].event.payload_field[field_name]
+                        # elif "msg_energy" in field_name:    
+                        #     joules = image_pipeline_msg_sets[set_index][msg_index].event.payload_field[field_name]
+                        # elif "msg_time" in field_name:  
+                        #     seconds = image_pipeline_msg_sets[set_index][msg_index].event.payload_field[field_name]
+                    target_chain_watts.append(watts)
+                    # target_chain_joules.append(joules)
+                    # target_chain_seconds.append(seconds)
+                
+                image_pipeline_msg_sets_watts.append(target_chain_watts)
+                # image_pipeline_msg_sets_joules.append(target_chain_joules)
+                # image_pipeline_msg_sets_seconds.append(target_chain_seconds)
+                total_watts = image_pipeline_msg_sets_watts[-1][0]
+                # total_joules = image_pipeline_msg_sets_joules[-1][0]
+                # total_seconds = image_pipeline_msg_sets_seconds[-1][0]
+
+        else:  # not multidimensional
+            target_chain_watts = []
+            # target_chain_joules = []
+            # target_chain_seconds = []
+            
+            for msg_index in range(len(image_pipeline_msg_sets)):
+                payload_fields = image_pipeline_msg_sets[msg_index].event.payload_field
+                for field_name, field_value in payload_fields.items():
+                    if "msg_power" in field_name:
+                        watts = image_pipeline_msg_sets[msg_index].event.payload_field[field_name]
+                    # elif "msg_energy" in field_name:    
+                    #     joules = image_pipeline_msg_sets[msg_index].event.payload_field[field_name]
+                    # elif "msg_time" in field_name:  
+                    #     seconds = image_pipeline_msg_sets[msg_index].event.payload_field[field_name]
+                target_chain_watts.append(watts)
+                # target_chain_joules.append(joules)
+                # target_chain_seconds.append(seconds)
+            
+            image_pipeline_msg_sets_watts.append(target_chain_watts)
+            # image_pipeline_msg_sets_joules.append(target_chain_joules)
+            # image_pipeline_msg_sets_seconds.append(target_chain_seconds) 
+            total_watts = image_pipeline_msg_sets_watts[-1]
+            # total_joules = image_pipeline_msg_sets_joules[-1]
+            # total_seconds = image_pipeline_msg_sets_seconds[-1]      
+
+        # print(image_pipeline_msg_sets_watts)   
+        # print(image_pipeline_msg_sets_joules)  
+        # print(image_pipeline_msg_sets_seconds)  
+        # print(total_watts)
+        # print(total_joules)
+        # print(total_seconds)
+        return total_watts
+    
     def barchart_data_throughput(self, image_pipeline_msg_sets, option):
         """
         Converts a tracing message list into its corresponding 
@@ -1615,7 +1702,7 @@ class BenchmarkAnalyzer:
         ]
 
 
-    def print_markdown_table(self, list_sets, list_sets_names, from_baseline=True, units='ms'):
+    def print_markdown_table(self, list_sets, list_sets_names, from_baseline=True, units='ms', add_power=False, power_consumption = None):
         """
         Creates a markdown table from a list of sets
 
@@ -1632,44 +1719,84 @@ class BenchmarkAnalyzer:
         for sets in list_sets:
             list_statistics.append(self.statistics(sets))
 
-        # Add name to each statistics list
-        for stat_list_index in range(len(list_statistics)):
-            list_statistics[stat_list_index].insert(0, list_sets_names[stat_list_index])
+        if not add_power:
+            # Add name to each statistics list
+            for stat_list_index in range(len(list_statistics)):
+                list_statistics[stat_list_index].insert(0, list_sets_names[stat_list_index])
 
-        # add headers
-        list_statistics.insert(
-            0,
-            [
-                "---",
-                "---",
-                "---",
-                "---",
-                "---",
-                "---",
-                "---",
-                "---",
-                #"---",
-                #"---",
-                "---",
-            ],
-        )
-        list_statistics.insert(
-            0,
-            [
-                " ",
-                "Benchmark Mean",
-                "Benchmark RMS",
-                "Benchmark Max ",
-                "Benchmark Min",
-                #"Benchmark Median",
-                "Mean",
-                "RMS",
-                "Max",
-                "Min",
-                #"Median",
-            ],
-        )
+            # add headers
+            list_statistics.insert(
+                0,
+                [
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    #"---",
+                    #"---",
+                    "---",
+                ],
+            )
+            list_statistics.insert(
+                0,
+                [
+                    " ",
+                    "Benchmark Mean",
+                    "Benchmark RMS",
+                    "Benchmark Max ",
+                    "Benchmark Min",
+                    #"Benchmark Median",
+                    "Mean",
+                    "RMS",
+                    "Max",
+                    "Min",
+                    #"Median",
+                ],
+            )
+        else:
+            # Add name to each statistics list
+            for stat_list_index in range(len(list_statistics)):
+                list_statistics[stat_list_index].insert(0, list_sets_names[stat_list_index], power_consumption)
 
+            # add headers
+            list_statistics.insert(
+                0,
+                [
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    #"---",
+                    #"---",
+                    "---",
+                    "---",
+                ],
+            )
+            list_statistics.insert(
+                0,
+                [
+                    " ",
+                    "Benchmark Mean",
+                    "Benchmark RMS",
+                    "Benchmark Max ",
+                    "Benchmark Min",
+                    #"Benchmark Median",
+                    "Mean",
+                    "RMS",
+                    "Max",
+                    "Min",
+                    #"Median",
+                    "Power (W)",
+                ],
+            )
         baseline = list_statistics[2]  # baseline for %
 
         # add missing messages at the end
@@ -1757,7 +1884,7 @@ class BenchmarkAnalyzer:
             # count += 1
             # print(row)
 
-    def print_markdown_table_1d(self, list_sets, list_sets_names, from_baseline=True, units='ms'):
+    def print_markdown_table_1d(self, list_sets, list_sets_names, from_baseline=True, units='ms', add_power=False, power_consumption=None):
         """
         Creates a markdown table from a list of sets
 
@@ -1774,43 +1901,84 @@ class BenchmarkAnalyzer:
         for sets in list_sets:
             list_statistics.append(self.statistics_1d(sets))
 
-        # Add name to each statistics list
-        for stat_list_index in range(len(list_statistics)):
-            list_statistics[stat_list_index].insert(0, list_sets_names[stat_list_index])
+        if not add_power:
+            # Add name to each statistics list
+            for stat_list_index in range(len(list_statistics)):
+                list_statistics[stat_list_index].insert(0, list_sets_names[stat_list_index])
 
-        # add headers
-        list_statistics.insert(
-            0,
-            [
-                "---",
-                "---",
-                "---",
-                "---",
-                "---",
-                #"---",
-                #"---",
-                "---",
-                "---",
-                "---",
-                "---",
-            ],
-        )
-        list_statistics.insert(
-            0,
-            [
-                " ",
-                "Benchmark Mean",
-                "Benchmark RMS",
-                "Benchmark Max ",
-                "Benchmark Min",
-                #"Benchmark Median",
-                #" ",
-                " ",
-                " ",
-                " ",
-                " ",
-            ],
-        )
+            # add headers
+            list_statistics.insert(
+                0,
+                [
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    #"---",
+                    #"---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                ],
+            )
+            list_statistics.insert(
+                0,
+                [
+                    " ",
+                    "Benchmark Mean",
+                    "Benchmark RMS",
+                    "Benchmark Max ",
+                    "Benchmark Min",
+                    #"Benchmark Median",
+                    #" ",
+                    " ",
+                    " ",
+                    " ",
+                    " ",
+                ],
+            )
+        else:
+            # Add name to each statistics list
+            for stat_list_index in range(len(list_statistics)):
+                list_statistics[stat_list_index].insert(0, list_sets_names[stat_list_index], power_consumption)
+
+            # add headers
+            list_statistics.insert(
+                0,
+                [
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    #"---",
+                    #"---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                ],
+            )
+            list_statistics.insert(
+                0,
+                [
+                    " ",
+                    "Benchmark Mean",
+                    "Benchmark RMS",
+                    "Benchmark Max ",
+                    "Benchmark Min",
+                    #"Benchmark Median",
+                    #" ",
+                    " ",
+                    " ",
+                    " ",
+                    " ",
+                    "Power (W)"
+                ],
+            )
 
         baseline = list_statistics[2]  # baseline for %
 
@@ -2108,7 +2276,7 @@ class BenchmarkAnalyzer:
         outs, err = run('cd /tmp/benchmarks && git log -1', shell=True)
         print(outs)
 
-    def analyze_latency(self, tracepath=None):
+    def analyze_latency(self, tracepath=None, add_power=False):
         """Analyze latency of the image pipeline
 
         Args:
@@ -2120,17 +2288,24 @@ class BenchmarkAnalyzer:
         self.index_to_plot = self.get_index_to_plot_latency()
         self.print_timing_pipeline()
         self.draw_tracepoints()
+        if add_power:
+            power_consumption = self.analyze_power(tracepath)
+        else:
+            power_consumption = None
+            
         self.print_markdown_table(
             [self.image_pipeline_msg_sets_barchart],
             ["RobotPerf benchmark"],
             from_baseline=False,
-            units='ms'
+            units='ms',
+            add_power=add_power,
+            power_consumption=power_consumption
         )
         self.plot_latency_results()
         # self.upload_results()  # performed in CI/CD pipelines instead
 
 
-    def analyze_throughput(self, tracepath=None):
+    def analyze_throughput(self, tracepath=None, add_power=False):
         """Analyze throughput of the image pipeline
 
         Args:
@@ -2140,18 +2315,27 @@ class BenchmarkAnalyzer:
         self.get_target_chain_traces(tracepath)        
         barcharts_through_megabys, barcharts_through_fps = self.barchart_data_throughput(self.image_pipeline_msg_sets, 'potential')
         
+        if add_power:
+            power_consumption = self.analyze_power(tracepath)
+        else:
+            power_consumption = None
+
         self.print_markdown_table_1d(
             [barcharts_through_megabys],
             ["RobotPerf potential throughput"],
             from_baseline=False,
-            units='MB/s'
+            units='MB/s',
+            add_power=add_power,
+            power_consumption=power_consumption
         )
 
         self.print_markdown_table_1d(
             [barcharts_through_fps],
             ["RobotPerf potential throughput"],
             from_baseline=False,
-            units='fps'
+            units='fps',
+            add_power=add_power,
+            power_consumption=power_consumption
         )
         
         barcharts_through_megabys, barcharts_through_fps = self.barchart_data_throughput(self.image_pipeline_msg_sets, 'real')
@@ -2160,7 +2344,9 @@ class BenchmarkAnalyzer:
             [barcharts_through_megabys],
             ["RobotPerf real throughput"],
             from_baseline=False,
-            units='MB/s'
+            units='MB/s',
+            add_power=add_power,
+            power_consumption=power_consumption
         )
 
 
@@ -2168,7 +2354,26 @@ class BenchmarkAnalyzer:
             [barcharts_through_fps],
             ["RobotPerf real throughput"],
             from_baseline=False,
-            units='fps'
+            units='fps',
+            add_power=add_power,
+            power_consumption=power_consumption
         )
 
+    def analyze_power(self, tracepath=None):
+        """Analyze power of the image pipeline
+
+        Args:
+            tracepath (string, optional):
+                Path of the CTF tracefiles. Defaults to None.
+        """
+        self.get_target_chain_traces(tracepath)        
+        total_watts = self.barchart_data_power(self.image_pipeline_msg_sets)
+        
+        print("Total power consumption")
+        print(total_watts)
+        return total_watts
+
     
+
+    
+

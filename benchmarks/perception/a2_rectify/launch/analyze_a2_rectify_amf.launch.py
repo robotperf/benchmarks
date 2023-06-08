@@ -225,6 +225,17 @@ def main(argv):
         #         "marker": "diamond",
         #     }
         # )
+        ba.add_target(
+            {
+                "name": "robotperf_benchmarks:robotcore_power_output_cb_fini",
+                "name_disambiguous": "robotperf_benchmarks:robotcore_power_output_cb_fini",
+                "colors_fg": "blue",
+                "colors_fg_bokeh": "silver",
+                "layer": "userland",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+        )
     else:
         print('The hardware device type ' + hardware_device_type + ' is not yet implemented\n')
 
@@ -236,6 +247,22 @@ def main(argv):
         else:
             print('The metric ' + metric + ' is not yet implemented\n')
         
+    num_metrics = 0 # initialize the metric count
+    for metric in metrics:
+        if metric == 'power':
+            add_power = True
+        else:
+            num_metrics += 1 # it will be larger than 0 if other metrics besides power are desired
+            
+    for metric in metrics:
+        if metric == 'latency':
+            ba.analyze_latency(trace_path, add_power)
+        elif metric == 'throughput':
+            ba.analyze_throughput(trace_path, add_power)
+        elif metric == 'power' and num_metrics == 0: # launch independently iff no other metric is requested
+            ba.analyze_power(trace_path)
+        else:
+            print('The metric ' + metric + ' is not yet implemented\n')
     
   
 def generate_launch_description():
