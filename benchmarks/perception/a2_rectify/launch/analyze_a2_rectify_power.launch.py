@@ -287,7 +287,7 @@ def generate_launch_description():
     # Define the ExecuteProcess action to run the Python script
     analyzer = ExecuteProcess(
         cmd=[
-            'python3', "src/benchmarks/benchmarks/perception/a2_rectify/launch/analyze_a2_rectify_amf.launch.py",
+            'python3', "src/benchmarks/benchmarks/perception/a2_rectify/launch/analyze_a2_rectify_power.launch.py",
             '--hardware_device_type', LaunchConfiguration('hardware_device_type'),
             '--trace_path', LaunchConfiguration('trace_path'),
             '--metrics', LaunchConfiguration('metrics')],
