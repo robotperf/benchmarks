@@ -1393,6 +1393,7 @@ class BenchmarkAnalyzer:
                         # elif "msg_time" in field_name:  
                         #     seconds = image_pipeline_msg_sets[set_index][msg_index].event.payload_field[field_name]
                     power_chain_watts.append(watts)
+                    print(watts)
                     # power_chain_joules.append(joules)
                     # power_chain_seconds.append(seconds)
                 

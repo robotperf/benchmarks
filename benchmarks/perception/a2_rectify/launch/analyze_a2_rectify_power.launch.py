@@ -256,7 +256,7 @@ def main(argv):
         elif metric == 'power': 
             if num_metrics == 0: # launch independently iff no other metric is requested
                 total_consumption = ba.analyze_power(trace_path)
-                print("The total consumption is {} W".format(total_consumption))
+                print("The average consumption is {} W".format(total_consumption))
         else:
             print('The metric ' + metric + ' is not yet implemented\n')
     
