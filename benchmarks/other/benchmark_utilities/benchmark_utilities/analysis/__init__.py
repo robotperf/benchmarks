@@ -2009,7 +2009,7 @@ class BenchmarkAnalyzer:
             list_statistics[2].append("{:.2f} %".format((self.lost_msgs/len(self.image_pipeline_msg_sets))*100))
 
             if add_power:
-                list_statistics[0].append("Power (W)")
+                list_statistics[0].append("Average Power (W)")
                 list_statistics[1].append("---")
                 list_statistics[2].append(str(power_consumption))
         
@@ -2195,7 +2195,7 @@ class BenchmarkAnalyzer:
             list_statistics[2].append("{:.2f} %".format((self.lost_msgs/len(self.image_pipeline_msg_sets))*100))
 
             if add_power:
-                list_statistics[0].append("Power (W)")
+                list_statistics[0].append("Average Power (W)")
                 list_statistics[1].append("---")
                 list_statistics[2].append(str(power_consumption))
 
