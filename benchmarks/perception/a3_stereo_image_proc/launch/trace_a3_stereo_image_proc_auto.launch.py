@@ -5,7 +5,7 @@
 #    @@@@@ @@  @@    @@@@
 #    @@@@@ @@  @@    @@@@ Copyright (c) 2023, Acceleration Robotics®
 #    @@@@@ @@  @@    @@@@ Author: Alejandra Martínez Fariña <alex@accelerationrobotics.com>
-#    @@@@@ @@  @@    @@@@ 
+#    @@@@@ @@  @@    @@@@ Author: Víctor Mayoral Vilches <victor@accelerationrobotics.com>
 #    @@@@@ @@  @@    @@@@ 
 #    @@@@@@@@@&@@@@@@@@@@
 #    @@@@@@@@@@@@@@@@@@@@
@@ -31,9 +31,9 @@ from ros2_benchmark import ROS2BenchmarkConfig, ROS2BenchmarkTest
 
 IMAGE_RESOLUTION = ImageResolution.HD 
 ROSBAG_PATH = '/home/amf/benchmark_ws/src/rosbags/perception/image3' # NOTE: hardcoded, modify accordingly
-SESSION_NAME = 'a3_stereo_image_proc_auto_wmon'
+SESSION_NAME = 'a3_stereo_image_proc_auto'
 OPTION = 'with_monitor_node'
-
+POWER = "off" # by default "off"
 
 def launch_setup(container_prefix, container_sigterm_timeout):
     """Generate launch description for benchmarking stereo_image_proc DisparityNode."""
@@ -133,6 +133,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         plugin='ros2_benchmark::MonitorNode',
         parameters=[{
             'monitor_data_format': 'stereo_msgs/msg/DisparityImage',
+            'monitor_power_data_format': 'power_msgs/msg/Power',
         }],
         remappings=[
             ('output', '/robotperf/benchmark/disparity')],
@@ -169,7 +170,31 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         output='screen'
     )
 
-    return [composable_node_container]
+    if POWER == "on":
+        power_container = ComposableNodeContainer(
+            name="power_container",
+            namespace="robotcore/power",
+            package="rclcpp_components",
+            executable="component_container",
+            composable_node_descriptions=[
+                ComposableNode(
+                    package="robotcore-power",
+                    namespace="robotcore/power",
+                    plugin="robotcore::power::PowerComponent",
+                    name="power_component",
+                    parameters=[
+                        {"publish_rate": 20.0},
+                        {"hardware_device_type": "rapl"}
+                    ],
+                ),
+                
+            ],
+            output="screen",
+        )
+        return [composable_node_container, power_container]
+    else:
+        return [composable_node_container]
+
 
 class TestDisparityNode(ROS2BenchmarkTest):
     """Performance test for stereo_image_proc DisparityNode."""
@@ -185,7 +210,8 @@ class TestDisparityNode(ROS2BenchmarkTest):
         playback_message_buffer_size=50,
         custom_report_info={'data_resolution': IMAGE_RESOLUTION},
         option = OPTION,
-        session_name = SESSION_NAME
+        session_name = SESSION_NAME,
+        add_power = POWER
     )
     
     def test_benchmark(self):
@@ -196,22 +222,24 @@ class TestDisparityNode(ROS2BenchmarkTest):
             with open(json_file_path, 'r') as f:
                 data = json.load(f)
             # Extract the desired fields
-            
             mean_latency = data.get("BasicPerformanceMetrics.MEAN_LATENCY")
             max_latency = data.get("BasicPerformanceMetrics.MAX_LATENCY")
             min_latency = data.get("BasicPerformanceMetrics.MIN_LATENCY")
             rms_latency = data.get("BasicPerformanceMetrics.RMS_LATENCY")
             frames_sent = int(data.get("BasicPerformanceMetrics.NUM_FRAMES_SENT"))
-            frames_missed = int(data.get("BasicPerformanceMetrics.NUM_MISSED_FRAMES"))               
-
-            str_out =  "|     | Benchmark Mean | Benchmark RMS | Benchmark Max  | Benchmark Min | Lost Messages |\n"
-            str_out += "| --- | -------------- | ------------- | -------------- | ------------- | --------------|\n"
-            str_out += "| ros2_benchmark | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | {:.2f} % |\n".format(
-                mean_latency, rms_latency, max_latency, min_latency, (frames_missed/frames_sent)*100)
+            frames_missed = int(data.get("BasicPerformanceMetrics.NUM_MISSED_FRAMES"))  
+            if self.config.add_power == "on":
+                average_power = data.get("BasicPerformanceMetrics.AVERAGE_POWER")   
+                str_out =  "|     | Benchmark Mean | Benchmark RMS | Benchmark Max  | Benchmark Min | Lost Messages | Average Power |\n"
+                str_out += "| --- | -------------- | ------------- | -------------- | ------------- | --------------| ------------------|\n"
+                str_out += "| ros2_benchmark | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | {:.2f} % | **{:.2f}** W |\n".format(
+                mean_latency, rms_latency, max_latency, min_latency, (frames_missed/frames_sent)*100, average_power)         
+            else:
+                str_out =  "|     | Benchmark Mean | Benchmark RMS | Benchmark Max  | Benchmark Min | Lost Messages |\n"
+                str_out += "| --- | -------------- | ------------- | -------------- | ------------- | --------------|\n"
+                str_out += "| ros2_benchmark | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | {:.2f} % |\n".format(
+                    mean_latency, rms_latency, max_latency, min_latency, (frames_missed/frames_sent)*100)
             print(str_out)
-        
-    
-
-
+     
 def generate_test_description():
     return TestDisparityNode.generate_test_description_with_nsys(launch_setup)

@@ -4,9 +4,9 @@
 #    @@@@@ @@  @@    @@@@
 #    @@@@@ @@  @@    @@@@
 #    @@@@@ @@  @@    @@@@ Copyright (c) 2023, Acceleration Robotics®
-#    @@@@@ @@  @@    @@@@ Author: Alejandra Martínez Fariña <alex@accelerationrobotics.com>
+#    @@@@@ @@  @@    @@@@ Author: Martiño Crespo <martinho@accelerationrobotics.com>
 #    @@@@@ @@  @@    @@@@ Author: Víctor Mayoral Vilches <victor@accelerationrobotics.com>
-#    @@@@@ @@  @@    @@@@ 
+#    @@@@@ @@  @@    @@@@ Alejandra Martínez Fariña <alex@accelerationrobotics.com>
 #    @@@@@@@@@&@@@@@@@@@@
 #    @@@@@@@@@@@@@@@@@@@@
 #
@@ -34,7 +34,6 @@ import argparse
 import json
 
 def main(argv):
-    
     # Parse the command-line arguments
     parser = argparse.ArgumentParser()
     parser.add_argument('--hardware_device_type', type=str, help='Hardware Device Type (e.g. cpu or fpga)', default ='cpu')
@@ -50,27 +49,32 @@ def main(argv):
     metrics = json.loads(json.dumps(metrics_elements))
  
     # Instantiate the class
-    ba = BenchmarkAnalyzer('a2_rectify', hardware_device_type)
+    ba = BenchmarkAnalyzer('a4_depth_image_proc', hardware_device_type)
 
     if hardware_device_type == 'cpu':
         target_chain = [
-        # "ros2:callback_start",
-        "robotperf_benchmarks:robotperf_image_input_cb_init",
-        "robotperf_benchmarks:robotperf_image_input_cb_fini",
-        # "ros2:callback_end",
-        # "ros2:callback_start",
-        "ros2_image_pipeline:image_proc_rectify_cb_init",
-        "ros2_image_pipeline:image_proc_rectify_init",
-        "ros2_image_pipeline:image_proc_rectify_fini",
-        "ros2_image_pipeline:image_proc_rectify_cb_fini",
-        # "ros2:callback_end",
-        # "ros2:callback_start",
-        "robotperf_benchmarks:robotperf_image_output_cb_init",
-        "robotperf_benchmarks:robotperf_image_output_cb_fini",
-        # "ros2:callback_end",
+            # "ros2:callback_start",
+            'robotperf_benchmarks:robotperf_image_input_cb_init',
+            'robotperf_benchmarks:robotperf_image_input_cb_fini',
+            # 'ros2:callback_end',
+            # 'ros2:callback_start',
+            'robotperf_benchmarks:robotperf_image_input_cb_init',
+            'robotperf_benchmarks:robotperf_image_input_cb_fini',
+            # 'ros2:callback_end',
+            # "ros2:callback_start",
+            'ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_cb_init',
+            'ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_init',
+            'ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_fini',
+            'ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_cb_fini',
+            # "ros2:callback_end",
+            # "ros2:callback_start",
+            'robotperf_benchmarks:robotperf_pointcloud_output_cb_init',
+            'robotperf_benchmarks:robotperf_pointcloud_output_cb_fini',
+            # "ros2:callback_end",
         ]
 
-        # # add parameters for analyzing the traces
+        # add parameters for analyzing the traces
+
         # ba.add_target(
         #     {
         #         "name": "ros2:callback_start",
@@ -115,12 +119,13 @@ def main(argv):
         #         "marker": "diamond",
         #     }
         # )
+
         # ba.add_target(
         #     {
         #         "name": "ros2:callback_start",
-        #         "name_disambiguous": "ros2:callback_start (2)",
+        #         "name_disambiguous": "ros2:callback_start",
         #         "colors_fg": "blue",
-        #         "colors_fg_bokeh": "lightsalmon",
+        #         "colors_fg_bokeh": "lightgray",
         #         "layer": "rclcpp",
         #         "label_layer": 3,
         #         "marker": "diamond",
@@ -128,10 +133,10 @@ def main(argv):
         # )
         ba.add_target(
             {
-                "name": "ros2_image_pipeline:image_proc_rectify_cb_init",
-                "name_disambiguous": "ros2_image_pipeline:image_proc_rectify_cb_init",
-                "colors_fg": "yellow",
-                "colors_fg_bokeh": "salmon",
+                "name": "robotperf_benchmarks:robotperf_image_input_cb_init",
+                "name_disambiguous": "robotperf_benchmarks:robotperf_image_input_cb_init (2)",
+                "colors_fg": "blue",
+                "colors_fg_bokeh": "silver",
                 "layer": "userland",
                 "label_layer": 4,
                 "marker": "plus",
@@ -139,43 +144,21 @@ def main(argv):
         )
         ba.add_target(
             {
-                "name": "ros2_image_pipeline:image_proc_rectify_init",
-                "name_disambiguous": "ros2_image_pipeline:image_proc_rectify_init",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "darksalmon",
-                "layer": "userland",
-                "label_layer": 4,
-                "marker": "plus",
-            }
-        )
-        ba.add_target(
-            {
-                "name": "ros2_image_pipeline:image_proc_rectify_fini",
-                "name_disambiguous": "ros2_image_pipeline:image_proc_rectify_fini",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "lightcoral",
-                "layer": "userland",
-                "label_layer": 4,
-                "marker": "plus",
-            }
-        )
-        ba.add_target(
-            {
-                "name": "ros2_image_pipeline:image_proc_rectify_cb_fini",
-                "name_disambiguous": "ros2_image_pipeline:image_proc_rectify_cb_fini",
-                "colors_fg": "yellow",
-                "colors_fg_bokeh": "darkred",
-                "layer": "userland",
-                "label_layer": 4,
+                "name": "robotperf_benchmarks:robotperf_image_input_cb_fini",
+                "name_disambiguous": "robotperf_benchmarks:robotperf_image_input_cb_fini (2)",
+                "colors_fg": "blue",
+                "colors_fg_bokeh": "darkgray",
+                "layer": "benchmark",
+                "label_layer": 5,
                 "marker": "plus",
             }
         )
         # ba.add_target(
         #     {
         #         "name": "ros2:callback_end",
-        #         "name_disambiguous": "ros2:callback_end (2)",
+        #         "name_disambiguous": "ros2:callback_end",
         #         "colors_fg": "blue",
-        #         "colors_fg_bokeh": "red",
+        #         "colors_fg_bokeh": "gray",
         #         "layer": "rclcpp",
         #         "label_layer": 3,
         #         "marker": "diamond",
@@ -194,8 +177,74 @@ def main(argv):
         # )
         ba.add_target(
             {
-                "name": "robotperf_benchmarks:robotperf_image_output_cb_init",
-                "name_disambiguous": "robotperf_benchmarks:robotperf_image_output_cb_init",
+                "name": "ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_cb_init",
+                "name_disambiguous": "ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_cb_init",
+                "colors_fg": "yellow",
+                "colors_fg_bokeh": "salmon",
+                "layer": "userland",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+        )
+        ba.add_target(
+            {
+                "name": "ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_init",
+                "name_disambiguous": "ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_init",
+                "colors_fg": "red",
+                "colors_fg_bokeh": "darksalmon",
+                "layer": "userland",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+        )
+        ba.add_target(
+            {
+                "name": "ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_fini",
+                "name_disambiguous": "ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_fini",
+                "colors_fg": "red",
+                "colors_fg_bokeh": "lightcoral",
+                "layer": "userland",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+        )
+        ba.add_target(
+            {
+                "name": "ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_cb_fini",
+                "name_disambiguous": "ros2_image_pipeline:depth_image_proc_transform_to_pointcloud_cb_fini",
+                "colors_fg": "yellow",
+                "colors_fg_bokeh": "darkred",
+                "layer": "userland",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+        )
+        # ba.add_target(
+        #     {
+        #         "name": "ros2:callback_end",
+        #         "name_disambiguous": "ros2:callback_end",
+        #         "colors_fg": "blue",
+        #         "colors_fg_bokeh": "gray",
+        #         "layer": "rclcpp",
+        #         "label_layer": 3,
+        #         "marker": "diamond",
+        #     }
+        # )
+        # ba.add_target(
+        #     {
+        #         "name": "ros2:callback_start",
+        #         "name_disambiguous": "ros2:callback_start (3)",
+        #         "colors_fg": "blue",
+        #         "colors_fg_bokeh": "chartreuse",
+        #         "layer": "rclcpp",
+        #         "label_layer": 3,
+        #         "marker": "diamond",
+        #     }
+        # )
+        ba.add_target(
+            {
+                "name": "robotperf_benchmarks:robotperf_pointcloud_output_cb_init",
+                "name_disambiguous": "robotperf_benchmarks:robotperf_pointcloud_output_cb_init",
                 "colors_fg": "blue",
                 "colors_fg_bokeh": "chocolate",
                 "layer": "benchmark",
@@ -205,8 +254,8 @@ def main(argv):
         )
         ba.add_target(
             {
-                "name": "robotperf_benchmarks:robotperf_image_output_cb_fini",
-                "name_disambiguous": "robotperf_benchmarks:robotperf_image_output_cb_fini",
+                "name": "robotperf_benchmarks:robotperf_pointcloud_output_cb_fini",
+                "name_disambiguous": "robotperf_benchmarks:robotperf_pointcloud_output_cb_fini",
                 "colors_fg": "blue",
                 "colors_fg_bokeh": "coral",
                 "layer": "userland",
@@ -225,7 +274,6 @@ def main(argv):
         #         "marker": "diamond",
         #     }
         # )
-        
     else:
         print('The hardware device type ' + hardware_device_type + ' is not yet implemented\n')
 
@@ -261,6 +309,7 @@ def main(argv):
             print('The metric ' + metric + ' is not yet implemented\n')
     
   
+  
 def generate_launch_description():
     # Declare the launch arguments
     hardware_device_type_arg = DeclareLaunchArgument(
@@ -287,7 +336,7 @@ def generate_launch_description():
     # Define the ExecuteProcess action to run the Python script
     analyzer = ExecuteProcess(
         cmd=[
-            'python3', "src/benchmarks/benchmarks/perception/a2_rectify/launch/analyze_a2_rectify_power.launch.py",
+            'python3', "src/benchmarks/benchmarks/perception/a4_depth_image_proc/launch/analyze_a4_depth_image_proc.launch.py",
             '--hardware_device_type', LaunchConfiguration('hardware_device_type'),
             '--trace_path', LaunchConfiguration('trace_path'),
             '--metrics', LaunchConfiguration('metrics')],

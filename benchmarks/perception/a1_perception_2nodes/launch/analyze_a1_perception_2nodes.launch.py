@@ -5,8 +5,8 @@
 #    @@@@@ @@  @@    @@@@
 #    @@@@@ @@  @@    @@@@ Copyright (c) 2023, Acceleration Robotics®
 #    @@@@@ @@  @@    @@@@ Author: Alejandra Martínez Fariña <alex@accelerationrobotics.com>
-#    @@@@@ @@  @@    @@@@ 
-#    @@@@@ @@  @@    @@@@ 
+#    @@@@@ @@  @@    @@@@ Author: Víctor Mayoral Vilches <victor@accelerationrobotics.com>
+#    @@@@@ @@  @@    @@@@ Author: Martiño Crespo <martinho@accelerationrobotics.com>
 #    @@@@@@@@@&@@@@@@@@@@
 #    @@@@@@@@@@@@@@@@@@@@
 #
@@ -40,7 +40,7 @@ def main(argv):
     parser.add_argument('--hardware_device_type', type=str, help='Hardware Device Type (e.g. cpu or fpga)', default ='cpu')
     parser.add_argument('--trace_path', type=str, help='Path to trace files (e.g. /tmp/analysis/trace)', default = '/tmp/analysis/trace')
     parser.add_argument('--metrics', type=str, help='List of metrics to be analyzed (e.g. latency and/or throughput)', default = ['latency'])
-    parser.add_argument('--integrated', type=bool, help='Integrated or separated version of the Resize and Rectify nodes (only for fpga now)', default=False) 
+    parser.add_argument('--integrated', type=str, help='Integrated or separated version of the Resize and Rectify nodes (only for fpga now)', default='false') 
     args = parser.parse_args(argv)
 
     # Get the values of the arguments
@@ -206,7 +206,7 @@ def main(argv):
         )
 
     elif hardware_device_type == "fpga":
-        if not integrated:
+        if integrated == 'false':
             target_chain = [
                 "ros2:callback_start",  # 0
                 "robotperf_benchmarks:robotperf_image_input_cb_init",  # 1
@@ -616,16 +616,38 @@ def main(argv):
     else:
         print('The hardware device type ' + hardware_device_type + ' is not yet implemented\n')
         
-
+    num_metrics = 0 # initialize the metric count
+    add_power = False # initialize the boolean
+    for metric in metrics:
+        if metric == 'power':
+            add_power = True
+            ba.add_power(
+            {
+                "name": "robotperf_benchmarks:robotcore_power_output_cb_fini",
+                "name_disambiguous": "robotperf_benchmarks:robotcore_power_output_cb_fini",
+                "colors_fg": "blue",
+                "colors_fg_bokeh": "silver",
+                "layer": "userland",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+            )
+        else:
+            num_metrics += 1 # it will be larger than 0 if other metrics besides power are desired
+    
     for metric in metrics:
         if metric == 'latency':
-            ba.analyze_latency(trace_path)
+            ba.analyze_latency(trace_path, add_power)
         elif metric == 'throughput':
-            ba.analyze_throughput(trace_path)
+            ba.analyze_throughput(trace_path, add_power)
+        elif metric == 'power': 
+            if num_metrics == 0: # launch independently iff no other metric is requested
+                total_consumption = ba.analyze_power(trace_path)
+                print("The average consumption is {} W".format(total_consumption))
         else:
             print('The metric ' + metric + ' is not yet implemented\n')
     
-  
+
 def generate_launch_description():
     # Declare the launch arguments
     hardware_device_type_arg = DeclareLaunchArgument(
@@ -648,7 +670,7 @@ def generate_launch_description():
     
     integrated_arg = DeclareLaunchArgument(
         'integrated',
-        default_value=False,
+        default_value="false",
         description='Integrated or separated version of the Resize and Rectify nodes (only for fpga now)'
     )
 
@@ -658,7 +680,7 @@ def generate_launch_description():
     # Define the ExecuteProcess action to run the Python script
     analyzer = ExecuteProcess(
         cmd=[
-            'python3', "src/benchmarks/benchmarks/perception/a1_perception_2nodes/launch/analyze_a1_perception_2nodes_amf.launch.py",
+            'python3', "src/benchmarks/benchmarks/perception/a1_perception_2nodes/launch/analyze_a1_perception_2nodes.launch.py",
             '--hardware_device_type', LaunchConfiguration('hardware_device_type'),
             '--trace_path', LaunchConfiguration('trace_path'),
             '--metrics', LaunchConfiguration('metrics'),

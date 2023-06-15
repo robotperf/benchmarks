@@ -4,9 +4,8 @@
 #    @@@@@ @@  @@    @@@@
 #    @@@@@ @@  @@    @@@@
 #    @@@@@ @@  @@    @@@@ Copyright (c) 2023, Acceleration Robotics®
-#    @@@@@ @@  @@    @@@@ Author: Martiño Crespo <martinho@accelerationrobotics.com>
 #    @@@@@ @@  @@    @@@@ Author: Víctor Mayoral Vilches <victor@accelerationrobotics.com>
-#    @@@@@ @@  @@    @@@@ 
+#    @@@@@ @@  @@    @@@@ Author: Alejandra Martínez Fariña <alex@accelerationrobotics.com>
 #    @@@@@@@@@&@@@@@@@@@@
 #    @@@@@@@@@@@@@@@@@@@@
 #
@@ -36,7 +35,7 @@ from tracetools_trace.tools.names import DEFAULT_CONTEXT
 def generate_launch_description():
      # Trace
     trace = Trace(
-        session_name="a4_depth_image_proc",
+        session_name="a3_stereo_image_proc",
         events_ust=[
             "robotperf_benchmarks:*",
             "ros2_image_pipeline:*",
@@ -48,6 +47,27 @@ def generate_launch_description():
                 'userspace': ['vpid', 'vtid', 'procname'],
         },
     )
+
+    power_container = ComposableNodeContainer(
+        name="power_container",
+        namespace="robotcore/power",
+        package="rclcpp_components",
+        executable="component_container",
+        composable_node_descriptions=[
+            ComposableNode(
+                package="robotcore-power",
+                namespace="robotcore/power",
+                plugin="robotcore::power::PowerComponent",
+                name="power_component",
+                parameters=[
+                    {"publish_rate": 20.0},
+                    {"hardware_device_type": "rapl"}
+                ],
+            ),
+            
+        ],
+        output="screen",
+    )
  
     perception_container = ComposableNodeContainer(
         name="perception_container",
@@ -55,85 +75,56 @@ def generate_launch_description():
         package="rclcpp_components",
         executable="component_container",
         composable_node_descriptions=[
-            # Rectify Image
-            ComposableNode(
-                package='image_proc',
-                plugin='image_proc::RectifyNode',
-                namespace='robotperf/preprocessing',
-                name='rectify_color_node',
-                remappings=[
-                    ('image', '/camera/image_raw'),
-                    ('camera_info', "/camera/camera_info"),
-                    ('image_rect', '/robotperf/preprocessing/rgb/image_rect_color')
-                ],
-                extra_arguments=[{'use_intra_process_comms': True}],
-            ),
-            # Rectify Depth Image
-            ComposableNode(
-                package='image_proc',
-                plugin='image_proc::RectifyNode',
-                namespace='robotperf/preprocessing',
-                name='rectify_depth_node',
-                remappings=[
-                    ('image', '/camera/depth/image_raw'),
-                    ('camera_info', "/camera/depth/camera_info"),
-                    ('image_rect', '/robotperf/preprocessing/depth_registered/image_rect')
-                ],
-                extra_arguments=[{'use_intra_process_comms': True}],
-            ), 
-            # Input Image Rectify Component
             ComposableNode(
                 package="a1_perception_2nodes",
                 plugin="robotperf::perception::ImageInputComponent",
                 name="image_input_component",
-                namespace='robotperf',
+                namespace="robotperf",
                 parameters=[
-                    {"input_topic_name":"/robotperf/input/rgb/image_rect_color"}
+                    {"input_topic_name":"/robotperf/input/left_input/left_image_raw"}
                 ],
                 remappings=[
-                    ("image", "/robotperf/preprocessing/rgb/image_rect_color"),
-                    ("camera_info", "/camera/camera_info"),
+                    ("image", "/left_camera/image_raw"),
+                    ("camera_info", "/left_camera/camera_info"),
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],
             ),
-            # Input Depth Image Rectify Component
             ComposableNode(
                 package="a1_perception_2nodes",
                 plugin="robotperf::perception::ImageInputComponent",
                 name="image_input_component",
-                namespace='robotperf',
+                namespace="robotperf",
                 parameters=[
-                    {"input_topic_name":"/robotperf/input/depth_registered/image_rect"}
+                    {"input_topic_name":"/robotperf/input/right_input/right_image_raw"}
                 ],
                 remappings=[
-                    ("image", "/robotperf/preprocessing/depth_registered/image_rect"),
-                    ("camera_info", "/camera/depth/camera_info"),
+                    ("image", "/right_camera/image_raw"),
+                    ("camera_info", "/right_camera/camera_info"),
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],
             ),
-
             ComposableNode(
                 namespace="robotperf/benchmark",
-                package="depth_image_proc",
-                plugin="depth_image_proc::PointCloudXyzrgbNode",
-                name="depth_image_to_pointcloud_node",
+                package="stereo_image_proc",
+                plugin="stereo_image_proc::DisparityNode",
+                name="stereo_image_proc_disparity_node",
                 remappings=[
-                    ('rgb/camera_info', '/robotperf/input/rgb/camera_info'),
-                    ('rgb/image_rect_color', '/robotperf/input/rgb/image_rect_color'),
-                    ('depth_registered/image_rect', '/robotperf/input/depth_registered/image_rect')
-                ],                  
+                    ('left/camera_info', '/robotperf/input/left_input/camera_info'),
+                    ('left/image_rect', '/robotperf/input/left_input/left_image_raw'),
+                    ('right/camera_info', '/robotperf/input/right_input/camera_info'),
+                    ('right/image_rect', '/robotperf/input/right_input/right_image_raw'),                    
+                ],
                 extra_arguments=[{'use_intra_process_comms': True}],
             ),
             ComposableNode(
-                package="a4_depth_image_proc",
-                plugin="robotperf::perception::PointCloudOutputComponent",
-                namespace='robotperf',
-                name="point_cloud_output_component",
+                package="a3_stereo_image_proc",
+                namespace="robotperf",
+                plugin="robotperf::perception::DisparityOutputComponent",
+                name="disparity_output_component",
                 parameters=[
-                    {"output_topic_name":"/robotperf/benchmark/points"}
+                    {"output_topic_name":"/robotperf/benchmark/disparity"}
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],
-                
             ),
         ],
         output="screen",
@@ -143,7 +134,6 @@ def generate_launch_description():
         # LTTng tracing
         trace,
         # image pipeline
-        perception_container
+        perception_container,
+        power_container
     ])
-
-

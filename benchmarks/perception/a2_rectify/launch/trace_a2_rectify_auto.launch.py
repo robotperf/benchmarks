@@ -6,7 +6,7 @@
 #    @@@@@ @@  @@    @@@@ Copyright (c) 2023, Acceleration Robotics®
 #    @@@@@ @@  @@    @@@@ Author: Alejandra Martínez Fariña <alex@accelerationrobotics.com>
 #    @@@@@ @@  @@    @@@@ Author: Martiño Crespo Álvarez <martinho@accelerationrobotics.com>
-#    @@@@@ @@  @@    @@@@ 
+#    @@@@@ @@  @@    @@@@ Author: Víctor Mayoral Vilches <victor@accelerationrobotics.com>
 #    @@@@@@@@@&@@@@@@@@@@
 #    @@@@@@@@@@@@@@@@@@@@
 #
@@ -142,28 +142,28 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         output='screen'
     )
 
-    power_container = ComposableNodeContainer(
-        name="power_container",
-        namespace="robotcore/power",
-        package="rclcpp_components",
-        executable="component_container",
-        composable_node_descriptions=[
-            ComposableNode(
-                package="robotcore-power",
-                namespace="robotcore/power",
-                plugin="robotcore::power::PowerComponent",
-                name="power_component",
-                parameters=[
-                    {"publish_rate": 20.0},
-                    {"hardware_device_type": "rapl"}
-                ],
-            ),
-            
-        ],
-        output="screen",
-    )
 
     if POWER == "on":
+        power_container = ComposableNodeContainer(
+            name="power_container",
+            namespace="robotcore/power",
+            package="rclcpp_components",
+            executable="component_container",
+            composable_node_descriptions=[
+                ComposableNode(
+                    package="robotcore-power",
+                    namespace="robotcore/power",
+                    plugin="robotcore::power::PowerComponent",
+                    name="power_component",
+                    parameters=[
+                        {"publish_rate": 20.0},
+                        {"hardware_device_type": "rapl"}
+                    ],
+                ),
+                
+            ],
+            output="screen",
+        )
         return [composable_node_container, power_container]
     else:
         return [composable_node_container]

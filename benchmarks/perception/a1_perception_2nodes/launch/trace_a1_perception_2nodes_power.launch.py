@@ -4,8 +4,8 @@
 #    @@@@@ @@  @@    @@@@
 #    @@@@@ @@  @@    @@@@
 #    @@@@@ @@  @@    @@@@ Copyright (c) 2023, Acceleration Robotics®
-#    @@@@@ @@  @@    @@@@ Author: Martiño Crespo <martinho@accelerationrobotics.com>
 #    @@@@@ @@  @@    @@@@ Author: Víctor Mayoral Vilches <victor@accelerationrobotics.com>
+#    @@@@@ @@  @@    @@@@ Author: Alejandra Martínez Fariña <alex@accelerationrobotics.com>
 #    @@@@@@@@@&@@@@@@@@@@
 #    @@@@@@@@@@@@@@@@@@@@
 #
@@ -35,7 +35,7 @@ from tracetools_trace.tools.names import DEFAULT_CONTEXT
 def generate_launch_description():
      # Trace
     trace = Trace(
-        session_name="a5_resize",
+        session_name="a1_perception_2nodes",
         events_ust=[
             "robotperf_benchmarks:*",
             "ros2_image_pipeline:*",
@@ -52,6 +52,28 @@ def generate_launch_description():
         # events_kernel=DEFAULT_EVENTS_KERNEL,
         # context_names=DEFAULT_CONTEXT,
     )
+
+    power_container = ComposableNodeContainer(
+        name="power_container",
+        namespace="robotcore/power",
+        package="rclcpp_components",
+        executable="component_container",
+        composable_node_descriptions=[
+            ComposableNode(
+                package="robotcore-power",
+                namespace="robotcore/power",
+                plugin="robotcore::power::PowerComponent",
+                name="power_component",
+                parameters=[
+                    {"publish_rate": 20.0},
+                    {"hardware_device_type": "rapl"}
+                ],
+            ),
+            
+        ],
+        output="screen",
+    )
+ 
  
     perception_container = ComposableNodeContainer(
         name="perception_container",
@@ -73,11 +95,23 @@ def generate_launch_description():
             ComposableNode(
                 namespace="robotperf/benchmark",
                 package="image_proc",
+                plugin="image_proc::RectifyNode",
+                name="rectify_node",
+                remappings=[
+                    ("image", "/robotperf/input"),
+                    ("camera_info", "/camera/camera_info"),
+                ],
+                extra_arguments=[{'use_intra_process_comms': True}],
+            ),
+
+            ComposableNode(
+                namespace="robotperf/benchmark",
+                package="image_proc",
                 plugin="image_proc::ResizeNode",
                 name="resize_node",
                 remappings=[
                     ("camera_info", "/camera/camera_info"),
-                    ("image", "/robotperf/input"),
+                    ("image", "/robotperf/benchmark/image_rect"),
                     ("resize", "/robotperf/benchmark/resize"),
                 ],
                 parameters=[
@@ -91,8 +125,8 @@ def generate_launch_description():
             ComposableNode(
                 package="a1_perception_2nodes",
                 plugin="robotperf::perception::ImageOutputComponent",
-                namespace="robotperf",
                 name="image_output_component",
+                namespace="robotperf",
                 remappings=[
                     ("image", "/robotperf/benchmark/resize"),
                     ("camera_info", "/camera/camera_info"),
@@ -107,5 +141,6 @@ def generate_launch_description():
         # LTTng tracing
         trace,
         # image pipeline
-        perception_container
+        perception_container,
+        power_container
     ])
