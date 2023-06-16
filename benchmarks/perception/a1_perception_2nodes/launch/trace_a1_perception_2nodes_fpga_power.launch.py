@@ -39,6 +39,7 @@ def generate_launch_description():
         session_name="a1_perception_nodes_fpga",
         events_ust=[
             "robotperf_benchmarks:*",
+            "robotcore_power:*",
             "ros2_image_pipeline:*",
             "ros2:*"
         ]

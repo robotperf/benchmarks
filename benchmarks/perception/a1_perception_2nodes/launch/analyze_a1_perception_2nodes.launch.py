@@ -623,8 +623,8 @@ def main(argv):
             add_power = True
             ba.add_power(
             {
-                "name": "robotperf_benchmarks:robotcore_power_output_cb_fini",
-                "name_disambiguous": "robotperf_benchmarks:robotcore_power_output_cb_fini",
+                "name": "robotcore_power:robotcore_power_output_cb_fini",
+                "name_disambiguous": "robotcore_power:robotcore_power_output_cb_fini",
                 "colors_fg": "blue",
                 "colors_fg_bokeh": "silver",
                 "layer": "userland",

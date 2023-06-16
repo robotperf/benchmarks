@@ -38,6 +38,7 @@ def generate_launch_description():
         session_name="a2_rectify",
         events_ust=[
             "robotperf_benchmarks:*",
+            "robotcore_power:*",
             "ros2_image_pipeline:*",
             "ros2:*"
             # "lttng_ust_cyg_profile*",

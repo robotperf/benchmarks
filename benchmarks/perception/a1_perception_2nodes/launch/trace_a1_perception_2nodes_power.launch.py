@@ -39,6 +39,7 @@ def generate_launch_description():
         events_ust=[
             "robotperf_benchmarks:*",
             "ros2_image_pipeline:*",
+            "robotcore_power:*",
             "ros2:*"
             # "lttng_ust_cyg_profile*",
             # "lttng_ust_statedump*",
