@@ -92,16 +92,6 @@ def generate_launch_description():
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],
             ),
-            ComposableNode(
-                package="robotcore-power",
-                namespace="robotcore/power",
-                plugin="robotcore::power::PowerComponent",
-                name="power_component",
-                parameters=[
-                    {"publish_rate": 20.0},
-                    {"hardware_device_type": "rapl"}
-                ],
-            ),
         ],
         output="screen",
     )
