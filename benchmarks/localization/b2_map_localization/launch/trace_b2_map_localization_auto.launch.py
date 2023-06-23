@@ -35,6 +35,7 @@ from ros2_benchmark import ROS2BenchmarkConfig, ROS2BenchmarkTest
 
 IMAGE_RESOLUTION = ImageResolution.HD
 ROSBAG_PATH = '/workspaces/isaac_ros-dev/src/ros2_benchmark/assets/datasets/r2b_dataset/r2b_storage' # NOTE: hardcoded, modify accordingly
+MAP_YAML_PATH = '/workspaces/isaac_ros-dev/src/isaac_ros_benchmark/scripts/occupancy_grid_localizer/maps/map.yaml'
 SESSION_NAME = 'b2_map_localization_auto'
 OPTION = 'with_monitor_node'
 POWER = "on" # by default "off"
@@ -42,13 +43,9 @@ POWER = "on" # by default "off"
 def launch_setup(container_premap_localizationfix, container_sigterm_timeout):
     """Generate launch description for benchmarking Isaac ROS OccupancyGridLocalizerNode."""
 
-    MAP_YAML_PATH = os.path.join(
-        os.path.dirname(os.path.realpath(__file__)),
-        '/workspaces/isaac_ros-dev/src/isaac_ros_benchmark/scripts/occupancy_grid_localizer/maps/map.yaml')
-    
     occupancy_grid_localizer_node = ComposableNode(
         name='OccupancyGridLocalizerNode',
-        namespace=TestIsaacROSOccupancyGridLocalizerNode.generate_namespace(),
+        namespace=TestOccupancyGridLocalizerNode.generate_namespace(),
         package='isaac_ros_occupancy_grid_localizer',
         plugin='nvidia::isaac_ros::occupancy_grid_localizer::OccupancyGridLocalizerNode',
         parameters=[
@@ -61,7 +58,7 @@ def launch_setup(container_premap_localizationfix, container_sigterm_timeout):
     
     data_loader_node = ComposableNode(
         name='DataLoaderNode',
-        namespace=TestIsaacROSOccupancyGridLocalizerNode.generate_namespace(),
+        namespace=TestOccupancyGridLocalizerNode.generate_namespace(),
         package='ros2_benchmark',
         plugin='ros2_benchmark::DataLoaderNode',
         remappings=[('pandar_xt_32_0_lidar', 'data_loader/pointcloud')]
@@ -70,7 +67,7 @@ def launch_setup(container_premap_localizationfix, container_sigterm_timeout):
 
     pointcloud_to_flatscan_node = ComposableNode(
         name='PointCloudToFlatScanNode',
-        namespace=TestIsaacROSOccupancyGridLocalizerNode.generate_namespace(),
+        namespace=TestOccupancyGridLocalizerNode.generate_namespace(),
         package='isaac_ros_pointcloud_utils',
         plugin='nvidia::isaac_ros::pointcloud_utils::PointCloudToFlatScanNode',
         remappings=[('pointcloud', 'data_loader/pointcloud'),
@@ -79,7 +76,7 @@ def launch_setup(container_premap_localizationfix, container_sigterm_timeout):
 
     playback_node = ComposableNode(
         name='PlaybackNode',
-        namespace=TestIsaacROSOccupancyGridLocalizerNode.generate_namespace(),
+        namespace=TestOccupancyGridLocalizerNode.generate_namespace(),
         package='isaac_ros_benchmark',
         plugin='isaac_ros_benchmark::NitrosPlaybackNode',
         parameters=[{
@@ -91,7 +88,7 @@ def launch_setup(container_premap_localizationfix, container_sigterm_timeout):
 
     monitor_node = ComposableNode(
         name='MonitorNode',
-        namespace=TestIsaacROSOccupancyGridLocalizerNode.generate_namespace(),
+        namespace=TestOccupancyGridLocalizerNode.generate_namespace(),
         package='isaac_ros_benchmark',
         plugin='isaac_ros_benchmark::NitrosMonitorNode',
         parameters=[{
@@ -121,7 +118,7 @@ def launch_setup(container_premap_localizationfix, container_sigterm_timeout):
 
     composable_node_container = ComposableNodeContainer(
         name='container',
-        namespace=TestIsaacROSOccupancyGridLocalizerNode.generate_namespace(),
+        namespace=TestOccupancyGridLocalizerNode.generate_namespace(),
         package='rclcpp_components',
         executable='component_container_mt',
         prefix=container_prefix,
@@ -157,7 +154,7 @@ def launch_setup(container_premap_localizationfix, container_sigterm_timeout):
         return [composable_node_container]
 
 
-class TestIsaacROSOccupancyGridLocalizerNode(ROS2BenchmarkTest):
+class TestOccupancyGridLocalizerNode(ROS2BenchmarkTest):
     """Performance test for OccupancyGridLocalizerNode."""
 
     # Custom configurations
@@ -210,5 +207,5 @@ class TestIsaacROSOccupancyGridLocalizerNode(ROS2BenchmarkTest):
 
 
 def generate_test_description():
-    return TestIsaacROSOccupancyGridLocalizerNode.generate_test_description_with_nsys(launch_setup)
+    return TestOccupancyGridLocalizerNode.generate_test_description_with_nsys(launch_setup)
 
