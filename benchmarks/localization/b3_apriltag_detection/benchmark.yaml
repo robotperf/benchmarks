@@ -1,0 +1,37 @@
+id: b3
+name: b3_apriltag_detection
+description: |
+  An april tag pose detection component. Used to demonstrate the april tag detection components [isaac_ros_apriltag_graph](https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_benchmark/blob/main/scripts/isaac_ros_apriltag_graph.py) and [isaac_ros_apriltag_node](https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_benchmark/blob/main/scripts/isaac_ros_apriltag_node.py).
+short: Apriltag detection ROS Component.
+graph: ../../../imgs/a2_rectify.svg
+reproduction: |
+  # Create a ROS 2 overlay workspace
+  mkdir -p /tmp/benchmark_ws/src
+  
+  # Clone the benchmark repository
+  cd /tmp/benchmark_ws/src && git clone https://github.com/robotperf/benchmarks
+  
+  # Fetch dependencies
+  source /opt/ros/humble/setup.bash
+  cd /tmp/benchmark_ws && sudo rosdep update || true && sudo apt-get update &&
+    sudo rosdep install --from-paths src --ignore-src --rosdistro humble -y
+  
+  # Build the benchmark
+  colcon build --merge-install --packages-up-to a2_rectify
+  
+  # Source the workspace as an overlay, launch the benchmark
+  source install/setup.bash
+  RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch a2_rectify trace_a2_rectify.launch.py
+
+# Data not valid at the moment, just a placeholder for now
+results:
+  - result:
+      type: grey  
+      metric: latency
+      metric_unit: ms      
+      hardware: ROBOTCORE
+      category: edge
+      timestampt: 14-10-2022
+      value: 66.82
+      note: ""
+      datasource: "perception/image"
