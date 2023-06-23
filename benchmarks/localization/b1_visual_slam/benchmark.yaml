@@ -1,0 +1,37 @@
+id: b1
+name: b1_visual_slam
+description: |
+  A SLAM localization based on visual input, and optionally other sensors such as IMUs. Used to demonstrate the visual SLAM component [isaac_ros_visual_slam](https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_benchmark/blob/main/scripts/isaac_ros_visual_slam_node.py) package.
+short: Visual SLAM ROS Component.
+graph: ../../../imgs/a2_rectify.svg
+reproduction: |
+  # Create a ROS 2 overlay workspace
+  mkdir -p /tmp/benchmark_ws/src
+  
+  # Clone the benchmark repository
+  cd /tmp/benchmark_ws/src && git clone https://github.com/robotperf/benchmarks
+  
+  # Fetch dependencies
+  source /opt/ros/humble/setup.bash
+  cd /tmp/benchmark_ws && sudo rosdep update || true && sudo apt-get update &&
+    sudo rosdep install --from-paths src --ignore-src --rosdistro humble -y
+  
+  # Build the benchmark
+  colcon build --merge-install --packages-up-to a2_rectify
+  
+  # Source the workspace as an overlay, launch the benchmark
+  source install/setup.bash
+  RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch a2_rectify trace_a2_rectify.launch.py
+
+# Data not valid at the moment, just a placeholder for now
+results:
+  - result:
+      type: grey  
+      metric: latency
+      metric_unit: ms      
+      hardware: ROBOTCORE
+      category: edge
+      timestampt: 14-10-2022
+      value: 66.82
+      note: ""
+      datasource: "perception/image"
