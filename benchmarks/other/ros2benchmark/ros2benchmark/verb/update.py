@@ -44,7 +44,6 @@ class UpdateVerb(VerbExtension):
 
     def main(self, *, args):
         """
-        
         For each benchmarks in the workspace, update README.md file. Then, 
         update general README.md file.
 

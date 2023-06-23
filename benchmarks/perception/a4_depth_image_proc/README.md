@@ -9,9 +9,7 @@ a4
 The [depth_image_proc](https://github.com/ros-perception/image_pipeline/tree/humble/depth_image_proc) package computes a point cloud using a rectified depth image and a rectified color image. 
 
 
-![](/benchmarks/perception/a4_depth_image_proc/imgs/a4_depth_image_proc_graph.png)
-
-**Metric**: latency (ms)
+![](/imgs/a3_stereo_image_proc_graph.png)
 
 ## Reproduction Steps
 
@@ -81,7 +79,7 @@ ros2 bag play --loop /path/to/bag/directory/
 
 ## Results
 
-| Hardware | Value | Category | Timestamp | Note | Data Source |
-| --- | --- | --- | --- | --- | --- |
-| 12th Gen Intel(R) Core(TM) i9-12900KF | 939.43 | edge | 26-04-2023 | Mean: 37.09 ms,  RMS: 65.12 ms, Max: 939.43 ms, Min: 7.97 ms over 1147 samples. | perception/depth_image1 |
+| Type | Hardware | Metric | Value | Category | Timestamp | Note | Data Source |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| grey | 12th Gen Intel(R) Core(TM) i9-12900KF | latency | 939.43 | edge | 26-04-2023 | Mean: 37.09 ms,  RMS: 65.12 ms, Max: 939.43 ms, Min: 7.97 ms over 1147 samples. | perception/depth_image1 |
 

@@ -11,8 +11,6 @@ A simple perception computational graph composed by 2 Components, `rectify` and 
 
 ![](../../../imgs/a1_perception_2nodes.svg)
 
-**Metric**: latency (ms)
-
 ## Reproduction Steps
 
 ```bash
@@ -38,10 +36,10 @@ RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch a1_perception_2nodes trace_a1_
 
 ## Results
 
-| Hardware | Value | Category | Timestamp | Note | Data Source |
-| --- | --- | --- | --- | --- | --- |
-| ROBOTCORE | 66.82 | edge | 14-10-2022 |  | perception/image |
-| Kria KR260 | 66.82 | edge | 14-10-2022 |  | perception/image |
-| Jetson Nano | 238.13 | edge | 14-10-2022 |  | perception/image |
-| Jetson AGX Xavier | 106.34 | edge | 14-10-2022 |  | perception/image |
+| Type | Hardware | Metric | Value | Category | Timestamp | Note | Data Source |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| grey | ROBOTCORE | latency | 66.82 | edge | 14-10-2022 |  | perception/image |
+| grey | Kria KR260 | latency | 66.82 | edge | 14-10-2022 |  | perception/image |
+| grey | Jetson Nano | latency | 238.13 | edge | 14-10-2022 |  | perception/image |
+| grey | Jetson AGX Xavier | latency | 106.34 | edge | 14-10-2022 |  | perception/image |
 

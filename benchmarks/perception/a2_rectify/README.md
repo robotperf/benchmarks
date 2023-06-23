@@ -11,8 +11,6 @@ A simple perception rectify ROS robotics operation. Used to demonstrate a simple
 
 ![](../../../imgs/a2_rectify.svg)
 
-**Metric**: latency (ms)
-
 ## Reproduction Steps
 
 ```bash
@@ -38,7 +36,7 @@ RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch a2_rectify trace_a2_rectify.la
 
 ## Results
 
-| Hardware | Value | Category | Timestamp | Note | Data Source |
-| --- | --- | --- | --- | --- | --- |
-| ROBOTCORE | 66.82 | edge | 14-10-2022 |  | perception/image |
+| Type | Hardware | Metric | Value | Category | Timestamp | Note | Data Source |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| grey | ROBOTCORE | latency | 66.82 | edge | 14-10-2022 |  | perception/image |
 

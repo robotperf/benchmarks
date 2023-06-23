@@ -5,9 +5,6 @@ description: |
   A simple perception computational graph composed by 2 Components, `rectify` and `resize` operations. Used to demonstrate a simple perception pipeline using the  package.
 short: Perception computational graph to compute a disparity map for stereo images.
 graph: /imgs/a3_stereo_image_proc_graph.png
-metric:
-  metric: "latency"
-  unit: "ms"
 reproduction: |
   ## ------- Installation -------
   # Create a ROS 2 overlay workspace
@@ -72,6 +69,9 @@ reproduction: |
 
 results:
   - result:
+      type: grey  
+      metric: latency
+      metric_unit: ms      
       hardware: 12th Gen Intel(R) Core(TM) i9-12900KF
       category: edge
       timestampt: 25-04-2023

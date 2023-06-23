@@ -12,8 +12,6 @@ A simple perception computational graph composed by 2 Components, `rectify` and 
 
 ![](/imgs/a3_stereo_image_proc_graph.png)
 
-**Metric**: latency (ms)
-
 ## Reproduction Steps
 
 ```bash
@@ -82,7 +80,7 @@ ros2 bag play --loop /path/to/bag/directory/
 
 ## Results
 
-| Hardware | Value | Category | Timestamp | Note | Data Source |
-| --- | --- | --- | --- | --- | --- |
-| 12th Gen Intel(R) Core(TM) i9-12900KF | 132.12 | edge | 25-04-2023 | Mean: 26.25 ms,  RMS: 27.18 ms, Max: 132.12 ms, Min: 8.73 ms over 1124 samples. | perception/image3 |
+| Type | Hardware | Metric | Value | Category | Timestamp | Note | Data Source |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| grey | 12th Gen Intel(R) Core(TM) i9-12900KF | latency | 132.12 | edge | 25-04-2023 | Mean: 26.25 ms,  RMS: 27.18 ms, Max: 132.12 ms, Min: 8.73 ms over 1124 samples. | perception/image3 |
 

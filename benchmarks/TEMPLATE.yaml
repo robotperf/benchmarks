@@ -6,9 +6,6 @@ name: a1_perception_2nodes
 description: |
   A simple perception computational graph composed by 2 Components, `rectify` and `resize` operations. Used to demonstrate a simple perception pipeline using the [image_pipeline](https://github.com/ros-perception/image_pipeline) package.
 graph: ../imgs/a1_perception_2nodes.svg
-metric:
-  metric: "latency"
-  unit: "ms"
 reproduction: |
   # Install the image_pipeline package
   apt-get install ros-humble-image-pipeline
@@ -30,28 +27,12 @@ reproduction: |
   ros2 launch a1_perception_2nodes a1_perception_2nodes.launch.py
 results:
   - result:
+      type: grey
+      metric: latency
+      metric_unit: ms
       hardware: ROBOTCORE
       category: edge
       timestampt: 14-10-2022
       value: 66.82
       note: ""
-  - result:
-      hardware: Kria KR260
-      category: edge      
-      timestampt: 14-10-2022
-      value: 66.82
-      note: ""      
-  - result:
-      hardware: Jetson Nano
-      category: edge      
-      timestampt: 14-10-2022
-      value: 238.13
-      note: ""
-  - result:
-      hardware: Jetson AGX Xavier
-      category: edge      
-      timestampt: 14-10-2022
-      value: 106.34
-      note: ""
-  
-  
+      datasource: "perception/image"

@@ -147,12 +147,14 @@ class Benchmark:
         self.description = yaml_data["description"]
         self.short = yaml_data["short"]
         self.graph = yaml_data["graph"]
-        self.metric = yaml_data["metric"]
         self.reproduction = yaml_data["reproduction"]
         self.results = []
         self.path = yaml_file.replace("/benchmark.yaml", "")
 
         for result in yaml_data["results"]:
+            metric = result["result"]["metric"]
+            metric_unit = result["result"]["metric_unit"]
+            result_type = result["result"]["type"]
             hardware = result["result"]["hardware"]
             category = result["result"]["category"]
             timestampt = result["result"]["timestampt"]
@@ -161,6 +163,9 @@ class Benchmark:
             datasource = result["result"]["datasource"]
 
             self.results.append({
+                "metric": metric,
+                "metric_unit": metric_unit,
+                "type": result_type, # "type" is a reserved keyword in Python, so we use "result_type
                 "hardware": hardware,
                 "category": category,
                 "timestampt": timestampt,
@@ -181,7 +186,7 @@ class Benchmark:
             "results": [{"result": result} for result in self.results]
         }
 
-        key_order = ["id", "name", "description", "short", "graph", "metric", "reproduction", "results"]
+        key_order = ["id", "name", "description", "short", "graph", "reproduction", "results"]
         return yaml.dump(yaml_data, sort_keys=key_order)
 
     def markdown(self):
@@ -196,16 +201,18 @@ class Benchmark:
         md += f"### ID\n{self.id}\n\n"
         md += f"### Description\n{self.description}\n\n"
         md += f"![]({self.graph})\n\n"
-        md += f"**Metric**: {self.metric['metric']} ({self.metric['unit']})\n\n"
+
+        # NOTE: metric and unit now living on each measurements
+        # md += f"**Metric**: {self.metric['metric']} ({self.metric['unit']})\n\n"
         
         md += f"## Reproduction Steps\n\n```bash\n{self.reproduction}\n```\n\n"
         
         # Results section
         md += "## Results\n\n"
-        md += "| Hardware | Value | Category | Timestamp | Note | Data Source |\n"
-        md += "| --- | --- | --- | --- | --- | --- |\n"
+        md += "| Type | Hardware | Metric | Value | Category | Timestamp | Note | Data Source |\n"
+        md += "| --- | --- | --- | --- | --- | --- | --- | --- |\n"
         for result in self.results:
-            md += f"| {result['hardware']} | {result['value']} | {result['category']} | {result['timestampt']} | {result['note']} | {result['datasource']} |\n"
+            md += f"| {result['type']} | {result['hardware']} | {result['metric']} | {result['value']} | {result['category']} | {result['timestampt']} | {result['note']} | {result['datasource']} |\n"
         md += "\n"
         
         return md
@@ -221,5 +228,5 @@ class Benchmark:
         relative_graph_path = "imgs" + self.graph.split("imgs")[1]
 
         for result in self.results:
-            md += f"| [{self.id}](https://github.com/robotperf/benchmarks/tree/main/{relative}) | ![]({relative_graph_path}) | {self.short} | {self.metric['metric']} ({self.metric['unit']}) | {result['hardware']} | {result['value']} | {result['category']} | {result['timestampt']} | {result['note']} | {result['datasource']} |\n"        
+            md += f"| [{self.id}](https://github.com/robotperf/benchmarks/tree/main/{relative}) | ![]({relative_graph_path}) | {self.short} | {result['metric']} ({result['metric_unit']}) | {result['hardware']} | {result['value']} | {result['category']} | {result['timestampt']} | {result['note']} | {result['datasource']} |\n"        
         return md

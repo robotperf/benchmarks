@@ -73,6 +73,52 @@ This way, targets can be grouped and compared easily.
 ### Metric
 Benchmarks should be designed to measure one or more metrics and according to [REP 2014](https://github.com/ros-infrastructure/rep/pull/364). Each metric should be associated with a unit of measurement.
 
+### Type
+In `RobotPerf` non-functional benchmarks can be of two types: `grey` or `black`. This should be specified on each measurement:
+
+```
+             Probe      Probe
+             +            +
+             |            |
+    +--------|------------|-------+     +-----------------------------+
+    |        |            |       |     |                             |
+    |     +--|------------|-+     |     |                             |
+    |     |  v            v |     |     |        - latency   <--------------+ Probe
+    |     |                 |     |     |        - throughput<--------------+ Probe
+    |     |     Function    |     |     |        - memory    <--------------+ Probe
+    |     |                 |     |     |        - power     <--------------+ Probe
+    |     +-----------------+     |     |                             |
+    |      System under test      |     |       System under test     |
+    +-----------------------------+     +-----------------------------+
+
+
+              Functional                            Non-functional
+
+
+    +-------------+                     +----------------------------+
+    | Test App.   |                     |  +-----------------------+ |
+    |  + +  +  +  |                     |  |    Application        | |
+    +--|-|--|--|--+---------------+     |  |                   <------------+ Probe
+    |  | |  |  |                  |     |  +-----------------------+ |
+    |  v v  v  v                  |     |                            |
+    |     Probes                  |     |                      <------------+ Probe
+    |                             |     |                            |
+    |       System under test     |     |   System under test        |
+    |                             |     |                      <------------+ Probe
+    |                             |     |                            |
+    |                             |     |                            |
+    +-----------------------------+     +----------------------------+
+
+
+             Black-Box                            Grey-box
+
+```
+
+- `Black-box performance testing`: Measures performance by eliminating the layers above the *layer-of-interest* and replacing those with a specific test application that stimulates the layer-of-interest in the way you need it. This allows to gather the measurement data right inside your specific test application. The acquisition of the data (the probe) resides inside the test application. A major design constraint in such a test is that you have to eliminate the “application” in order to test the system. Otherwise, the real application and the test application would likely interfere.
+
+- `Grey-box performance testing`: More application-specific measure which is capable of watching internal states of the system and can measure (probe) certain points in the system, thus generate the measurement data with minimal interference. Requires to instrument the complete application.
+
+
 ### Machine-readable definition of benchmarks
 So that benchmark information can be easily consumed by other tools, each benchmark should be defined in a machine-readable format. The format will use YAML data serialization language. A YAML file named `benchmark.yaml` should be placed in the root of the ROS 2 package describing each benchmark at any of its results.
 
@@ -94,9 +140,11 @@ Create a new benchmark by following these steps:
    - `description`: short description of the benchmark
    - `short`: short description of the benchmark
    - `graph`: depiction of the computational graph of the benchmark
-   - `metric`, including subfields `metric` and `unit`
    - `reproduction`: instructions on how to reproduce the benchmark. Additional reproduction fields can be added as needed (e.g. `reproduction-robotcore` if special instructions are needed to reproduce the benchmark on [ROBOTCORE](https://accelerationrobotics.com/robotcore.php) hardware)
    - `results`: a list of results (`result`), each containing:
+     - `type`: `grey` for grey-box and `black` for black-box
+     - `metric`: metric measured, e.g. latency, power, throughput, etc.
+    - `metric_unit`: unit of the metric measured, e.g. ms, W, etc.
      - `hardware`: name of the hardware used to run the benchmark
      - `timestampt`: timestamp of the result
      - `value`: value of the metric

@@ -11,8 +11,6 @@ A simple perception resize ROS robotics operation. Used to demonstrate a simple 
 
 ![](../../../imgs/a5_resize.svg)
 
-**Metric**: latency (ms)
-
 ## Reproduction Steps
 
 ```bash
@@ -38,7 +36,7 @@ RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch a5_resize trace_a5_resize.laun
 
 ## Results
 
-| Hardware | Value | Category | Timestamp | Note | Data Source |
-| --- | --- | --- | --- | --- | --- |
-| Intel® Core™ i5-8250U CPU @ 1.60GHz × 8 | 33.68 | workstation | 08-05-2023 |  | perception/image2 |
+| Type | Hardware | Metric | Value | Category | Timestamp | Note | Data Source |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| grey | Intel® Core™ i5-8250U CPU @ 1.60GHz × 8 | latency | 33.68 | workstation | 08-05-2023 |  | perception/image2 |
 

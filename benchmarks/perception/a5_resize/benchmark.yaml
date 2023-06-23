@@ -4,9 +4,6 @@ description: |
   A simple perception resize ROS robotics operation. Used to demonstrate a simple perception component [image_pipeline](https://github.com/ros-perception/image_pipeline) package.
 short: Perception resize ROS Component.
 graph: ../../../imgs/a5_resize.svg
-metric:
-  metric: "latency"
-  unit: "ms"
 reproduction: |
   # Create a ROS 2 overlay workspace
   mkdir -p /tmp/benchmark_ws/src
@@ -29,6 +26,9 @@ reproduction: |
 # Data not valid at the moment, just a placeholder for now
 results:
   - result:
+      type: grey
+      metric: latency
+      metric_unit: ms      
       hardware: Intel® Core™ i5-8250U CPU @ 1.60GHz × 8
       category: workstation
       timestampt: 08-05-2023
