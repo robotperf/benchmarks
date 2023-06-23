@@ -224,7 +224,11 @@ class Benchmark:
         md = ""        
         
         benchmarks_repo_path = search_benchmarks_repo()
-        relative = self.path.replace("./" + benchmarks_repo_path, "")
+        print(benchmarks_repo_path)
+        print(self.path)
+        # relative = self.path.replace("./" + benchmarks_repo_path, "")
+        relative = self.path.replace("src/benchmarks/", "")
+        print(relative)
         relative_graph_path = "imgs" + self.graph.split("imgs")[1]
 
         for result in self.results:
