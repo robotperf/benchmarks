@@ -74,7 +74,7 @@ This way, targets can be grouped and compared easily.
 Benchmarks should be designed to measure one or more metrics and according to [REP 2014](https://github.com/ros-infrastructure/rep/pull/364). Each metric should be associated with a unit of measurement.
 
 ### Type
-In `RobotPerf` non-functional benchmarks can be of two types: `grey` or `black`. This should be specified on each measurement:
+In `RobotPerf` non-functional benchmarks can be of two types: :white_circle: `grey` or :black_circle: `black`. This should be specified on each measurement:
 
 ```
              Probe      Probe

@@ -219,8 +219,9 @@ class Benchmark:
                 aux_type = "[:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type)"
             else:
                 aux_type = result['type']
+            datasource = "[{}](https://github.com/robotperf/rosbags/tree/main/{})".format(result['datasource'], result['datasource'])
 
-            md += f"| {aux_type} | {result['hardware']} | {result['metric']} | {result['value']} | {result['category']} | {result['timestampt']} | {result['note']} | {result['datasource']} |\n"
+            md += f"| {aux_type} | {result['hardware']} | {result['metric']} | {result['value']} | {result['category']} | {result['timestampt']} | {result['note']} | {datasource} |\n"
         md += "\n"
         
         return md
