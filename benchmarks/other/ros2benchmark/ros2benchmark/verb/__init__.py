@@ -214,9 +214,9 @@ class Benchmark:
 
         for result in self.results:
             if result['type'].lower() == "grey":
-                aux_type = ":white_circle:"
+                aux_type = "[:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type)"
             elif result['type'].lower() == "black":
-                aux_type = ":black_circle:"
+                aux_type = "[:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type)"
             else:
                 aux_type = result['type']
 
