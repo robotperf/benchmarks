@@ -34,7 +34,7 @@ from ros2_benchmark import BenchmarkMode, ROS2BenchmarkConfig, ROS2BenchmarkTest
 import json
 
 # NOTE: hardcoded, modify accordingly
-ROSBAG_PATH = '/workspaces/isaac_ros-dev/src/rosbags/r2b_cafe'
+ROSBAG_PATH = '/workspaces/isaac_ros-dev/src/datasets/r2b_storage'
 SESSION_NAME = 'isaac_ros_visual_slam'
 OPTION = 'with_monitor_node'
 POWER = "on" # by default "off"
@@ -43,13 +43,13 @@ def launch_setup(container_prefix, container_sigterm_timeout):
     """Generate launch description for VSLAM node."""
     visual_slam_node = ComposableNode(
         name='VisualSlamNode',
-        namespace=TestIsaacROSVisualSlamNode.generate_namespace(),
+        namespace='/robotperf/benchmark',
         package='isaac_ros_visual_slam',
         plugin='isaac_ros::visual_slam::VisualSlamNode',
-        remappings=[('stereo_camera/left/image', 'image_left'),
-                    ('stereo_camera/left/camera_info', 'camera_info_left'),
-                    ('stereo_camera/right/image', 'image_right'),
-                    ('stereo_camera/right/camera_info', 'camera_info_right')],
+        remappings=[('stereo_camera/left/image', '/r2b/image_left'),
+                    ('stereo_camera/left/camera_info', '/r2b/camera_info_left'),
+                    ('stereo_camera/right/image', '/r2b/image_right'),
+                    ('stereo_camera/right/camera_info', '/r2b/camera_info_right')],
         parameters=[{
                     'enable_rectified_pose': True,
                     'denoise_input_images': False,
@@ -60,7 +60,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
 
     data_loader_node = ComposableNode(
         name='DataLoaderNode',
-        namespace=TestIsaacROSVisualSlamNode.generate_namespace(),
+        namespace=RobotPerfVisualSlamNode.generate_namespace(),
         package='ros2_benchmark',
         plugin='ros2_benchmark::DataLoaderNode',
         remappings=[
@@ -72,7 +72,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
 
     playback_node = ComposableNode(
         name='PlaybackNode',
-        namespace=TestIsaacROSVisualSlamNode.generate_namespace(),
+        namespace=RobotPerfVisualSlamNode.generate_namespace(),
         package='isaac_ros_benchmark',
         plugin='isaac_ros_benchmark::NitrosPlaybackNode',
         parameters=[{
@@ -94,7 +94,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
 
     monitor_node = ComposableNode(
         name='MonitorNode',
-        namespace=TestIsaacROSVisualSlamNode.generate_namespace(),
+        namespace=RobotPerfVisualSlamNode.generate_namespace(),
         package='isaac_ros_benchmark',
         plugin='isaac_ros_benchmark::NitrosMonitorNode',
         parameters=[{
@@ -102,12 +102,12 @@ def launch_setup(container_prefix, container_sigterm_timeout):
             'monitor_power_data_format': 'power_msgs/msg/Power'
         }],
         remappings=[
-            ('output', 'visual_slam/tracking/odometry')],
+            ('output', '/robotperf/benchmark/visual_slam/tracking/odometry')],
     )
 
     composable_node_container = ComposableNodeContainer(
         name='vslam_container',
-        namespace=TestIsaacROSVisualSlamNode.generate_namespace(),
+        namespace=RobotPerfVisualSlamNode.generate_namespace(),
         package='rclcpp_components',
         executable='component_container_mt',
         prefix=container_prefix,
@@ -136,7 +136,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
                     parameters=[
                         {"publish_rate": 40.0},
                         # {"hardware_device_type": "rapl"}
-                        {"hardware_device_type": "jetson"}
+                        {"hardware_device_type": "nvml"}
                     ],
                 ),
                 
@@ -149,10 +149,10 @@ def launch_setup(container_prefix, container_sigterm_timeout):
 
 
 def generate_test_description():
-    return TestIsaacROSVisualSlamNode.generate_test_description_with_nsys(launch_setup)
+    return RobotPerfVisualSlamNode.generate_test_description_with_nsys(launch_setup)
 
 
-class TestIsaacROSVisualSlamNode(ROS2BenchmarkTest):
+class RobotPerfVisualSlamNode(ROS2BenchmarkTest):
     """Performance test for the VisualSlam node."""
 
     # Custom configurations
@@ -161,8 +161,8 @@ class TestIsaacROSVisualSlamNode(ROS2BenchmarkTest):
         benchmark_mode=BenchmarkMode.SWEEPING,
         input_data_path=ROSBAG_PATH,
         # Upper and lower bounds of peak throughput search window
-        publisher_upper_frequency=200.0,
-        publisher_lower_frequency=200.0,
+        publisher_upper_frequency=10.0,
+        publisher_lower_frequency=10.0,
         # The number of frames to be buffered
         playback_message_buffer_size=100,
         # Fine tuned publisher frequency search parameters

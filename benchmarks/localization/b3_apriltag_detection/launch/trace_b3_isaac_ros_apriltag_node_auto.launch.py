@@ -45,15 +45,20 @@ def launch_setup(container_prefix, container_sigterm_timeout):
     """Generate launch description for benchmarking Isaac ROS AprilTagNode."""
     apriltag_node = ComposableNode(
         name='AprilTagNode',
-        namespace=TestIsaacROSAprilTagNode.generate_namespace(),
+        namespace='/robotperf/benchmark',
         package='isaac_ros_apriltag',
         plugin='nvidia::isaac_ros::apriltag::AprilTagNode',
-        remappings=[('tag_detections', 'apriltag_detections')]
+        remappings=[('tag_detections', 'apriltag_detections'),
+                    ('camera_info', '/r2b/camera_info'),
+                    ('image', '/r2b/image'),
+                    ('image/nitros', '/r2b/image/nitros'),
+                    ('camera_info/nitros', '/r2b/camera_info/nitros')
+        ]
     )
 
     data_loader_node = ComposableNode(
         name='DataLoaderNode',
-        namespace=TestIsaacROSAprilTagNode.generate_namespace(),
+        namespace=RobotPerfAprilTagNode.generate_namespace(),
         package='ros2_benchmark',
         plugin='ros2_benchmark::DataLoaderNode',
         remappings=[('hawk_0_left_rgb_image', 'data_loader/image'),
@@ -62,7 +67,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
 
     prep_resize_node = ComposableNode(
         name='PrepResizeNode',
-        namespace=TestIsaacROSAprilTagNode.generate_namespace(),
+        namespace=RobotPerfAprilTagNode.generate_namespace(),
         package='isaac_ros_image_proc',
         plugin='nvidia::isaac_ros::image_proc::ResizeNode',
         parameters=[{
@@ -77,7 +82,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
 
     playback_node = ComposableNode(
         name='PlaybackNode',
-        namespace=TestIsaacROSAprilTagNode.generate_namespace(),
+        namespace=RobotPerfAprilTagNode.generate_namespace(),
         package='isaac_ros_benchmark',
         plugin='isaac_ros_benchmark::NitrosPlaybackNode',
         parameters=[{
@@ -94,7 +99,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
 
     monitor_node = ComposableNode(
         name='MonitorNode',
-        namespace=TestIsaacROSAprilTagNode.generate_namespace(),
+        namespace=RobotPerfAprilTagNode.generate_namespace(),
         package='isaac_ros_benchmark',
         plugin='isaac_ros_benchmark::NitrosMonitorNode',
         parameters=[{
@@ -102,12 +107,12 @@ def launch_setup(container_prefix, container_sigterm_timeout):
             'monitor_power_data_format': 'power_msgs/msg/Power',
             'use_nitros_type_monitor_sub': True,
         }],
-        remappings=[('output', 'apriltag_detections')]
+        remappings=[('output', '/robotperf/benchmark/apriltag_detections')]
     )
 
     composable_node_container = ComposableNodeContainer(
         name='container',
-        namespace=TestIsaacROSAprilTagNode.generate_namespace(),
+        namespace=RobotPerfAprilTagNode.generate_namespace(),
         package='rclcpp_components',
         executable='component_container_mt',
         prefix=container_prefix,
@@ -149,10 +154,10 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         return [composable_node_container]
 
 def generate_test_description():
-    return TestIsaacROSAprilTagNode.generate_test_description_with_nsys(launch_setup)
+    return RobotPerfAprilTagNode.generate_test_description_with_nsys(launch_setup)
 
 
-class TestIsaacROSAprilTagNode(ROS2BenchmarkTest):
+class RobotPerfAprilTagNode(ROS2BenchmarkTest):
     """Performance test for Isaac ROS AprilTagNode."""
 
     # Custom configurations
@@ -163,7 +168,7 @@ class TestIsaacROSAprilTagNode(ROS2BenchmarkTest):
         input_data_start_time=3.0,
         input_data_end_time=3.5,
         # Upper and lower bounds of peak throughput search window
-        publisher_upper_frequency=600.0,
+        publisher_upper_frequency=10.0,
         publisher_lower_frequency=10.0,
         # The number of frames to be buffered
         playback_message_buffer_size=10,

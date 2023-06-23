@@ -8,8 +8,11 @@ b3
 ### Description
 An april tag pose detection component. Used to demonstrate the april tag detection components [isaac_ros_apriltag_graph](https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_benchmark/blob/main/scripts/isaac_ros_apriltag_graph.py) and [isaac_ros_apriltag_node](https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_benchmark/blob/main/scripts/isaac_ros_apriltag_node.py).
 
+`isaac_ros_apriltag_graph`-based graph:
+![](../../../imgs/b3_apriltag_detection_graph.svg)
 
-![](../../../imgs/a5_resize.svg)
+`isaac_ros_apriltag_node`-based graph:
+![](../../../imgs/b3_apriltag_detection_node.svg)
 
 ## Reproduction Steps
 
