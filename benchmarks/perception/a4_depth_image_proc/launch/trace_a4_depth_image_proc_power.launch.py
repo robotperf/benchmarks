@@ -6,7 +6,7 @@
 #    @@@@@ @@  @@    @@@@ Copyright (c) 2023, Acceleration Robotics®
 #    @@@@@ @@  @@    @@@@ Author: Martiño Crespo <martinho@accelerationrobotics.com>
 #    @@@@@ @@  @@    @@@@ Author: Víctor Mayoral Vilches <victor@accelerationrobotics.com>
-#    @@@@@ @@  @@    @@@@ 
+#    @@@@@ @@  @@    @@@@ Author: Alejandra Martínez Fariña <alex@accelerationrobotics.com>
 #    @@@@@@@@@&@@@@@@@@@@
 #    @@@@@@@@@@@@@@@@@@@@
 #
@@ -40,6 +40,7 @@ def generate_launch_description():
         events_ust=[
             "robotperf_benchmarks:*",
             "ros2_image_pipeline:*",
+            "robotcore_power:*",
             "ros2:*"
         ]
         + DEFAULT_EVENTS_ROS,
@@ -47,6 +48,27 @@ def generate_launch_description():
                 'kernel': [],
                 'userspace': ['vpid', 'vtid', 'procname'],
         },
+    )
+
+    power_container = ComposableNodeContainer(
+        name="power_container",
+        namespace="robotcore/power",
+        package="rclcpp_components",
+        executable="component_container",
+        composable_node_descriptions=[
+            ComposableNode(
+                package="robotcore-power",
+                namespace="robotcore/power",
+                plugin="robotcore::power::PowerComponent",
+                name="power_component",
+                parameters=[
+                    {"publish_rate": 20.0},
+                    {"hardware_device_type": "rapl"}
+                ],
+            ),
+            
+        ],
+        output="screen",
     )
  
     perception_container = ComposableNodeContainer(
@@ -143,7 +165,8 @@ def generate_launch_description():
         # LTTng tracing
         trace,
         # image pipeline
-        perception_container
+        perception_container,
+        power_container
     ])
 
 

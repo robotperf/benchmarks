@@ -42,10 +42,12 @@ namespace perception
 DisparityOutputComponent::DisparityOutputComponent(const rclcpp::NodeOptions & options)
 : rclcpp::Node("DisparityOutputComponent", options)
 {
+  // Get the output_topic_name parameter from the parameter server with default value "input"
+  std::string output_topic_name = this->declare_parameter<std::string>("output_topic_name", "/benchmark/disparity");
 
   //Create subscriber to Disparity image with callback function
   sub_disparity_ = this->create_subscription<stereo_msgs::msg::DisparityImage>(
-    "/benchmark/disparity", rclcpp::QoS(10), std::bind(&DisparityOutputComponent::disparityCb, this, std::placeholders::_1));
+    output_topic_name, rclcpp::QoS(10), std::bind(&DisparityOutputComponent::disparityCb, this, std::placeholders::_1));
 
 }
 

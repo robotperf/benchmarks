@@ -33,6 +33,8 @@ from bokeh.models import (
 )
 from bokeh.models.annotations import Label
 
+import sys
+import argparse
 # color("{:02x}".format(x), fg=16, bg="green")
 # debug = True  # debug flag, set to True if desired
 
@@ -52,6 +54,16 @@ class BenchmarkAnalyzer:
         self.target_chain_marker = []
         self.lost_msgs = 0  # lost messages counter, target_chain not fully met
 
+        # initialize arrays where tracing configuration will be stored
+        self.power_chain = []
+        self.power_chain_dissambiguous = []
+        self.power_chain_colors_fg = []
+        self.power_chain_colors_fg_bokeh = []
+        self.power_chain_layer = []
+        self.power_chain_label_layer = []
+        self.power_chain_marker = []
+        self.power_lost_msgs = 0  # lost messages counter, target_chain not fully met
+
     def add_target(self, target_dict):
         # targeted chain of messages for tracing
         # NOTE: there're not "publish" tracepoints because
@@ -64,6 +76,19 @@ class BenchmarkAnalyzer:
         self.target_chain_layer.append(target_dict["layer"])
         self.target_chain_label_layer.append(target_dict["label_layer"])
         self.target_chain_marker.append(target_dict["marker"])
+
+    def add_power(self, power_dict):
+        # targeted chain of messages for tracing
+        # NOTE: there're not "publish" tracepoints because
+        # graph's using inter-process communications
+
+        self.power_chain.append(power_dict["name"])
+        self.power_chain_dissambiguous.append(power_dict["name_disambiguous"])
+        self.power_chain_colors_fg.append(power_dict["colors_fg"])
+        self.power_chain_colors_fg_bokeh.append(power_dict["colors_fg_bokeh"])
+        self.power_chain_layer.append(power_dict["layer"])
+        self.power_chain_label_layer.append(power_dict["label_layer"])
+        self.power_chain_marker.append(power_dict["marker"])
 
     def get_change(self, first, second):
         """
@@ -135,7 +160,7 @@ class BenchmarkAnalyzer:
                 assert False, "invalid marker_type value"
 
 
-    def msgsets_from_ctf_vtf_traces(self, ctf_trace, vtf_trace, debug=False):
+    def msgsets_from_ctf_vtf_traces(self, ctf_trace, vtf_trace, debug=False, target=True):
         """
         Returns a list of message sets ready to be used
         for plotting them in various forms. Takes two inputs,
@@ -155,19 +180,23 @@ class BenchmarkAnalyzer:
                 # An event message holds a trace event.
                 event = msg.event
                 # Only check `sched_switch` events.
-                if event.name in self.target_chain:
+                if target and event.name in self.target_chain:
+                    ctf_msgs.append(msg)
+                elif not target and event.name in self.power_chain:
                     ctf_msgs.append(msg)
 
         msg_it = bt2.TraceCollectionMessageIterator(vtf_trace)
         # Iterate the trace messages and pick right ones
         vtf_msgs = []
-        for msg in msg_it:
+        for msg in msg_it:# launch independently iff no other metric is requested
             # `bt2._EventMessageConst` is the Python type of an event message.
             if type(msg) is bt2._EventMessageConst:
                 # An event message holds a trace event.
                 event = msg.event
                 # Only check `sched_switch` events.
-                if event.name in self.target_chain:
+                if target and event.name in self.target_chain:
+                    vtf_msgs.append(msg)
+                elif not target and event.name in self.power_chain:
                     vtf_msgs.append(msg)
 
         all_msgs = ctf_msgs + vtf_msgs
@@ -184,7 +213,7 @@ class BenchmarkAnalyzer:
         # "ros2:callback_start" will not be associated with the target chain and it won't stop
         # being considered until a "ros2:callback_end" of that particular process is seen
         for index in range(len(all_msgs_sorted)):
-            if all_msgs_sorted[index].event.name in self.target_chain:  # optimization
+            if target and all_msgs_sorted[index].event.name in self.target_chain:  # optimization
 
                 # print("new: " + all_msgs_sorted[index].event.name)
                 # print("expected: " + str(self.target_chain[chain_index]))
@@ -254,7 +283,76 @@ class BenchmarkAnalyzer:
                         chain_index = 0  # restart
                         new_set = []  # restart
 
-        # print(len(image_pipeline_msg_sets))
+            elif not target and all_msgs_sorted[index].event.name in self.power_chain:  # optimization
+
+                # print("new: " + all_msgs_sorted[index].event.name)
+                # print("expected: " + str(self.power_chain[chain_index]))
+                # print("chain_index: " + str(chain_index))
+                # print("---")
+
+                if debug:
+                    print("---")
+                    print("new: " + all_msgs_sorted[index].event.name)
+                    print("expected: " + str(self.power_chain[chain_index]))
+                    print("chain_index: " + str(chain_index))
+
+                # first one
+                if (
+                    chain_index == 0
+                    and all_msgs_sorted[index].event.name == self.power_chain[chain_index]
+                ):
+                    new_set.append(all_msgs_sorted[index])
+                    # vpid_chain = all_msgs_sorted[index].event.common_context_field.get(
+                    #     "vpid"
+                    # )
+                    chain_index += 1
+                    if debug:
+                        print(color("Found first: " + str(all_msgs_sorted[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
+                # last one
+                elif (
+                    all_msgs_sorted[index].event.name == self.power_chain[chain_index]
+                    and self.power_chain[chain_index] == self.power_chain[-1]
+                    and new_set[-1].event.name == self.power_chain[-2]
+                    # and all_msgs_sorted[index].event.common_context_field.get("vpid")
+                    # == vpid_chain
+                ):
+                    new_set.append(all_msgs_sorted[index])
+                    image_pipeline_msg_sets.append(new_set)
+                    if debug:
+                        print(color("Found last: " + str(all_msgs_sorted[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
+                    chain_index = 0  # restart
+                    new_set = []  # restart
+                # match
+                elif (
+                    all_msgs_sorted[index].event.name == self.power_chain[chain_index]
+                    # and all_msgs_sorted[index].event.common_context_field.get("vpid")
+                    # == vpid_chain
+                ):
+                    new_set.append(all_msgs_sorted[index])
+                    chain_index += 1
+                    if debug:
+                        print(color("Found: " + str(all_msgs_sorted[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="green"))
+                # altered order
+                elif (
+                    all_msgs_sorted[index].event.name in self.power_chain
+                    # and all_msgs_sorted[index].event.common_context_field.get("vpid")
+                    # == vpid_chain
+                ):
+                    # pop ros2:callback_start in new_set, if followed by "ros2:callback_end"
+                    # NOTE: consider case of disconnected series of:
+                    #       "ros2:callback_start"
+                    #       "ros2:callback_end"
+                    if (all_msgs_sorted[index].event.name == "ros2:callback_end"
+                        and self.power_chain[chain_index - 1] == "ros2:callback_start"):
+                        new_set.pop()
+                        chain_index -= 1
+                    else:
+                        new_set.append(all_msgs_sorted[index])
+                        if debug:
+                            print(color("Altered order: " + str([x.event.name for x in new_set]) + ", restarting", fg="red"))
+                        chain_index = 0  # restart
+                        new_set = []  # restart
+
         return image_pipeline_msg_sets
 
 
@@ -262,9 +360,17 @@ class BenchmarkAnalyzer:
         """
         Returns ROS message header timestamp as unique identifier
         from a CTF msg
-        """        
-        id_nanosecs = msg.event.payload_field["image_input_header_nsec"]
-        id_sec = msg.event.payload_field["image_input_header_sec"]
+        """    
+        payload_fields = msg.event.payload_field
+        for field_name, field_value in payload_fields.items():
+            if "header_nsec" in field_name:
+                id_nanosecs = msg.event.payload_field[field_name]
+            elif "header_sec" in field_name:    
+                id_sec = msg.event.payload_field[field_name]
+            
+                                
+        # id_nanosecs = msg.event.payload_field["image_input_header_nsec"]
+        # id_sec = msg.event.payload_field["image_input_header_sec"]
 
         id = id_sec + id_nanosecs/1e9
         return id
@@ -273,7 +379,8 @@ class BenchmarkAnalyzer:
         self, 
         tracename, 
         unique_funq=None, 
-        debug=False
+        debug=False,
+        target=True
     ):
         """
         Returns a list of message sets ready to be used
@@ -286,6 +393,7 @@ class BenchmarkAnalyzer:
         Args:
             tracename (string): path for the trace file
             debug (bool, optional): [description]. Defaults to False.
+            target (bool, optional): to specify the traces to be selected (target or power)
 
         """
         if unique_funq is None:
@@ -302,7 +410,9 @@ class BenchmarkAnalyzer:
                 event = msg.event
                 # Only check `sched_switch` events.
                 # if "ros2" in event.name or "robotperf" in event.name:
-                if event.name in self.target_chain:
+                if (target) and (event.name in self.target_chain):
+                    image_pipeline_msgs.append(msg)
+                elif (not target) and (event.name in self.power_chain):
                     image_pipeline_msgs.append(msg)
 
         # Form sets with each pipeline
@@ -313,30 +423,55 @@ class BenchmarkAnalyzer:
         for msg in image_pipeline_msgs:
             id = unique_funq(msg)
             if id in image_pipeline_msg_dict.keys():
-                if (len(image_pipeline_msg_dict[id]) < len(self.target_chain)):
-                    image_pipeline_msg_dict[id].append(msg)
-                else:
-                    pass
-                    if debug:
-                        print(color("Message with id: " + str(id) + " already fully propagated, discarding - " + str(msg.event.name), fg="yellow"))
+                if target:
+                    if (len(image_pipeline_msg_dict[id]) < len(self.target_chain)):
+                        image_pipeline_msg_dict[id].append(msg)
+                    else:
+                        pass
+                        if debug:
+                            print(color("Message with id: " + str(id) + " already fully propagated, discarding - " + str(msg.event.name), fg="yellow"))
+                elif not target:
+                    if (len(image_pipeline_msg_dict[id]) < len(self.power_chain)):
+                        image_pipeline_msg_dict[id].append(msg)
+                    else:
+                        pass
+                        if debug:
+                            print(color("Message with id: " + str(id) + " already fully propagated, discarding - " + str(msg.event.name), fg="yellow"))
+
             else:
                 image_pipeline_msg_dict[id] = [msg]
-
 
         del_list = []
         for key_id, value_list in image_pipeline_msg_dict.items():
             names_value_list = [msg.event.name for msg in value_list]
-            if len(value_list) != len(self.target_chain):
-                if debug:
-                    print(color("Message with id: " + str(key_id) + " not fully propagated (missing number), discarding chain - " + str([x.event.name for x in value_list]), fg="orange"))
-                # del image_pipeline_msg_dict[key_id]  # this leads to error:
-                #                                      # dictionary changed size during iteration
-                del_list.append(key_id)
-                continue
-            if not all(item in names_value_list for item in self.target_chain):
-                if debug:
-                    print(color("Message with id: " + str(key_id) + " does not have all tracepoints, discarding chain - " + str([x.event.name for x in value_list]), fg="red"))
-                del_list.append(key_id)
+            if target:
+                if len(value_list) != (len(self.target_chain)):
+                    if debug:
+                        print(color("Message with id: " + str(key_id) + " not fully propagated (missing number), discarding chain - " + str([x.event.name for x in value_list]), fg="orange"))
+                    # del image_pipeline_msg_dict[key_id]  # this leads to error:
+                    #                                      # dictionary changed size during iteration
+                    del_list.append(key_id)
+                    continue
+            elif not target:
+                if len(value_list) != (len(self.power_chain)):
+                    if debug:
+                        print(color("Message with id: " + str(key_id) + " not fully propagated (missing number), discarding chain - " + str([x.event.name for x in value_list]), fg="orange"))
+                    # del image_pipeline_msg_dict[key_id]  # this leads to error:
+                    #                                      # dictionary changed size during iteration
+                    del_list.append(key_id)
+                    continue
+
+            if target:
+                if not all(item in names_value_list for item in self.target_chain):
+                    if debug:
+                        print(color("Message with id: " + str(key_id) + " does not have all tracepoints, discarding chain - " + str([x.event.name for x in value_list]), fg="red"))
+                    del_list.append(key_id)
+            elif not target:
+                if not all(item in names_value_list for item in self.power_chain):
+                    if debug:
+                        print(color("Message with id: " + str(key_id) + " does not have all tracepoints, discarding chain - " + str([x.event.name for x in value_list]), fg="red"))
+                    del_list.append(key_id)
+
         for key in del_list:
             del image_pipeline_msg_dict[key]
             self.lost_msgs += 1
@@ -344,7 +479,7 @@ class BenchmarkAnalyzer:
         # survivors
         return list(image_pipeline_msg_dict.values())
 
-    def msgsets_from_trace(self, tracename, debug=False):
+    def msgsets_from_trace(self, tracename, debug=False, target=True):
         """
         Returns a list of message sets ready to be used
         for plotting them in various forms.
@@ -368,7 +503,9 @@ class BenchmarkAnalyzer:
                 event = msg.event
                 # Only check `sched_switch` events.
                 # if "ros2" in event.name or "robotperf" in event.name:
-                if event.name in self.target_chain:
+                if target and event.name in self.target_chain:
+                    image_pipeline_msgs.append(msg)
+                elif not target and event.name in self.power_chain:
                     image_pipeline_msgs.append(msg)
 
         # Form sets with each pipeline
@@ -382,7 +519,7 @@ class BenchmarkAnalyzer:
         # "ros2:callback_start" will not be associated with the target chain and it won't stop
         # being considered until a "ros2:callback_end" of that particular process is seen
         for index in range(len(image_pipeline_msgs)):
-            if image_pipeline_msgs[index].event.name in self.target_chain:  # optimization
+            if target and image_pipeline_msgs[index].event.name in self.target_chain:  # optimization
 
                 if debug:
                     print("---")
@@ -455,6 +592,81 @@ class BenchmarkAnalyzer:
                             print(color("Altered order: " + str([x.event.name for x in new_set]) + ", restarting", fg="red"))
                         chain_index = 0  # restart
                         new_set = []  # restart
+
+            elif not target and image_pipeline_msgs[index].event.name in self.power_chain:  # optimization
+
+                if debug:
+                    print("---")
+                    print("new: " + image_pipeline_msgs[index].event.name)
+                    print("expected: " + str(self.power_chain[chain_index]))
+                    print("chain_index: " + str(chain_index))
+
+                # first one            
+                if (
+                    chain_index == 0
+                    and image_pipeline_msgs[index].event.name == self.power_chain[chain_index]
+                ):
+                    new_set.append(image_pipeline_msgs[index])
+                    vpid_chain = image_pipeline_msgs[index].event.common_context_field.get(
+                        "vpid"
+                    )
+                    chain_index += 1
+                    if debug:
+                        print(color("Found: " + str(image_pipeline_msgs[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
+                # last one
+                elif (
+                    image_pipeline_msgs[index].event.name == self.power_chain[chain_index]
+                    and self.power_chain[chain_index] == self.power_chain[-1]
+                    and new_set[-1].event.name == self.power_chain[-2]
+                    and image_pipeline_msgs[index].event.common_context_field.get("vpid")
+                    == vpid_chain
+                ):
+                    new_set.append(image_pipeline_msgs[index])
+                    image_pipeline_msg_sets.append(new_set)
+                    if debug:
+                        print(color("Found: " + str(image_pipeline_msgs[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
+                    chain_index = 0  # restart
+                    new_set = []  # restart
+                # match
+                elif (
+                    image_pipeline_msgs[index].event.name == self.power_chain[chain_index]
+                    and image_pipeline_msgs[index].event.common_context_field.get("vpid")
+                    == vpid_chain
+                ):
+                    new_set.append(image_pipeline_msgs[index])
+                    chain_index += 1
+                    if debug:
+                        print(color("Found: " + str(image_pipeline_msgs[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="green"))
+                # altered order
+                elif (
+                    image_pipeline_msgs[index].event.name in self.power_chain
+                    and image_pipeline_msgs[index].event.common_context_field.get("vpid")
+                    == vpid_chain
+                ):
+                    # pop ros2:callback_start in new_set, if followed by "ros2:callback_end"
+                    # NOTE: consider case of disconnected series of:
+                    #       "ros2:callback_start"
+                    #       "ros2:callback_end"
+                    if (image_pipeline_msgs[index].event.name == "ros2:callback_end"
+                        and self.power_chain[chain_index - 1] == "ros2:callback_start"):
+                        new_set.pop()
+                        chain_index -= 1
+                    # # it's been observed that "robotperf_benchmarks:robotperf_image_input_cb_init" triggers
+                    # # before "ros2_image_pipeline:image_proc_rectify_cb_fini" which leads to trouble
+                    # # Skip this as well as the next event
+                    # elif (image_pipeline_msgs[index].event.name == "robotperf_benchmarks:robotperf_image_input_cb_init"
+                    #     and self.power_chain[chain_index - 3] == "ros2_image_pipeline:image_proc_rectify_cb_fini"):
+                    #     print(color("Skipping: " + str(image_pipeline_msgs[index].event.name), fg="yellow"))
+                    # elif (image_pipeline_msgs[index].event.name == "robotperf_benchmarks:robotperf_image_input_cb_fini"
+                    #     and self.power_chain[chain_index - 3] == "ros2_image_pipeline:image_proc_rectify_cb_fini"):
+                    #     print(color("Skipping: " + str(image_pipeline_msgs[index].event.name), fg="yellow"))
+                    else:
+                        new_set.append(image_pipeline_msgs[index])
+                        if debug:
+                            print(color("Altered order: " + str([x.event.name for x in new_set]) + ", restarting", fg="red"))
+                        chain_index = 0  # restart
+                        new_set = []  # restart
+
         return image_pipeline_msg_sets
 
     def barplot_all(self, image_pipeline_msg_sets, title="Barplot"):
@@ -1145,6 +1357,85 @@ class BenchmarkAnalyzer:
         # show(fig)  # show in browser    
         export_png(fig, filename="/tmp/analysis/plot_trace.png")
 
+    def barchart_data_power(self, image_pipeline_msg_sets):
+        """
+        Converts a tracing message list into its corresponding 
+        power list in watss.
+
+        Args:
+            image_pipeline_msg_sets ([type]): [description]
+
+        Returns:
+            list: list of throughput in bytes/s
+        """
+        image_pipeline_msg_sets_ns = []
+        image_pipeline_msg_sets_watts = []
+        image_pipeline_msg_sets_joules = []
+        image_pipeline_msg_sets_seconds = []
+        total_watts = 0
+        total_joules = 0
+        total_seconds = 0
+        
+        # if multidimensional:
+        if type(image_pipeline_msg_sets[0]) == list:
+            for set_index in range(len(image_pipeline_msg_sets)):
+                power_chain_watts = []
+                # power_chain_joules = []
+                # power_chain_seconds = []
+                
+                for msg_index in range(len(image_pipeline_msg_sets[set_index])):
+                    payload_fields = image_pipeline_msg_sets[set_index][msg_index].event.payload_field
+                    for field_name, field_value in payload_fields.items():
+                        if "msg_power" in field_name:
+                            watts = image_pipeline_msg_sets[set_index][msg_index].event.payload_field[field_name]
+                        # elif "msg_energy" in field_name:    
+                        #     joules = image_pipeline_msg_sets[set_index][msg_index].event.payload_field[field_name]
+                        # elif "msg_time" in field_name:  
+                        #     seconds = image_pipeline_msg_sets[set_index][msg_index].event.payload_field[field_name]
+                    power_chain_watts.append(watts)
+                    # power_chain_joules.append(joules)
+                    # power_chain_seconds.append(seconds)
+                
+                image_pipeline_msg_sets_watts.append(power_chain_watts)
+                # image_pipeline_msg_sets_joules.append(power_chain_joules)
+                # image_pipeline_msg_sets_seconds.append(power_chain_seconds)
+                total_watts = image_pipeline_msg_sets_watts[-1][0]
+                # total_joules = image_pipeline_msg_sets_joules[-1][0]
+                # total_seconds = image_pipeline_msg_sets_seconds[-1][0]
+
+        else:  # not multidimensional
+            power_chain_watts = []
+            # power_chain_joules = []
+            # power_chain_seconds = []
+            
+            for msg_index in range(len(image_pipeline_msg_sets)):
+                payload_fields = image_pipeline_msg_sets[msg_index].event.payload_field
+                for field_name, field_value in payload_fields.items():
+                    if "msg_power" in field_name:
+                        watts = image_pipeline_msg_sets[msg_index].event.payload_field[field_name]
+                    # elif "msg_energy" in field_name:    
+                    #     joules = image_pipeline_msg_sets[msg_index].event.payload_field[field_name]
+                    # elif "msg_time" in field_name:  
+                    #     seconds = image_pipeline_msg_sets[msg_index].event.payload_field[field_name]
+                power_chain_watts.append(watts)
+                # power_chain_joules.append(joules)
+                # power_chain_seconds.append(seconds)
+            
+            image_pipeline_msg_sets_watts.append(power_chain_watts)
+            # image_pipeline_msg_sets_joules.append(power_chain_joules)
+            # image_pipeline_msg_sets_seconds.append(power_chain_seconds) 
+            total_watts = image_pipeline_msg_sets_watts[-1]
+            # total_joules = image_pipeline_msg_sets_joules[-1]
+            # total_seconds = image_pipeline_msg_sets_seconds[-1]      
+
+        # print(image_pipeline_msg_sets_watts)   
+        # print(image_pipeline_msg_sets_joules)  
+        # print(image_pipeline_msg_sets_seconds)  
+        # print(total_watts)
+        # print(total_joules)
+        # print(total_seconds)
+        return total_watts
+    
     def barchart_data_throughput(self, image_pipeline_msg_sets, option):
         """
         Converts a tracing message list into its corresponding 
@@ -1541,7 +1832,7 @@ class BenchmarkAnalyzer:
         
         # # NOTE: we can particularizations for first_target and last_target
         # #       as needed, e.g.
-        if self.benchmark_name == "a4_depth_image_proc":
+        if "a4" in self.benchmark_name:
             last_target = "robotperf_benchmarks:robotperf_pointcloud_output_cb_init"
         #
         # NOTE 2: find a way to parametrize this into the class
@@ -1613,7 +1904,7 @@ class BenchmarkAnalyzer:
         ]
 
 
-    def print_markdown_table(self, list_sets, list_sets_names, from_baseline=True, units='ms'):
+    def print_markdown_table(self, list_sets, list_sets_names, from_baseline=True, units='ms', add_power=False, power_consumption=0.0):
         """
         Creates a markdown table from a list of sets
 
@@ -1630,54 +1921,97 @@ class BenchmarkAnalyzer:
         for sets in list_sets:
             list_statistics.append(self.statistics(sets))
 
-        # Add name to each statistics list
-        for stat_list_index in range(len(list_statistics)):
-            list_statistics[stat_list_index].insert(0, list_sets_names[stat_list_index])
+        if not add_power:
+            # Add name to each statistics list
+            for stat_list_index in range(len(list_statistics)):
+                list_statistics[stat_list_index].insert(0, list_sets_names[stat_list_index])
 
-        # add headers
-        list_statistics.insert(
-            0,
-            [
-                "---",
-                "---",
-                "---",
-                "---",
-                "---",
-                "---",
-                "---",
-                "---",
-                #"---",
-                #"---",
-                "---",
-            ],
-        )
-        list_statistics.insert(
-            0,
-            [
-                " ",
-                "Benchmark Mean",
-                "Benchmark RMS",
-                "Benchmark Max ",
-                "Benchmark Min",
-                #"Benchmark Median",
-                "Mean",
-                "RMS",
-                "Max",
-                "Min",
-                #"Median",
-            ],
-        )
-
+            # add headers
+            list_statistics.insert(
+                0,
+                [
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    #"---",
+                    #"---",
+                    "---",
+                ],
+            )
+            list_statistics.insert(
+                0,
+                [
+                    " ",
+                    "Benchmark Mean",
+                    "Benchmark RMS",
+                    "Benchmark Max ",
+                    "Benchmark Min",
+                    #"Benchmark Median",
+                    "Mean",
+                    "RMS",
+                    "Max",
+                    "Min",
+                    #"Median",
+                ],
+            )
+        else:
+            # Add name to each statistics list
+            for stat_list_index in range(len(list_statistics)):
+                list_statistics[stat_list_index].insert(0, list_sets_names[stat_list_index])
+                
+            # add headers
+            list_statistics.insert(
+                0,
+                [
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    #"---",
+                    #"---",
+                    "---",
+                ],
+            )
+            list_statistics.insert(
+                0,
+                [
+                    " ",
+                    "Benchmark Mean",
+                    "Benchmark RMS",
+                    "Benchmark Max ",
+                    "Benchmark Min",
+                    #"Benchmark Median",
+                    "Mean",
+                    "RMS",
+                    "Max",
+                    "Min",
+                    #"Median",
+                ],
+            )
         baseline = list_statistics[2]  # baseline for %
 
         # add missing messages at the end
         # NOTE: programmed for only 1 initial list_statistics, if more provided
         # consider extending the self.lost_msgs to a list
-        if len(list_statistics) == 3:  # 1 initial, +2 headers
+        if len(list_statistics) == 3:  # 1 initial, +2 headers            
             list_statistics[0].append("Lost Messages")
             list_statistics[1].append("---")
             list_statistics[2].append("{:.2f} %".format((self.lost_msgs/len(self.image_pipeline_msg_sets))*100))
 
+            if add_power:
+                list_statistics[0].append("Average Power (W)")
+                list_statistics[1].append("---")
+                list_statistics[2].append(str(power_consumption))
+        
         length_list = [len(row) for row in list_statistics]
         column_width = max(length_list)
         count = 0
@@ -1755,7 +2089,7 @@ class BenchmarkAnalyzer:
             # count += 1
             # print(row)
 
-    def print_markdown_table_1d(self, list_sets, list_sets_names, from_baseline=True, units='ms'):
+    def print_markdown_table_1d(self, list_sets, list_sets_names, from_baseline=True, units='ms', add_power=False, power_consumption=None):
         """
         Creates a markdown table from a list of sets
 
@@ -1772,43 +2106,82 @@ class BenchmarkAnalyzer:
         for sets in list_sets:
             list_statistics.append(self.statistics_1d(sets))
 
-        # Add name to each statistics list
-        for stat_list_index in range(len(list_statistics)):
-            list_statistics[stat_list_index].insert(0, list_sets_names[stat_list_index])
+        if not add_power:
+            # Add name to each statistics list
+            for stat_list_index in range(len(list_statistics)):
+                list_statistics[stat_list_index].insert(0, list_sets_names[stat_list_index])
 
-        # add headers
-        list_statistics.insert(
-            0,
-            [
-                "---",
-                "---",
-                "---",
-                "---",
-                "---",
-                #"---",
-                #"---",
-                "---",
-                "---",
-                "---",
-                "---",
-            ],
-        )
-        list_statistics.insert(
-            0,
-            [
-                " ",
-                "Benchmark Mean",
-                "Benchmark RMS",
-                "Benchmark Max ",
-                "Benchmark Min",
-                #"Benchmark Median",
-                #" ",
-                " ",
-                " ",
-                " ",
-                " ",
-            ],
-        )
+            # add headers
+            list_statistics.insert(
+                0,
+                [
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    #"---",
+                    #"---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                ],
+            )
+            list_statistics.insert(
+                0,
+                [
+                    " ",
+                    "Benchmark Mean",
+                    "Benchmark RMS",
+                    "Benchmark Max ",
+                    "Benchmark Min",
+                    #"Benchmark Median",
+                    #" ",
+                    " ",
+                    " ",
+                    " ",
+                    " ",
+                ],
+            )
+        else:
+            # Add name to each statistics list
+            for stat_list_index in range(len(list_statistics)):
+                list_statistics[stat_list_index].insert(0, list_sets_names[stat_list_index])
+            
+            # add headers
+            list_statistics.insert(
+                0,
+                [
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                    #"---",
+                    #"---",
+                    "---",
+                    "---",
+                    "---",
+                    "---",
+                ],
+            )
+            list_statistics.insert(
+                0,
+                [
+                    " ",
+                    "Benchmark Mean",
+                    "Benchmark RMS",
+                    "Benchmark Max ",
+                    "Benchmark Min",
+                    #"Benchmark Median",
+                    #" ",
+                    " ",
+                    " ",
+                    " ",
+                    " ",
+                ],
+            )
 
         baseline = list_statistics[2]  # baseline for %
 
@@ -1819,6 +2192,12 @@ class BenchmarkAnalyzer:
             list_statistics[0].append("Lost Messages")
             list_statistics[1].append("---")
             list_statistics[2].append("{:.2f} %".format((self.lost_msgs/len(self.image_pipeline_msg_sets))*100))
+
+            if add_power:
+                list_statistics[0].append("Average Power (W)")
+                list_statistics[1].append("---")
+                list_statistics[2].append(str(power_consumption))
+
 
         length_list = [len(row) for row in list_statistics]
         column_width = max(length_list)
@@ -1972,6 +2351,25 @@ class BenchmarkAnalyzer:
                 trace_path + "/trace_cpu_ctf",
                 trace_path + "/trace_fpga_vtf_ctf_fix",
                 True)
+            
+    def get_power_chain_traces(self, trace_path):
+        if not trace_path:
+            trace_path = "/tmp/analysis/trace"
+
+        if self.hardware_device_type == "cpu":
+            # self.image_pipeline_msg_sets \
+            #     = self.msgsets_from_trace(trace_path, True)
+            self.image_pipeline_msg_sets \
+                = self.msgsets_from_trace_identifier(trace_path, debug=True, target=False)
+        elif self.hardware_device_type == "fpga":
+            # NOTE: can't use msgsets_from_trace_identifier because vtf traces
+            # won't have the unique identifier
+            self.image_pipeline_msg_sets = self.msgsets_from_ctf_vtf_traces(
+                trace_path + "/trace_cpu_ctf",
+                trace_path + "/trace_fpga_vtf_ctf_fix",
+                True,
+                target=False)
+
 
     def get_index_to_plot_latency(self):
         """ Obtain the index to plot given a series of sets
@@ -2106,50 +2504,70 @@ class BenchmarkAnalyzer:
         outs, err = run('cd /tmp/benchmarks && git log -1', shell=True)
         print(outs)
 
-    def analyze_latency(self, tracepath=None):
+    def analyze_latency(self, tracepath=None, add_power=False):
         """Analyze latency of the image pipeline
 
         Args:
             tracepath (string, optional):
                 Path of the CTF tracefiles. Defaults to None.
         """
+        if add_power:
+            power_consumption = self.analyze_power(tracepath)
+        else:
+            power_consumption = None
+        
         self.get_target_chain_traces(tracepath)        
         self.bar_charts_latency()
         self.index_to_plot = self.get_index_to_plot_latency()
         self.print_timing_pipeline()
         self.draw_tracepoints()
+        
+            
         self.print_markdown_table(
             [self.image_pipeline_msg_sets_barchart],
             ["RobotPerf benchmark"],
             from_baseline=False,
-            units='ms'
+            units='ms',
+            add_power=add_power,
+            power_consumption=power_consumption
         )
         self.plot_latency_results()
         # self.upload_results()  # performed in CI/CD pipelines instead
 
 
-    def analyze_throughput(self, tracepath=None):
+    def analyze_throughput(self, tracepath=None, add_power=False):
         """Analyze throughput of the image pipeline
 
         Args:
             tracepath (string, optional):
                 Path of the CTF tracefiles. Defaults to None.
         """
+        if add_power:
+            power_consumption = self.analyze_power(tracepath)
+        else:
+            power_consumption = None
+
+
         self.get_target_chain_traces(tracepath)        
         barcharts_through_megabys, barcharts_through_fps = self.barchart_data_throughput(self.image_pipeline_msg_sets, 'potential')
         
+
         self.print_markdown_table_1d(
             [barcharts_through_megabys],
             ["RobotPerf potential throughput"],
             from_baseline=False,
-            units='MB/s'
+            units='MB/s',
+            add_power=add_power,
+            power_consumption=power_consumption
         )
 
         self.print_markdown_table_1d(
             [barcharts_through_fps],
             ["RobotPerf potential throughput"],
             from_baseline=False,
-            units='fps'
+            units='fps',
+            add_power=add_power,
+            power_consumption=power_consumption
         )
         
         barcharts_through_megabys, barcharts_through_fps = self.barchart_data_throughput(self.image_pipeline_msg_sets, 'real')
@@ -2158,7 +2576,9 @@ class BenchmarkAnalyzer:
             [barcharts_through_megabys],
             ["RobotPerf real throughput"],
             from_baseline=False,
-            units='MB/s'
+            units='MB/s',
+            add_power=add_power,
+            power_consumption=power_consumption
         )
 
 
@@ -2166,8 +2586,24 @@ class BenchmarkAnalyzer:
             [barcharts_through_fps],
             ["RobotPerf real throughput"],
             from_baseline=False,
-            units='fps'
+            units='fps',
+            add_power=add_power,
+            power_consumption=power_consumption
         )
 
-    
+    def analyze_power(self, tracepath=None):
+        """Analyze power of the image pipeline
+
+        Args:
+            tracepath (string, optional):
+                Path of the CTF tracefiles. Defaults to None.
+        """
+        self.get_power_chain_traces(tracepath)        
+        total_watts = self.barchart_data_power(self.image_pipeline_msg_sets)
         
+        return total_watts
+
+    
+
+    
+

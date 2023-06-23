@@ -20,9 +20,12 @@ PointCloudOutputComponent::PointCloudOutputComponent(const rclcpp::NodeOptions &
 : rclcpp::Node("PointCloudOutputComponent", options)
 {
 
+  // Get the output_topic_name parameter from the parameter server with default value "input"
+  std::string output_topic_name = this->declare_parameter<std::string>("output_topic_name", "/benchmark/points");
+
   //Create subscriber to point cloud messages with callback function
   sub_point_cloud_ = this->create_subscription<sensor_msgs::msg::PointCloud2>(
-  "/benchmark/points", rclcpp::QoS(rclcpp::KeepLast(10)).reliable().best_effort(), std::bind(&PointCloudOutputComponent::pointcloudCb, this, std::placeholders::_1));
+  output_topic_name, rclcpp::QoS(rclcpp::KeepLast(10)).reliable().best_effort(), std::bind(&PointCloudOutputComponent::pointcloudCb, this, std::placeholders::_1));
 
 }
 
