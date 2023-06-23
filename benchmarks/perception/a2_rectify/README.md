@@ -38,5 +38,5 @@ RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch a2_rectify trace_a2_rectify.la
 
 | Type | Hardware | Metric | Value | Category | Timestamp | Note | Data Source |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| grey | ROBOTCORE | latency | 66.82 | edge | 14-10-2022 |  | perception/image |
+| :white_circle: | ROBOTCORE | latency | 66.82 | edge | 14-10-2022 |  | perception/image |
 

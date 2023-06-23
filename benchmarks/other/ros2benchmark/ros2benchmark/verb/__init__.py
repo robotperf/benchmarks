@@ -211,8 +211,16 @@ class Benchmark:
         md += "## Results\n\n"
         md += "| Type | Hardware | Metric | Value | Category | Timestamp | Note | Data Source |\n"
         md += "| --- | --- | --- | --- | --- | --- | --- | --- |\n"
+
         for result in self.results:
-            md += f"| {result['type']} | {result['hardware']} | {result['metric']} | {result['value']} | {result['category']} | {result['timestampt']} | {result['note']} | {result['datasource']} |\n"
+            if result['type'].lower() == "grey":
+                aux_type = ":white_circle:"
+            elif result['type'].lower() == "black":
+                aux_type = ":black_circle:"
+            else:
+                aux_type = result['type']
+
+            md += f"| {aux_type} | {result['hardware']} | {result['metric']} | {result['value']} | {result['category']} | {result['timestampt']} | {result['note']} | {result['datasource']} |\n"
         md += "\n"
         
         return md
@@ -224,11 +232,8 @@ class Benchmark:
         md = ""        
         
         benchmarks_repo_path = search_benchmarks_repo()
-        print(benchmarks_repo_path)
-        print(self.path)
         # relative = self.path.replace("./" + benchmarks_repo_path, "")
         relative = self.path.replace("src/benchmarks/", "")
-        print(relative)
         relative_graph_path = "imgs" + self.graph.split("imgs")[1]
 
         for result in self.results:

@@ -38,8 +38,8 @@ RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch a1_perception_2nodes trace_a1_
 
 | Type | Hardware | Metric | Value | Category | Timestamp | Note | Data Source |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| grey | ROBOTCORE | latency | 66.82 | edge | 14-10-2022 |  | perception/image |
-| grey | Kria KR260 | latency | 66.82 | edge | 14-10-2022 |  | perception/image |
-| grey | Jetson Nano | latency | 238.13 | edge | 14-10-2022 |  | perception/image |
-| grey | Jetson AGX Xavier | latency | 106.34 | edge | 14-10-2022 |  | perception/image |
+| :white_circle: | ROBOTCORE | latency | 66.82 | edge | 14-10-2022 |  | perception/image |
+| :white_circle: | Kria KR260 | latency | 66.82 | edge | 14-10-2022 |  | perception/image |
+| :white_circle: | Jetson Nano | latency | 238.13 | edge | 14-10-2022 |  | perception/image |
+| :white_circle: | Jetson AGX Xavier | latency | 106.34 | edge | 14-10-2022 |  | perception/image |
 
