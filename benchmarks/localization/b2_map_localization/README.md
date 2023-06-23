@@ -10,7 +10,7 @@ A map localization ROS robotics operation. Used to demonstrate the occupancy gri
 
 
 
-![](../../../imgs/b2_map_localization.svg)
+![](../../../imgs/b2_map_localization.png)
 
 **Metric**: latency (ms)
 

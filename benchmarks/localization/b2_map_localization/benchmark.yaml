@@ -3,7 +3,7 @@ name: b2_map_localization
 description: |
   A map localization ROS robotics operation. Used to demonstrate the occupancy grid localizer component [isaac_ros_occupancy_grid_localizer](https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_map_localization/tree/main/isaac_ros_occupancy_grid_localizer) package.
 short: Map localization ROS Component.
-graph: ../../../imgs/b2_map_localization.svg
+graph: ../../../imgs/b2_map_localization.png
 metric:
   metric: "latency"
   unit: "ms"

@@ -28,7 +28,6 @@
 import json
 from launch_ros.actions import ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
-import os
 
 from ros2_benchmark import ImageResolution
 from ros2_benchmark import ROS2BenchmarkConfig, ROS2BenchmarkTest
@@ -40,12 +39,12 @@ SESSION_NAME = 'b2_map_localization_auto'
 OPTION = 'with_monitor_node'
 POWER = "on" # by default "off"
 
-def launch_setup(container_premap_localizationfix, container_sigterm_timeout):
+def launch_setup(container_prefix, container_sigterm_timeout):
     """Generate launch description for benchmarking Isaac ROS OccupancyGridLocalizerNode."""
 
     occupancy_grid_localizer_node = ComposableNode(
         name='OccupancyGridLocalizerNode',
-        namespace=TestOccupancyGridLocalizerNode.generate_namespace(),
+        namespace='robotperf/benchmark',
         package='isaac_ros_occupancy_grid_localizer',
         plugin='nvidia::isaac_ros::occupancy_grid_localizer::OccupancyGridLocalizerNode',
         parameters=[
@@ -54,7 +53,10 @@ def launch_setup(container_premap_localizationfix, container_sigterm_timeout):
                 'loc_result_frame': 'map',
                 'map_yaml_path': MAP_YAML_PATH,
             }
-        ])
+        ],
+        remappings=[
+            ('flatscan_localization', '/r2b/flatscan_localization')],
+    )
     
     data_loader_node = ComposableNode(
         name='DataLoaderNode',
@@ -97,7 +99,7 @@ def launch_setup(container_premap_localizationfix, container_sigterm_timeout):
             'use_nitros_type_monitor_sub': True,
         }],
         remappings=[
-            ('output', 'localization_result')],
+            ('output', '/robotperf/benchmark/localization_result')],
     )
 
     if OPTION == 'with_monitor_node':
