@@ -2278,7 +2278,7 @@ class BenchmarkAnalyzer:
 
 
 
-    def results(self, sets):
+    def results(self, sets, metric="latency"):
         """
         Builds a dictionary of results from a list of sets.
 
@@ -2290,6 +2290,8 @@ class BenchmarkAnalyzer:
                 "category": "perception",
                 "timestampt": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())),
                 "value": 15.2,
+                "metric": "latency",
+                "metric_unit": "ms",
                 "note": "Note",
                 "datasource": "perception/image"
             }    
@@ -2463,30 +2465,8 @@ class BenchmarkAnalyzer:
         # fig.show()
         fig.write_image("/tmp/analysis/plot_barchart.png", width=1400, height=1000)
 
-        # ///////////////////
-        # Add results into robotperf/benchmarks repo
-
-        path_repo = "/tmp/benchmarks"
-        branch_name = ""
         result = self.results(self.image_pipeline_msg_sets_barchart)
-
-        # # fetch repo
-        # run('if [ -d "/tmp/benchmarks" ]; then cd ' + path_repo +  ' && git pull; \
-        #         else cd /tmp && git clone https://github.com/robotperf/benchmarks; fi',
-        #     shell=True)
-
-        if os.path.exists(path_repo):
-            benchmark_meta_paths = search_benchmarks(searchpath="/tmp/benchmarks")
-            for meta in benchmark_meta_paths:
-                # print(meta)  # debug
-                benchmark = Benchmark(meta)
-                if benchmark.name == self.benchmark_name:
-                    benchmark.results.append(result)
-                    branch_name = benchmark.id + "-" + str(len(benchmark.results))
-                    with open(meta, 'w') as file:
-                        file.write(str(benchmark))
-                    print(benchmark)
-                    break
+        self.add_result(result)
 
     def upload_results():
         # commit and push in a new branch called "branch_name" and drop instructions to create a PR
@@ -2605,9 +2585,62 @@ class BenchmarkAnalyzer:
         self.get_power_chain_traces(tracepath)        
         total_watts = self.barchart_data_power(self.image_pipeline_msg_sets)
         
+        # add results to yaml
+        result = {
+                "hardware": os.environ.get('HARDWARE'),
+                "category": os.environ.get('CATEGORY'),
+                "metric": os.environ.get('METRIC'),
+                "metric_unit": os.environ.get('METRIC_UNIT'),
+                "timestampt": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())),
+                "value": float(total_watts),
+                "note": "mean_benchmark {}, rms_benchmark {}, max_benchmark {}, min_benchmark {}, lost messages {:.2f} %".format(statistics_data[0], statistics_data[1], statistics_data[2], statistics_data[3], (self.lost_msgs/len(self.image_pipeline_msg_sets))*100),
+                "datasource": os.environ.get('ROSBAG')
+        }
+
+        self.add_result(result)
         return total_watts
 
-    
+    def add_result(self, result)
+        """        
+        Add results into robotperf/benchmarks repo
+
+        :param: result: dictionary of results
+
+        NOTE: Syntax should follow the following format, see results() method:
+            {
+                "hardware": "kr260",
+                "category": "perception",
+                "timestampt": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())),
+                "value": 15.2,
+                "metric": "latency",
+                "metric_unit": "ms",
+                "note": "Note",
+                "datasource": "perception/image"
+            }            
+
+        NOTE 2: repo's assumed already cloned at /tmp/benchmarks.
+        """
+
+        path_repo = "/tmp/benchmarks"
+        branch_name = ""
+
+        # # fetch repo
+        # run('if [ -d "/tmp/benchmarks" ]; then cd ' + path_repo +  ' && git pull; \
+        #         else cd /tmp && git clone https://github.com/robotperf/benchmarks; fi',
+        #     shell=True)
+
+        if os.path.exists(path_repo):
+            benchmark_meta_paths = search_benchmarks(searchpath="/tmp/benchmarks")
+            for meta in benchmark_meta_paths:
+                # print(meta)  # debug
+                benchmark = Benchmark(meta)
+                if benchmark.name == self.benchmark_name:
+                    benchmark.results.append(result)
+                    branch_name = benchmark.id + "-" + str(len(benchmark.results))
+                    with open(meta, 'w') as file:
+                        file.write(str(benchmark))
+                    print(benchmark)
+                    break        
 
     
 
