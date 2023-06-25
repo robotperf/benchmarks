@@ -30,6 +30,8 @@ reproduction: |
 results:
   - result:
       hardware: ROBOTCORE
+      metric: latency
+      metric_unit: ms
       category: edge
       timestampt: 14-10-2022
       value: 66.82

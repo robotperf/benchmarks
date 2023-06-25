@@ -2478,7 +2478,7 @@ class BenchmarkAnalyzer:
         if os.path.exists(path_repo):
             benchmark_meta_paths = search_benchmarks(searchpath="/tmp/benchmarks")
             for meta in benchmark_meta_paths:
-                print(meta)  # debug
+                # print(meta)  # debug
                 benchmark = Benchmark(meta)
                 if benchmark.name == self.benchmark_name:
                     benchmark.results.append(result)
@@ -2486,6 +2486,7 @@ class BenchmarkAnalyzer:
                     with open(meta, 'w') as file:
                         file.write(str(benchmark))
                     print(benchmark)
+                    break
 
     def upload_results():
         # commit and push in a new branch called "branch_name" and drop instructions to create a PR
