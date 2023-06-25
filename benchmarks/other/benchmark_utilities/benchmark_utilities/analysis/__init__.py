@@ -2600,7 +2600,7 @@ class BenchmarkAnalyzer:
         self.add_result(result)
         return total_watts
 
-    def add_result(self, result)
+    def add_result(self, result):
         """        
         Add results into robotperf/benchmarks repo
 
