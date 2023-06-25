@@ -2478,6 +2478,7 @@ class BenchmarkAnalyzer:
         if os.path.exists(path_repo):
             benchmark_meta_paths = search_benchmarks(searchpath="/tmp/benchmarks")
             for meta in benchmark_meta_paths:
+                print(meta)  # debug
                 benchmark = Benchmark(meta)
                 if benchmark.name == self.benchmark_name:
                     benchmark.results.append(result)
