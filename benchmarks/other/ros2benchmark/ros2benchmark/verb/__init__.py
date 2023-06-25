@@ -181,7 +181,6 @@ class Benchmark:
             "description": self.description,
             "short": self.short,
             "graph": self.graph,
-            "metric": self.metric,
             "reproduction": self.reproduction,
             "results": [{"result": result} for result in self.results]
         }
