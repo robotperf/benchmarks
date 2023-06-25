@@ -2520,7 +2520,7 @@ class BenchmarkAnalyzer:
         self.bar_charts_latency()
         self.index_to_plot = self.get_index_to_plot_latency()
         self.print_timing_pipeline()
-        self.draw_tracepoints()
+        # self.draw_tracepoints()
         
             
         self.print_markdown_table(
