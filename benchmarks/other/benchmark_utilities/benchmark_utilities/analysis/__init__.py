@@ -2310,7 +2310,7 @@ class BenchmarkAnalyzer:
                 "timestampt": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())),
                 "value": float(statistics_data[2]),
                 "note": "mean_benchmark {}, rms_benchmark {}, max_benchmark {}, min_benchmark {}, lost messages {:.2f} %".format(statistics_data[0], statistics_data[1], statistics_data[2], statistics_data[3], (self.lost_msgs/len(self.image_pipeline_msg_sets))*100),
-                "datasource": os.environ.get('ROSBAG')
+                "datasource": os.environ.get('ROSBAG'),
                 "type": os.environ.get('TYPE')
             }
 
@@ -2595,7 +2595,7 @@ class BenchmarkAnalyzer:
                 "timestampt": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())),
                 "value": float(total_watts),
                 "note": "mean_benchmark {}, rms_benchmark {}, max_benchmark {}, min_benchmark {}, lost messages {:.2f} %".format(statistics_data[0], statistics_data[1], statistics_data[2], statistics_data[3], (self.lost_msgs/len(self.image_pipeline_msg_sets))*100),
-                "datasource": os.environ.get('ROSBAG')
+                "datasource": os.environ.get('ROSBAG'),
                 "type": os.environ.get('TYPE')
         }
 
