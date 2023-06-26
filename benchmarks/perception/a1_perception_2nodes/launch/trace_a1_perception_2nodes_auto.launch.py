@@ -34,13 +34,24 @@ rosbag = os.environ.get('ROSBAG')
 print(rosbag)
 package = os.environ.get('PACKAGE')
 print(package)
+type = os.environ.get('TYPE')
+print(type)
+metric = os.environ.get('METRIC')
+print(metric)
+
 IMAGE_RESOLUTION = ImageResolution.HD
 #ROSBAG_PATH = '/home/amf/benchmark_ws/src/rosbags/perception/image' # NOTE: hardcoded, modify accordingly
 
-ROSBAG_PATH = 'src/rosbags/' + rosbag
+ROSBAG_PATH = '~/src/rosbags/' + rosbag
 SESSION_NAME = package
-OPTION = 'without_monitor_node'
-POWER = "on" # by default "off"
+if type == "grey":
+    OPTION = 'without_monitor_node'
+else:
+    OPTION = 'with_monitor_node'
+if metric == "power":
+    POWER = "on" # by default "off"
+else:
+    POWER = "off"
 
 def launch_setup(container_prefix, container_sigterm_timeout):
     """Generate launch description for benchmarking image_proc RectifyNode."""
