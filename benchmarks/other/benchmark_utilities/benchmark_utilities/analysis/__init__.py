@@ -2313,6 +2313,42 @@ class BenchmarkAnalyzer:
                 "datasource": os.environ.get('ROSBAG'),
                 "type": os.environ.get('TYPE')
             }
+    
+    def results_1d(self, sets, metric="throughput"):
+        """
+        Builds a dictionary of results from a list of sets.
+
+        :param: sets: list of processed data
+
+        NOTE: Syntax should follow the following format:
+            {
+                "hardware": "kr260",
+                "category": "perception",
+                "timestampt": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())),
+                "value": 15.2,
+                "metric": "latency",
+                "metric_unit": "ms",
+                "note": "Note",
+                "datasource": "perception/image"
+            }    
+        """
+
+        # mean_benchmark, rms_benchmark, max_benchmark, min_benchmark, mean_, rms_, max_, min_
+        # 0,                1,                  2,          3,          4,      5,   6,    7
+        statistics_data = self.statistics_1d(sets)
+
+        # print(statistics_data[2])
+        return {
+                "hardware": os.environ.get('HARDWARE'),
+                "category": os.environ.get('CATEGORY'),
+                "metric": os.environ.get('METRIC'),
+                "metric_unit": os.environ.get('METRIC_UNIT'),
+                "timestampt": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())),
+                "value": float(statistics_data[2]),
+                "note": "mean_benchmark {}, rms_benchmark {}, max_benchmark {}, min_benchmark {}, lost messages {:.2f} %".format(statistics_data[0], statistics_data[1], statistics_data[2], statistics_data[3], (self.lost_msgs/len(self.image_pipeline_msg_sets))*100),
+                "datasource": os.environ.get('ROSBAG'),
+                "type": os.environ.get('TYPE')
+            }
 
 
     def run(self, cmd, shell=False, timeout=1):
@@ -2534,11 +2570,11 @@ class BenchmarkAnalyzer:
 
 
         self.get_target_chain_traces(tracepath)        
-        barcharts_through_megabys, barcharts_through_fps = self.barchart_data_throughput(self.image_pipeline_msg_sets, 'potential')
+        barcharts_through_megabys_pot, barcharts_through_fps_pot = self.barchart_data_throughput(self.image_pipeline_msg_sets, 'potential')
         
 
         self.print_markdown_table_1d(
-            [barcharts_through_megabys],
+            [barcharts_through_megabys_pot],
             ["RobotPerf potential throughput"],
             from_baseline=False,
             units='MB/s',
@@ -2547,7 +2583,7 @@ class BenchmarkAnalyzer:
         )
 
         self.print_markdown_table_1d(
-            [barcharts_through_fps],
+            [barcharts_through_fps_pot],
             ["RobotPerf potential throughput"],
             from_baseline=False,
             units='fps',
@@ -2555,10 +2591,10 @@ class BenchmarkAnalyzer:
             power_consumption=power_consumption
         )
         
-        barcharts_through_megabys, barcharts_through_fps = self.barchart_data_throughput(self.image_pipeline_msg_sets, 'real')
+        barcharts_through_megabys_real, barcharts_through_fps_real = self.barchart_data_throughput(self.image_pipeline_msg_sets, 'real')
         
         self.print_markdown_table_1d(
-            [barcharts_through_megabys],
+            [barcharts_through_megabys_real],
             ["RobotPerf real throughput"],
             from_baseline=False,
             units='MB/s',
@@ -2568,13 +2604,22 @@ class BenchmarkAnalyzer:
 
 
         self.print_markdown_table_1d(
-            [barcharts_through_fps],
+            [barcharts_through_fps_real],
             ["RobotPerf real throughput"],
             from_baseline=False,
             units='fps',
             add_power=add_power,
             power_consumption=power_consumption
         )
+
+        metric_unit = os.environ.get('METRIC_UNIT')
+        if metric_unit == "fps":
+            result = self.results_1d(barcharts_through_fps_real)
+            self.add_result(result)
+        elif metric_unit == "MB/s":
+            result = self.results_1d(barcharts_through_megabys_real)
+            self.add_result(result)
+        
 
     def analyze_power(self, tracepath=None):
         """Analyze power of the image pipeline
@@ -2594,7 +2639,6 @@ class BenchmarkAnalyzer:
                 "metric_unit": os.environ.get('METRIC_UNIT'),
                 "timestampt": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())),
                 "value": float(total_watts),
-                "note": "mean_benchmark {}, rms_benchmark {}, max_benchmark {}, min_benchmark {}, lost messages {:.2f} %".format(statistics_data[0], statistics_data[1], statistics_data[2], statistics_data[3], (self.lost_msgs/len(self.image_pipeline_msg_sets))*100),
                 "datasource": os.environ.get('ROSBAG'),
                 "type": os.environ.get('TYPE')
         }
