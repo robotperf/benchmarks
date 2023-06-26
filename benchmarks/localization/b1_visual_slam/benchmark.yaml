@@ -1,10 +1,13 @@
 id: b1
 name: b1_visual_slam
 description: |
-  A SLAM localization based on visual input, and optionally other sensors such as IMUs. Used to demonstrate the visual SLAM component [isaac_ros_visual_slam](https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_benchmark/blob/main/scripts/isaac_ros_visual_slam_node.py) package.
+  A SLAM localization based on visual input, and optionally other sensors such as IMUs. Used to demonstrate the visual SLAM components [isaac_ros_visual_slam](https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_benchmark/blob/main/scripts/isaac_ros_visual_slam_node.py) and [`stella_vslam_ros`](https://github.com/stella-cv/stella_vslam_ros).
 short: Visual SLAM ROS Component.
 graph: ../../../imgs/a2_rectify.svg
 reproduction: |
+  # Install isaac_ros_benchmark: https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_benchmark#quickstart
+  # Install stella_vslam_ros: https://stella-cv.readthedocs.io/en/latest/index.html
+
   # Create a ROS 2 overlay workspace
   mkdir -p /tmp/benchmark_ws/src
   
