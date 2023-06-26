@@ -39,9 +39,9 @@ OPTION = 'with_monitor_node'
 POWER = "on" # by default "off"
 
 # NOTE: hardcoded, modify accordingly
-ROSBAG_PATH = '/home/martinho/acceleration/isaac_ros_vslam_ws/src/robotcore-vslam/data/stella_vslam/stereo/r2b_cafe'
-STELLA_VSLAM_FBOW_PATH = '/home/martinho/acceleration/isaac_ros_vslam_ws/src/robotcore-vslam/data/stella_vslam/common/orb_vocab.fbow'
-STELLA_VSLAM_CAMERA_CONFIG_PATH = '/home/martinho/acceleration/isaac_ros_vslam_ws/src/robotcore-vslam/data/stella_vslam/stereo/r2b_cafe.yaml'
+ROSBAG_PATH = '/data/stella_vslam/stereo/r2b_cafe'
+STELLA_VSLAM_FBOW_PATH = '/data/stella_vslam/common/orb_vocab.fbow'
+STELLA_VSLAM_CAMERA_CONFIG_PATH = 'data/stella_vslam/stereo/r2b_cafe.yaml'
 
 
 def launch_setup(container_prefix, container_sigterm_timeout):
