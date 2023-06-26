@@ -9,9 +9,10 @@ b1
 A SLAM localization based on visual input, and optionally other sensors such as IMUs. Used to demonstrate the visual SLAM components [isaac_ros_visual_slam](https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_benchmark/blob/main/scripts/isaac_ros_visual_slam_node.py) and [`stella_vslam_ros`](https://github.com/stella-cv/stella_vslam_ros).
 
 `isaac_ros_visual_slam`-based graph:
-![](../../../imgs/b1_visual_slam.svg)
+![](../../../imgs/b1_visual_slam_isaac_ros.svg)
 
 `stella_vslam_ros`-based graph:
+![](../../../imgs/b1_visual_slam_stella.svg)
 
 ## Reproduction Steps
 
