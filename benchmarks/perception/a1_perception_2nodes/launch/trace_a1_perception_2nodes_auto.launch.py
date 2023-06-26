@@ -37,7 +37,7 @@ type = os.environ.get('TYPE')
 metric = os.environ.get('METRIC')
 
 IMAGE_RESOLUTION = ImageResolution.HD
-ROSBAG_PATH = '/src/rosbags/' + rosbag # '/home/amf/benchmark_ws/src/rosbags/perception/image' # NOTE: hardcoded, modify accordingly
+ROSBAG_PATH = 'src/rosbags/' + rosbag # '/home/amf/benchmark_ws/src/rosbags/perception/image' # NOTE: hardcoded, modify accordingly
 SESSION_NAME = package
 if type == "grey":
     OPTION = 'without_monitor_node'
