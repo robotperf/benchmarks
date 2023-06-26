@@ -23,17 +23,24 @@
 # limitations under the License.
 
 import json
+import os
 from launch_ros.actions import ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
 
 from ros2_benchmark import ImageResolution
 from ros2_benchmark import ROS2BenchmarkConfig, ROS2BenchmarkTest
 
+rosbag = os.environ.get('ROSBAG')
+print(rosbag)
+package = os.environ.get('PACKAGE')
+print(package)
 IMAGE_RESOLUTION = ImageResolution.HD
-ROSBAG_PATH = '/home/amf/benchmark_ws/src/rosbags/perception/image' # NOTE: hardcoded, modify accordingly
-SESSION_NAME = 'a1_perception_2nodes_auto'
-OPTION = 'with_monitor_node'
-POWER = "off" # by default "off"
+#ROSBAG_PATH = '/home/amf/benchmark_ws/src/rosbags/perception/image' # NOTE: hardcoded, modify accordingly
+
+ROSBAG_PATH = 'src/rosbags/' + rosbag
+SESSION_NAME = package
+OPTION = 'without_monitor_node'
+POWER = "on" # by default "off"
 
 def launch_setup(container_prefix, container_sigterm_timeout):
     """Generate launch description for benchmarking image_proc RectifyNode."""
