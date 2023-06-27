@@ -23,6 +23,7 @@
 # limitations under the License.
 
 import json
+import os
 from launch_ros.actions import ComposableNodeContainer
 from launch.actions import DeclareLaunchArgument
 from launch_ros.descriptions import ComposableNode
@@ -31,12 +32,23 @@ from launch import LaunchDescription
 from ros2_benchmark import ImageResolution
 from ros2_benchmark import ROS2BenchmarkConfig, ROS2BenchmarkTest
 
+# These are provided as environment variables for CI, you can manually hardcord them for other uses
+rosbag = os.environ.get('ROSBAG')
+package = os.environ.get('PACKAGE')
+type = os.environ.get('TYPE')
+metric = os.environ.get('METRIC')
+
 IMAGE_RESOLUTION = ImageResolution.HD
-# ROSBAG_PATH = '/tmp/benchmark_ws/src/rosbags/image'  # NOTE: hardcoded, modify accordingly
-ROSBAG_PATH = '/home/amf/benchmark_ws/src/rosbags/perception/depth_image1'
-SESSION_NAME = 'a4_depth_image_proc_auto'
-OPTION = 'with_monitor_node'
-POWER = "off" # by default "off"
+ROSBAG_PATH = '/tmp/benchmark_ws/src/rosbags/' + rosbag # '/home/amf/benchmark_ws/src/rosbags/perception/depth_image' # NOTE: hardcoded, modify accordingly
+SESSION_NAME = package
+if type == "grey":
+    OPTION = 'without_monitor_node'
+else:
+    OPTION = 'with_monitor_node'
+if metric == "power":
+    POWER = "on" # by default "off"
+else:
+    POWER = "off"
 
 def launch_setup(container_prefix, container_sigterm_timeout):
     """Generate launch description for benchmarking image_proc RectifyNode."""
