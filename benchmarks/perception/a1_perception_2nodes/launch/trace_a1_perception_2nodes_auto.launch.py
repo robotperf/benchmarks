@@ -48,11 +48,6 @@ if metric == "power":
 else:
     POWER = "off"
 
-print(ROSBAG_PATH)
-print(OPTION)
-print(SESSION_NAME)
-print(POWER)
-
 def launch_setup(container_prefix, container_sigterm_timeout):
     """Generate launch description for benchmarking image_proc RectifyNode."""
 
