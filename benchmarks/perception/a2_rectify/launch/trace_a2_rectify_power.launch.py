@@ -31,7 +31,9 @@ from tracetools_launch.action import Trace
 from tracetools_trace.tools.names import DEFAULT_EVENTS_ROS
 from tracetools_trace.tools.names import DEFAULT_EVENTS_KERNEL
 from tracetools_trace.tools.names import DEFAULT_CONTEXT
- 
+
+POWER_LIB = os.environ.get('POWER_LIB')
+
 def generate_launch_description():
      # Trace
     trace = Trace(
@@ -67,7 +69,7 @@ def generate_launch_description():
                 name="power_component",
                 parameters=[
                     {"publish_rate": 20.0},
-                    {"power_lib": "rapl"}
+                    {"power_lib": POWER_LIB}
                 ],
             ),
             
