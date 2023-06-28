@@ -67,7 +67,7 @@ def generate_launch_description():
                 name="power_component",
                 parameters=[
                     {"publish_rate": 20.0},
-                    {"hardware_device_type": "rapl"}
+                    {"power_lib": "rapl"}
                 ],
             ),
             

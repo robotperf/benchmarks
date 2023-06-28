@@ -36,6 +36,7 @@ package = os.environ.get('PACKAGE')
 type = os.environ.get('TYPE')
 metric = os.environ.get('METRIC')
 
+POWER_LIB = os.environ.get('POWER_LIB')
 IMAGE_RESOLUTION = ImageResolution.HD
 ROSBAG_PATH = '/tmp/benchmark_ws/src/rosbags/' + rosbag # '/home/amf/benchmark_ws/src/rosbags/perception/image' # NOTE: hardcoded, modify accordingly
 SESSION_NAME = package
@@ -170,7 +171,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
                     name="power_component",
                     parameters=[
                         {"publish_rate": 20.0},
-                        {"hardware_device_type": "rapl"}
+                        {"power_lib": POWER_LIB}
                     ],
                 ),
                 
