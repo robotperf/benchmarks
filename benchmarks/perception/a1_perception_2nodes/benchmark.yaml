@@ -61,10 +61,21 @@ results:
     hardware: Intel i7-8700K
     metric: latency
     metric_unit: ms
-    type: grey    
     note: mean_benchmark 13.880188545454546, rms_benchmark 14.387412826011047, max_benchmark
       27.86298, min_benchmark 9.530861999999999, lost messages 4.55 %
     timestampt: '2023-06-25 15:10:31'
+    type: grey
     value: 27.86298
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.31249304260846, rms_benchmark 30.38833973215019, max_benchmark
+      44.30657616369117, min_benchmark 27.524451139736538, lost messages 0.00 %
+    timestampt: '2023-06-30 10:38:38'
+    type: black
+    value: 44.30657616369117
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
