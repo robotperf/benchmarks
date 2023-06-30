@@ -6,14 +6,20 @@ Visual SLAM ROS Component.
 b1
 
 ### Description
-A SLAM localization based on visual input, and optionally other sensors such as IMUs. Used to demonstrate the visual SLAM component [isaac_ros_visual_slam](https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_benchmark/blob/main/scripts/isaac_ros_visual_slam_node.py) package.
+A SLAM localization based on visual input, and optionally other sensors such as IMUs. Used to demonstrate the visual SLAM components.
 
+`isaac_ros_visual_slam`-based graph:
+![](../../../imgs/b1_visual_slam_isaac_ros.svg)
 
-![](../../../imgs/b1_visual_slam.svg)
+`stella_vslam_ros`-based graph:
+![](../../../imgs/b1_visual_slam_stella.svg)
 
 ## Reproduction Steps
 
 ```bash
+# Install isaac_ros_benchmark: https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_benchmark#quickstart
+# Install stella_vslam_ros: https://stella-cv.readthedocs.io/en/latest/index.html
+
 # Create a ROS 2 overlay workspace
 mkdir -p /tmp/benchmark_ws/src
 
