@@ -1,80 +1,66 @@
+description: 'The [stereo_image_proc](https://github.com/ros-perception/image_pipeline/tree/humble/stereo_image_proc)
+  package computes the disparity map using a left and right image. A disparity map
+  represents the difference in pixel position between corresponding points in the
+  stereo images. Disparity images are images that show the difference in displacement
+  or distance between corresponding points in a pair of stereo images. Stereo images
+  are two images of the same scene taken from slightly different viewpoints, such
+  as from the left and right eyes of a human observer or from two cameras. Disparity
+  images are often used in computer vision and image processing applications, such
+  as 3D reconstruction, depth estimation, and object recognition. By analyzing the
+  disparities between corresponding points in stereo images, it is possible to infer
+  the depth of objects in the scene and create a 3D representation of the environment.
+
+  A simple perception computational graph composed by 2 Components, `rectify` and
+  `resize` operations. Used to demonstrate a simple perception pipeline using the  package.
+
+  '
+graph: /imgs/a3_stereo_image_proc_graph.png
 id: a3
 name: a3_stereo_image_proc
-description: |
-  The [stereo_image_proc](https://github.com/ros-perception/image_pipeline/tree/humble/stereo_image_proc) package computes the disparity map using a left and right image. A disparity map represents the difference in pixel position between corresponding points in the stereo images. Disparity images are images that show the difference in displacement or distance between corresponding points in a pair of stereo images. Stereo images are two images of the same scene taken from slightly different viewpoints, such as from the left and right eyes of a human observer or from two cameras. Disparity images are often used in computer vision and image processing applications, such as 3D reconstruction, depth estimation, and object recognition. By analyzing the disparities between corresponding points in stereo images, it is possible to infer the depth of objects in the scene and create a 3D representation of the environment.
-  A simple perception computational graph composed by 2 Components, `rectify` and `resize` operations. Used to demonstrate a simple perception pipeline using the  package.
-short: Perception computational graph to compute a disparity map for stereo images.
-graph: /imgs/a3_stereo_image_proc_graph.png
-reproduction: |
-  ## ------- Installation -------
-  # Create a ROS 2 overlay workspace
-  mkdir -p /tmp/benchmark_ws/src
-
-  # Clone the benchmark repository
-  cd /tmp/benchmark_ws/src && git clone https://github.com/robotperf/benchmarks
-
-  # Fetch dependencies
-  source /opt/ros/humble/setup.bash
-  cd /tmp/benchmark_ws && sudo rosdep update || true && sudo apt-get update &&
-    sudo rosdep install --from-paths src --ignore-src --rosdistro humble -y
-
-  # Build the benchmark
-  colcon build --merge-install --packages-up-to a3_stereo_image_proc
-
-  # Terminal 1: Replay rosbag in a loop (within rosbags repo)
-  cd /path/to/rosbags/perception
-  ros2 bag play --loop image3
-
-  # Verify you are working in the workspace
-  cd /tmp/benchmark_ws
-
-  # Source the workspace as an overlay
-  source install/setup.bash
-
-  # Terminal 2: Run Stereo Image Proc Benchmark
-  ros2 launch a3_stereo_image_proc trace_a3_stereo_image_proc.launch.py
-
-  # Verify data was collected
-  cd ~/.ros/tracing
-  babeltrace a3_stereo_image_proc | less
-
-  # Analyze Data
-  ros2 launch a3_stereo_image_proc analyze_a3_stereo_image_proc.launch.py
-
-  # Optional: Visualize benchmark process while it's running using this script
-  chmod +x src/benchmarks/benchmarks/perception/a3_stereo_image_proc/scripts/visualize_benchmark.sh
-  ./src/benchmarks/benchmarks/perception/a3_stereo_image_proc/scripts/visualize_benchmark.sh
-  
-  ## ------- Reproduce Simulation -------
-  cd /tmp/benchmark_ws
-
-  # Source
-  source install/setup.bash
-
-  # Terminal 1: Launch Simulation
-  cd /tmp/benchmark_ws 
-  ros2 launch a3_stereo_image_proc launch_sim.launch.py world:=src/benchmarks/benchmarks/perception/a3_stereo_image_proc/worlds/neighborhood.world
-
-  # Terminal 2: Visualize perception from robot's perspective using rviz
-  rviz2 -d src/benchmarks/benchmarks/perception/a3_stereo_image_proc/config/camera_bot.rviz
-
-  # Terminal 3: Record a rosbag (ctrl+c to end recording)
-  ros2 bag record -a
-
-  # Terminal 4: Use keyboard to drive robot around world
-  ros2 run teleop_twist_keyboard teleop_twist_keyboard
-
-  # Verify: Play back rosbag after recording it in a loop
-  ros2 bag play --loop /path/to/bag/directory/
-
+reproduction: "## ------- Installation -------\n# Create a ROS 2 overlay workspace\n\
+  mkdir -p /tmp/benchmark_ws/src\n\n# Clone the benchmark repository\ncd /tmp/benchmark_ws/src\
+  \ && git clone https://github.com/robotperf/benchmarks\n\n# Fetch dependencies\n\
+  source /opt/ros/humble/setup.bash\ncd /tmp/benchmark_ws && sudo rosdep update ||\
+  \ true && sudo apt-get update &&\n  sudo rosdep install --from-paths src --ignore-src\
+  \ --rosdistro humble -y\n\n# Build the benchmark\ncolcon build --merge-install --packages-up-to\
+  \ a3_stereo_image_proc\n\n# Terminal 1: Replay rosbag in a loop (within rosbags\
+  \ repo)\ncd /path/to/rosbags/perception\nros2 bag play --loop image3\n\n# Verify\
+  \ you are working in the workspace\ncd /tmp/benchmark_ws\n\n# Source the workspace\
+  \ as an overlay\nsource install/setup.bash\n\n# Terminal 2: Run Stereo Image Proc\
+  \ Benchmark\nros2 launch a3_stereo_image_proc trace_a3_stereo_image_proc.launch.py\n\
+  \n# Verify data was collected\ncd ~/.ros/tracing\nbabeltrace a3_stereo_image_proc\
+  \ | less\n\n# Analyze Data\nros2 launch a3_stereo_image_proc analyze_a3_stereo_image_proc.launch.py\n\
+  \n# Optional: Visualize benchmark process while it's running using this script\n\
+  chmod +x src/benchmarks/benchmarks/perception/a3_stereo_image_proc/scripts/visualize_benchmark.sh\n\
+  ./src/benchmarks/benchmarks/perception/a3_stereo_image_proc/scripts/visualize_benchmark.sh\n\
+  \n## ------- Reproduce Simulation -------\ncd /tmp/benchmark_ws\n\n# Source\nsource\
+  \ install/setup.bash\n\n# Terminal 1: Launch Simulation\ncd /tmp/benchmark_ws \n\
+  ros2 launch a3_stereo_image_proc launch_sim.launch.py world:=src/benchmarks/benchmarks/perception/a3_stereo_image_proc/worlds/neighborhood.world\n\
+  \n# Terminal 2: Visualize perception from robot's perspective using rviz\nrviz2\
+  \ -d src/benchmarks/benchmarks/perception/a3_stereo_image_proc/config/camera_bot.rviz\n\
+  \n# Terminal 3: Record a rosbag (ctrl+c to end recording)\nros2 bag record -a\n\n\
+  # Terminal 4: Use keyboard to drive robot around world\nros2 run teleop_twist_keyboard\
+  \ teleop_twist_keyboard\n\n# Verify: Play back rosbag after recording it in a loop\n\
+  ros2 bag play --loop /path/to/bag/directory/\n"
 results:
-  - result:
-      type: grey  
-      metric: latency
-      metric_unit: ms      
-      hardware: 12th Gen Intel(R) Core(TM) i9-12900KF
-      category: edge
-      timestampt: 25-04-2023
-      value: 132.12
-      note: "Mean: 26.25 ms,  RMS: 27.18 ms, Max: 132.12 ms, Min: 8.73 ms over 1124 samples."
-      datasource: "perception/image3"
+- result:
+    category: edge
+    datasource: perception/image3
+    hardware: 12th Gen Intel(R) Core(TM) i9-12900KF
+    metric: latency
+    metric_unit: ms
+    note: 'Mean: 26.25 ms,  RMS: 27.18 ms, Max: 132.12 ms, Min: 8.73 ms over 1124
+      samples.'
+    timestampt: 25-04-2023
+    type: grey
+    value: 132.12
+- result:
+    category: edge
+    datasource: perception/image3
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: power
+    metric_unit: W
+    timestampt: '2023-06-30 19:59:24'
+    type: grey
+    value: 11.355308532714844
+short: Perception computational graph to compute a disparity map for stereo images.
