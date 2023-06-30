@@ -61,10 +61,21 @@ results:
     hardware: Intel i7-8700K
     metric: latency
     metric_unit: ms
-    type: grey    
     note: mean_benchmark 13.880188545454546, rms_benchmark 14.387412826011047, max_benchmark
       27.86298, min_benchmark 9.530861999999999, lost messages 4.55 %
     timestampt: '2023-06-25 15:10:31'
+    type: grey
     value: 27.86298
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 15.721566456521733, rms_benchmark 15.869114308427369, max_benchmark
+      23.859921999999997, min_benchmark 10.937566, lost messages 2.17 %
+    timestampt: '2023-06-30 18:57:25'
+    type: grey
+    value: 23.859921999999997
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
