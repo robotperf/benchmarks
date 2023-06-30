@@ -1,37 +1,39 @@
+description: 'A simple perception resize ROS robotics operation. Used to demonstrate
+  a simple perception component [image_pipeline](https://github.com/ros-perception/image_pipeline)
+  package.
+
+  '
+graph: ../../../imgs/a5_resize.svg
 id: a5
 name: a5_resize
-description: |
-  A simple perception resize ROS robotics operation. Used to demonstrate a simple perception component [image_pipeline](https://github.com/ros-perception/image_pipeline) package.
-short: Perception resize ROS Component.
-graph: ../../../imgs/a5_resize.svg
-reproduction: |
-  # Create a ROS 2 overlay workspace
-  mkdir -p /tmp/benchmark_ws/src
-  
-  # Clone the benchmark repository
-  cd /tmp/benchmark_ws/src && git clone https://github.com/robotperf/benchmarks
-  
-  # Fetch dependencies
-  source /opt/ros/humble/setup.bash
-  cd /tmp/benchmark_ws && sudo rosdep update || true && sudo apt-get update &&
-    sudo rosdep install --from-paths src --ignore-src --rosdistro humble -y
-  
-  # Build the benchmark
-  colcon build --merge-install --packages-up-to a5_resize
-  
-  # Source the workspace as an overlay, launch the benchmark
-  source install/setup.bash
-  RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch a5_resize trace_a5_resize.launch.py
-
-# Data not valid at the moment, just a placeholder for now
+reproduction: "# Create a ROS 2 overlay workspace\nmkdir -p /tmp/benchmark_ws/src\n\
+  \n# Clone the benchmark repository\ncd /tmp/benchmark_ws/src && git clone https://github.com/robotperf/benchmarks\n\
+  \n# Fetch dependencies\nsource /opt/ros/humble/setup.bash\ncd /tmp/benchmark_ws\
+  \ && sudo rosdep update || true && sudo apt-get update &&\n  sudo rosdep install\
+  \ --from-paths src --ignore-src --rosdistro humble -y\n\n# Build the benchmark\n\
+  colcon build --merge-install --packages-up-to a5_resize\n\n# Source the workspace\
+  \ as an overlay, launch the benchmark\nsource install/setup.bash\nRMW_IMPLEMENTATION=rmw_cyclonedds_cpp\
+  \ ros2 launch a5_resize trace_a5_resize.launch.py\n"
 results:
-  - result:
-      type: grey
-      metric: latency
-      metric_unit: ms      
-      hardware: Intel® Core™ i5-8250U CPU @ 1.60GHz × 8
-      category: workstation
-      timestampt: 08-05-2023
-      value: 33.68
-      note: ""
-      datasource: "perception/image2"
+- result:
+    category: workstation
+    datasource: perception/image2
+    hardware: "Intel\xAE Core\u2122 i5-8250U CPU @ 1.60GHz \xD7 8"
+    metric: latency
+    metric_unit: ms
+    note: ''
+    timestampt: 08-05-2023
+    type: grey
+    value: 33.68
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 27.71287288898708, rms_benchmark 28.543389821126386, max_benchmark
+      44.32367523404895, min_benchmark 2.9718233552358204, lost messages 2.38 %
+    timestampt: '2023-06-30 18:34:39'
+    type: grey
+    value: 44.32367523404895
+short: Perception resize ROS Component.
