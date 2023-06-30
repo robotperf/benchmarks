@@ -1,79 +1,54 @@
+description: "The [depth_image_proc](https://github.com/ros-perception/image_pipeline/tree/humble/depth_image_proc)\
+  \ package computes a point cloud using a rectified depth image and a rectified color\
+  \ image. \n"
+graph: /imgs/a3_stereo_image_proc_graph.png
 id: a4
 name: a4_depth_image_proc
-description: |
-  The [depth_image_proc](https://github.com/ros-perception/image_pipeline/tree/humble/depth_image_proc) package computes a point cloud using a rectified depth image and a rectified color image. 
-short: Perception computational graph to compute a point cloud using a rectified depth image and a rectified color image. 
-graph: /imgs/a3_stereo_image_proc_graph.png
-reproduction: |
-  ## ------- Installation -------
-  # Create a ROS 2 overlay workspace
-  mkdir -p /tmp/benchmark_ws/src
-
-  # Clone the benchmark repository
-  cd /tmp/benchmark_ws/src && git clone https://github.com/robotperf/benchmarks
-
-  # Fetch dependencies
-  source /opt/ros/humble/setup.bash
-  cd /tmp/benchmark_ws && sudo rosdep update || true && sudo apt-get update &&
-    sudo rosdep install --from-paths src --ignore-src --rosdistro humble -y
-
-  # Build the benchmark
-  colcon build --merge-install --packages-up-to a4_depth_image_proc
-
-  # Terminal 1: Replay rosbag in a loop (within rosbags repo)
-  cd /path/to/rosbags/perception
-  ros2 bag play --loop depth_image1
-
-  # Verify you are working in the workspace
-  cd /tmp/benchmark_ws
-
-  # Source the workspace as an overlay
-  source install/setup.bash
-
-  # Terminal 2: Run Stereo Image Proc Benchmark
-  ros2 launch a4_depth_image_proc trace_a4_depth_image_proc.launch.py
-
-  # Verify data was collected
-  cd ~/.ros/tracing
-  babeltrace a4_depth_image_proc | less
-
-  # Analyze Data
-  ros2 launch a4_depth_image_proc analyze_a4_depth_image_proc.launch.py
-
-  # Optional: Visualize benchmark process while it's running using this script
-  chmod +x src/benchmarks/benchmarks/perception/a4_depth_image_proc/scripts/visualize_benchmark.sh
-  ./src/benchmarks/benchmarks/perception/a4_depth_image_proc/scripts/visualize_benchmark.sh
-  
-  ## ------- Reproduce Simulation -------
-  cd /tmp/benchmark_ws
-
-  # Source
-  source install/setup.bash
-
-  # Terminal 1: Launch Simulation
-  cd /tmp/benchmark_ws 
-  ros2 launch a4_depth_image_proc launch_sim.launch.py world:=src/benchmarks/benchmarks/perception/a4_depth_image_proc/worlds/parking_garage.world
-
-  # Terminal 2: Visualize perception from robot's perspective using rviz
-  rviz2 -d src/benchmarks/benchmarks/perception/a4_depth_image_proc/config/sim_depth_camera_bot.rviz
-
-  # Terminal 3: Record a rosbag (ctrl+c to end recording)
-  ros2 bag record -a
-
-  # Terminal 4: Use keyboard to drive robot around world
-  ros2 run teleop_twist_keyboard teleop_twist_keyboard
-
-  # Verify: Play back rosbag after recording it in a loop
-  ros2 bag play --loop /path/to/bag/directory/
-
+reproduction: "## ------- Installation -------\n# Create a ROS 2 overlay workspace\n\
+  mkdir -p /tmp/benchmark_ws/src\n\n# Clone the benchmark repository\ncd /tmp/benchmark_ws/src\
+  \ && git clone https://github.com/robotperf/benchmarks\n\n# Fetch dependencies\n\
+  source /opt/ros/humble/setup.bash\ncd /tmp/benchmark_ws && sudo rosdep update ||\
+  \ true && sudo apt-get update &&\n  sudo rosdep install --from-paths src --ignore-src\
+  \ --rosdistro humble -y\n\n# Build the benchmark\ncolcon build --merge-install --packages-up-to\
+  \ a4_depth_image_proc\n\n# Terminal 1: Replay rosbag in a loop (within rosbags repo)\n\
+  cd /path/to/rosbags/perception\nros2 bag play --loop depth_image1\n\n# Verify you\
+  \ are working in the workspace\ncd /tmp/benchmark_ws\n\n# Source the workspace as\
+  \ an overlay\nsource install/setup.bash\n\n# Terminal 2: Run Stereo Image Proc Benchmark\n\
+  ros2 launch a4_depth_image_proc trace_a4_depth_image_proc.launch.py\n\n# Verify\
+  \ data was collected\ncd ~/.ros/tracing\nbabeltrace a4_depth_image_proc | less\n\
+  \n# Analyze Data\nros2 launch a4_depth_image_proc analyze_a4_depth_image_proc.launch.py\n\
+  \n# Optional: Visualize benchmark process while it's running using this script\n\
+  chmod +x src/benchmarks/benchmarks/perception/a4_depth_image_proc/scripts/visualize_benchmark.sh\n\
+  ./src/benchmarks/benchmarks/perception/a4_depth_image_proc/scripts/visualize_benchmark.sh\n\
+  \n## ------- Reproduce Simulation -------\ncd /tmp/benchmark_ws\n\n# Source\nsource\
+  \ install/setup.bash\n\n# Terminal 1: Launch Simulation\ncd /tmp/benchmark_ws \n\
+  ros2 launch a4_depth_image_proc launch_sim.launch.py world:=src/benchmarks/benchmarks/perception/a4_depth_image_proc/worlds/parking_garage.world\n\
+  \n# Terminal 2: Visualize perception from robot's perspective using rviz\nrviz2\
+  \ -d src/benchmarks/benchmarks/perception/a4_depth_image_proc/config/sim_depth_camera_bot.rviz\n\
+  \n# Terminal 3: Record a rosbag (ctrl+c to end recording)\nros2 bag record -a\n\n\
+  # Terminal 4: Use keyboard to drive robot around world\nros2 run teleop_twist_keyboard\
+  \ teleop_twist_keyboard\n\n# Verify: Play back rosbag after recording it in a loop\n\
+  ros2 bag play --loop /path/to/bag/directory/\n"
 results:
-  - result:
-      type: grey  
-      metric: latency
-      metric_unit: ms      
-      hardware: 12th Gen Intel(R) Core(TM) i9-12900KF
-      category: edge
-      timestampt: 26-04-2023
-      value: 939.43
-      note: "Mean: 37.09 ms,  RMS: 65.12 ms, Max: 939.43 ms, Min: 7.97 ms over 1147 samples."
-      datasource: "perception/depth_image1"
+- result:
+    category: edge
+    datasource: perception/depth_image1
+    hardware: 12th Gen Intel(R) Core(TM) i9-12900KF
+    metric: latency
+    metric_unit: ms
+    note: 'Mean: 37.09 ms,  RMS: 65.12 ms, Max: 939.43 ms, Min: 7.97 ms over 1147
+      samples.'
+    timestampt: 26-04-2023
+    type: grey
+    value: 939.43
+- result:
+    category: edge
+    datasource: perception/depth_image1
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: power
+    metric_unit: W
+    timestampt: '2023-06-30 20:37:42'
+    type: black
+    value: 11.513117790222168
+short: Perception computational graph to compute a point cloud using a rectified depth
+  image and a rectified color image.
