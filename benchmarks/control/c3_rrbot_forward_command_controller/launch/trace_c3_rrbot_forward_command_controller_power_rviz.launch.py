@@ -44,8 +44,8 @@ from tracetools_trace.tools.names import DEFAULT_CONTEXT
 
 import os
 
-EXAMPLE_3_CONTROLLER_TYPE = os.environ.get('EXAMPLE_3_CONTROLLER_TYPE')
-if EXAMPLE_3_CONTROLLER_TYPE == 'position':
+C3_CONTROLLER_TYPE = os.environ.get('C3_CONTROLLER_TYPE')
+if C3_CONTROLLER_TYPE == 'position':
     robot_controller = 'forward_position_controller'
     command_composable_node = ComposableNode(
             package="robotcore_control_ros2",
@@ -53,7 +53,7 @@ if EXAMPLE_3_CONTROLLER_TYPE == 'position':
             plugin="ros2_control_demos_example_3::PositionCommandPublisherNode",
             name="position_command_publisher",
         )
-elif EXAMPLE_3_CONTROLLER_TYPE == 'velocity':
+elif C3_CONTROLLER_TYPE == 'velocity':
     robot_controller = 'forward_velocity_controller'
     command_composable_node = ComposableNode(
             package="robotcore_control_ros2",
@@ -61,7 +61,7 @@ elif EXAMPLE_3_CONTROLLER_TYPE == 'velocity':
             plugin="ros2_control_demos_example_3::VelocityCommandPublisherNode",
             name="velocity_command_publisher",
         )
-elif EXAMPLE_3_CONTROLLER_TYPE == 'acceleration':
+elif C3_CONTROLLER_TYPE == 'acceleration':
     robot_controller = 'forward_acceleration_controller'
     command_composable_node = ComposableNode(
             package="robotcore_control_ros2",

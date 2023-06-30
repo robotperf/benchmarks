@@ -38,7 +38,7 @@ A [ros2_control_demos](https://github.com/ros-controls/ros2_control_demos) used 
   source install/setup.bash
 
   # Select what type of controller (position, velocity or acceleration) to launch before launching the trace file
-  export EXAMPLE_3_CONTROLLER_TYPE=position
+  export C3_CONTROLLER_TYPE=position
   ros2 launch c3_rrbot_forward_command_controller trace_c3_rrbot_forward_command_controller_power.launch.py
 
   # Analyze trace files
