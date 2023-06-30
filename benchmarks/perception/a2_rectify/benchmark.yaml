@@ -1,37 +1,39 @@
+description: 'A simple perception rectify ROS robotics operation. Used to demonstrate
+  a simple perception component [image_pipeline](https://github.com/ros-perception/image_pipeline)
+  package.
+
+  '
+graph: ../../../imgs/a2_rectify.svg
 id: a2
 name: a2_rectify
-description: |
-  A simple perception rectify ROS robotics operation. Used to demonstrate a simple perception component [image_pipeline](https://github.com/ros-perception/image_pipeline) package.
-short: Perception rectify ROS Component.
-graph: ../../../imgs/a2_rectify.svg
-reproduction: |
-  # Create a ROS 2 overlay workspace
-  mkdir -p /tmp/benchmark_ws/src
-  
-  # Clone the benchmark repository
-  cd /tmp/benchmark_ws/src && git clone https://github.com/robotperf/benchmarks
-  
-  # Fetch dependencies
-  source /opt/ros/humble/setup.bash
-  cd /tmp/benchmark_ws && sudo rosdep update || true && sudo apt-get update &&
-    sudo rosdep install --from-paths src --ignore-src --rosdistro humble -y
-  
-  # Build the benchmark
-  colcon build --merge-install --packages-up-to a2_rectify
-  
-  # Source the workspace as an overlay, launch the benchmark
-  source install/setup.bash
-  RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch a2_rectify trace_a2_rectify.launch.py
-
-# Data not valid at the moment, just a placeholder for now
+reproduction: "# Create a ROS 2 overlay workspace\nmkdir -p /tmp/benchmark_ws/src\n\
+  \n# Clone the benchmark repository\ncd /tmp/benchmark_ws/src && git clone https://github.com/robotperf/benchmarks\n\
+  \n# Fetch dependencies\nsource /opt/ros/humble/setup.bash\ncd /tmp/benchmark_ws\
+  \ && sudo rosdep update || true && sudo apt-get update &&\n  sudo rosdep install\
+  \ --from-paths src --ignore-src --rosdistro humble -y\n\n# Build the benchmark\n\
+  colcon build --merge-install --packages-up-to a2_rectify\n\n# Source the workspace\
+  \ as an overlay, launch the benchmark\nsource install/setup.bash\nRMW_IMPLEMENTATION=rmw_cyclonedds_cpp\
+  \ ros2 launch a2_rectify trace_a2_rectify.launch.py\n"
 results:
-  - result:
-      type: grey  
-      metric: latency
-      metric_unit: ms      
-      hardware: ROBOTCORE
-      category: edge
-      timestampt: 14-10-2022
-      value: 66.82
-      note: ""
-      datasource: "perception/image"
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: ROBOTCORE
+    metric: latency
+    metric_unit: ms
+    note: ''
+    timestampt: 14-10-2022
+    type: grey
+    value: 66.82
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 13.991133647058822, rms_benchmark 14.134927956173124, max_benchmark
+      17.196661, min_benchmark 5.3474580000000005, lost messages 0.00 %
+    timestampt: '2023-06-30 19:47:26'
+    type: black
+    value: 17.196661
+short: Perception rectify ROS Component.
