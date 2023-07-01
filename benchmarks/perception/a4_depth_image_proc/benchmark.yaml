@@ -47,9 +47,20 @@ results:
     hardware: NVIDIA AGX Orin Dev. Kit
     metric: power
     metric_unit: W
-    timestampt: '2023-06-30 20:37:42'
     note: ''
+    timestampt: '2023-06-30 20:37:42'
     type: black
     value: 11.513117790222168
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 52.36187717005076, rms_benchmark 67.83441415522553, max_benchmark
+      492.41293299999995, min_benchmark 15.982555999999999, lost messages 1.14 %
+    timestampt: '2023-07-01 18:52:57'
+    type: grey
+    value: 492.41293299999995
 short: Perception computational graph to compute a point cloud using a rectified depth
   image and a rectified color image.
