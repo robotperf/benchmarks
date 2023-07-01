@@ -31,8 +31,19 @@ results:
     hardware: NVIDIA AGX Orin Dev. Kit
     metric: power
     metric_unit: W
+    note: ''
     timestampt: '2023-06-30 21:06:37'
     type: black
-    note: ''
     value: 11.99144172668457
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 14.496061530612247, rms_benchmark 15.356667129367795, max_benchmark
+      42.158766, min_benchmark 8.635698999999999, lost messages 4.08 %
+    timestampt: '2023-07-01 19:22:31'
+    type: grey
+    value: 42.158766
 short: Perception resize ROS Component.
