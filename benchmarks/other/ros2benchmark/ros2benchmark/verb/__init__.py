@@ -154,34 +154,31 @@ class Benchmark:
         # print("debugging: ", self.name)
 
         for result in yaml_data["results"]:
-            # try:
-            metric = result["result"]["metric"]
-            metric_unit = result["result"]["metric_unit"]
-            result_type = result["result"]["type"]
-            hardware = result["result"]["hardware"]
-            category = result["result"]["category"]
-            timestampt = result["result"]["timestampt"]
-            value = result["result"]["value"]
-            note = result["result"]["note"]
-            datasource = result["result"]["datasource"]
+            try:
+                metric = result["result"]["metric"]
+                metric_unit = result["result"]["metric_unit"]
+                result_type = result["result"]["type"]
+                hardware = result["result"]["hardware"]
+                category = result["result"]["category"]
+                timestampt = result["result"]["timestampt"]
+                value = result["result"]["value"]
+                note = result["result"]["note"]
+                datasource = result["result"]["datasource"]
 
-            self.results.append({
-                "metric": metric,
-                "metric_unit": metric_unit,
-                "type": result_type, # "type" is a reserved keyword in Python, so we use "result_type
-                "hardware": hardware,
-                "category": category,
-                "timestampt": timestampt,
-                "value": value,
-                "note": note,
-                "datasource": datasource
-            })
+                self.results.append({
+                    "metric": metric,
+                    "metric_unit": metric_unit,
+                    "type": result_type, # "type" is a reserved keyword in Python, so we use "result_type
+                    "hardware": hardware,
+                    "category": category,
+                    "timestampt": timestampt,
+                    "value": value,
+                    "note": note,
+                    "datasource": datasource
+                })
 
-            # except KeyError as e:
-            #     print(f"{e} not found in the dictionary")
-            #     note = None  # Or set it as a default value suitable for your use case
-
-        
+            except KeyError as e:
+                print(f"{e} not found in benchmark.yml of: {self.name} (timestamp: {timestampt})")
 
     def __str__(self):
         yaml_data = {

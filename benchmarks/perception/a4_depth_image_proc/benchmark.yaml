@@ -48,6 +48,7 @@ results:
     metric: power
     metric_unit: W
     timestampt: '2023-06-30 20:37:42'
+    note: ''
     type: black
     value: 11.513117790222168
 short: Perception computational graph to compute a point cloud using a rectified depth

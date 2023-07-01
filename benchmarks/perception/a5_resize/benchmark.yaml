@@ -33,5 +33,6 @@ results:
     metric_unit: W
     timestampt: '2023-06-30 21:06:37'
     type: black
+    note: ''
     value: 11.99144172668457
 short: Perception resize ROS Component.
