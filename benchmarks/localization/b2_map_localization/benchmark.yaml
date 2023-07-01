@@ -36,4 +36,5 @@ results:
       timestampt: 14-10-2022
       value: 66.82
       note: ""
+      type: grey
       datasource: "perception/image"

@@ -151,6 +151,8 @@ class Benchmark:
         self.results = []
         self.path = yaml_file.replace("/benchmark.yaml", "")
 
+        # print("debugging: ", self.name)
+
         for result in yaml_data["results"]:
             metric = result["result"]["metric"]
             metric_unit = result["result"]["metric_unit"]
