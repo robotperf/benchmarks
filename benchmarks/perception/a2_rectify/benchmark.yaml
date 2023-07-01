@@ -79,4 +79,14 @@ results:
     timestampt: '2023-07-01 18:04:50'
     type: grey
     value: 19.59939
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-01 18:08:07'
+    type: grey
+    value: 6.1853766441345215
 short: Perception rectify ROS Component.
