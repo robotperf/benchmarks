@@ -99,4 +99,15 @@ results:
     timestampt: '2023-07-01 19:39:11'
     type: grey
     value: 34.55349916548109
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 11.631717441176473, rms_benchmark 12.280089043557881, max_benchmark
+      35.53647, min_benchmark 5.307922, lost messages 0.00 %
+    timestampt: '2023-07-01 19:42:28'
+    type: black
+    value: 35.53647
 short: Perception resize ROS Component.
