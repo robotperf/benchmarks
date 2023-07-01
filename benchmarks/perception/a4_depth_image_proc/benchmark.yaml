@@ -94,5 +94,15 @@ results:
     timestampt: '2023-07-01 19:02:52'
     type: grey
     value: 56.589352000000005
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-01 19:06:20'
+    type: grey
+    value: 20.117462158203125
 short: Perception computational graph to compute a point cloud using a rectified depth
   image and a rectified color image.
