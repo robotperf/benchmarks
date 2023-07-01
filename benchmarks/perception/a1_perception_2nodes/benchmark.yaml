@@ -96,6 +96,7 @@ results:
     metric_unit: W
     timestampt: '2023-07-01 13:36:18'
     type: grey
+    note: ''
     value: 7.1712188720703125
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.

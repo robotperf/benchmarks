@@ -154,6 +154,7 @@ class Benchmark:
         # print("debugging: ", self.name)
 
         for result in yaml_data["results"]:
+            # try:
             metric = result["result"]["metric"]
             metric_unit = result["result"]["metric_unit"]
             result_type = result["result"]["type"]
@@ -175,6 +176,12 @@ class Benchmark:
                 "note": note,
                 "datasource": datasource
             })
+
+            # except KeyError as e:
+            #     print(f"{e} not found in the dictionary")
+            #     note = None  # Or set it as a default value suitable for your use case
+
+        
 
     def __str__(self):
         yaml_data = {

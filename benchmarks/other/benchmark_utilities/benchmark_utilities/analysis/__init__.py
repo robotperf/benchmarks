@@ -2640,7 +2640,8 @@ class BenchmarkAnalyzer:
                 "timestampt": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())),
                 "value": float(total_watts),
                 "datasource": os.environ.get('ROSBAG'),
-                "type": os.environ.get('TYPE')
+                "type": os.environ.get('TYPE'),
+                "note": ''
         }
 
         self.add_result(result)
