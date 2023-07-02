@@ -21,7 +21,8 @@ class SummaryVerb(VerbExtension):
     detailed at https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md
     """
 
-    def proprocess(self, benchmark_meta_paths):
+    @staticmethod
+    def preprocess(benchmark_meta_paths):
         """ Preprocess a benchmark and return list with all results
 
         End up dumpting a list with dicts as follows
@@ -39,17 +40,28 @@ class SummaryVerb(VerbExtension):
             "id": id
         }    
         """
-        list_proceprocess = []
+        list_preprocess = []
         
         for meta in benchmark_meta_paths:
             benchmark = Benchmark(meta)
             for result in benchmark.results:
                 result["name"] = benchmark.name
                 result["id"] = benchmark.id
-                list_proceprocess.append(result)
+                list_preprocess.append(result)
         
-        return list_proceprocess
+        return list_preprocess
 
+
+    def most_recent(self, data):
+        """ Return the most recent entry for each 'name' in the provided data"""
+
+        # Use a dictionary to hold the most recent entry for each 'name'
+        filtered_dict = {}
+        for entry in data:
+            name = entry['name'] + entry['hardware'] + entry['type'] + entry['datasource']
+            if name not in filtered_dict or arrow.get(entry['timestampt'], ['D-M-YYYY', 'YYYY-MM-DD HH:mm:ss']).datetime > arrow.get(filtered_dict[name]['timestampt'], ['D-M-YYYY', 'YYYY-MM-DD HH:mm:ss']).datetime:
+                filtered_dict[name] = entry
+        return filtered_dict.values()        
 
     def plot_data(self, data, condition_func):
         # Filter data using the provided function
@@ -77,16 +89,115 @@ class SummaryVerb(VerbExtension):
         # Save the figure
         plt.savefig('/tmp/resultimg.png', bbox_inches='tight')
 
-    def filter_robotcore(self, d):
+    @staticmethod
+    def filter_robotcore(d):
         return d['hardware'] == 'ROBOTCORE'
+
+    @staticmethod
+    def extract_unique_x(data, x="hardware"):
+        hardware_set = {d[x] for d in data}
+        return list(hardware_set)        
+
+    @staticmethod
+    def to_markdown_table(data, title=None, unique=False):
+        """Print a list of results as a markdown table, sorted by timestamp and name"""
+        
+        # Sort the data by 'timestampt' and 'name' and 'metric'
+        sorted_data = sorted(
+            data,
+            key=lambda d: (arrow.get(d['timestampt'], ['D-M-YYYY', 'YYYY-MM-DD HH:mm:ss']).datetime, d['name']),
+            reverse=True
+        )
+
+        if unique:
+            sorted_data = self.most_recent(sorted_data)
+
+        return_str = ""
+        
+        # Print the table header
+        if title:
+            # print(f"\n**{title}**")
+            return_str += f"\n**{title}**\n"
+
+        # print("| Type | Benchmark | Metric | Value | Category | Timestamp | Note | Data Source |")
+        # print("| --- | --- | --- | --- | --- | --- | --- | --- |")
+        return_str += "| Type | Benchmark | Metric | Value | Category | Hardware | Timestamp | Note | Data Source |\n"
+        return_str += "| --- | --- | --- | --- | --- | --- | --- | --- | --- |\n"
+
+        # Print each row of the table
+        for d in sorted_data:
+            # customize the results
+            if d['type'].lower() == "grey":
+                aux_type = "[:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type)"
+            elif d['type'].lower() == "black":
+                aux_type = "[:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type)"
+            else:
+                aux_type = d['type']
+
+            if d['category'] == "workstation":
+                aux_category = "[:desktop_computer:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#computing-targets)"
+            elif d['category'] == "edge":
+                aux_category = "[:pager:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#computing-targets)"
+            elif d['category'] == "cloud":
+                aux_category = "[:partly_sunny:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#computing-targets)"
+            elif d['category'] == "datacenter":
+                aux_category = "[:file_cabinet:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#computing-targets)"
+            else:
+                aux_category = d['category']
+
+            datasource = "[{}](https://github.com/robotperf/rosbags/tree/main/{})".format(d['datasource'], d['datasource'])
+            subgroup = ""
+            if d['id'].startswith("a"):
+                subgroup = "perception"
+            elif d['id'].startswith("b"):
+                subgroup = "localization"
+            elif d['id'].startswith("c"):
+                subgroup = "control"
+            benchmark_url = "[{}](https://github.com/robotperf/benchmarks/tree/main/benchmarks/{}/{})".format(d['name'], subgroup, d['name'])
+
+            metric_icon = d['metric']
+            if d['metric'].lower() == "latency":
+                metric_icon += " :stopwatch:"
+            elif d['metric'].lower() == "throughput":
+                metric_icon += " :signal_strength:"
+            elif d['metric'].lower() == "power":
+                metric_icon += " :zap:"
+
+            # print(f"| {aux_type} | {benchmark_url} | {metric_icon} | {d['value']} | {d['category']} | {d['timestampt']} | {d['note']} | {datasource} |")
+            return_str += f"| {aux_type} | {benchmark_url} | {metric_icon} | {d['value']} | {aux_category} |  {d['hardware']} | {d['timestampt']} | {d['note']} | {datasource} |\n"
+        return return_str
 
     def main(self, *, args):
         # get paths of "benchmark.yaml" files for each benchmark
         benchmark_meta_paths = search_benchmarks()
-        list_results = self.proprocess(benchmark_meta_paths)
+        list_results = SummaryVerb.preprocess(benchmark_meta_paths)
         # pprint.pprint(list_results)
 
-        # filtered_data = [item for item in list_results if item['hardware'] == 'ROBOTCORE']
-        # pprint.pprint(filtered_data)
+        # # 0. Print all results for a given hardware solution
+        # ######################################################
+        # # NOTE: ordered by timestamp and name
+        # # NOTE 2: unique applied, so only the most recent entry for each 'name','hardware','type','datasource' 
+        # # combination is printed
+        # hw = 'Intel i7-8700K'
+        # filtered_data = [item for item in list_results if item['hardware'] == hw]
+        # print(SummaryVerb.to_markdown_table(filtered_data, hw, unique=True))
+        # ######################################################
+        
+        # # 1. Print all results for a given benchmark
+        # ######################################################
+        # # NOTE: ordered by timestamp and name
+        # benchmark_id = 'a1'
+        # filtered_data = [item for item in list_results if item['id'] == benchmark_id]
+        # print(SummaryVerb.to_markdown_table(filtered_data, benchmark_id))
+        # ######################################################
 
-        self.plot_data(list_results, self.filter_robotcore)
+        # 2. Print all results grouped by hardware solution, for all of the solutions
+        ######################################################
+        # NOTE: ordered by timestamp and name
+        list_hardware = self.extract_unique_x(list_results, "hardware")
+        for hw in list_hardware:
+            extracted_data = [d for d in list_results if d['hardware'] == hw]
+            print(SummaryVerb.to_markdown_table(extracted_data, hw))
+        ######################################################                
+
+        # self.plot_data(list_results, SummaryVerb.filter_robotcore)

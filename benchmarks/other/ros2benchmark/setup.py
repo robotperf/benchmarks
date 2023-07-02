@@ -42,6 +42,7 @@ The package provides the benchmark command for the ROS 2 command line tools.""",
             "list = ros2benchmark.verb.list:ListVerb",
             "update = ros2benchmark.verb.update:UpdateVerb",
             "summary = ros2benchmark.verb.summary:SummaryVerb",
+            "report = ros2benchmark.verb.report:ReportVerb",
         ],
     },
 )

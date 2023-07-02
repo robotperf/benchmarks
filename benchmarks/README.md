@@ -64,10 +64,10 @@ Each benchmark should be a ROS 2 package and should build and run using the comm
 ### Computing Targets
 
 Each computing target will be marked with a symbol denoting its group as in:
-  - edge/embedded -> 🤖
-  - workstation -> 🖥️
-  - data center -> 🗄
-  - cloud targets -> ⛅
+  - `edge` -> 📟
+  - `workstation` -> 🖥️
+  - `datacenter` -> 🗄
+  - `cloud` -> ⛅
 
 This way, targets can be grouped and compared easily.
 ### Metric
