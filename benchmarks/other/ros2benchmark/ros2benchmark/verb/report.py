@@ -73,6 +73,8 @@ class ReportVerb(VerbExtension):
     @staticmethod
     def plot_data(data, 
                   title,
+                  xlabel,
+                  ylabel,
                   name_function=plot_function_names,
                   value_function=plot_function_values, 
                   filter=None, 
@@ -120,13 +122,14 @@ class ReportVerb(VerbExtension):
         plt.figure(figsize=(10, 5))
         # plt.bar(names, values, color='blue')
         plt.bar(names, values, color=colors)
-        plt.title('Latency Values: ' + title)
-        plt.xlabel('Hardware')
-        plt.ylabel('Latency (ms)')
+        plt.title(title)
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
         plt.xticks(rotation=80)  # Rotate x-axis labels for better visibility
 
-        # Save the figure
+        # Save the figure and close
         plt.savefig(plotpath, bbox_inches='tight')
+        plt.close()
         
         return plotpath
 
@@ -186,18 +189,69 @@ class ReportVerb(VerbExtension):
         benchmark_id_report += "## Benchmark results by `id`\n"
         list_ids = SummaryVerb.extract_unique_x(list_results, "id")
         alphabetical_list_ids = sorted(list_ids)
+
+        # unique condition
+        unique_condition = False
+
         for benchmark_id in alphabetical_list_ids:
-            # get body
-            filtered_data = [item for item in list_results if item['id'] == benchmark_id]
-            benchmark_id_report += SummaryVerb.to_markdown_table(filtered_data, benchmark_id)
-            # plot
-            plotpath = (ReportVerb.plot_data(filtered_data, 
-                                            name_function=ReportVerb.plot_function_names_forid,
-                                            value_function=ReportVerb.plot_function_values,
-                                            title=benchmark_id, 
-                                            unique=False))
-            # plotpath = (ReportVerb.plot_data(list_results, title=benchmark_id, filter=SummaryVerb.filter_robotcore, unique=True))        
-            benchmark_id_report += f"\n![{plotpath}]({plotpath})"
+            
+            # ## all of it (metric-agnostic)
+            # # get body
+            # filtered_data = [item for item in list_results if item['id'] == benchmark_id]
+            # benchmark_id_report += SummaryVerb.to_markdown_table(filtered_data, benchmark_id)
+            # # plot
+            # plotpath = (ReportVerb.plot_data(filtered_data, 
+            #                                 name_function=ReportVerb.plot_function_names_forid,
+            #                                 value_function=ReportVerb.plot_function_values,
+            #                                 title=benchmark_id, 
+            #                                 unique=False))
+            # benchmark_id_report += f"\n![{plotpath}]({plotpath})"
+
+            ## ⏱ latency
+            filtered_data = [item for item in list_results if (item['id'] == benchmark_id and item['metric'] == "latency")]
+            sorted_filtered_data = sorted(filtered_data, key=lambda x: x['value'])
+            benchmark_id_report += SummaryVerb.to_markdown_table(sorted_filtered_data, 
+                                                                 benchmark_id+"-latency",
+                                                                 sortedata=True)
+            plotpath = (ReportVerb.plot_data(sorted_filtered_data,
+                                             xlabel="Hardware (timestamp)",
+                                             ylabel="Latency (ms)",
+                                             name_function=ReportVerb.plot_function_names_forid,
+                                             value_function=ReportVerb.plot_function_values,
+                                             title=benchmark_id + "-latency",
+                                             unique=unique_condition))
+            benchmark_id_report += f"\n![{plotpath}]({plotpath})\n"
+
+            ## ⚡ power
+            filtered_data = [item for item in list_results if (item['id'] == benchmark_id and item['metric'] == "power")]
+            sorted_filtered_data = sorted(filtered_data, key=lambda x: x['value'])
+            benchmark_id_report += SummaryVerb.to_markdown_table(sorted_filtered_data, 
+                                                                 benchmark_id+"-power",
+                                                                 sortedata=True)
+            plotpath = (ReportVerb.plot_data(sorted_filtered_data,
+                                             xlabel="Hardware (timestamp)",
+                                             ylabel="Power (W)",
+                                             name_function=ReportVerb.plot_function_names_forid,
+                                             value_function=ReportVerb.plot_function_values,
+                                             title=benchmark_id + "-power",
+                                             unique=unique_condition))
+            benchmark_id_report += f"\n![{plotpath}]({plotpath})\n"
+
+            ## 📶 throughput
+            filtered_data = [item for item in list_results if (item['id'] == benchmark_id and item['metric'] == "throughput")]
+            sorted_filtered_data = sorted(filtered_data, key=lambda x: x['value'], reverse=True)
+            benchmark_id_report += SummaryVerb.to_markdown_table(sorted_filtered_data, 
+                                                                 benchmark_id+"-throughput",
+                                                                 sortedatareverse=True)
+            plotpath = (ReportVerb.plot_data(sorted_filtered_data,
+                                             xlabel="Hardware (timestamp)",
+                                             ylabel="Throughput (FPS)",
+                                             name_function=ReportVerb.plot_function_names_forid,
+                                             value_function=ReportVerb.plot_function_values,
+                                             title=benchmark_id + "-throughput",
+                                             unique=unique_condition))
+            benchmark_id_report += f"\n![{plotpath}]({plotpath})\n"
+
         benchmark_id_report += f"\n\n"
 
         ######################################################

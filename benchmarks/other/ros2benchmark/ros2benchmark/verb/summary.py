@@ -52,7 +52,8 @@ class SummaryVerb(VerbExtension):
         return list_preprocess
 
 
-    def most_recent(self, data):
+    @staticmethod
+    def most_recent(data):
         """ Return the most recent entry for each 'name' in the provided data"""
 
         # Use a dictionary to hold the most recent entry for each 'name'
@@ -99,7 +100,7 @@ class SummaryVerb(VerbExtension):
         return list(hardware_set)        
 
     @staticmethod
-    def to_markdown_table(data, title=None, unique=False):
+    def to_markdown_table(data, title=None, unique=False, sortedata=False, sortedatareverse=False):
         """Print a list of results as a markdown table, sorted by timestamp and name"""
         
         # Sort the data by 'timestampt' and 'name' and 'metric'
@@ -109,8 +110,13 @@ class SummaryVerb(VerbExtension):
             reverse=True
         )
 
+        if sortedata:
+            sorted_data = sorted(sorted_data, key=lambda x: x['value'])
+        if sortedatareverse:
+            sorted_data = sorted(sorted_data, key=lambda x: x['value'], reverse=True)
+
         if unique:
-            sorted_data = self.most_recent(sorted_data)
+            sorted_data = SummaryVerb.most_recent(sorted_data)
 
         return_str = ""
         
