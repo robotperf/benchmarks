@@ -81,4 +81,5 @@ class UpdateVerb(VerbExtension):
         for bench in benchmark_list:
             md+= bench.markdown_general()
 
-        self.update_general_readme_benchmarks(general_readme_path, new_content=md)
+        # self.update_general_readme_benchmarks(general_readme_path, new_content=md)
+        self.update_general_readme_benchmarks(general_readme_path, new_content="")
