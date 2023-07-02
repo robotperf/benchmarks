@@ -9,10 +9,7 @@ b2
 A map localization ROS robotics operation. Used to demonstrate the occupancy grid localizer component [isaac_ros_occupancy_grid_localizer](https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_map_localization/tree/main/isaac_ros_occupancy_grid_localizer) package.
 
 
-
 ![](../../../imgs/b2_map_localization.png)
-
-**Metric**: latency (ms)
 
 ## Reproduction Steps
 
@@ -39,7 +36,7 @@ RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch b2_map_localization trace_b2_m
 
 ## Results
 
-| Hardware | Value | Category | Timestamp | Note | Data Source |
-| --- | --- | --- | --- | --- | --- |
-| ROBOTCORE | 66.82 | edge | 14-10-2022 |  | perception/image |
+| Type | Hardware | Metric | Value | Category | Timestamp | Note | Data Source |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | ROBOTCORE | latency | 66.82 | edge | 14-10-2022 |  | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
 

@@ -8,11 +8,8 @@ b3
 ### Description
 An april tag pose detection component. Used to demonstrate the april tag detection components [isaac_ros_apriltag_graph](https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_benchmark/blob/main/scripts/isaac_ros_apriltag_graph.py) and [isaac_ros_apriltag_node](https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_benchmark/blob/main/scripts/isaac_ros_apriltag_node.py).
 
-`isaac_ros_apriltag_graph`-based graph:
-![](../../../imgs/b3_apriltag_detection_graph.svg)
 
-`isaac_ros_apriltag_node`-based graph:
-![](../../../imgs/b3_apriltag_detection_node.svg)
+![](../../../imgs/a2_rectify.svg)
 
 ## Reproduction Steps
 
@@ -29,19 +26,17 @@ cd /tmp/benchmark_ws && sudo rosdep update || true && sudo apt-get update &&
   sudo rosdep install --from-paths src --ignore-src --rosdistro humble -y
 
 # Build the benchmark
-colcon build --merge-install --packages-up-to a5_resize
+colcon build --merge-install --packages-up-to a2_rectify
 
 # Source the workspace as an overlay, launch the benchmark
 source install/setup.bash
-RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch a5_resize trace_a5_resize.launch.py
+RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch a2_rectify trace_a2_rectify.launch.py
 
 ```
 
 ## Results
 
-Data not valid at the moment, just a placeholder for now
-
 | Type | Hardware | Metric | Value | Category | Timestamp | Note | Data Source |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| grey | Intel® Core™ i5-8250U CPU @ 1.60GHz × 8 | latency | 33.68 | workstation | 08-05-2023 |  | perception/image2 |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | ROBOTCORE | latency | 66.82 | edge | 14-10-2022 |  | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
 
