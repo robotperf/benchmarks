@@ -15,6 +15,7 @@ import pprint
 import subprocess
 import yaml
 import time
+import json
 from tabnanny import verbose
 from turtle import width
 from wasabi import color
@@ -2277,10 +2278,9 @@ class BenchmarkAnalyzer:
             # print(row)
 
 
-
     def results(self, sets, metric="latency"):
         """
-        Builds a dictionary of results from a list of sets.
+        Builds a dictionary result from a list of sets.
 
         :param: sets: list of processed data
 
@@ -2313,7 +2313,88 @@ class BenchmarkAnalyzer:
                 "datasource": os.environ.get('ROSBAG'),
                 "type": os.environ.get('TYPE')
             }
-    
+
+
+    def results_json(self, metric="latency", jsonfilepath="/tmp/json"):
+        """
+        Builds a dictionary result from a json file
+
+        :param: metric: metric to be used
+        :param: metric_unit: metric unit to be used
+        :param: jsonfilepath: path to json file
+
+        NOTE: Syntax should follow the following format:
+            {
+                "hardware": "kr260",
+                "category": "perception",
+                "timestampt": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())),
+                "value": 15.2,
+                "metric": "latency",
+                "metric_unit": "ms",
+                "note": "Note",
+                "datasource": "perception/image"
+            }    
+        """
+        with open(jsonfilepath, 'r') as f:
+            data = json.load(f)
+
+            aux_value = ""
+            aux_note = ""
+
+            # Extract the desired fields
+            mean_latency = data.get("BasicPerformanceMetrics.MEAN_LATENCY")
+            max_latency = data.get("BasicPerformanceMetrics.MAX_LATENCY")
+            min_latency = data.get("BasicPerformanceMetrics.MIN_LATENCY")
+            rms_latency = data.get("BasicPerformanceMetrics.RMS_LATENCY")
+            frames_sent = int(data.get("BasicPerformanceMetrics.NUM_FRAMES_SENT"))
+            frames_missed = int(data.get("BasicPerformanceMetrics.NUM_MISSED_FRAMES"))  
+
+            if metric == "latency":
+                aux_value = max_latency
+                aux_note = "mean_latency {}, rms_latency {}, max_latency {}, min_latency {}, lost messages {:.2f} %".format(mean_latency, rms_latency, max_latency, min_latency, (frames_missed/frames_sent)*100)
+
+                str_out =  "| Benchmark Mean | Benchmark RMS | Benchmark Max  | Benchmark Min | Lost Messages |\n"
+                str_out += "| -------------- | ------------- | -------------- | ------------- | --------------|\n"
+                str_out += "| **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | {:.2f} % |\n".format(
+                    mean_latency, rms_latency, max_latency, min_latency, (frames_missed/frames_sent)*100)
+                print(str_out)
+
+            elif metric == "throughput":
+                mean_framerate = data.get("BasicPerformanceMetrics.MEAN_FRAME_RATE")
+                aux_value = mean_framerate
+                aux_note = "lost messages {:.2f} %".format((frames_missed/frames_sent)*100)
+
+                str_out =  "| Benchmark Mean | Benchmark RMS | Benchmark Max  | Benchmark Min | Lost Messages | Throughput |\n"
+                str_out += "| -------------- | ------------- | -------------- | ------------- | --------------|--------|\n"
+                str_out += "| **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | {:.2f} % | {:.2f} % |\n".format(
+                    mean_latency, rms_latency, max_latency, min_latency, (frames_missed/frames_sent)*100, mean_framerate)
+                print(str_out)
+
+
+            elif metric == "power":                
+                average_power = data.get("BasicPerformanceMetrics.AVERAGE_POWER")
+                aux_value = average_power
+                aux_note = "lost messages {:.2f} %".format((frames_missed/frames_sent)*100)
+
+                str_out =  "| Benchmark Mean | Benchmark RMS | Benchmark Max  | Benchmark Min | Lost Messages | Power |\n"
+                str_out += "| -------------- | ------------- | -------------- | ------------- | --------------|--------|\n"
+                str_out += "| **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | {:.2f} % | {:.2f} % |\n".format(
+                    mean_latency, rms_latency, max_latency, min_latency, (frames_missed/frames_sent)*100, average_power)
+                print(str_out)
+
+
+            return {
+                    "hardware": os.environ.get('HARDWARE'),
+                    "category": os.environ.get('CATEGORY'),
+                    "metric": os.environ.get('METRIC'),
+                    "metric_unit": os.environ.get('METRIC_UNIT'),
+                    "timestampt": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())),
+                    "value": float(aux_value),
+                    "note": aux_note,
+                    "datasource": os.environ.get('ROSBAG'),
+                    "type": os.environ.get('TYPE')
+                }
+
     def results_1d(self, sets, metric="throughput"):
         """
         Builds a dictionary of results from a list of sets.
@@ -2531,7 +2612,8 @@ class BenchmarkAnalyzer:
         Args:
             tracepath (string, optional):
                 Path of the CTF tracefiles. Defaults to None.
-        """
+        """        
+
         if add_power:
             power_consumption = self.analyze_power(tracepath)
         else:
@@ -2542,8 +2624,7 @@ class BenchmarkAnalyzer:
         self.index_to_plot = self.get_index_to_plot_latency()
         self.print_timing_pipeline()
         # self.draw_tracepoints()
-        
-            
+                    
         self.print_markdown_table(
             [self.image_pipeline_msg_sets_barchart],
             ["RobotPerf benchmark"],
@@ -2552,8 +2633,14 @@ class BenchmarkAnalyzer:
             add_power=add_power,
             power_consumption=power_consumption
         )
-        self.plot_latency_results()
-        # self.upload_results()  # performed in CI/CD pipelines instead
+
+        if os.environ("TYPE") and os.environ.get('TYPE') == "black":
+            result = self.results_json(metric=os.environ.get('METRIC'))
+            self.add_result(result)
+        else:
+            # default to grey-box benchmarking
+            self.plot_latency_results()
+            # self.upload_results()  # performed in CI/CD pipelines instead
 
 
     def analyze_throughput(self, tracepath=None, add_power=False):
@@ -2612,14 +2699,19 @@ class BenchmarkAnalyzer:
             power_consumption=power_consumption
         )
 
-        metric_unit = os.environ.get('METRIC_UNIT')
-        if metric_unit == "fps":
-            result = self.results_1d(barcharts_through_fps_real)
+        if os.environ("TYPE") and os.environ.get('TYPE') == "black":
+            result = self.results_json(metric=os.environ.get('METRIC'))
             self.add_result(result)
-        elif metric_unit == "MB/s":
-            result = self.results_1d(barcharts_through_megabys_real)
-            self.add_result(result)
-        
+        else:
+            # default to grey-box benchmarking
+            metric_unit = os.environ.get('METRIC_UNIT')
+            if metric_unit == "fps":
+                result = self.results_1d(barcharts_through_fps_real)
+                self.add_result(result)
+            elif metric_unit == "MB/s":
+                result = self.results_1d(barcharts_through_megabys_real)
+                self.add_result(result)
+
 
     def analyze_power(self, tracepath=None):
         """Analyze power of the image pipeline
@@ -2628,24 +2720,29 @@ class BenchmarkAnalyzer:
             tracepath (string, optional):
                 Path of the CTF tracefiles. Defaults to None.
         """
-        self.get_power_chain_traces(tracepath)        
-        total_watts = self.barchart_data_power(self.image_pipeline_msg_sets)
-        
-        # add results to yaml
-        result = {
-                "hardware": os.environ.get('HARDWARE'),
-                "category": os.environ.get('CATEGORY'),
-                "metric": os.environ.get('METRIC'),
-                "metric_unit": os.environ.get('METRIC_UNIT'),
-                "timestampt": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())),
-                "value": float(total_watts),
-                "datasource": os.environ.get('ROSBAG'),
-                "type": os.environ.get('TYPE'),
-                "note": ''
-        }
+        if os.environ("TYPE") and os.environ.get('TYPE') == "black":
+            result = self.results_json(metric=os.environ.get('METRIC'))
+            self.add_result(result)
+            return result["value"]
+        else:
+            # default to grey-box benchmarking
+            self.get_power_chain_traces(tracepath)        
+            total_watts = self.barchart_data_power(self.image_pipeline_msg_sets)
 
-        self.add_result(result)
-        return total_watts
+            # add results to yaml
+            result = {
+                    "hardware": os.environ.get('HARDWARE'),
+                    "category": os.environ.get('CATEGORY'),
+                    "metric": os.environ.get('METRIC'),
+                    "metric_unit": os.environ.get('METRIC_UNIT'),
+                    "timestampt": time.strftime("%Y-%m-%d %H:%M:%S", time.localtime(time.time())),
+                    "value": float(total_watts),
+                    "datasource": os.environ.get('ROSBAG'),
+                    "type": os.environ.get('TYPE'),
+                    "note": ''
+            }
+            self.add_result(result)
+            return total_watts
 
     def add_result(self, result):
         """        
