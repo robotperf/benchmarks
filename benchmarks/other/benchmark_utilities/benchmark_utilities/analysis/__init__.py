@@ -2634,7 +2634,7 @@ class BenchmarkAnalyzer:
             power_consumption=power_consumption
         )
 
-        if os.environ("TYPE") and os.environ.get('TYPE') == "black":
+        if os.environ.get('TYPE') == "black":
             result = self.results_json(metric=os.environ.get('METRIC'))
             self.add_result(result)
         else:
@@ -2699,7 +2699,7 @@ class BenchmarkAnalyzer:
             power_consumption=power_consumption
         )
 
-        if os.environ("TYPE") and os.environ.get('TYPE') == "black":
+        if os.environ.get('TYPE') == "black":
             result = self.results_json(metric=os.environ.get('METRIC'))
             self.add_result(result)
         else:
@@ -2720,7 +2720,7 @@ class BenchmarkAnalyzer:
             tracepath (string, optional):
                 Path of the CTF tracefiles. Defaults to None.
         """
-        if os.environ("TYPE") and os.environ.get('TYPE') == "black":
+        if os.environ.get('TYPE') == "black":
             result = self.results_json(metric=os.environ.get('METRIC'))
             self.add_result(result)
             return result["value"]
