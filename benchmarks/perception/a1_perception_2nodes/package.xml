@@ -30,6 +30,8 @@
   <depend>lttng-tools</depend>
   <depend>liblttng-ust-dev</depend>
   <depend>babeltrace</depend>
+  <depend>theora_image_transport</depend>
+  <depend>gazebo_msgs</depend>
   <!-- <depend>python3-bt2</depend> -->
 
   <test_depend>ament_lint_auto</test_depend>
