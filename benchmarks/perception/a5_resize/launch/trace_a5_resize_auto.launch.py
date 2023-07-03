@@ -212,7 +212,11 @@ class TestResizeNode(ROS2BenchmarkTest):
 
     def test_benchmark(self):
         json_file_path = self.run_benchmark()
-        
+
+        # Copy the JSON file to the "/tmp/json" file
+        # NOTE: this will be then used by the CI to post-process and analyze results
+        os.system("cp " + json_file_path + " /tmp/json")
+
         if self.config.option == 'with_monitor_node':
             # Open the file and load the JSON content into a Python dictionary
             with open(json_file_path, 'r') as f:
