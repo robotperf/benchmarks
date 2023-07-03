@@ -2765,8 +2765,8 @@ class BenchmarkAnalyzer:
         NOTE 2: repo's assumed already cloned at /tmp/benchmarks.
         """
 
-        # prepend special NOTE env. variable to result
-        if os.environ("NOTE"):
+        # prepend special NOTE env. variable to result        
+        if "NOTE" in os.environ:
             result["note"] = os.environ.get("NOTE") + result["note"]
 
 
