@@ -170,7 +170,7 @@ class SummaryVerb(VerbExtension):
                 metric_icon += " :zap:"
 
             # print(f"| {aux_type} | {benchmark_url} | {metric_icon} | {d['value']} | {d['category']} | {d['timestampt']} | {d['note']} | {datasource} |")
-            return_str += f"| {aux_type} | {benchmark_url} | {metric_icon} | {d['value']} | {aux_category} |  {d['hardware']} | {d['timestampt']} | {d['note']} | {datasource} |\n"
+            return_str += f"| {aux_type} | {benchmark_url} | {metric_icon} | {d['value']:.2f} | {aux_category} |  {d['hardware']} | {d['timestampt']} | {d['note']} | {datasource} |\n"
         return return_str
 
     def main(self, *, args):
@@ -206,4 +206,5 @@ class SummaryVerb(VerbExtension):
             print(SummaryVerb.to_markdown_table(extracted_data, hw))
         ######################################################                
 
-        # self.plot_data(list_results, SummaryVerb.filter_robotcore)
+        # 3. Print summary with best results for each benchmark
+        ######################################################

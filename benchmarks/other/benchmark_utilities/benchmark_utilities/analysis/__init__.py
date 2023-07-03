@@ -2668,6 +2668,11 @@ class BenchmarkAnalyzer:
         NOTE 2: repo's assumed already cloned at /tmp/benchmarks.
         """
 
+        # prepend special NOTE env. variable to result
+        if os.environ("NOTE"):
+            result["note"] = os.environ.get("NOTE") + result["note"]
+
+
         path_repo = "/tmp/benchmarks"
         branch_name = ""
 
