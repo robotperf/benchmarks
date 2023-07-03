@@ -2353,9 +2353,9 @@ class BenchmarkAnalyzer:
                 aux_value = max_latency
                 aux_note = "mean_latency {}, rms_latency {}, max_latency {}, min_latency {}, lost messages {:.2f} %".format(mean_latency, rms_latency, max_latency, min_latency, (frames_missed/frames_sent)*100)
 
-                str_out =  "| Benchmark Mean | Benchmark RMS | Benchmark Max  | Benchmark Min | Lost Messages |\n"
-                str_out += "| -------------- | ------------- | -------------- | ------------- | --------------|\n"
-                str_out += "| **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | {:.2f} % |\n".format(
+                str_out =  "| | Benchmark Mean | Benchmark RMS | Benchmark Max  | Benchmark Min | Lost Messages |\n"
+                str_out += "|----- | -------------- | ------------- | -------------- | ------------- | --------------|\n"
+                str_out += "| black-boxed | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | {:.2f} % |\n".format(
                     mean_latency, rms_latency, max_latency, min_latency, (frames_missed/frames_sent)*100)
                 print(str_out)
 
@@ -2364,9 +2364,9 @@ class BenchmarkAnalyzer:
                 aux_value = mean_framerate
                 aux_note = "lost messages {:.2f} %".format((frames_missed/frames_sent)*100)
 
-                str_out =  "| Benchmark Mean | Benchmark RMS | Benchmark Max  | Benchmark Min | Lost Messages | Throughput |\n"
-                str_out += "| -------------- | ------------- | -------------- | ------------- | --------------|--------|\n"
-                str_out += "| **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | {:.2f} % | {:.2f} % |\n".format(
+                str_out =  "|  | Benchmark Mean | Benchmark RMS | Benchmark Max  | Benchmark Min | Lost Messages | Throughput |\n"
+                str_out += "|------| -------------- | ------------- | -------------- | ------------- | --------------|--------|\n"
+                str_out += "| black-boxed | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | {:.2f} % | {:.2f}|\n".format(
                     mean_latency, rms_latency, max_latency, min_latency, (frames_missed/frames_sent)*100, mean_framerate)
                 print(str_out)
 
@@ -2376,9 +2376,9 @@ class BenchmarkAnalyzer:
                 aux_value = average_power
                 aux_note = "lost messages {:.2f} %".format((frames_missed/frames_sent)*100)
 
-                str_out =  "| Benchmark Mean | Benchmark RMS | Benchmark Max  | Benchmark Min | Lost Messages | Power |\n"
-                str_out += "| -------------- | ------------- | -------------- | ------------- | --------------|--------|\n"
-                str_out += "| **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | {:.2f} % | {:.2f} % |\n".format(
+                str_out =  "|  | Benchmark Mean | Benchmark RMS | Benchmark Max  | Benchmark Min | Lost Messages | Power |\n"
+                str_out += "|----- | -------------- | ------------- | -------------- | ------------- | --------------|--------|\n"
+                str_out += "| black-boxed | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | {:.2f} % | {:.2f} |\n".format(
                     mean_latency, rms_latency, max_latency, min_latency, (frames_missed/frames_sent)*100, average_power)
                 print(str_out)
 
@@ -2627,7 +2627,7 @@ class BenchmarkAnalyzer:
                     
         self.print_markdown_table(
             [self.image_pipeline_msg_sets_barchart],
-            ["RobotPerf benchmark"],
+            ["grey-boxed"],
             from_baseline=False,
             units='ms',
             add_power=add_power,
