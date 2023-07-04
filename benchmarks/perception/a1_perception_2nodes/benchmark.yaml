@@ -455,5 +455,15 @@ results:
     timestampt: '2023-07-04 21:19:47'
     type: black
     value: 8128.944581
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: power
+    metric_unit: W
+    note: lost messages 49.33 %
+    timestampt: '2023-07-04 21:22:09'
+    type: black
+    value: 8.96831017167883e-44
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
