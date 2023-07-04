@@ -33,32 +33,32 @@ from launch_ros.descriptions import ComposableNode
 from ros2_benchmark import ImageResolution
 from ros2_benchmark import ROS2BenchmarkConfig, ROS2BenchmarkTest
 
-# # These are provided as environment variables for CI, you can manually hardcord them for other uses
-# rosbag = os.environ.get('ROSBAG')
-# package = os.environ.get('PACKAGE')
-# type = os.environ.get('TYPE')
-# metric = os.environ.get('METRIC')
+# These are provided as environment variables for CI, you can manually hardcord them for other uses
+rosbag = os.environ.get('ROSBAG')
+package = os.environ.get('PACKAGE')
+type = os.environ.get('TYPE')
+metric = os.environ.get('METRIC')
 
-# POWER_LIB = os.environ.get('POWER_LIB')
-# IMAGE_RESOLUTION = ImageResolution.HD
-# ROSBAG_PATH = '/tmp/benchmark_ws/src/rosbags/' + rosbag # '/home/amf/benchmark_ws/src/rosbags/perception/image' # NOTE: hardcoded, modify accordingly
-# SESSION_NAME = package
-# if type == "grey":
-#     OPTION = 'without_monitor_node'
-# else:
-#     OPTION = 'with_monitor_node'
-# if metric == "power":
-#     POWER = "on" # by default "off"
-# else:
-#     POWER = "off"
-
+POWER_LIB = os.environ.get('POWER_LIB')
 IMAGE_RESOLUTION = ImageResolution.HD
-ROSBAG_PATH = '/workspaces/isaac_ros-dev/src/ros2_benchmark/assets/datasets/r2b_dataset/r2b_storage' # NOTE: hardcoded, modify accordingly
-MAP_YAML_PATH = '/workspaces/isaac_ros-dev/src/isaac_ros_benchmark/scripts/occupancy_grid_localizer/maps/map.yaml'
-SESSION_NAME = 'b2_map_localization'
-OPTION = 'with_monitor_node'
-POWER = "on" # by default "off"
-POWER_LIB = "jetson"
+ROSBAG_PATH = '/tmp/benchmark_ws/src/rosbags/' + rosbag # '/home/amf/benchmark_ws/src/rosbags/perception/image' # NOTE: hardcoded, modify accordingly
+SESSION_NAME = package
+if type == "grey":
+    OPTION = 'without_monitor_node'
+else:
+    OPTION = 'with_monitor_node'
+if metric == "power":
+    POWER = "on" # by default "off"
+else:
+    POWER = "off"
+
+# IMAGE_RESOLUTION = ImageResolution.HD
+# ROSBAG_PATH = '/workspaces/isaac_ros-dev/src/ros2_benchmark/assets/datasets/r2b_dataset/r2b_storage' # NOTE: hardcoded, modify accordingly
+# MAP_YAML_PATH = '/workspaces/isaac_ros-dev/src/isaac_ros_benchmark/scripts/occupancy_grid_localizer/maps/map.yaml'
+# SESSION_NAME = 'b2_map_localization'
+# OPTION = 'with_monitor_node'
+# POWER = "on" # by default "off"
+# POWER_LIB = "jetson"
 
 def launch_setup(container_prefix, container_sigterm_timeout):
     """Generate launch description for benchmarking Isaac ROS OccupancyGridLocalizerNode."""
