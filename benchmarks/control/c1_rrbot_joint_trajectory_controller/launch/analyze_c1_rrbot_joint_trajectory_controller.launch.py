@@ -52,7 +52,7 @@ def main(argv):
     integrated = args.integrated
 
     # Instantiate the class
-    ba = BenchmarkAnalyzer('rrbot_joint_trajectory_controller', hardware_device_type)
+    ba = BenchmarkAnalyzer('c1_rrbot_joint_trajectory_controller', hardware_device_type)
 
     if hardware_device_type == 'cpu':
         # add parameters for analyzing the traces
