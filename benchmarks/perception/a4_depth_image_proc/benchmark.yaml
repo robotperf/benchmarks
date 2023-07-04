@@ -253,5 +253,15 @@ results:
     timestampt: '2023-07-04 21:35:29'
     type: black
     value: 22.755641555786134
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 0.00 %
+    timestampt: '2023-07-04 21:38:47'
+    type: black
+    value: 30.152673846639914
 short: Perception computational graph to compute a point cloud using a rectified depth
   image and a rectified color image.
