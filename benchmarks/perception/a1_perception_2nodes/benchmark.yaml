@@ -542,5 +542,17 @@ results:
     timestampt: '2023-07-04 21:44:04'
     type: grey
     value: 11.319457054138184
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 28.72494072900588, rms_benchmark 29.326112707755627,\
+      \ max_benchmark 37.369213358626816, min_benchmark 5.9837027870890855, lost messages\
+      \ 6.67 %"
+    timestampt: '2023-07-04 21:46:23'
+    type: grey
+    value: 37.369213358626816
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
