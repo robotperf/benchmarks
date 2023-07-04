@@ -175,4 +175,14 @@ results:
     timestampt: '2023-07-04 20:50:39'
     type: grey
     value: 10.134706
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-04 20:52:56'
+    type: grey
+    value: 5.59568452835083
 short: Perception resize ROS Component.
