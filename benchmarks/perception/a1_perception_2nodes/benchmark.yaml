@@ -704,5 +704,15 @@ results:
     timestampt: '2023-07-04 22:20:47'
     type: black
     value: 787.341237
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA Jetson Nano
+    metric: power
+    metric_unit: W
+    note: lost messages 2.67 %
+    timestampt: '2023-07-04 22:23:08'
+    type: black
+    value: 0.0
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
