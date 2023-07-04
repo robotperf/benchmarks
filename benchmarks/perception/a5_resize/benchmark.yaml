@@ -217,4 +217,14 @@ results:
     timestampt: '2023-07-04 21:00:02'
     type: black
     value: 5.481223487854004
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 0.00 %
+    timestampt: '2023-07-04 21:03:00'
+    type: black
+    value: 30.195265535377274
 short: Perception resize ROS Component.
