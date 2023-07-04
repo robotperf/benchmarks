@@ -131,4 +131,15 @@ results:
     timestampt: '2023-07-01 19:49:10'
     type: black
     value: 34.86660264461089
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 12.77105203846154, rms_benchmark 12.812109406906421,\
+      \ max_benchmark 17.602448, min_benchmark 9.66194, lost messages 0.00 %"
+    timestampt: '2023-07-04 20:43:34'
+    type: grey
+    value: 17.602448
 short: Perception resize ROS Component.
