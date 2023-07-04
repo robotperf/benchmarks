@@ -34,11 +34,31 @@ from ros2_benchmark import BenchmarkMode, ROS2BenchmarkConfig, ROS2BenchmarkTest
 import json
 import os
 
-# NOTE: hardcoded, modify accordingly
-ROSBAG_PATH = '/workspaces/isaac_ros-dev/src/datasets/r2b_storage'
-SESSION_NAME = 'isaac_ros_visual_slam'
-OPTION = 'with_monitor_node'
-POWER = "on" # by default "off"
+# These are provided as environment variables for CI, you can manually hardcord them for other uses
+rosbag = os.environ.get('ROSBAG')
+package = os.environ.get('PACKAGE')
+type = os.environ.get('TYPE')
+metric = os.environ.get('METRIC')
+
+POWER_LIB = os.environ.get('POWER_LIB')
+IMAGE_RESOLUTION = ImageResolution.HD
+ROSBAG_PATH = '/tmp/benchmark_ws/src/rosbags/' + rosbag # '/home/amf/benchmark_ws/src/rosbags/perception/image' # NOTE: hardcoded, modify accordingly
+SESSION_NAME = package
+if type == "grey":
+    OPTION = 'without_monitor_node'
+else:
+    OPTION = 'with_monitor_node'
+if metric == "power":
+    POWER = "on" # by default "off"
+else:
+    POWER = "off"
+
+# # NOTE: hardcoded, modify accordingly
+# ROSBAG_PATH = '/workspaces/isaac_ros-dev/src/ros2_benchmark/assets/datasets/r2b_dataset/r2b_storage' # NOTE: hardcoded, modify accordingly
+# SESSION_NAME = 'isaac_ros_visual_slam'
+# OPTION = 'with_monitor_node'
+# POWER = "on" # by default "off"
+# POWER_LIB = "jetson"
 
 def launch_setup(container_prefix, container_sigterm_timeout):
     """Generate launch description for VSLAM node."""
@@ -136,8 +156,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
                     name="power_component",
                     parameters=[
                         {"publish_rate": 40.0},
-                        # {"hardware_device_type": "rapl"}
-                        {"hardware_device_type": "nvml"}
+                        {"power_lib": POWER_LIB}
                     ],
                 ),
                 
