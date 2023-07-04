@@ -693,5 +693,16 @@ results:
     timestampt: '2023-07-04 22:18:25'
     type: grey
     value: 105.55514564973981
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA Jetson Nano
+    metric: latency
+    metric_unit: ms
+    note: mean_latency 162.5014986085128, rms_latency 162.88856202877045, max_latency
+      787.341237, min_latency 26.890983, lost messages 2.67 %
+    timestampt: '2023-07-04 22:20:47'
+    type: black
+    value: 787.341237
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
