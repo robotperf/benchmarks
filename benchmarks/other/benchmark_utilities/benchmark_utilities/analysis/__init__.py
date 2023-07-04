@@ -1835,6 +1835,19 @@ class BenchmarkAnalyzer:
         # #       as needed, e.g.
         if "a4" in self.benchmark_name:
             last_target = "robotperf_benchmarks:robotperf_pointcloud_output_cb_init"
+
+        if "c1" in self.benchmark_name:
+            first_target = "robotcore_control:robotcore_control_joint_trajectory_controller_cb_init"
+            last_target = "robotcore_control:robotcore_control_joint_trajectory_controller_cb_fini"
+
+        if "c2" in self.benchmark_name:
+            first_target = "robotcore_control:robotcore_control_diff_drive_controller_cb_init"
+            last_target = "robotcore_control:robotcore_control_diff_drive_controller_cb_fini"
+
+        if "c3" in self.benchmark_name:
+            first_target = "robotcore_control:robotcore_control_forward_command_controller_cb_init"
+            last_target = "robotcore_control:robotcore_control_forward_command_controller_cb_fini"
+
         #
         # NOTE 2: find a way to parametrize this into the class
 
