@@ -807,4 +807,14 @@ results:
     timestampt: '2023-07-05 21:04:42'
     type: grey
     value: 38.789196999999994
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-05 21:07:49'
+    type: grey
+    value: 27.565385818481445
 short: Perception computational graph to compute a disparity map for stereo images.
