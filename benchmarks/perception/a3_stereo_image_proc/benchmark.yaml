@@ -664,4 +664,15 @@ results:
     timestampt: '2023-07-05 14:23:20'
     type: grey
     value: 6.046652793884277
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 21.74411848, rms_benchmark 25.30561883231595, max_benchmark
+      59.726972999999994, min_benchmark 6.374908, lost messages 0.00 %
+    timestampt: '2023-07-05 14:28:33'
+    type: grey
+    value: 59.726972999999994
 short: Perception computational graph to compute a disparity map for stereo images.
