@@ -526,5 +526,16 @@ results:
     timestampt: '2023-07-05 21:39:45'
     type: grey
     value: 15.212177859505658
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 20.7332296, rms_benchmark 20.972370458149065, max_benchmark
+      28.465759, min_benchmark 15.867379, lost messages 0.00 %
+    timestampt: '2023-07-05 21:42:58'
+    type: grey
+    value: 28.465759
 short: Perception computational graph to compute a point cloud using a rectified depth
   image and a rectified color image.
