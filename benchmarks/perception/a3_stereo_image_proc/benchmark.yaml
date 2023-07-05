@@ -732,4 +732,15 @@ results:
     timestampt: '2023-07-05 20:42:15'
     type: grey
     value: 14.880279446886325
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 17.58534826, rms_benchmark 17.977122097004088, max_benchmark
+      22.534809, min_benchmark 6.314745, lost messages 0.00 %
+    timestampt: '2023-07-05 20:44:41'
+    type: grey
+    value: 22.534809
 short: Perception computational graph to compute a disparity map for stereo images.
