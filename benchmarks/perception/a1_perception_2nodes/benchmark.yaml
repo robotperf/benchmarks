@@ -1838,5 +1838,16 @@ results:
     timestampt: '2023-07-05 16:19:17'
     type: black
     value: 2651.383632
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Qualcomm RB5 Robotics Kit
+    metric: latency
+    metric_unit: ms
+    note: mean_latency 425.14073690443075, rms_latency 466.85811192848314, max_latency
+      2857.14539, min_latency 17.49311, lost messages 12.00 %
+    timestampt: '2023-07-05 16:21:38'
+    type: black
+    value: 2857.14539
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
