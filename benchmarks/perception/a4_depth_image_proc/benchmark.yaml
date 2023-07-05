@@ -1,8 +1,10 @@
-description: "Perception computational graph to compute a point cloud using a rectified depth image and a rectified color image. Benchmarks the depth_image_proc ROS 2 package."
+description: Perception computational graph to compute a point cloud using a rectified
+  depth image and a rectified color image. Benchmarks the depth_image_proc ROS 2 package.
 graph: ../../../imgs/a4_depth_image_proc.png
 id: a4
 name: a4_depth_image_proc
-reproduction: "Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/perception/a4_depth_image_proc and review the launch files to reproduce this package."
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/perception/a4_depth_image_proc
+  and review the launch files to reproduce this package.
 results:
 - result:
     category: edge
@@ -470,5 +472,15 @@ results:
     timestampt: '2023-07-05 15:12:57'
     type: black
     value: 30.136307987279515
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-05 21:01:13'
+    type: grey
+    value: 3.985650062561035
 short: Perception computational graph to compute a point cloud using a rectified depth
   image and a rectified color image.
