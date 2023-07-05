@@ -6,76 +6,14 @@ Perception computational graph to compute a disparity map for stereo images.
 a3
 
 ### Description
-The [stereo_image_proc](https://github.com/ros-perception/image_pipeline/tree/humble/stereo_image_proc) package computes the disparity map using a left and right image. A disparity map represents the difference in pixel position between corresponding points in the stereo images. Disparity images are images that show the difference in displacement or distance between corresponding points in a pair of stereo images. Stereo images are two images of the same scene taken from slightly different viewpoints, such as from the left and right eyes of a human observer or from two cameras. Disparity images are often used in computer vision and image processing applications, such as 3D reconstruction, depth estimation, and object recognition. By analyzing the disparities between corresponding points in stereo images, it is possible to infer the depth of objects in the scene and create a 3D representation of the environment.
-A simple perception computational graph composed by 2 Components, `rectify` and `resize` operations. Used to demonstrate a simple perception pipeline using the  package.
+The [stereo_image_proc](https://github.com/ros-perception/image_pipeline/tree/humble/stereo_image_proc) package computes the disparity map using a left and right image. A disparity map represents the difference in pixel position between corresponding points in the stereo images. Disparity images are images that show the difference in displacement or distance between corresponding points in a pair of stereo images. Stereo images are two images of the same scene taken from slightly different viewpoints, such as from the left and right eyes of a human observer or from two cameras. Disparity images are often used in computer vision and image processing applications, such as 3D reconstruction, depth estimation, and object recognition. By analyzing the disparities between corresponding points in stereo images, it is possible to infer the depth of objects in the scene and create a 3D representation of the environment. 
 
-
-![](/imgs/a3_stereo_image_proc_graph.png)
+![](../../../imgs/a3_stereo_image_proc.png)
 
 ## Reproduction Steps
 
 ```bash
-## ------- Installation -------
-# Create a ROS 2 overlay workspace
-mkdir -p /tmp/benchmark_ws/src
-
-# Clone the benchmark repository
-cd /tmp/benchmark_ws/src && git clone https://github.com/robotperf/benchmarks
-
-# Fetch dependencies
-source /opt/ros/humble/setup.bash
-cd /tmp/benchmark_ws && sudo rosdep update || true && sudo apt-get update &&
-  sudo rosdep install --from-paths src --ignore-src --rosdistro humble -y
-
-# Build the benchmark
-colcon build --merge-install --packages-up-to a3_stereo_image_proc
-
-# Terminal 1: Replay rosbag in a loop (within rosbags repo)
-cd /path/to/rosbags/perception
-ros2 bag play --loop image3
-
-# Verify you are working in the workspace
-cd /tmp/benchmark_ws
-
-# Source the workspace as an overlay
-source install/setup.bash
-
-# Terminal 2: Run Stereo Image Proc Benchmark
-ros2 launch a3_stereo_image_proc trace_a3_stereo_image_proc.launch.py
-
-# Verify data was collected
-cd ~/.ros/tracing
-babeltrace a3_stereo_image_proc | less
-
-# Analyze Data
-ros2 launch a3_stereo_image_proc analyze_a3_stereo_image_proc.launch.py
-
-# Optional: Visualize benchmark process while it's running using this script
-chmod +x src/benchmarks/benchmarks/perception/a3_stereo_image_proc/scripts/visualize_benchmark.sh
-./src/benchmarks/benchmarks/perception/a3_stereo_image_proc/scripts/visualize_benchmark.sh
-
-## ------- Reproduce Simulation -------
-cd /tmp/benchmark_ws
-
-# Source
-source install/setup.bash
-
-# Terminal 1: Launch Simulation
-cd /tmp/benchmark_ws 
-ros2 launch a3_stereo_image_proc launch_sim.launch.py world:=src/benchmarks/benchmarks/perception/a3_stereo_image_proc/worlds/neighborhood.world
-
-# Terminal 2: Visualize perception from robot's perspective using rviz
-rviz2 -d src/benchmarks/benchmarks/perception/a3_stereo_image_proc/config/camera_bot.rviz
-
-# Terminal 3: Record a rosbag (ctrl+c to end recording)
-ros2 bag record -a
-
-# Terminal 4: Use keyboard to drive robot around world
-ros2 run teleop_twist_keyboard teleop_twist_keyboard
-
-# Verify: Play back rosbag after recording it in a loop
-ros2 bag play --loop /path/to/bag/directory/
-
+Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/perception/a3_stereo_image_proc and review the launch files to reproduce this package.
 ```
 
 ## Results
@@ -93,4 +31,57 @@ ros2 bag play --loop /path/to/bag/directory/
 | [:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | latency | 64.159806 | workstation | 2023-07-01 18:43:16 | mean_benchmark 22.797836120000003, rms_benchmark 26.96963921531789, max_benchmark 64.159806, min_benchmark 8.604811999999999, lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
 | [:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | power | 9.158670425415039 | workstation | 2023-07-01 18:46:31 |  | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
 | [:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | throughput | 34.36352784361543 | workstation | 2023-07-01 18:49:44 | mean_benchmark 30.085827751710223, rms_benchmark 30.09714182807465, max_benchmark 34.36352784361543, min_benchmark 28.252331403576672, lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | latency | 142.15711000000002 | workstation | 2023-07-04 20:07:57 | ✋ mean_benchmark 32.3114033081862, rms_benchmark 34.68918659518702, max_benchmark 142.15711000000002, min_benchmark 12.120403999999999, lost messages 0.72 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | power | 4.991259574890137 | workstation | 2023-07-04 20:10:21 | ✋  | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | throughput | 14.014305242218835 | workstation | 2023-07-04 20:12:43 | ✋ mean_benchmark 9.95786076576006, rms_benchmark 10.000320564763012, max_benchmark 14.014305242218835, min_benchmark 1.1055157177316373, lost messages 0.72 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | latency | 24.369248000000002 | workstation | 2023-07-04 20:15:03 | mean_benchmark 17.6331561, rms_benchmark 18.099543689588273, max_benchmark 24.369248000000002, min_benchmark 5.983129, lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | power | 5.4462056159973145 | workstation | 2023-07-04 20:17:42 |  | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | throughput | 30.785183177535163 | workstation | 2023-07-04 20:20:16 | mean_benchmark 30.015308093574397, rms_benchmark 30.016198313579036, max_benchmark 30.785183177535163, min_benchmark 29.60869474717772, lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | latency | 55.534672 | workstation | 2023-07-04 20:22:36 | mean_latency 21.6347996, rms_latency 21.919571154482348, max_latency 55.534672, min_latency 9.973629, lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | power | 5.380381870269775 | workstation | 2023-07-04 20:24:58 | lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | throughput | 30.17785995618677 | workstation | 2023-07-04 20:27:19 | lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | latency | 60.643169 | workstation | 2023-07-04 20:41:27 | ✋ mean_benchmark 40.59611141757387, rms_benchmark 41.09626116823718, max_benchmark 60.643169, min_benchmark 13.180157000000001, lost messages 0.23 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | power | 5.990500450134277 | workstation | 2023-07-04 20:44:45 | ✋  | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | throughput | 13.103120761099573 | workstation | 2023-07-04 20:48:19 | ✋ mean_benchmark 9.999751655473396, rms_benchmark 10.01639796608056, max_benchmark 13.103120761099573, min_benchmark 1.9803484400107794, lost messages 0.23 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | latency | 62.041148 | workstation | 2023-07-04 20:51:50 | mean_benchmark 26.0268131, rms_benchmark 30.84000782866287, max_benchmark 62.041148, min_benchmark 7.290354, lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | power | 9.378743171691895 | workstation | 2023-07-04 20:55:07 |  | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | throughput | 31.565990360062205 | workstation | 2023-07-04 20:58:18 | mean_benchmark 30.02965228348836, rms_benchmark 30.039870735495253, max_benchmark 31.565990360062205, min_benchmark 27.41622253528502, lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | latency | 70.352786 | workstation | 2023-07-04 21:01:42 | mean_latency 22.584123708, rms_latency 24.90450479966949, max_latency 70.352786, min_latency 8.102569, lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | power | 9.438055419921875 | workstation | 2023-07-04 21:05:16 | lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | throughput | 30.123718888372743 | workstation | 2023-07-04 21:08:49 | lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | latency | 167.73728 | workstation | 2023-07-05 04:21:46 | ✋ mean_benchmark 31.67222337539683, rms_benchmark 34.072803616452454, max_benchmark 167.73728, min_benchmark 10.236117, lost messages 0.56 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | power | 4.890318870544434 | workstation | 2023-07-05 04:24:03 | ✋  | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | throughput | 13.52755127283494 | workstation | 2023-07-05 04:26:32 | ✋ mean_benchmark 9.992771175130876, rms_benchmark 10.023037345436832, max_benchmark 13.52755127283494, min_benchmark 1.1121367149396761, lost messages 0.56 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | latency | 24.677001999999998 | workstation | 2023-07-05 04:28:51 | mean_benchmark 17.258439699999997, rms_benchmark 17.7422706124164, max_benchmark 24.677001999999998, min_benchmark 6.436769, lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | power | 5.508819580078125 | workstation | 2023-07-05 04:31:14 |  | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | throughput | 30.567931067359098 | workstation | 2023-07-05 04:33:36 | mean_benchmark 30.00752658817761, rms_benchmark 30.008686791462203, max_benchmark 30.567931067359098, min_benchmark 29.52769652165804, lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | latency | 46.221303 | workstation | 2023-07-05 04:36:11 | mean_latency 21.497497947999996, rms_latency 21.77906532825144, max_latency 46.221303, min_latency 10.017148, lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | power | 5.3956067085266115 | workstation | 2023-07-05 04:38:31 | lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | throughput | 30.156793533907724 | workstation | 2023-07-05 04:40:53 | lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | latency | 61.390225 | workstation | 2023-07-05 04:54:59 | ✋ mean_benchmark 40.667252279561474, rms_benchmark 41.14203356077351, max_benchmark 61.390225, min_benchmark 18.031408, lost messages 0.55 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | power | 6.003722667694092 | workstation | 2023-07-05 04:58:37 | ✋  | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | throughput | 12.865070331860164 | workstation | 2023-07-05 05:01:57 | ✋ mean_benchmark 9.998811574542417, rms_benchmark 10.01543398154981, max_benchmark 12.865070331860164, min_benchmark 3.213400837801732, lost messages 0.55 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | latency | 63.093501 | workstation | 2023-07-05 05:05:20 | mean_benchmark 26.8524586, rms_benchmark 31.89981642301621, max_benchmark 63.093501, min_benchmark 6.36959, lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | power | 9.25777530670166 | workstation | 2023-07-05 05:08:35 |  | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | throughput | 40.80019296859267 | workstation | 2023-07-05 05:12:01 | mean_benchmark 30.20103740844159, rms_benchmark 30.250504433416246, max_benchmark 40.80019296859267, min_benchmark 28.022977272076332, lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | latency | 69.674379 | workstation | 2023-07-05 05:15:20 | mean_latency 22.132071910666664, rms_latency 24.13688631911655, max_latency 69.674379, min_latency 7.99689, lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | power | 9.503683471679688 | workstation | 2023-07-05 05:18:37 | lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | throughput | 30.144931928302505 | workstation | 2023-07-05 05:21:47 | lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | latency | 148.540541 | workstation | 2023-07-05 13:53:54 | ✋ mean_benchmark 31.054195867879745, rms_benchmark 32.748681991168546, max_benchmark 148.540541, min_benchmark 11.966536, lost messages 0.55 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | power | 4.95824670791626 | workstation | 2023-07-05 13:56:10 | ✋  | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | throughput | 13.476212268508911 | workstation | 2023-07-05 13:58:55 | ✋ mean_benchmark 9.99395684781208, rms_benchmark 10.027046759370862, max_benchmark 13.476212268508911, min_benchmark 1.0011340987229076, lost messages 0.55 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | latency | 22.541862000000002 | workstation | 2023-07-05 14:01:20 | mean_benchmark 16.91952196, rms_benchmark 17.367060454996214, max_benchmark 22.541862000000002, min_benchmark 6.926711, lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | power | 5.384462833404541 | workstation | 2023-07-05 14:03:48 |  | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | throughput | 30.82409576282116 | workstation | 2023-07-05 14:06:19 | mean_benchmark 30.009468598656817, rms_benchmark 30.010282393832185, max_benchmark 30.82409576282116, min_benchmark 29.45895969218923, lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | latency | 27.318159 | workstation | 2023-07-05 14:08:46 | mean_latency 21.599631930666664, rms_latency 21.844087377154132, max_latency 27.318159, min_latency 9.914517, lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | power | 5.356595516204834 | workstation | 2023-07-05 14:11:08 | lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | AMD Ryzen 5 PRO 4650G | throughput | 30.187649948188287 | workstation | 2023-07-05 14:13:43 | lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | latency | 60.821372 | workstation | 2023-07-05 14:20:10 | ✋ mean_benchmark 40.98972929186228, rms_benchmark 41.465300413019776, max_benchmark 60.821372, min_benchmark 18.734987, lost messages 0.23 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | power | 6.046652793884277 | workstation | 2023-07-05 14:23:20 | ✋  | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | latency | 59.726972999999994 | workstation | 2023-07-05 14:28:33 | mean_benchmark 21.74411848, rms_benchmark 25.30561883231595, max_benchmark 59.726972999999994, min_benchmark 6.374908, lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | power | 9.121424674987793 | workstation | 2023-07-05 14:31:58 |  | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | throughput | 40.7902923346434 | workstation | 2023-07-05 14:35:08 | mean_benchmark 30.216029310686125, rms_benchmark 30.26211477207322, max_benchmark 40.7902923346434, min_benchmark 28.75755734228169, lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | latency | 67.75825 | workstation | 2023-07-05 14:38:15 | mean_latency 21.567918357333333, rms_latency 23.23889476132209, max_latency 67.75825, min_latency 8.137907, lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | power | 9.493589210510255 | workstation | 2023-07-05 14:40:35 | lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
+| [:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | throughput | 30.15859282377587 | workstation | 2023-07-05 14:43:41 | lost messages 0.00 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
 

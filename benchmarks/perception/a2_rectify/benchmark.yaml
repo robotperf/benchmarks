@@ -6,7 +6,7 @@ description: 'A simple perception rectify ROS robotics operation. Used to demons
 graph: ../../../imgs/a2_rectify.png
 id: a2
 name: a2_rectify
-reproduction: "reproduction: "Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/perception/a2_rectify and review the launch files to reproduce this package.""
+reproduction: "Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/perception/a2_rectify and review the launch files to reproduce this package."
 results:
 - result:
     category: edge
