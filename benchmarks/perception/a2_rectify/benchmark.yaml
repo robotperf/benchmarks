@@ -1,10 +1,11 @@
-description: 'A simple perception rectify ROS robotics operation. Used to demonstrate
+description: A simple perception rectify ROS robotics operation. Used to demonstrate
   a simple perception component [image_pipeline](https://github.com/ros-perception/image_pipeline)
-  package.'
+  package.
 graph: ../../../imgs/a2_rectify.png
 id: a2
 name: a2_rectify
-reproduction: "Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/perception/a2_rectify and review the launch files to reproduce this package."
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/perception/a2_rectify
+  and review the launch files to reproduce this package.
 results:
 - result:
     category: edge
@@ -702,4 +703,16 @@ results:
     timestampt: '2023-07-05 14:16:56'
     type: black
     value: 30.115830605398493
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 3.3014271521739134, rms_benchmark 3.377277893064352,\
+      \ max_benchmark 7.946702999999999, min_benchmark 2.360006, lost messages 2.17\
+      \ %"
+    timestampt: '2023-07-05 20:15:02'
+    type: grey
+    value: 7.946702999999999
 short: Perception rectify ROS Component.
