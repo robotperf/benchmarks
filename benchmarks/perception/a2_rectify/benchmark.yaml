@@ -854,4 +854,15 @@ results:
     timestampt: '2023-07-05 20:48:32'
     type: grey
     value: 28.809751510620117
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.009037142434934, rms_benchmark 30.015515238053833, max_benchmark
+      31.505009422518196, min_benchmark 28.987437221544862, lost messages 0.00 %
+    timestampt: '2023-07-05 20:51:43'
+    type: grey
+    value: 31.505009422518196
 short: Perception rectify ROS Component.
