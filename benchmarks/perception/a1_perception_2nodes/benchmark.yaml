@@ -3,17 +3,10 @@ description: 'A simple perception computational graph composed by 2 Components, 
   the [image_pipeline](https://github.com/ros-perception/image_pipeline) package.
 
   '
-graph: ../../../imgs/a1_perception_2nodes.svg
+graph: ../../../imgs/a1_perception_2nodes.png
 id: a1
 name: a1_perception_2nodes
-reproduction: "# Create a ROS 2 overlay workspace\nmkdir -p /tmp/benchmark_ws/src\n\
-  \n# Clone the benchmark repository\ncd /tmp/benchmark_ws/src && git clone https://github.com/robotperf/benchmarks\n\
-  \n# Fetch dependencies\nsource /opt/ros/humble/setup.bash\ncd /tmp/benchmark_ws\
-  \ && sudo rosdep update || true && sudo apt-get update &&\n  sudo rosdep install\
-  \ --from-paths src --ignore-src --rosdistro humble -y\n\n# Build the benchmark\n\
-  colcon build --merge-install --packages-up-to a1_perception_2nodes\n\n# Source the\
-  \ workspace as an overlay, launch the benchmark\nsource install/setup.bash\nRMW_IMPLEMENTATION=rmw_cyclonedds_cpp\
-  \ ros2 launch a1_perception_2nodes trace_a1_perception_2nodes.launch.py\n"
+reproduction: "Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/perception/a1_perception_2nodes and review the launch files to reproduce this package."
 results:
 - result:
     category: edge

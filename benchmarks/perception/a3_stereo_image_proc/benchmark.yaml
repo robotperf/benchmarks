@@ -9,39 +9,11 @@ description: 'The [stereo_image_proc](https://github.com/ros-perception/image_pi
   as 3D reconstruction, depth estimation, and object recognition. By analyzing the
   disparities between corresponding points in stereo images, it is possible to infer
   the depth of objects in the scene and create a 3D representation of the environment.
-
-  A simple perception computational graph composed by 2 Components, `rectify` and
-  `resize` operations. Used to demonstrate a simple perception pipeline using the  package.
-
   '
-graph: /imgs/a3_stereo_image_proc_graph.png
+graph: ../../../imgs/a3_stereo_image_proc.png
 id: a3
 name: a3_stereo_image_proc
-reproduction: "## ------- Installation -------\n# Create a ROS 2 overlay workspace\n\
-  mkdir -p /tmp/benchmark_ws/src\n\n# Clone the benchmark repository\ncd /tmp/benchmark_ws/src\
-  \ && git clone https://github.com/robotperf/benchmarks\n\n# Fetch dependencies\n\
-  source /opt/ros/humble/setup.bash\ncd /tmp/benchmark_ws && sudo rosdep update ||\
-  \ true && sudo apt-get update &&\n  sudo rosdep install --from-paths src --ignore-src\
-  \ --rosdistro humble -y\n\n# Build the benchmark\ncolcon build --merge-install --packages-up-to\
-  \ a3_stereo_image_proc\n\n# Terminal 1: Replay rosbag in a loop (within rosbags\
-  \ repo)\ncd /path/to/rosbags/perception\nros2 bag play --loop image3\n\n# Verify\
-  \ you are working in the workspace\ncd /tmp/benchmark_ws\n\n# Source the workspace\
-  \ as an overlay\nsource install/setup.bash\n\n# Terminal 2: Run Stereo Image Proc\
-  \ Benchmark\nros2 launch a3_stereo_image_proc trace_a3_stereo_image_proc.launch.py\n\
-  \n# Verify data was collected\ncd ~/.ros/tracing\nbabeltrace a3_stereo_image_proc\
-  \ | less\n\n# Analyze Data\nros2 launch a3_stereo_image_proc analyze_a3_stereo_image_proc.launch.py\n\
-  \n# Optional: Visualize benchmark process while it's running using this script\n\
-  chmod +x src/benchmarks/benchmarks/perception/a3_stereo_image_proc/scripts/visualize_benchmark.sh\n\
-  ./src/benchmarks/benchmarks/perception/a3_stereo_image_proc/scripts/visualize_benchmark.sh\n\
-  \n## ------- Reproduce Simulation -------\ncd /tmp/benchmark_ws\n\n# Source\nsource\
-  \ install/setup.bash\n\n# Terminal 1: Launch Simulation\ncd /tmp/benchmark_ws \n\
-  ros2 launch a3_stereo_image_proc launch_sim.launch.py world:=src/benchmarks/benchmarks/perception/a3_stereo_image_proc/worlds/neighborhood.world\n\
-  \n# Terminal 2: Visualize perception from robot's perspective using rviz\nrviz2\
-  \ -d src/benchmarks/benchmarks/perception/a3_stereo_image_proc/config/camera_bot.rviz\n\
-  \n# Terminal 3: Record a rosbag (ctrl+c to end recording)\nros2 bag record -a\n\n\
-  # Terminal 4: Use keyboard to drive robot around world\nros2 run teleop_twist_keyboard\
-  \ teleop_twist_keyboard\n\n# Verify: Play back rosbag after recording it in a loop\n\
-  ros2 bag play --loop /path/to/bag/directory/\n"
+reproduction: "Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/perception/a3_stereo_image_proc and review the launch files to reproduce this package."
 results:
 - result:
     category: edge

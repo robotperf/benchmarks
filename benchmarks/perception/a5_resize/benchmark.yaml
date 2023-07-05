@@ -3,17 +3,10 @@ description: 'A simple perception resize ROS robotics operation. Used to demonst
   package.
 
   '
-graph: ../../../imgs/a5_resize.svg
+graph: ../../../imgs/a5_resize.png
 id: a5
 name: a5_resize
-reproduction: "# Create a ROS 2 overlay workspace\nmkdir -p /tmp/benchmark_ws/src\n\
-  \n# Clone the benchmark repository\ncd /tmp/benchmark_ws/src && git clone https://github.com/robotperf/benchmarks\n\
-  \n# Fetch dependencies\nsource /opt/ros/humble/setup.bash\ncd /tmp/benchmark_ws\
-  \ && sudo rosdep update || true && sudo apt-get update &&\n  sudo rosdep install\
-  \ --from-paths src --ignore-src --rosdistro humble -y\n\n# Build the benchmark\n\
-  colcon build --merge-install --packages-up-to a5_resize\n\n# Source the workspace\
-  \ as an overlay, launch the benchmark\nsource install/setup.bash\nRMW_IMPLEMENTATION=rmw_cyclonedds_cpp\
-  \ ros2 launch a5_resize trace_a5_resize.launch.py\n"
+reproduction: "Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/perception/a5_resize and review the launch files to reproduce this package."
 results:
 - result:
     category: workstation
