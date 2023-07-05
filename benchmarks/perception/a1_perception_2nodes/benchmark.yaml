@@ -1990,5 +1990,15 @@ results:
     timestampt: '2023-07-05 20:10:28'
     type: grey
     value: 32.23097074623625
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 0.00 %
+    timestampt: '2023-07-05 20:12:45'
+    type: black
+    value: 30.194256231311623
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
