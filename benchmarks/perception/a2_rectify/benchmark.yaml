@@ -1,8 +1,6 @@
 description: 'A simple perception rectify ROS robotics operation. Used to demonstrate
   a simple perception component [image_pipeline](https://github.com/ros-perception/image_pipeline)
-  package.
-
-  '
+  package.'
 graph: ../../../imgs/a2_rectify.png
 id: a2
 name: a2_rectify
