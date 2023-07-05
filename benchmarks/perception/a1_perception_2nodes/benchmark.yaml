@@ -1539,5 +1539,15 @@ results:
     timestampt: '2023-07-05 13:39:17'
     type: black
     value: 34.956984
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: lost messages 0.00 %
+    timestampt: '2023-07-05 13:44:09'
+    type: black
+    value: 10.599472808837891
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
