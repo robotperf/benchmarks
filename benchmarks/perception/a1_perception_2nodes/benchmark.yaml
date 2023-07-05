@@ -1399,5 +1399,15 @@ results:
     timestampt: '2023-07-05 13:14:36'
     type: grey
     value: 12.119776
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-05 13:17:08'
+    type: grey
+    value: 6.830331325531006
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
