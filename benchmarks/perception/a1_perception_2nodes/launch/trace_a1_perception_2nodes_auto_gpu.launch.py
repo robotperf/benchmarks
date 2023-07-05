@@ -36,6 +36,7 @@ package = os.environ.get('PACKAGE')
 type = os.environ.get('TYPE')
 metric = os.environ.get('METRIC')
 
+POWER_LIB = os.environ.get('POWER_LIB')
 IMAGE_RESOLUTION = ImageResolution.HD
 ROSBAG_PATH = '/tmp/benchmark_ws/src/rosbags/' + rosbag # '/home/amf/benchmark_ws/src/rosbags/perception/image' # NOTE: hardcoded, modify accordingly
 SESSION_NAME = package
@@ -47,6 +48,12 @@ if metric == "power":
     POWER = "on" # by default "off"
 else:
     POWER = "off"
+
+# ROSBAG_PATH = '/workspaces/isaac_ros-dev/src/rosbags/perception/image'
+# SESSION_NAME = 'trace_a1_perception_2nodes'
+# OPTION = 'with_monitor_node'
+# POWER = 'on'
+# POWER_LIB = 'rapl'
 
 def launch_setup(container_prefix, container_sigterm_timeout):
     """Generate launch description for benchmarking image_proc RectifyNode."""
@@ -76,25 +83,13 @@ def launch_setup(container_prefix, container_sigterm_timeout):
                     ('input1', 'camera_info')],                
     )
 
-    input_node = ComposableNode(
-        package="a1_perception_2nodes",
-        namespace="robotperf",
-        plugin="robotperf::perception::ImageInputComponent",
-        name="image_input_component",
-        remappings=[
-            ("image", "/r2b/image_raw"),
-            ("camera_info", "/r2b/camera_info"),
-        ],
-        extra_arguments=[{'use_intra_process_comms': True}],
-    )
-
     rectify_node = ComposableNode(
         name='RectifyNode',
         namespace="robotperf/benchmark",
         package="isaac_ros_image_proc",
         plugin="nvidia::isaac_ros::image_proc::RectifyNode",
         remappings=[
-            ("image_raw", "/robotperf/input"),
+            ("image_raw", "/r2b/image_raw"),
             ("camera_info", "/r2b/camera_info"),
         ],
     )
@@ -107,7 +102,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         remappings=[
             ("camera_info", "/r2b/camera_info"),
             ("image", "/robotperf/benchmark/image_rect"),
-            ("resize", "/robotperf/benchmark/resize"),
+            ("resize", "/robotperf/benchmark/resize/image"),
         ],
         parameters=[
             {
@@ -116,18 +111,6 @@ def launch_setup(container_prefix, container_sigterm_timeout):
             }
         ],
         # extra_arguments=[{'use_intra_process_comms': True}],
-    )
-
-    output_node = ComposableNode(
-        package="a1_perception_2nodes",
-        namespace="robotperf",
-        plugin="robotperf::perception::ImageOutputComponent",
-        name="image_output_component",
-        remappings=[
-            ("image", "/robotperf/benchmark/resize"),
-            ("camera_info", "/r2b/camera_info"),
-        ],
-        extra_arguments=[{'use_intra_process_comms': True}],
     )
 
     monitor_node = ComposableNode(
@@ -140,7 +123,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
             'monitor_power_data_format': 'power_msgs/msg/Power',
         }],
         remappings=[
-            ('output', '/robotperf/benchmark/resize')],
+            ('output', '/robotperf/benchmark/resize/image')],
     )
 
     if OPTION == 'with_monitor_node':
@@ -148,10 +131,8 @@ def launch_setup(container_prefix, container_sigterm_timeout):
             data_loader_node,
             # prep_resize_node,
             playback_node,
-            input_node,
             rectify_node,
             resize_node,
-            output_node,
             monitor_node  
         ]
     else:
@@ -159,10 +140,8 @@ def launch_setup(container_prefix, container_sigterm_timeout):
             data_loader_node,
             # prep_resize_node,
             playback_node,
-            input_node,
             rectify_node,
             resize_node,
-            output_node,  
         ]
 
     composable_node_container = ComposableNodeContainer(
@@ -190,7 +169,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
                     name="power_component",
                     parameters=[
                         {"publish_rate": 20.0},
-                        {"hardware_device_type": "rapl"}
+                        {"power_lib": POWER_LIB}
                     ],
                 ),
                 
@@ -211,7 +190,7 @@ class TestRectifyNode(ROS2BenchmarkTest):
         benchmark_name='image_proc::RectifyNodeResizeNode Benchmark',
         input_data_path=ROSBAG_PATH,
         # Upper and lower bounds of peak throughput search window
-        publisher_upper_frequency=30.0,
+        publisher_upper_frequency=500.0,
         publisher_lower_frequency=30.0,
         # The number of frames to be buffered
         playback_message_buffer_size=68,
