@@ -1496,5 +1496,16 @@ results:
     timestampt: '2023-07-05 13:29:20'
     type: black
     value: 30.181081928142152
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 13.464772029411764, rms_benchmark 13.92469696012834, max_benchmark
+      22.034759, min_benchmark 6.781306999999999, lost messages 0.00 %
+    timestampt: '2023-07-05 13:29:48'
+    type: grey
+    value: 22.034759
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
