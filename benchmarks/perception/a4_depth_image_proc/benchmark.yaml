@@ -263,5 +263,15 @@ results:
     timestampt: '2023-07-04 21:38:47'
     type: black
     value: 30.152673846639914
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-05 04:45:29'
+    type: grey
+    value: 4.234061241149902
 short: Perception computational graph to compute a point cloud using a rectified depth
   image and a rectified color image.
