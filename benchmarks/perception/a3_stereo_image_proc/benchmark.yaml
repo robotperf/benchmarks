@@ -8,12 +8,12 @@ description: 'The [stereo_image_proc](https://github.com/ros-perception/image_pi
   images are often used in computer vision and image processing applications, such
   as 3D reconstruction, depth estimation, and object recognition. By analyzing the
   disparities between corresponding points in stereo images, it is possible to infer
-  the depth of objects in the scene and create a 3D representation of the environment.
-  '
+  the depth of objects in the scene and create a 3D representation of the environment. '
 graph: ../../../imgs/a3_stereo_image_proc.png
 id: a3
 name: a3_stereo_image_proc
-reproduction: "Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/perception/a3_stereo_image_proc and review the launch files to reproduce this package."
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/perception/a3_stereo_image_proc
+  and review the launch files to reproduce this package.
 results:
 - result:
     category: edge
@@ -699,4 +699,15 @@ results:
     timestampt: '2023-07-05 14:43:41'
     type: black
     value: 30.15859282377587
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 30.791134007064365, rms_benchmark 32.647780998388825,\
+      \ max_benchmark 146.692566, min_benchmark 8.97375, lost messages 0.39 %"
+    timestampt: '2023-07-05 20:37:13'
+    type: grey
+    value: 146.692566
 short: Perception computational graph to compute a disparity map for stereo images.
