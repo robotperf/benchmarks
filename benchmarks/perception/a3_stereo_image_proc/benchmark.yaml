@@ -872,4 +872,14 @@ results:
     timestampt: '2023-07-05 21:23:38'
     type: black
     value: 43.648845
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: lost messages 0.00 %
+    timestampt: '2023-07-05 21:26:46'
+    type: black
+    value: 30.022187423706054
 short: Perception computational graph to compute a disparity map for stereo images.
