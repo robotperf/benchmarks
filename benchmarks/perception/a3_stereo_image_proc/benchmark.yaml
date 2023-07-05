@@ -591,4 +591,14 @@ results:
     timestampt: '2023-07-05 14:01:20'
     type: grey
     value: 22.541862000000002
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-05 14:03:48'
+    type: grey
+    value: 5.384462833404541
 short: Perception computational graph to compute a disparity map for stereo images.
