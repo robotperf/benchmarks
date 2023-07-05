@@ -2021,5 +2021,16 @@ results:
     timestampt: '2023-07-05 20:16:59'
     type: grey
     value: 31.556129455566406
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.028826476504708, rms_benchmark 30.029460824147215, max_benchmark
+      31.128416296995976, min_benchmark 29.722003856311165, lost messages 0.00 %
+    timestampt: '2023-07-05 20:20:14'
+    type: grey
+    value: 31.128416296995976
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
