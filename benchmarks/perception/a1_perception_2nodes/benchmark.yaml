@@ -2316,5 +2316,15 @@ results:
     timestampt: '2023-07-05 22:41:50'
     type: grey
     value: 143.699983
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA Jetson Nano
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-05 22:44:13'
+    type: grey
+    value: 0.0
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
