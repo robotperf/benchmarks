@@ -6,7 +6,8 @@ description: 'A simple perception resize ROS robotics operation. Used to demonst
 graph: ../../../imgs/a5_resize.png
 id: a5
 name: a5_resize
-reproduction: "Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/perception/a5_resize and review the launch files to reproduce this package."
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/perception/a5_resize
+  and review the launch files to reproduce this package.
 results:
 - result:
     category: workstation
@@ -671,4 +672,14 @@ results:
     timestampt: '2023-07-05 15:38:40'
     type: black
     value: 8.732030487060547
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 0.00 %
+    timestampt: '2023-07-05 15:41:06'
+    type: black
+    value: 30.12620587059871
 short: Perception resize ROS Component.
