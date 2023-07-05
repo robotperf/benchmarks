@@ -6,7 +6,8 @@ description: 'A simple perception computational graph composed by 2 Components, 
 graph: ../../../imgs/a1_perception_2nodes.png
 id: a1
 name: a1_perception_2nodes
-reproduction: "Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/perception/a1_perception_2nodes and review the launch files to reproduce this package."
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/perception/a1_perception_2nodes
+  and review the launch files to reproduce this package.
 results:
 - result:
     category: edge
@@ -1651,5 +1652,16 @@ results:
     timestampt: '2023-07-05 15:38:14'
     type: grey
     value: 12.463730812072754
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.072437980548933, rms_benchmark 30.09681113250644, max_benchmark
+      34.418017143614335, min_benchmark 27.24812197087734, lost messages 0.00 %
+    timestampt: '2023-07-05 15:40:38'
+    type: grey
+    value: 34.418017143614335
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
