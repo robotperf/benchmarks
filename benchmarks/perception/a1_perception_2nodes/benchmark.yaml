@@ -1355,5 +1355,16 @@ results:
     timestampt: '2023-07-05 06:49:53'
     type: black
     value: 29.606299899580506
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 14.7839480625, rms_benchmark 14.89190157762751, max_benchmark\
+      \ 16.128576, min_benchmark 8.327144, lost messages 4.17 %"
+    timestampt: '2023-07-05 13:07:23'
+    type: grey
+    value: 16.128576
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
