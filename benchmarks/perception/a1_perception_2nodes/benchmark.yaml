@@ -1507,5 +1507,15 @@ results:
     timestampt: '2023-07-05 13:29:48'
     type: grey
     value: 22.034759
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-05 13:33:05'
+    type: grey
+    value: 9.109890937805176
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
