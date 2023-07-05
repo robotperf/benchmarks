@@ -1637,5 +1637,16 @@ results:
     timestampt: '2023-07-05 15:33:29'
     type: grey
     value: 38.137366446279565
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 22.362729705882348, rms_benchmark 22.761566219809588, max_benchmark
+      32.104033, min_benchmark 11.387583000000001, lost messages 0.00 %
+    timestampt: '2023-07-05 15:35:53'
+    type: grey
+    value: 32.104033
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
