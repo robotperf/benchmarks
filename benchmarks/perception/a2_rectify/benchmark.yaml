@@ -701,4 +701,14 @@ results:
     timestampt: '2023-07-05 14:13:44'
     type: black
     value: 6.633075428009033
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 0.00 %
+    timestampt: '2023-07-05 14:16:56'
+    type: black
+    value: 30.115830605398493
 short: Perception rectify ROS Component.
