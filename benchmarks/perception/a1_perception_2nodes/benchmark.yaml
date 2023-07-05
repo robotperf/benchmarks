@@ -856,5 +856,16 @@ results:
     timestampt: '2023-07-05 03:48:18'
     type: grey
     value: 5.795474052429199
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.015841650713682, rms_benchmark 30.018891859429804, max_benchmark
+      31.961003484740147, min_benchmark 28.111084661703956, lost messages 0.00 %
+    timestampt: '2023-07-05 03:50:39'
+    type: grey
+    value: 31.961003484740147
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
