@@ -2304,5 +2304,17 @@ results:
     timestampt: '2023-07-05 22:39:24'
     type: black
     value: 30.190151356321373
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA Jetson Nano
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 127.22776171428573, rms_benchmark 128.35976410492987,\
+      \ max_benchmark 143.699983, min_benchmark 72.05726299999999, lost messages 16.67\
+      \ %"
+    timestampt: '2023-07-05 22:41:50'
+    type: grey
+    value: 143.699983
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
