@@ -1005,4 +1005,14 @@ results:
     timestampt: '2023-07-06 07:06:43'
     type: black
     value: 30.198691066294238
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-06 07:08:09'
+    type: grey
+    value: 28.528194427490234
 short: Perception rectify ROS Component.
