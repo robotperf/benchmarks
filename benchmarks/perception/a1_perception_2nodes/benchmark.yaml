@@ -2816,5 +2816,15 @@ results:
     timestampt: '2023-07-06 08:48:46'
     type: grey
     value: 30.395527
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-06 08:51:20'
+    type: grey
+    value: 12.468761444091797
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
