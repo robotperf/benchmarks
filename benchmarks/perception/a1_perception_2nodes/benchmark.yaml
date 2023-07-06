@@ -2739,5 +2739,16 @@ results:
     timestampt: '2023-07-06 08:13:08'
     type: grey
     value: 225.198974
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 17.791576346848455, rms_benchmark 19.60046231465367, max_benchmark
+      42.1944257534864, min_benchmark 7.5218121646146185, lost messages 100.00 %
+    timestampt: '2023-07-06 08:17:43'
+    type: grey
+    value: 42.1944257534864
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
