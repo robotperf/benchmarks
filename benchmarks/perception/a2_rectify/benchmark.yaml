@@ -908,4 +908,14 @@ results:
     timestampt: '2023-07-06 06:47:39'
     type: grey
     value: 4.863187000000001
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-06 06:49:55'
+    type: grey
+    value: 4.916999340057373
 short: Perception rectify ROS Component.
