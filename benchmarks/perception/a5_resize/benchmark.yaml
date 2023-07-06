@@ -993,4 +993,16 @@ results:
     timestampt: '2023-07-06 08:32:37'
     type: grey
     value: 28.4294376373291
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 29.722456751933855, rms_benchmark 29.931457297170383,\
+      \ max_benchmark 41.900525721706224, min_benchmark 14.679849582627655, lost messages\
+      \ 0.00 %"
+    timestampt: '2023-07-06 08:35:44'
+    type: grey
+    value: 41.900525721706224
 short: Perception resize ROS Component.
