@@ -2609,5 +2609,17 @@ results:
     timestampt: '2023-07-06 06:39:48'
     type: black
     value: 19.136221
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 30.279110989365577, rms_benchmark 30.402041502273743,\
+      \ max_benchmark 41.28540796568093, min_benchmark 23.145028926888596, lost messages\
+      \ 2.70 %"
+    timestampt: '2023-07-06 06:40:11'
+    type: grey
+    value: 41.28540796568093
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
