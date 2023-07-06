@@ -1027,4 +1027,15 @@ results:
     timestampt: '2023-07-06 07:11:16'
     type: grey
     value: 42.555167135631855
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 3.441520573529412, rms_benchmark 3.4857570155880206, max_benchmark
+      5.992582, min_benchmark 2.124014, lost messages 0.00 %
+    timestampt: '2023-07-06 07:14:28'
+    type: grey
+    value: 5.992582
 short: Perception rectify ROS Component.
