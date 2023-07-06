@@ -962,4 +962,15 @@ results:
     timestampt: '2023-07-06 06:59:35'
     type: grey
     value: 32.30346860432347
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: mean_latency 6.1631808359999996, rms_latency 6.199599269161347, max_latency
+      8.234453, min_latency 4.013544, lost messages 0.00 %
+    timestampt: '2023-07-06 07:02:00'
+    type: black
+    value: 8.234453
 short: Perception rectify ROS Component.
