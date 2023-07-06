@@ -918,4 +918,16 @@ results:
     timestampt: '2023-07-06 06:49:55'
     type: grey
     value: 4.916999340057373
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 28.35100162499542, rms_benchmark 29.252892934105525,\
+      \ max_benchmark 37.42562032217176, min_benchmark 1.8655366270581402, lost messages\
+      \ 2.78 %"
+    timestampt: '2023-07-06 06:52:21'
+    type: grey
+    value: 37.42562032217176
 short: Perception rectify ROS Component.
