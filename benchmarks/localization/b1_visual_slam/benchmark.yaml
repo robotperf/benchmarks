@@ -3,7 +3,7 @@ name: b1_visual_slam
 description: |
   A SLAM localization based on visual input, and optionally other sensors such as IMUs. Used to demonstrate the visual SLAM components.
 short: Visual SLAM ROS Component.
-graph: ../../../imgs/a2_rectify.svg
+graph: ../../../imgs/b1_visual_slam_stella.svg
 reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/localization/b1_visual_slam
   and review the launch files to reproduce this package.
 

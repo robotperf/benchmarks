@@ -9,32 +9,12 @@ b1
 A SLAM localization based on visual input, and optionally other sensors such as IMUs. Used to demonstrate the visual SLAM components.
 
 
-![](../../../imgs/a2_rectify.svg)
+![](../../../imgs/b1_visual_slam_stella.svg)
 
 ## Reproduction Steps
 
 ```bash
-# Install isaac_ros_benchmark: https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_benchmark#quickstart
-# Install stella_vslam_ros: https://stella-cv.readthedocs.io/en/latest/index.html
-
-# Create a ROS 2 overlay workspace
-mkdir -p /tmp/benchmark_ws/src
-
-# Clone the benchmark repository
-cd /tmp/benchmark_ws/src && git clone https://github.com/robotperf/benchmarks
-
-# Fetch dependencies
-source /opt/ros/humble/setup.bash
-cd /tmp/benchmark_ws && sudo rosdep update || true && sudo apt-get update &&
-  sudo rosdep install --from-paths src --ignore-src --rosdistro humble -y
-
-# Build the benchmark
-colcon build --merge-install --packages-up-to a2_rectify
-
-# Source the workspace as an overlay, launch the benchmark
-source install/setup.bash
-RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch a2_rectify trace_a2_rectify.launch.py
-
+Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/localization/b1_visual_slam and review the launch files to reproduce this package.
 ```
 
 ## Results

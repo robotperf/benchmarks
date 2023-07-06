@@ -14,28 +14,7 @@ A [ros2_control_demos](https://github.com/ros-controls/ros2_control_demos) used 
 ## Reproduction Steps
 
 ```bash
-# Create a ROS 2 overlay workspace
-mkdir -p /tmp/benchmark_ws/src
-
-# Clone the benchmark repository
-cd /tmp/benchmark_ws/src && git clone https://github.com/robotperf/benchmarks
-
-# Fetch dependencies
-source /opt/ros/humble/setup.bash
-cd /tmp/benchmark_ws && sudo rosdep update || true && sudo apt-get update &&
-  sudo rosdep install --from-paths src --ignore-src --rosdistro humble -y
-
-# Build the benchmark
-colcon build --merge-install --packages-up-to c2_diffbot_diff_driver_controller
-
-# Source the workspace as an overlay, launch the benchmark
-source install/setup.bash
-ros2 launch c2_diffbot_diff_driver_controller trace_c2_diffbot_diff_driver_controller.launch.py
-
-# Analyze trace files
-cd path/to/benchmark_ws
-ros2 launch c2_diffbot_diff_driver_controller analyze_c2_diffbot_diff_driver_controller.launch.py trace_path:=/root/.ros/tracing/c2_diffbot_diff_driver_controller metrics:=[latency,power]
-
+Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/control/c2_diffbot_diff_driver_controller and review the launch files to reproduce this package.
 ```
 
 ## Results
