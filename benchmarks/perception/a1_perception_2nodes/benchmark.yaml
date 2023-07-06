@@ -2673,5 +2673,16 @@ results:
     timestampt: '2023-07-06 06:52:15'
     type: black
     value: 10.951905
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: Fast-DDS mean_latency 10.741690412250554, rms_latency 14.748231221334796,
+      max_latency 223.597165, min_latency 4.822633, lost messages 0.00 %
+    timestampt: '2023-07-06 06:55:24'
+    type: black
+    value: 223.597165
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
