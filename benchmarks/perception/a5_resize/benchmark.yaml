@@ -1037,4 +1037,14 @@ results:
     timestampt: '2023-07-06 08:47:11'
     type: black
     value: 9.348727
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: lost messages 0.00 %
+    timestampt: '2023-07-06 08:50:23'
+    type: black
+    value: 31.18579864501953
 short: Perception resize ROS Component.
