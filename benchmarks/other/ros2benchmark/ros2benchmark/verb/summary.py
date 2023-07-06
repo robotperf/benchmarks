@@ -64,7 +64,7 @@ class SummaryVerb(VerbExtension):
                 filtered_dict[name] = entry
         return filtered_dict.values()        
 
-    def plot_data(self, data, condition_func):
+    def plot_data(self, data, condition_func, sortedata=False, sortedatareverse=False):
         # Filter data using the provided function
         filtered_data = [d for d in data if condition_func(d)]
 
@@ -78,6 +78,13 @@ class SummaryVerb(VerbExtension):
         # Extract 'name' and 'value' for each filtered record
         names = [d['name'] for d in filtered_dict.values()]
         values = [d['value'] for d in filtered_dict.values()]
+
+        if sortedata:
+            names = sorted(names, key=lambda x: x['value'])
+            values = sorted(values, key=lambda x: x['value'])
+        if sortedatareverse:
+            names = sorted(names, key=lambda x: x['value'], reverse=True)
+            values = sorted(values, key=lambda x: x['value'], reverse=True)
 
         # Create a bar plot
         plt.figure(figsize=(10, 5))
@@ -100,8 +107,11 @@ class SummaryVerb(VerbExtension):
         return list(hardware_set)        
 
     @staticmethod
-    def to_markdown_table(data, title=None, unique=False, sortedata=False, sortedatareverse=False):
-        """Print a list of results as a markdown table, sorted by timestamp and name"""
+    def to_markdown_table(data, title=None, unique=False, sortedata=False, sortedatareverse=False, filterout=None):
+        """Print a list of results as a markdown table, sorted by timestamp and name
+        
+        NOTE: see ReportVerb.plot_data for documentation and coherency
+        """
         
         # Sort the data by 'timestampt' and 'name' and 'metric'
         sorted_data = sorted(
@@ -110,13 +120,32 @@ class SummaryVerb(VerbExtension):
             reverse=True
         )
 
+        if unique:
+            # Use a dictionary to hold the most recent entry for each 'name', 
+            # 'hardware', 'type', 'datasource' combination
+            filtered_dict = {}
+            for entry in sorted_data:
+                name = entry['name'] + entry['hardware'] + entry['type'] + entry['datasource']
+            
+                # NOTE: condition 1: if not in dict or more recent than the one in the dict
+                # if name not in filtered_dict or arrow.get(entry['timestampt'], ['D-M-YYYY', 'YYYY-MM-DD HH:mm:ss']).datetime > arrow.get(filtered_dict[name]['timestampt'], ['D-M-YYYY', 'YYYY-MM-DD HH:mm:ss']).datetime:
+
+                # NOTE: condition 2: if not in dict or lower "value" than the one in the dict
+                # not in filterout and greater then 0.001 (heuristic to remove outliers, close to zero)
+                if (name not in filtered_dict or entry['value'] < filtered_dict[name]['value']) and (filterout is None or (entry['hardware'], entry['type']) not in filterout) and (entry['value'] > 0.001):
+                    filtered_dict[name] = entry
+
+            filtered_data = filtered_dict.values()
+            sorted_data = filtered_data
+            
+            # NOTE: previously coded as follows, but not needed anymore
+            # sorted_data = SummaryVerb.most_recent(filtered_data)
+
         if sortedata:
             sorted_data = sorted(sorted_data, key=lambda x: x['value'])
         if sortedatareverse:
             sorted_data = sorted(sorted_data, key=lambda x: x['value'], reverse=True)
 
-        if unique:
-            sorted_data = SummaryVerb.most_recent(sorted_data)
 
         return_str = ""
         
@@ -134,20 +163,20 @@ class SummaryVerb(VerbExtension):
         for d in sorted_data:
             # customize the results
             if d['type'].lower() == "grey":
-                aux_type = "[:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type)"
+                aux_type = "[⚪](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type)"
             elif d['type'].lower() == "black":
-                aux_type = "[:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type)"
+                aux_type = "[⚫](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type)"
             else:
                 aux_type = d['type']
 
             if d['category'] == "workstation":
-                aux_category = "[:desktop_computer:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#computing-targets)"
+                aux_category = "[🖥️](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#computing-targets)"
             elif d['category'] == "edge":
-                aux_category = "[:pager:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#computing-targets)"
+                aux_category = "[📟](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#computing-targets)"
             elif d['category'] == "cloud":
-                aux_category = "[:partly_sunny:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#computing-targets)"
+                aux_category = "[⛅](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#computing-targets)"
             elif d['category'] == "datacenter":
-                aux_category = "[:file_cabinet:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#computing-targets)"
+                aux_category = "[🗄](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#computing-targets)"
             else:
                 aux_category = d['category']
 
@@ -163,11 +192,11 @@ class SummaryVerb(VerbExtension):
 
             metric_icon = d['metric']
             if d['metric'].lower() == "latency":
-                metric_icon += " :stopwatch:"
+                metric_icon += " ⏱"
             elif d['metric'].lower() == "throughput":
-                metric_icon += " :signal_strength:"
+                metric_icon += " 📶"
             elif d['metric'].lower() == "power":
-                metric_icon += " :zap:"
+                metric_icon += " ⚡"
 
             # print(f"| {aux_type} | {benchmark_url} | {metric_icon} | {d['value']} | {d['category']} | {d['timestampt']} | {d['note']} | {datasource} |")
             return_str += f"| {aux_type} | {benchmark_url} | {metric_icon} | {d['value']:.2f} | {aux_category} |  {d['hardware']} | {d['timestampt']} | {d['note']} | {datasource} |\n"

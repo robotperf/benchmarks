@@ -78,7 +78,10 @@ class ReportVerb(VerbExtension):
                   name_function=plot_function_names,
                   value_function=plot_function_values, 
                   filter=None, 
-                  unique=False):
+                  unique=False,
+                  sortedata=False, 
+                  sortedatareverse=False,
+                  filterout=None):
         """
         Plot the data in a bar plot and save it to a file.
 
@@ -88,6 +91,9 @@ class ReportVerb(VerbExtension):
         :param value_function: function to extract the value from the data
         :param filter: function to filter the data
         :param unique: if True, only the most recent entry for each 'name', 'hardware', 'type', 'datasource' combination is plotted
+        :param sortedata: if True, the data is sorted by value
+        :param sortedatareverse: if True, the data is sorted by value in reverse order
+        :param filterout: list of tuples (hardware, type) to filter out and not consider
         """
 
         plotpath = '/tmp/report-' + title + '-latency.png'
@@ -103,12 +109,27 @@ class ReportVerb(VerbExtension):
             filtered_dict = {}
             for entry in filtered_data:
                 name = entry['name'] + entry['hardware'] + entry['type'] + entry['datasource']
-                if name not in filtered_dict or arrow.get(entry['timestampt'], ['D-M-YYYY', 'YYYY-MM-DD HH:mm:ss']).datetime > arrow.get(filtered_dict[name]['timestampt'], ['D-M-YYYY', 'YYYY-MM-DD HH:mm:ss']).datetime:
+            
+                # NOTE: condition 1: if not in dict or more recent than the one in the dict
+                # if name not in filtered_dict or arrow.get(entry['timestampt'], ['D-M-YYYY', 'YYYY-MM-DD HH:mm:ss']).datetime > arrow.get(filtered_dict[name]['timestampt'], ['D-M-YYYY', 'YYYY-MM-DD HH:mm:ss']).datetime:
+
+                # NOTE: condition 2: if not in dict or lower "value" than the one in the dict
+                # not in filterout and greater then 0.001 (heuristic to remove outliers, close to zero)
+                if (name not in filtered_dict or entry['value'] < filtered_dict[name]['value']) and (filterout is None or (entry['hardware'], entry['type']) not in filterout) and (entry['value'] > 0.001):
                     filtered_dict[name] = entry
+
             filtered_data = filtered_dict.values()            
 
+        # order list using "value"
+        if sortedata:
+            filtered_data = sorted(filtered_data, key=lambda x: x['value'])
+        if sortedatareverse:
+            filtered_data = sorted(filtered_data, key=lambda x: x['value'], reverse=True)
+
+        # extac
         names = [name_function(d) for d in filtered_data]
         values = [value_function(d) for d in filtered_data]
+
 
         # # debug
         # print(names)
@@ -191,7 +212,7 @@ class ReportVerb(VerbExtension):
         alphabetical_list_ids = sorted(list_ids)
 
         # unique condition
-        unique_condition = False
+        unique_condition = True
 
         for benchmark_id in alphabetical_list_ids:
             
@@ -207,50 +228,66 @@ class ReportVerb(VerbExtension):
             #                                 unique=False))
             # benchmark_id_report += f"\n![{plotpath}]({plotpath})"
 
+
             ## ⏱ latency
+            filter_out = [("Kria KR260", "black")]
             filtered_data = [item for item in list_results if (item['id'] == benchmark_id and item['metric'] == "latency")]
             sorted_filtered_data = sorted(filtered_data, key=lambda x: x['value'])
-            benchmark_id_report += SummaryVerb.to_markdown_table(sorted_filtered_data, 
-                                                                 benchmark_id+"-latency",
-                                                                 sortedata=True)
             plotpath = (ReportVerb.plot_data(sorted_filtered_data,
                                              xlabel="Hardware (timestamp)",
                                              ylabel="Latency (ms)",
                                              name_function=ReportVerb.plot_function_names_forid,
                                              value_function=ReportVerb.plot_function_values,
                                              title=benchmark_id + "-latency",
-                                             unique=unique_condition))
+                                             unique=unique_condition,
+                                             sortedata=True,
+                                             filterout = filter_out))
             benchmark_id_report += f"\n![{plotpath}]({plotpath})\n"
+            benchmark_id_report += SummaryVerb.to_markdown_table(sorted_filtered_data, 
+                                                                 benchmark_id+"-latency",
+                                                                 unique=unique_condition,
+                                                                 sortedata=True,
+                                                                 filterout = filter_out)
 
             ## ⚡ power
+            filter_out = []
             filtered_data = [item for item in list_results if (item['id'] == benchmark_id and item['metric'] == "power")]
             sorted_filtered_data = sorted(filtered_data, key=lambda x: x['value'])
-            benchmark_id_report += SummaryVerb.to_markdown_table(sorted_filtered_data, 
-                                                                 benchmark_id+"-power",
-                                                                 sortedata=True)
             plotpath = (ReportVerb.plot_data(sorted_filtered_data,
                                              xlabel="Hardware (timestamp)",
                                              ylabel="Power (W)",
                                              name_function=ReportVerb.plot_function_names_forid,
                                              value_function=ReportVerb.plot_function_values,
                                              title=benchmark_id + "-power",
-                                             unique=unique_condition))
+                                             unique=unique_condition,
+                                             sortedata=True,
+                                             filterout = filter_out))
             benchmark_id_report += f"\n![{plotpath}]({plotpath})\n"
+            benchmark_id_report += SummaryVerb.to_markdown_table(sorted_filtered_data, 
+                                                                 benchmark_id+"-power",
+                                                                 unique=unique_condition,
+                                                                 sortedata=True,
+                                                                 filterout = filter_out)
 
             ## 📶 throughput
+            filter_out = []
             filtered_data = [item for item in list_results if (item['id'] == benchmark_id and item['metric'] == "throughput")]
             sorted_filtered_data = sorted(filtered_data, key=lambda x: x['value'], reverse=True)
-            benchmark_id_report += SummaryVerb.to_markdown_table(sorted_filtered_data, 
-                                                                 benchmark_id+"-throughput",
-                                                                 sortedatareverse=True)
             plotpath = (ReportVerb.plot_data(sorted_filtered_data,
                                              xlabel="Hardware (timestamp)",
                                              ylabel="Throughput (FPS)",
                                              name_function=ReportVerb.plot_function_names_forid,
                                              value_function=ReportVerb.plot_function_values,
                                              title=benchmark_id + "-throughput",
-                                             unique=unique_condition))
+                                             unique=unique_condition,
+                                             sortedatareverse=True,
+                                             filterout = filter_out))
             benchmark_id_report += f"\n![{plotpath}]({plotpath})\n"
+            benchmark_id_report += SummaryVerb.to_markdown_table(sorted_filtered_data, 
+                                                                 benchmark_id+"-throughput",
+                                                                 unique=unique_condition,
+                                                                 sortedatareverse=True,
+                                                                 filterout = filter_out)
 
         benchmark_id_report += f"\n\n"
 

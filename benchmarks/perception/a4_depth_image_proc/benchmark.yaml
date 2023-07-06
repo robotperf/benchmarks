@@ -9,17 +9,6 @@ results:
 - result:
     category: edge
     datasource: perception/depth_image1
-    hardware: 12th Gen Intel(R) Core(TM) i9-12900KF
-    metric: latency
-    metric_unit: ms
-    note: 'Mean: 37.09 ms,  RMS: 65.12 ms, Max: 939.43 ms, Min: 7.97 ms over 1147
-      samples.'
-    timestampt: 26-04-2023
-    type: grey
-    value: 939.43
-- result:
-    category: edge
-    datasource: perception/depth_image1
     hardware: NVIDIA AGX Orin Dev. Kit
     metric: power
     metric_unit: W

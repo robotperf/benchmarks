@@ -2185,7 +2185,7 @@ results:
     note: lost messages 60.67 %
     timestampt: '2023-07-05 22:12:50'
     type: black
-    value: 0.0
+    value: 0
 - result:
     category: edge
     datasource: perception/image

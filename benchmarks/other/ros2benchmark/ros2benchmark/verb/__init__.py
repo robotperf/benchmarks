@@ -161,7 +161,7 @@ class Benchmark:
                 hardware = result["result"]["hardware"]
                 category = result["result"]["category"]
                 timestampt = result["result"]["timestampt"]
-                value = result["result"]["value"]
+                value = float(result["result"]["value"])
                 note = result["result"]["note"]
                 datasource = result["result"]["datasource"]
 
