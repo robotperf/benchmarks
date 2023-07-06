@@ -3024,5 +3024,15 @@ results:
     timestampt: '2023-07-06 09:35:14'
     type: black
     value: 122.812316
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Qualcomm RB5 Robotics Kit
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 2.67 %
+    timestampt: '2023-07-06 09:37:42'
+    type: black
+    value: 29.660449255611734
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
