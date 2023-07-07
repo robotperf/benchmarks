@@ -159,6 +159,9 @@ class ReportVerb(VerbExtension):
         # get paths of "benchmark.yaml" files for each benchmark
         benchmark_meta_paths = search_benchmarks()
         list_results = SummaryVerb.preprocess(benchmark_meta_paths)
+        list_ids = SummaryVerb.extract_unique_x(list_results, "id")
+        alphabetical_list_ids = sorted(list_ids)
+
         # pprint.pprint(list_results)
 
         benchmark_id_report = ""
@@ -170,6 +173,8 @@ class ReportVerb(VerbExtension):
         benchmark_id_report += "- [Intro](#intro)\n"
         benchmark_id_report += "- [Legend](#legend)\n"
         benchmark_id_report += "- [Benchmark results by `id`](#benchmark-results-by-id)\n"
+        for benchmark_id in alphabetical_list_ids:
+            benchmark_id_report += "  - [Benchmark `{}`](#benchmark-{})\n".format(benchmark_id, benchmark_id)
         benchmark_id_report += "- [Benchmarking results by `hardware` solution](#benchmarking-results-by-hardware-solution)\n"
 
         ######################################################
@@ -208,14 +213,14 @@ class ReportVerb(VerbExtension):
         # 1. Print all results for each benchmark
         ######################################################
         benchmark_id_report += "## Benchmark results by `id`\n"
-        list_ids = SummaryVerb.extract_unique_x(list_results, "id")
-        alphabetical_list_ids = sorted(list_ids)
 
         # unique condition
         unique_condition = True
 
         for benchmark_id in alphabetical_list_ids:
             
+            benchmark_id_report += f"### Benchmark `{benchmark_id}`\n"
+
             # ## all of it (metric-agnostic)
             # # get body
             # filtered_data = [item for item in list_results if item['id'] == benchmark_id]

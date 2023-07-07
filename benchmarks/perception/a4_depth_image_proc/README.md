@@ -20,7 +20,6 @@ Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/perception
 
 | Type | Hardware | Metric | Value | Category | Timestamp | Note | Data Source |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | 12th Gen Intel(R) Core(TM) i9-12900KF | latency | 939.43 | edge | 26-04-2023 | Mean: 37.09 ms,  RMS: 65.12 ms, Max: 939.43 ms, Min: 7.97 ms over 1147 samples. | [perception/depth_image1](https://github.com/robotperf/rosbags/tree/main/perception/depth_image1) |
 | [:black_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | NVIDIA AGX Orin Dev. Kit | power | 11.513117790222168 | edge | 2023-06-30 20:37:42 |  | [perception/depth_image1](https://github.com/robotperf/rosbags/tree/main/perception/depth_image1) |
 | [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | latency | 492.41293299999995 | workstation | 2023-07-01 18:52:57 | mean_benchmark 52.36187717005076, rms_benchmark 67.83441415522553, max_benchmark 492.41293299999995, min_benchmark 15.982555999999999, lost messages 1.14 % | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |
 | [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | power | 10.32787799835205 | workstation | 2023-07-01 18:56:07 |  | [perception/image](https://github.com/robotperf/rosbags/tree/main/perception/image) |

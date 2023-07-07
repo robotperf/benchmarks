@@ -149,10 +149,10 @@ class SummaryVerb(VerbExtension):
 
         return_str = ""
         
-        # Print the table header
-        if title:
-            # print(f"\n**{title}**")
-            return_str += f"\n**{title}**\n"
+        # # Print the table header
+        # if title:
+        #     # print(f"\n**{title}**")
+        #     return_str += f"\n**{title}**\n"
 
         # print("| Type | Benchmark | Metric | Value | Category | Timestamp | Note | Data Source |")
         # print("| --- | --- | --- | --- | --- | --- | --- | --- |")
