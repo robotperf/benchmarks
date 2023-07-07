@@ -8,15 +8,55 @@ reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchma
   and review the launch files to reproduce this package.
 results:
 - result:
-    category: edge
+    category: workstation
     datasource: perception/image
-    hardware: ROBOTCORE
     metric: latency
     metric_unit: ms
-    note: ''
-    timestampt: 14-10-2022
-    type: grey
-    value: 66.82
+    timestampt: 07-07-2023
+    type: black
+    hardware: Intel i7-12700H
+    note: 'mean 5.41 ms, rms 5.85 ms, max 9.23 ms, min 1.38 ms, lost 0.00 %, throughput bounded to 30fps'
+    value: 9.23
+- result:
+    category: workstation
+    datasource: perception/image
+    metric: power
+    metric_unit: W
+    timestampt: 07-07-2023
+    type: black
+    hardware: Intel i7-12700H    
+    note: 'lost 0.00 %, throughput bounded to 30fps'
+    value: 20.84
+- result:
+    category: workstation
+    datasource: perception/image
+    metric: latency
+    metric_unit: ms
+    timestampt: 07-07-2023
+    type: black
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060
+    note: 'mean 7.87 ms, rms 8.06 ms, max 14.76 ms, min 3.38 ms, lost 0.00 %, throughput bounded to 30fps'
+    value: 14.76
+- result:
+    category: workstation
+    datasource: perception/image
+    metric: power
+    metric_unit: W
+    timestampt: 07-07-2023
+    type: black
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060    
+    note: 'lost 0.00 %, throughput bounded to 30fps'
+    value: 42.68
+- result:
+    category: workstation
+    datasource: perception/image
+    metric: throughput
+    metric_unit: fps
+    timestampt: 07-07-2023
+    type: black
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060
+    note: 'mean 106.80 ms, rms 122.48 ms, max 243.64 ms, min 3.82 ms, lost 4.06 %'
+    value: 255.533
 - result:
     category: edge
     datasource: perception/image

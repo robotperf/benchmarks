@@ -10,7 +10,7 @@ reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchma
   and review the launch files to reproduce this package.
 results:
 - result:
-    category: edge
+    category: workstation
     datasource: perception/image
     metric: latency
     metric_unit: ms
@@ -20,7 +20,7 @@ results:
     note: 'mean 14.73 ms, RMS 14.84 ms, max 20.40 ms, min 6.03 ms, throughput bounded to 30fps'
     value: 20.40
 - result:
-    category: edge
+    category: workstation
     datasource: perception/image
     metric: power
     metric_unit: W
@@ -30,7 +30,7 @@ results:
     note: 'throughput bounded to 30fps, estimated with RAPL'
     value: 12.46
 - result:
-    category: edge
+    category: workstation
     datasource: perception/image
     metric: latency
     metric_unit: ms
@@ -40,7 +40,7 @@ results:
     note: 'mean 11.94 ms, RMS 12.06 ms, max 17.47 ms, min 7.41 ms, throughput bounded to 30fps'
     value: 17.47
 - result:
-    category: edge
+    category: workstation
     datasource: perception/image
     metric: power
     metric_unit: W
@@ -50,7 +50,7 @@ results:
     note: 'throughput bounded to 30fps, estimated with RAPL and NVML'
     value: 39.40
 - result:
-    category: edge
+    category: workstation
     datasource: perception/image
     metric: latency
     metric_unit: ms
@@ -60,7 +60,7 @@ results:
     note: 'mean 66.17 ms, rms 71.71 ms, max 180.26 ms, min 3.92 ms, % frames lost 1.92 %. Throughput configured in the 30-500 FPS range. Mean FPS observed 174.432.'
     value: 180.26
 - result:
-    category: edge
+    category: workstation
     datasource: perception/image
     metric: power
     metric_unit: W
@@ -70,7 +70,7 @@ results:
     note: 'Throughput configured in the 30-500 FPS range. Mean FPS observed 174.432. Estimated with RAPL'
     value: 41.44
 - result:
-    category: edge
+    category: workstation
     datasource: perception/image
     metric: throughput
     metric_unit: fps
@@ -80,7 +80,7 @@ results:
     note: 'Throughput configured in the 30-500 FPS range. Mean FPS observed 174.432. % frames lost 1.92 %'
     value: 174.432
 - result:
-    category: edge
+    category: workstation
     datasource: perception/image
     metric: latency
     metric_unit: ms
@@ -90,7 +90,7 @@ results:
     note: 'mean 88.81 ms, rms 101.41 ms, max 197.53 ms, min 3.22 ms, % frames lost 3.24 %. Throughput configured in the 30-500 FPS range. Mean FPS observed 220.91.'
     value: 197.53
 - result:
-    category: edge
+    category: workstation
     datasource: perception/image
     metric: power
     metric_unit: W
@@ -100,7 +100,7 @@ results:
     note: 'Estimated with RAPL and NVML. Throughput configured in the 30-500 FPS range. Mean FPS observed 220.91.'
     value: 42.08
 - result:
-    category: edge
+    category: workstation
     datasource: perception/image
     metric: throughput
     metric_unit: fps
@@ -110,7 +110,7 @@ results:
     note: 'Throughput configured in the 30-500 FPS range. Mean FPS observed 220.91. % frames lost 3.24 %'
     value: 220.91
 - result:
-    category: edge
+    category: workstation
     datasource: perception/image
     metric: latency
     metric_unit: ms
@@ -120,7 +120,7 @@ results:
     note: 'throughput bounded to 30fps'
     value: 24.67
 - result:
-    category: edge
+    category: workstation
     datasource: perception/image
     metric: power
     metric_unit: W
