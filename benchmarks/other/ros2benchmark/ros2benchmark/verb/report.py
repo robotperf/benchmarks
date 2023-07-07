@@ -60,7 +60,14 @@ class ReportVerb(VerbExtension):
         """
 
         return_str = ""         
-        return_str += data_sample['hardware'] + " (" + data_sample['timestampt'] + ")"
+        # return_str += data_sample['hardware'] + " (" + data_sample['timestampt'] + ")"
+
+        if "ROBOTCORE®" in data_sample['hardware']:
+            return_str += data_sample['hardware'].replace("ROBOTCORE®", "$\mathbf{ROBOTCORE®}$")
+        else:
+            return_str += data_sample['hardware']
+
+
         if data_sample['type'].lower() == "grey":
             return_str += "⚪"
         elif data_sample['type'].lower() == "black":
@@ -146,7 +153,7 @@ class ReportVerb(VerbExtension):
         plt.title(title)
         plt.xlabel(xlabel)
         plt.ylabel(ylabel)
-        plt.xticks(rotation=80)  # Rotate x-axis labels for better visibility
+        plt.xticks(rotation=87)  # Rotate x-axis labels for better visibility
 
         # Save the figure and close
         plt.savefig(plotpath, bbox_inches='tight')

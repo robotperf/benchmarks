@@ -39,7 +39,7 @@ results:
     value: 33.277046318720096
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: latency
     metric_unit: ms
@@ -50,7 +50,7 @@ results:
     value: 61.133489
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: power
     metric_unit: W
@@ -60,7 +60,7 @@ results:
     value: 5.897109508514404
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: throughput
     metric_unit: fps
@@ -71,7 +71,7 @@ results:
     value: 12.975265148245784
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: latency
     metric_unit: ms
@@ -82,7 +82,7 @@ results:
     value: 59.300551
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: power
     metric_unit: W
@@ -92,7 +92,7 @@ results:
     value: 9.084548950195312
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: throughput
     metric_unit: fps
@@ -103,7 +103,7 @@ results:
     value: 31.884678474583428
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: latency
     metric_unit: ms
@@ -114,7 +114,7 @@ results:
     value: 64.159806
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: power
     metric_unit: W
@@ -124,7 +124,7 @@ results:
     value: 9.158670425415039
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: throughput
     metric_unit: fps
@@ -135,7 +135,7 @@ results:
     value: 34.36352784361543
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: latency
     metric_unit: ms
@@ -147,7 +147,7 @@ results:
     value: 142.15711000000002
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: power
     metric_unit: W
@@ -157,7 +157,7 @@ results:
     value: 4.991259574890137
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: throughput
     metric_unit: fps
@@ -169,7 +169,7 @@ results:
     value: 14.014305242218835
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: latency
     metric_unit: ms
@@ -180,7 +180,7 @@ results:
     value: 24.369248000000002
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: power
     metric_unit: W
@@ -190,7 +190,7 @@ results:
     value: 5.4462056159973145
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: throughput
     metric_unit: fps
@@ -201,7 +201,7 @@ results:
     value: 30.785183177535163
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: latency
     metric_unit: ms
@@ -212,7 +212,7 @@ results:
     value: 55.534672
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: power
     metric_unit: W
@@ -222,7 +222,7 @@ results:
     value: 5.380381870269775
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: throughput
     metric_unit: fps
@@ -232,7 +232,7 @@ results:
     value: 30.17785995618677
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: latency
     metric_unit: ms
@@ -244,7 +244,7 @@ results:
     value: 60.643169
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: power
     metric_unit: W
@@ -254,7 +254,7 @@ results:
     value: 5.990500450134277
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: throughput
     metric_unit: fps
@@ -266,7 +266,7 @@ results:
     value: 13.103120761099573
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: latency
     metric_unit: ms
@@ -277,7 +277,7 @@ results:
     value: 62.041148
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: power
     metric_unit: W
@@ -287,7 +287,7 @@ results:
     value: 9.378743171691895
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: throughput
     metric_unit: fps
@@ -298,7 +298,7 @@ results:
     value: 31.565990360062205
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: latency
     metric_unit: ms
@@ -309,7 +309,7 @@ results:
     value: 70.352786
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: power
     metric_unit: W
@@ -319,7 +319,7 @@ results:
     value: 9.438055419921875
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: throughput
     metric_unit: fps
@@ -329,7 +329,7 @@ results:
     value: 30.123718888372743
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: latency
     metric_unit: ms
@@ -340,7 +340,7 @@ results:
     value: 167.73728
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: power
     metric_unit: W
@@ -350,7 +350,7 @@ results:
     value: 4.890318870544434
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: throughput
     metric_unit: fps
@@ -362,7 +362,7 @@ results:
     value: 13.52755127283494
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: latency
     metric_unit: ms
@@ -373,7 +373,7 @@ results:
     value: 24.677001999999998
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: power
     metric_unit: W
@@ -383,7 +383,7 @@ results:
     value: 5.508819580078125
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: throughput
     metric_unit: fps
@@ -394,7 +394,7 @@ results:
     value: 30.567931067359098
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: latency
     metric_unit: ms
@@ -405,7 +405,7 @@ results:
     value: 46.221303
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: power
     metric_unit: W
@@ -415,7 +415,7 @@ results:
     value: 5.3956067085266115
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: throughput
     metric_unit: fps
@@ -425,7 +425,7 @@ results:
     value: 30.156793533907724
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: latency
     metric_unit: ms
@@ -436,7 +436,7 @@ results:
     value: 61.390225
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: power
     metric_unit: W
@@ -446,7 +446,7 @@ results:
     value: 6.003722667694092
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: throughput
     metric_unit: fps
@@ -458,7 +458,7 @@ results:
     value: 12.865070331860164
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: latency
     metric_unit: ms
@@ -469,7 +469,7 @@ results:
     value: 63.093501
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: power
     metric_unit: W
@@ -479,7 +479,7 @@ results:
     value: 9.25777530670166
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: throughput
     metric_unit: fps
@@ -490,7 +490,7 @@ results:
     value: 40.80019296859267
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: latency
     metric_unit: ms
@@ -501,7 +501,7 @@ results:
     value: 69.674379
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: power
     metric_unit: W
@@ -511,7 +511,7 @@ results:
     value: 9.503683471679688
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: throughput
     metric_unit: fps
@@ -521,7 +521,7 @@ results:
     value: 30.144931928302505
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: latency
     metric_unit: ms
@@ -532,7 +532,7 @@ results:
     value: 148.540541
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: power
     metric_unit: W
@@ -542,7 +542,7 @@ results:
     value: 4.95824670791626
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: throughput
     metric_unit: fps
@@ -554,7 +554,7 @@ results:
     value: 13.476212268508911
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: latency
     metric_unit: ms
@@ -565,7 +565,7 @@ results:
     value: 22.541862000000002
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: power
     metric_unit: W
@@ -575,7 +575,7 @@ results:
     value: 5.384462833404541
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: throughput
     metric_unit: fps
@@ -586,7 +586,7 @@ results:
     value: 30.82409576282116
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: latency
     metric_unit: ms
@@ -597,7 +597,7 @@ results:
     value: 27.318159
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: power
     metric_unit: W
@@ -607,7 +607,7 @@ results:
     value: 5.356595516204834
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: throughput
     metric_unit: fps
@@ -617,7 +617,7 @@ results:
     value: 30.187649948188287
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: latency
     metric_unit: ms
@@ -628,7 +628,7 @@ results:
     value: 60.821372
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: power
     metric_unit: W
@@ -638,7 +638,7 @@ results:
     value: 6.046652793884277
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: latency
     metric_unit: ms
@@ -649,7 +649,7 @@ results:
     value: 59.726972999999994
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: power
     metric_unit: W
@@ -659,7 +659,7 @@ results:
     value: 9.121424674987793
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: throughput
     metric_unit: fps
@@ -670,7 +670,7 @@ results:
     value: 40.7902923346434
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: latency
     metric_unit: ms
@@ -681,7 +681,7 @@ results:
     value: 67.75825
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: power
     metric_unit: W
@@ -691,7 +691,7 @@ results:
     value: 9.493589210510255
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: throughput
     metric_unit: fps
@@ -701,7 +701,7 @@ results:
     value: 30.15859282377587
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: latency
     metric_unit: ms
@@ -712,7 +712,7 @@ results:
     value: 146.692566
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: power
     metric_unit: W
@@ -722,7 +722,7 @@ results:
     value: 4.967750549316406
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: throughput
     metric_unit: fps
@@ -734,7 +734,7 @@ results:
     value: 14.880279446886325
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: latency
     metric_unit: ms
@@ -745,7 +745,7 @@ results:
     value: 22.534809
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: power
     metric_unit: W
@@ -755,7 +755,7 @@ results:
     value: 5.363163471221924
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: throughput
     metric_unit: fps
@@ -766,7 +766,7 @@ results:
     value: 30.421441616142733
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: latency
     metric_unit: ms
@@ -777,7 +777,7 @@ results:
     value: 26.363062
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: power
     metric_unit: W
@@ -787,7 +787,7 @@ results:
     value: 5.734482002258301
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: throughput
     metric_unit: fps
@@ -797,7 +797,7 @@ results:
     value: 30.153863945962684
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: latency
     metric_unit: ms
@@ -809,7 +809,7 @@ results:
     value: 38.789196999999994
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: power
     metric_unit: W
@@ -819,7 +819,7 @@ results:
     value: 27.565385818481445
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: throughput
     metric_unit: fps
@@ -831,7 +831,7 @@ results:
     value: 12.835034015984673
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: latency
     metric_unit: ms
@@ -842,7 +842,7 @@ results:
     value: 40.61329
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: power
     metric_unit: W
@@ -852,7 +852,7 @@ results:
     value: 30.50154685974121
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: throughput
     metric_unit: fps
@@ -863,7 +863,7 @@ results:
     value: 31.587386853190612
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: latency
     metric_unit: ms
@@ -874,7 +874,7 @@ results:
     value: 43.648845
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: power
     metric_unit: W
@@ -884,7 +884,7 @@ results:
     value: 30.022187423706054
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: throughput
     metric_unit: fps
@@ -894,7 +894,7 @@ results:
     value: 30.260771636853566
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: latency
     metric_unit: ms
@@ -906,7 +906,7 @@ results:
     value: 138.92758600000002
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: power
     metric_unit: W
@@ -916,7 +916,7 @@ results:
     value: 4.954197406768799
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: throughput
     metric_unit: fps
@@ -928,7 +928,7 @@ results:
     value: 177.47101321575875
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: latency
     metric_unit: ms
@@ -939,7 +939,7 @@ results:
     value: 21.948783
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: power
     metric_unit: W
@@ -949,7 +949,7 @@ results:
     value: 5.202226161956787
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: throughput
     metric_unit: fps
@@ -960,7 +960,7 @@ results:
     value: 30.97512864435553
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: latency
     metric_unit: ms
@@ -971,7 +971,7 @@ results:
     value: 26.832002
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: power
     metric_unit: W
@@ -981,7 +981,7 @@ results:
     value: 5.278471279144287
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: AMD Ryzen 5 PRO 4650G
     metric: throughput
     metric_unit: fps
@@ -991,7 +991,7 @@ results:
     value: 30.184747193055312
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: latency
     metric_unit: ms
@@ -1003,7 +1003,7 @@ results:
     value: 38.87722600000001
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: power
     metric_unit: W
@@ -1013,7 +1013,7 @@ results:
     value: 28.1240291595459
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: throughput
     metric_unit: fps
@@ -1025,7 +1025,7 @@ results:
     value: 12.793996279070871
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: latency
     metric_unit: ms
@@ -1036,7 +1036,7 @@ results:
     value: 39.259577
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: power
     metric_unit: W
@@ -1046,7 +1046,7 @@ results:
     value: 30.728836059570312
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: throughput
     metric_unit: fps
@@ -1057,7 +1057,7 @@ results:
     value: 31.42033553022225
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: latency
     metric_unit: ms
@@ -1068,7 +1068,7 @@ results:
     value: 44.979566
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: power
     metric_unit: W
@@ -1078,7 +1078,7 @@ results:
     value: 30.15460777282715
 - result:
     category: workstation
-    datasource: perception/image
+    datasource: perception/image3
     hardware: Intel i7-8700K
     metric: throughput
     metric_unit: fps
