@@ -52,7 +52,7 @@ def main(argv):
     integrated = args.integrated
 
     # Instantiate the class
-    ba = BenchmarkAnalyzer('c3_rrbot_forward_command_controller', hardware_device_type)
+    ba = BenchmarkAnalyzer('c4_rrbot_forward_command_controller_velocity', hardware_device_type)
 
     if hardware_device_type == 'cpu':
         # add parameters for analyzing the traces
@@ -173,7 +173,7 @@ def generate_launch_description():
     # Define the ExecuteProcess action to run the Python script
     analyzer = ExecuteProcess(
         cmd=[
-            'python3', "src/benchmarks/benchmarks/control/c3_rrbot_forward_command_controller/launch/analyze_c3_rrbot_forward_command_controller.launch.py",
+            'python3', "src/benchmarks/benchmarks/control/c4_rrbot_forward_command_controller_velocity/launch/analyze_c4_rrbot_forward_command_controller_velocity.launch.py",
             '--hardware_device_type', LaunchConfiguration('hardware_device_type'),
             '--trace_path', LaunchConfiguration('trace_path'),
             '--metrics', LaunchConfiguration('metrics'),
