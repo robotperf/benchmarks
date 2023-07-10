@@ -43,8 +43,9 @@ from tracetools_trace.tools.names import DEFAULT_EVENTS_KERNEL
 from tracetools_trace.tools.names import DEFAULT_CONTEXT
 
 import os
+POWER_LIB = os.environ.get('POWER_LIB')
+C3_CONTROLLER_TYPE = 'acceleration' # os.environ.get('C3_CONTROLLER_TYPE')
 
-C3_CONTROLLER_TYPE = os.environ.get('C3_CONTROLLER_TYPE')
 if C3_CONTROLLER_TYPE == 'position':
     robot_controller = 'forward_position_controller'
     command_composable_node = ComposableNode(
@@ -97,6 +98,7 @@ def generate_launch_description():
             description="Slowdown factor of the RRbot."
         )
     )
+
     declared_arguments.append(
         DeclareLaunchArgument(
             "runtime_config_package",
@@ -204,47 +206,11 @@ def generate_launch_description():
         parameters=[robot_description, robot_controllers],
         output="both",
     )
-    robot_state_pub_node = Node(
-        package="robot_state_publisher",
-        executable="robot_state_publisher",
-        output="both",
-        parameters=[robot_description],
-    )
-    rviz_node = Node(
-        package="rviz2",
-        executable="rviz2",
-        name="rviz2",
-        output="log",
-        arguments=["-d", rviz_config_file],
-        condition=IfCondition(start_rviz),
-    )
-
-    joint_state_broadcaster_spawner = Node(
-        package="controller_manager",
-        executable="spawner",
-        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
-    )
 
     robot_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
         arguments=[robot_controller, "--controller-manager", "/controller_manager"],
-    )
-
-    # Delay rviz start after `joint_state_broadcaster`
-    delay_rviz_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[rviz_node],
-        )
-    )
-
-    # Delay start of robot_controller after `joint_state_broadcaster`
-    delay_robot_controller_spawner_after_joint_state_broadcaster_spawner = RegisterEventHandler(
-        event_handler=OnProcessExit(
-            target_action=joint_state_broadcaster_spawner,
-            on_exit=[robot_controller_spawner],
-        )
     )
 
     command_container = ComposableNodeContainer(
@@ -257,7 +223,7 @@ def generate_launch_description():
     )
 
     trace = Trace(
-        session_name="c3_rrbot_forward_command_controller",
+        session_name="c5_rrbot_forward_command_controller_acceleration",
         events_ust=[
             "ros2:*",
             "robotcore_control:*",
@@ -288,7 +254,7 @@ def generate_launch_description():
                 name="power_component",
                 parameters=[
                     {"publish_rate": 20.0},
-                    {"hardware_device_type": "rapl"}
+                    {"power_lib": POWER_LIB}
                 ],
             ),
             
@@ -298,10 +264,7 @@ def generate_launch_description():
 
     nodes = [
         control_node,
-        robot_state_pub_node,
-        joint_state_broadcaster_spawner,
-        delay_rviz_after_joint_state_broadcaster_spawner,
-        delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
+        robot_controller_spawner,
         command_container,
         trace,
         power_container

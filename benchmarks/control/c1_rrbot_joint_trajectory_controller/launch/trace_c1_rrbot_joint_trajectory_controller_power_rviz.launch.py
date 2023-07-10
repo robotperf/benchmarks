@@ -40,6 +40,9 @@ from tracetools_trace.tools.names import DEFAULT_EVENTS_ROS
 from tracetools_trace.tools.names import DEFAULT_EVENTS_KERNEL
 from tracetools_trace.tools.names import DEFAULT_CONTEXT
 
+import os
+POWER_LIB = os.environ.get('POWER_LIB')
+
 def generate_launch_description():
 
     # Get URDF via xacro
@@ -166,6 +169,27 @@ def generate_launch_description():
         )
     )
 
+    power_container = ComposableNodeContainer(
+        name="power_container",
+        namespace="robotcore/power",
+        package="rclcpp_components",
+        executable="component_container",
+        composable_node_descriptions=[
+            ComposableNode(
+                package="robotcore-power",
+                namespace="robotcore/power",
+                plugin="robotcore::power::PowerComponent",
+                name="power_component",
+                parameters=[
+                    {"publish_rate": 20.0},
+                    {"power_lib": POWER_LIB}
+                ],
+            ),
+            
+        ],
+        output="screen",
+    )
+
     nodes = [
         control_node,
         robot_state_pub_node,
@@ -173,7 +197,8 @@ def generate_launch_description():
         delay_rviz_after_joint_state_broadcaster_spawner,
         delay_robot_controller_spawner_after_joint_state_broadcaster_spawner,
         delay_joint_commands_after_robot_controller_spawner,
-        delay_trace_after_joint_trajectory_commands
+        delay_trace_after_joint_trajectory_commands,
+        power_container
     ]
 
     return LaunchDescription(nodes)

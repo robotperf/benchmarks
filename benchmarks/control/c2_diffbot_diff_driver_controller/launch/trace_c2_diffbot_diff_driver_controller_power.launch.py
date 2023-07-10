@@ -40,6 +40,8 @@ from tracetools_trace.tools.names import DEFAULT_EVENTS_ROS
 from tracetools_trace.tools.names import DEFAULT_EVENTS_KERNEL
 from tracetools_trace.tools.names import DEFAULT_CONTEXT
 
+import os
+POWER_LIB = os.environ.get('POWER_LIB')
 
 def generate_launch_description():
     # Get URDF via xacro
@@ -125,7 +127,7 @@ def generate_launch_description():
                 name="power_component",
                 parameters=[
                     {"publish_rate": 20.0},
-                    {"hardware_device_type": "rapl"}
+                    {"power_lib": POWER_LIB}
                 ],
             ),
             

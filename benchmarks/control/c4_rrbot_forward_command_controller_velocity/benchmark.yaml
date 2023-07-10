@@ -1,10 +1,10 @@
-id: c3
-name: c3_rrbot_forward_command_controller
+id: c4
+name: c4_rrbot_forward_command_controller_velocity
 description: |
-  A [ros2_control_demos](https://github.com/ros-controls/ros2_control_demos) used to demonstrate the [ros2_controllers](https://github.com/ros-controls/ros2_controllers) forward_command_controller
-short: Forward command controller
+  A [ros2_control_demos](https://github.com/ros-controls/ros2_control_demos) used to demonstrate the [ros2_controllers](https://github.com/ros-controls/ros2_controllers) forward_command_controller with velocity commands
+short: Forward command controller with velocity commands
 graph: ../../../imgs/c3_rrbot_forward_command_controller_position.svg
-reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/control/c3_rrbot_forward_command_controller
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/control/c4_rrbot_forward_command_controller_velocity
   and review the launch files to reproduce this package.
 
 # Data not valid at the moment, just a placeholder for now
