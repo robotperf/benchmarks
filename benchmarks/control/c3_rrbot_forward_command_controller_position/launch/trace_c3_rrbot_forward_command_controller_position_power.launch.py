@@ -223,7 +223,7 @@ def generate_launch_description():
     )
 
     trace = Trace(
-        session_name="c3_rrbot_forward_command_controller",
+        session_name="c3_rrbot_forward_command_controller_position",
         events_ust=[
             "ros2:*",
             "robotcore_control:*",
