@@ -9,6 +9,26 @@ results:
 - result:
     category: edge
     datasource: perception/depth_image1
+    hardware: Intel i5-13600K
+    metric: latecy
+    metric_unit: ms
+    note: 'mean 17.14 ms, rms 18.76 ms, max 57.40 ms, min 12.46 ms, lost 0.00 %. Fixed at 30 FPS'
+    timestampt: '08-07-2023'
+    type: black
+    value: 57.40
+- result:
+    category: edge
+    datasource: perception/depth_image1
+    hardware: Intel i5-13600K
+    metric: power
+    metric_unit: W
+    note: 'Fixed at 30 FPS. lost 0.00 %.'
+    timestampt: '08-07-2023'
+    type: black
+    value: 32.44
+- result:
+    category: edge
+    datasource: perception/depth_image1
     hardware: NVIDIA AGX Orin Dev. Kit
     metric: power
     metric_unit: W

@@ -1,7 +1,7 @@
 id: b3
 name: b3_apriltag_detection
 description: |
-  An april tag pose detection component. Used to demonstrate the april tag detection components [isaac_ros_apriltag_graph](https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_benchmark/blob/main/scripts/isaac_ros_apriltag_graph.py) and [isaac_ros_apriltag_node](https://github.com/NVIDIA-ISAAC-ROS/isaac_ros_benchmark/blob/main/scripts/isaac_ros_apriltag_node.py).
+  An april tag pose detection component.
 short: Apriltag detection ROS Component.
 graph: ../../../imgs/b3_apriltag_detection_node.svg
 reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/localization/b3_apriltag_detection
@@ -9,13 +9,73 @@ reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchma
 
 # Data not valid at the moment, just a placeholder for now
 results:
-  - result:
-      type: grey  
-      metric: latency
-      metric_unit: ms      
-      hardware: ROBOTCORE
-      category: edge
-      timestampt: 14-10-2022
-      value: 66.82
-      note: ""
-      datasource: "perception/image"
+- result:
+    category: workstation
+    datasource: r2b_dataset/r2b_storage
+    metric: latency
+    metric_unit: ms
+    timestampt: '08-07-2023'
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE® Perception)
+    type: black
+    note: 'mean 16.32 ms, rms 16.37 ms, max 20.58 ms, min 12.52 ms, lost 0.00 %, throughput targeting 50 FPS'
+    value: 20.58
+- result:
+    category: workstation
+    datasource: r2b_dataset/r2b_storage
+    metric: throughput
+    metric_unit: fps
+    timestampt: '08-07-2023'
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE® Perception)
+    type: black
+    note: 'mean 16.32 ms, rms 16.37 ms, max 20.58 ms, min 12.52 ms, lost 0.00 %, throughput targeting 50 FPS'
+    value: 49.06
+- result:
+    category: edge
+    datasource: r2b_dataset/r2b_storage
+    metric: latency
+    metric_unit: ms
+    timestampt: '08-07-2023'
+    hardware: NVIDIA AGX Orin Dev. Kit  (ROBOTCORE® Perception)
+    type: black
+    note: 'mean 36.91 ms, rms 37.05 ms, max 55.88 ms, min 30.38 ms, lost 0.00 %, throughput targeting 10 FPS'
+    value: 55.88
+- result:
+    category: edge
+    datasource: r2b_dataset/r2b_storage
+    metric: throughput
+    metric_unit: fps
+    timestampt: '08-07-2023'
+    hardware: NVIDIA AGX Orin Dev. Kit (ROBOTCORE® Perception)
+    type: black
+    note: 'mean 36.91 ms, rms 37.05 ms, max 55.88 ms, min 30.38 ms, lost 0.00 %, throughput targeting 10 FPS'
+    value: 10.203
+- result:
+    category: edge
+    datasource: r2b_dataset/r2b_storage
+    metric: power
+    metric_unit: W
+    timestampt: '08-07-2023'
+    hardware: NVIDIA AGX Orin Dev. Kit (ROBOTCORE® Perception)
+    type: black
+    note: 'mean 36.91 ms, rms 37.05 ms, max 55.88 ms, min 30.38 ms, lost 0.00 %, throughput targeting 10 FPS'
+    value: 12.51
+- result:
+    category: workstation
+    datasource: r2b_dataset/r2b_storage
+    metric: latency
+    metric_unit: ms
+    timestampt: '08-07-2023'
+    hardware: Intel i5-13600K + NVIDIA GeForce RTX 3060 (ROBOTCORE® Perception)
+    type: black
+    note: 'mean 9.16 ms, rms 9.21 ms, max 17.94 ms, min 6.58 ms, lost 0.00 %, throughput targeting 50 FPS'
+    value: 17.94
+- result:
+    category: workstation
+    datasource: r2b_dataset/r2b_storage
+    metric: throughput
+    metric_unit: fps
+    timestampt: '08-07-2023'
+    hardware: Intel i5-13600K + NVIDIA GeForce RTX 3060 (ROBOTCORE® Perception)
+    type: black
+    note: 'mean 9.16 ms, rms 9.21 ms, max 17.94 ms, min 6.58 ms, lost 0.00 %, throughput targeting 50 FPS'
+    value: 49.09

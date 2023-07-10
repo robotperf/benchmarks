@@ -8,13 +8,43 @@ reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchma
   and review the launch files to reproduce this package.
 # Data not valid at the moment, just a placeholder for now
 results:
-  - result:
-      type: grey  
-      metric: latency
-      metric_unit: ms      
-      hardware: ROBOTCORE
-      category: edge
-      timestampt: 14-10-2022
-      value: 66.82
-      note: ""
-      datasource: "perception/image"
+- result:
+    category: workstation
+    datasource: N/A
+    metric: latency
+    metric_unit: ms
+    timestampt: '08-07-2023'
+    hardware: Intel i7-12700H
+    type: grey
+    note: 'mean 0.08 ms, rms 0.10 ms, max 0.55 ms, min 0.02 ms, lost 0.00%, update rate 10 Hz'
+    value: 0.55
+- result:
+    category: workstation
+    datasource: N/A
+    metric: power
+    metric_unit: W
+    timestampt: '08-07-2023'
+    hardware: Intel i7-12700H
+    type: grey
+    note: 'mean 0.08 ms, rms 0.10 ms, max 0.55 ms, min 0.02 ms, lost 0.00%, update rate 10 Hz'
+    value: 8.297782897949219
+- result:
+    category: workstation
+    datasource: N/A
+    metric: latency
+    metric_unit: ms
+    timestampt: '08-07-2023'
+    hardware: Intel i5-13600K
+    type: grey
+    note: 'mean 0.02 ms, rms 0.03 ms, max 0.13 ms, min 0.01 ms, lost 0.00%, update rate 10 Hz'
+    value: 0.13
+- result:
+    category: workstation
+    datasource: N/A
+    metric: power
+    metric_unit: W
+    timestampt: '08-07-2023'
+    hardware: Intel i5-13600K
+    type: grey
+    note: 'mean 0.02 ms, rms 0.03 ms, max 0.13 ms, min 0.01 ms, lost 0.00%, update rate 10 Hz'
+    value: 28.091297149658203

@@ -11,13 +11,83 @@ reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchma
   and review the launch files to reproduce this package.
 # Data not valid at the moment, just a placeholder for now
 results:
-  - result:
-      hardware: ROBOTCORE
-      metric: latency
-      metric_unit: ms
-      category: edge
-      timestampt: 14-10-2022
-      value: 66.82
-      note: ""
-      type: grey
-      datasource: "perception/image"
+- result:
+    category: workstation
+    datasource: r2b_dataset/r2b_storage
+    metric: latency
+    metric_unit: ms
+    timestampt: '08-07-2023'
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE® Perception)
+    type: black
+    note: 'mean 40.40 ms, rms 40.55 ms, max 57.48 ms, min 23.60 ms 0.00 %, throughput targeting 30 FPS'
+    value: 57.48
+- result:
+    category: workstation
+    datasource: r2b_dataset/r2b_storage
+    metric: throughput
+    metric_unit: fps
+    timestampt: '08-07-2023'
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE® Perception)
+    type: black
+    note: 'mean 40.40 ms, rms 40.55 ms, max 57.48 ms, min 23.60 ms 0.00 %'
+    value: 30.0
+- result:
+    category: edge
+    datasource: r2b_dataset/r2b_storage
+    metric: latency
+    metric_unit: ms
+    timestampt: '08-07-2023'
+    hardware: NVIDIA AGX Orin Dev. Kit  (ROBOTCORE® Perception)
+    type: black
+    note: 'mean 78.35 ms, rms 79.35 ms, max 143.01 ms, min 67.59 ms 0.00 %'
+    value: 143.01
+- result:
+    category: edge
+    datasource: r2b_dataset/r2b_storage
+    metric: throughput
+    metric_unit: fps
+    timestampt: '08-07-2023'
+    hardware: NVIDIA AGX Orin Dev. Kit (ROBOTCORE® Perception)
+    type: black
+    note: 'mean 78.35 ms, rms 79.35 ms, max 143.01 ms, min 67.59 ms 0.00 %'
+    value: 13.54
+- result:
+    category: edge
+    datasource: r2b_dataset/r2b_storage
+    metric: power
+    metric_unit: W
+    timestampt: '08-07-2023'
+    hardware: NVIDIA AGX Orin Dev. Kit (ROBOTCORE® Perception)
+    type: black
+    note: 'mean 78.35 ms, rms 79.35 ms, max 143.01 ms, min 67.59 ms 0.00 %'
+    value: 19.68
+- result:
+    category: workstation
+    datasource: r2b_dataset/r2b_storage
+    metric: latency
+    metric_unit: ms
+    timestampt: '08-07-2023'
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE® Perception)
+    type: black
+    note: 'mean 65.77 ms, rms 66.39 ms, max 98.39 ms, min 28.81 ms, lost 0.48 %'
+    value: 98.39
+- result:
+    category: workstation
+    datasource: r2b_dataset/r2b_storage
+    metric: throughput
+    metric_unit: fps
+    timestampt: '08-07-2023'
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE® Perception)
+    type: black
+    note: 'mean 65.77 ms, rms 66.39 ms, max 98.39 ms, min 28.81 ms, lost 0.48 %'
+    value: 41.58
+- result:
+    category: workstation
+    datasource: r2b_dataset/r2b_storage
+    metric: power
+    metric_unit: W
+    timestampt: '08-07-2023'
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE® Perception)
+    type: black
+    note: 'mean 65.77 ms, rms 66.39 ms, max 98.39 ms, min 28.81 ms, lost 0.48 %'
+    value: 106.78
