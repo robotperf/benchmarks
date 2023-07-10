@@ -38,7 +38,7 @@ metric = os.environ.get('METRIC')
 
 POWER_LIB = os.environ.get('POWER_LIB')
 IMAGE_RESOLUTION = ImageResolution.HD
-ROSBAG_PATH = '/tmp/benchmark_ws/src/rosbags/' + rosbag # '/home/amf/benchmark_ws/src/rosbags/perception/image' # NOTE: hardcoded, modify accordingly
+ROSBAG_PATH = '/tmp/benchmark_ws/src/rosbags/' + rosbag # '/home/amf/benchmark_ws/src/rosbags/perception/image3' # NOTE: hardcoded, modify accordingly
 SESSION_NAME = package
 if type == "grey":
     OPTION = 'without_monitor_node'
@@ -49,104 +49,92 @@ if metric == "power":
 else:
     POWER = "off"
 
-# ROSBAG_PATH = '/workspaces/isaac_ros-dev/src/rosbags/perception/image'
-# SESSION_NAME = 'trace_a1_perception_2nodes'
+# ROSBAG_PATH = '/workspaces/isaac_ros-dev/src/rosbags/perception/image3'
+# SESSION_NAME = 'a3_stereo_image_proc'
 # OPTION = 'with_monitor_node'
 # POWER = 'on'
 # POWER_LIB = 'rapl'
 
 def launch_setup(container_prefix, container_sigterm_timeout):
-    """Generate launch description for benchmarking image_proc RectifyNode."""
+    """Generate launch description for benchmarking stereo_image_proc DisparityNode."""
 
     data_loader_node = ComposableNode(
         name='DataLoaderNode',
-        namespace=TestRectifyNode.generate_namespace(),
+        namespace=TestDisparityNode.generate_namespace(),
         package='ros2_benchmark',
         plugin='ros2_benchmark::DataLoaderNode',
-        remappings=[('camera/image_raw', 'data_loader/image'),
-                    ('camera/camera_info', 'data_loader/camera_info')]                    
+        remappings=[('left_camera/image_raw', 'data_loader/left_camera/image'),
+                    ('left_camera/camera_info', 'data_loader/left_camera/camera_info'),
+                    ('right_camera/image_raw', 'data_loader/right_camera/image'),
+                    ('right_camera/camera_info', 'data_loader/right_camera/camera_info')]                    
     )
 
     playback_node = ComposableNode(
         name='PlaybackNode',
-        namespace=TestRectifyNode.generate_namespace(),
+        namespace=TestDisparityNode.generate_namespace(),
         package='ros2_benchmark',
         plugin='ros2_benchmark::PlaybackNode',
         parameters=[{
             'data_formats': [
                 'sensor_msgs/msg/Image',
+                'sensor_msgs/msg/CameraInfo',
+                'sensor_msgs/msg/Image',
                 'sensor_msgs/msg/CameraInfo'],
         }],
-        remappings=[('buffer/input0', 'data_loader/image'),
-                    ('input0', 'image_raw'),
-                    ('buffer/input1', 'data_loader/camera_info'),
-                    ('input1', 'camera_info')],                
+        remappings=[('buffer/input0', 'data_loader/left_camera/image'),
+                    ('input0', 'left_camera/image_raw'),
+                    ('buffer/input1', 'data_loader/left_camera/camera_info'),
+                    ('input1', 'left_camera/camera_info'),
+                    ('buffer/input2', 'data_loader/right_camera/image'),
+                    ('input2', 'right_camera/image_raw'),
+                    ('buffer/input3', 'data_loader/right_camera/camera_info'),
+                    ('input3', 'right_camera/camera_info')],                   
     )
 
-    rectify_node = ComposableNode(
-        name='RectifyNode',
+    disparity_node = ComposableNode(
         namespace="robotperf/benchmark",
-        package="isaac_ros_image_proc",
-        plugin="nvidia::isaac_ros::image_proc::RectifyNode",
+        package="isaac_ros_stereo_image_proc",
+        plugin="nvidia::isaac_ros::stereo_image_proc::DisparityNode",
+        name="disparity_node",
         remappings=[
-            ("image_raw", "/r2b/image_raw"),
-            ("camera_info", "/r2b/camera_info"),
+            ('left/camera_info', '/r2b/left_camera/camera_info'),
+            ('left/image_rect', '/r2b/left_camera/image_raw'),
+            ('right/camera_info', '/r2b/right_camera/camera_info'),
+            ('right/image_rect', '/r2b/right_camera/image_raw'),                    
         ],
+        #extra_arguments=[{'use_intra_process_comms': True}],
     )
-
-    resize_node = ComposableNode(
-        name="ResizeNode",
-        namespace="robotperf/benchmark",
-        package="isaac_ros_image_proc",
-        plugin="nvidia::isaac_ros::image_proc::ResizeNode",
-        remappings=[
-            ("camera_info", "/r2b/camera_info"),
-            ("image", "/robotperf/benchmark/image_rect"),
-            ("resize", "/robotperf/benchmark/resize/image"),
-        ],
-        parameters=[
-            {
-                "scale_height": 2.0,
-                "scale_width": 2.0,
-            }
-        ],
-        # extra_arguments=[{'use_intra_process_comms': True}],
-    )
-
+    
     monitor_node = ComposableNode(
         name='MonitorNode',
-        namespace=TestRectifyNode.generate_namespace(),
+        namespace=TestDisparityNode.generate_namespace(),
         package='ros2_benchmark',
         plugin='ros2_benchmark::MonitorNode',
         parameters=[{
-            'monitor_data_format': 'sensor_msgs/msg/Image',
+            'monitor_data_format': 'stereo_msgs/msg/DisparityImage',
             'monitor_power_data_format': 'power_msgs/msg/Power',
         }],
         remappings=[
-            ('output', '/robotperf/benchmark/resize/image')],
+            ('output', '/robotperf/benchmark/disparity')],
     )
 
     if OPTION == 'with_monitor_node':
         composable_node_descriptions_option=[
             data_loader_node,
-            # prep_resize_node,
             playback_node,
-            rectify_node,
-            resize_node,
-            monitor_node  
+            disparity_node,
+            monitor_node           
         ]
     else:
         composable_node_descriptions_option=[
             data_loader_node,
-            # prep_resize_node,
             playback_node,
-            rectify_node,
-            resize_node,
+            disparity_node           
         ]
 
     composable_node_container = ComposableNodeContainer(
         name='container',
-        namespace=TestRectifyNode.generate_namespace(),
+        namespace=TestDisparityNode.generate_namespace(),
         package='rclcpp_components',
         executable='component_container_mt',
         prefix=container_prefix,
@@ -181,28 +169,31 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         return [composable_node_container]
 
 
-
-class TestRectifyNode(ROS2BenchmarkTest):
-    """Performance test for image_proc RectifyNode and ResizeNode."""
+class TestDisparityNode(ROS2BenchmarkTest):
+    """Performance test for stereo_image_proc DisparityNode."""
 
     # Custom configurations
     config = ROS2BenchmarkConfig(
-        benchmark_name='image_proc::RectifyNodeResizeNode Benchmark',
+        benchmark_name='stereo_image_proc::DisparityNode Benchmark',
         input_data_path=ROSBAG_PATH,
         # Upper and lower bounds of peak throughput search window
-        publisher_upper_frequency=500.0,
+        publisher_upper_frequency=300.0,
         publisher_lower_frequency=30.0,
         # The number of frames to be buffered
-        playback_message_buffer_size=68,
+        playback_message_buffer_size=50,
         custom_report_info={'data_resolution': IMAGE_RESOLUTION},
         option = OPTION,
         session_name = SESSION_NAME,
         add_power = POWER
     )
-
+    
     def test_benchmark(self):
         json_file_path = self.run_benchmark()
-        
+
+        # Copy the JSON file to the "/tmp/json" file
+        # NOTE: this will be then used by the CI to post-process and analyze results
+        os.system("cp " + json_file_path + " /tmp/json")
+
         if self.config.option == 'with_monitor_node':
             # Open the file and load the JSON content into a Python dictionary
             with open(json_file_path, 'r') as f:
@@ -226,10 +217,6 @@ class TestRectifyNode(ROS2BenchmarkTest):
                 str_out += "| ros2_benchmark | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | **{:.2f}** ms | {:.2f} % |\n".format(
                     mean_latency, rms_latency, max_latency, min_latency, (frames_missed/frames_sent)*100)
             print(str_out)
-
-
+     
 def generate_test_description():
-    return TestRectifyNode.generate_test_description_with_nsys(launch_setup)
-
-
-
+    return TestDisparityNode.generate_test_description_with_nsys(launch_setup)

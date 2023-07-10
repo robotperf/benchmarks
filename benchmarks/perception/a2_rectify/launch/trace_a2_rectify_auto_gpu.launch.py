@@ -5,8 +5,8 @@
 #    @@@@@ @@  @@    @@@@
 #    @@@@@ @@  @@    @@@@ Copyright (c) 2023, Acceleration Robotics®
 #    @@@@@ @@  @@    @@@@ Author: Alejandra Martínez Fariña <alex@accelerationrobotics.com>
+#    @@@@@ @@  @@    @@@@ Author: Martiño Crespo Álvarez <martinho@accelerationrobotics.com>
 #    @@@@@ @@  @@    @@@@ Author: Víctor Mayoral Vilches <victor@accelerationrobotics.com>
-#    @@@@@ @@  @@    @@@@ 
 #    @@@@@@@@@&@@@@@@@@@@
 #    @@@@@@@@@@@@@@@@@@@@
 #
@@ -50,7 +50,7 @@ else:
     POWER = "off"
 
 # ROSBAG_PATH = '/workspaces/isaac_ros-dev/src/rosbags/perception/image'
-# SESSION_NAME = 'trace_a1_perception_2nodes'
+# SESSION_NAME = 'a2_rectify'
 # OPTION = 'with_monitor_node'
 # POWER = 'on'
 # POWER_LIB = 'rapl'
@@ -80,37 +80,18 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         remappings=[('buffer/input0', 'data_loader/image'),
                     ('input0', 'image_raw'),
                     ('buffer/input1', 'data_loader/camera_info'),
-                    ('input1', 'camera_info')],                
+                    ('input1', 'camera_info')],              
     )
 
     rectify_node = ComposableNode(
         name='RectifyNode',
         namespace="robotperf/benchmark",
-        package="isaac_ros_image_proc",
-        plugin="nvidia::isaac_ros::image_proc::RectifyNode",
+        package='isaac_ros_image_proc',
+        plugin='nvidia::isaac_ros::image_proc::RectifyNode',
         remappings=[
             ("image_raw", "/r2b/image_raw"),
             ("camera_info", "/r2b/camera_info"),
         ],
-    )
-
-    resize_node = ComposableNode(
-        name="ResizeNode",
-        namespace="robotperf/benchmark",
-        package="isaac_ros_image_proc",
-        plugin="nvidia::isaac_ros::image_proc::ResizeNode",
-        remappings=[
-            ("camera_info", "/r2b/camera_info"),
-            ("image", "/robotperf/benchmark/image_rect"),
-            ("resize", "/robotperf/benchmark/resize/image"),
-        ],
-        parameters=[
-            {
-                "scale_height": 2.0,
-                "scale_width": 2.0,
-            }
-        ],
-        # extra_arguments=[{'use_intra_process_comms': True}],
     )
 
     monitor_node = ComposableNode(
@@ -123,7 +104,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
             'monitor_power_data_format': 'power_msgs/msg/Power',
         }],
         remappings=[
-            ('output', '/robotperf/benchmark/resize/image')],
+            ('output', '/robotperf/benchmark/image_rect')],
     )
 
     if OPTION == 'with_monitor_node':
@@ -132,16 +113,14 @@ def launch_setup(container_prefix, container_sigterm_timeout):
             # prep_resize_node,
             playback_node,
             rectify_node,
-            resize_node,
-            monitor_node  
+            monitor_node            
         ]
     else:
         composable_node_descriptions_option=[
             data_loader_node,
             # prep_resize_node,
             playback_node,
-            rectify_node,
-            resize_node,
+            rectify_node,            
         ]
 
     composable_node_container = ComposableNodeContainer(
@@ -154,6 +133,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         composable_node_descriptions=composable_node_descriptions_option,
         output='screen'
     )
+
 
     if POWER == "on":
         power_container = ComposableNodeContainer(
@@ -181,16 +161,15 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         return [composable_node_container]
 
 
-
 class TestRectifyNode(ROS2BenchmarkTest):
-    """Performance test for image_proc RectifyNode and ResizeNode."""
+    """Performance test for image_proc RectifyNode."""
 
     # Custom configurations
     config = ROS2BenchmarkConfig(
-        benchmark_name='image_proc::RectifyNodeResizeNode Benchmark',
+        benchmark_name='image_proc::RectifyNode Benchmark',
         input_data_path=ROSBAG_PATH,
         # Upper and lower bounds of peak throughput search window
-        publisher_upper_frequency=500.0,
+        publisher_upper_frequency=300.0,
         publisher_lower_frequency=30.0,
         # The number of frames to be buffered
         playback_message_buffer_size=68,
@@ -202,6 +181,10 @@ class TestRectifyNode(ROS2BenchmarkTest):
 
     def test_benchmark(self):
         json_file_path = self.run_benchmark()
+
+        # Copy the JSON file to the "/tmp/json" file
+        # NOTE: this will be then used by the CI to post-process and analyze results
+        os.system("cp " + json_file_path + " /tmp/json")
         
         if self.config.option == 'with_monitor_node':
             # Open the file and load the JSON content into a Python dictionary
@@ -230,6 +213,4 @@ class TestRectifyNode(ROS2BenchmarkTest):
 
 def generate_test_description():
     return TestRectifyNode.generate_test_description_with_nsys(launch_setup)
-
-
 
