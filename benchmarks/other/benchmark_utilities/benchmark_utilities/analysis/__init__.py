@@ -1844,7 +1844,7 @@ class BenchmarkAnalyzer:
             first_target = "robotcore_control:robotcore_control_diff_drive_controller_cb_init"
             last_target = "robotcore_control:robotcore_control_diff_drive_controller_cb_fini"
 
-        if "c3" in self.benchmark_name:
+        if ("c3" in self.benchmark_name or "c4" in self.benchmark_name or "c5" in self.benchmark_name):
             first_target = "robotcore_control:robotcore_control_forward_command_controller_cb_init"
             last_target = "robotcore_control:robotcore_control_forward_command_controller_cb_fini"
 
