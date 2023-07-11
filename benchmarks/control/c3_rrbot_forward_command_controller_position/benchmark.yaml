@@ -14,38 +14,38 @@ results:
     datasource: N/A
     metric: latency
     metric_unit: ms
-    timestampt: '08-07-2023'
+    timestampt: '10-07-2023'
     hardware: Intel i7-12700H
     type: grey
-    note: 'mean 0.21 ms, rms 1.17 ms, max 10.04 ms, min 0.06 ms, lost 0.00%, update rate 10 Hz'
-    value: 10.04
+    note: 'mean 0.02 ms, rms 0.02 ms. max 0.05 ms, min 0.009 ms, lost 0.00%, update rate 100 Hz, position control'
+    value: 0.05
 - result:
     category: workstation
     datasource: N/A
     metric: power
     metric_unit: W
-    timestampt: '08-07-2023'
+    timestampt: '10-07-2023'
     hardware: Intel i7-12700H
     type: grey
-    note: 'mean 0.21 ms, rms 1.17 ms, max 10.04 ms, min 0.06 ms, lost 0.00%, update rate 10 Hz'
-    value: 8.0799007415
+    note: 'mean 0.02 ms, rms 0.02 ms. max 0.05 ms, min 0.009 ms, lost 0.00%, update rate 100 Hz, position control'
+    value: 8.90
 - result:
     category: workstation
     datasource: N/A
     metric: latency
     metric_unit: ms
-    timestampt: '08-07-2023'
+    timestampt: '10-07-2023'
     hardware: Intel i5-13600K
     type: grey
-    note: 'mean 0.02, ms, rms 0.05 ms, max 0.44 ms, min 0.009 ms, lost 0.00%, update rate 10 Hz'
-    value: 0.44
+    note: '0.009 ms 0.009 ms 0.01 ms 0.009 ms, lost 0.00%, update rate 100 Hz, position control'
+    value: 0.01
 - result:
     category: workstation
     datasource: N/A
     metric: power
     metric_unit: W
-    timestampt: '08-07-2023'
+    timestampt: '10-07-2023'
     hardware: Intel i5-13600K
     type: grey
-    note: 'mean 0.02, ms, rms 0.05 ms, max 0.44 ms, min 0.009 ms, lost 0.00%, update rate 10 Hz'
-    value: 35.25370407104492
+    note: '0.009 ms 0.009 ms 0.01 ms 0.009 ms, lost 0.00%, update rate 100 Hz, position control'
+    value: 29.24
