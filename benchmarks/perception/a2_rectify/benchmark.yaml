@@ -1,37 +1,1133 @@
+description: A simple perception rectify ROS robotics operation. Used to demonstrate
+  a simple perception component [image_pipeline](https://github.com/ros-perception/image_pipeline)
+  package.
+graph: ../../../imgs/a2_rectify.png
 id: a2
 name: a2_rectify
-description: |
-  A simple perception rectify ROS robotics operation. Used to demonstrate a simple perception component [image_pipeline](https://github.com/ros-perception/image_pipeline) package.
-short: Perception rectify ROS Component.
-graph: ../../../imgs/a2_rectify.svg
-metric:
-  metric: "latency"
-  unit: "ms"
-reproduction: |
-  # Create a ROS 2 overlay workspace
-  mkdir -p /tmp/benchmark_ws/src
-  
-  # Clone the benchmark repository
-  cd /tmp/benchmark_ws/src && git clone https://github.com/robotperf/benchmarks
-  
-  # Fetch dependencies
-  source /opt/ros/humble/setup.bash
-  cd /tmp/benchmark_ws && sudo rosdep update || true && sudo apt-get update &&
-    sudo rosdep install --from-paths src --ignore-src --rosdistro humble -y
-  
-  # Build the benchmark
-  colcon build --merge-install --packages-up-to a2_rectify
-  
-  # Source the workspace as an overlay, launch the benchmark
-  source install/setup.bash
-  RMW_IMPLEMENTATION=rmw_cyclonedds_cpp ros2 launch a2_rectify trace_a2_rectify.launch.py
-
-# Data not valid at the moment, just a placeholder for now
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/perception/a2_rectify
+  and review the launch files to reproduce this package.
 results:
-  - result:
-      hardware: ROBOTCORE
-      category: edge
-      timestampt: 14-10-2022
-      value: 66.82
-      note: ""
-      datasource: "perception/image"
+- result:
+    category: workstation
+    datasource: perception/image
+    metric: latency
+    metric_unit: ms
+    timestampt: 07-07-2023
+    type: black
+    hardware: Intel i7-12700H
+    note: 'mean 5.41 ms, rms 5.85 ms, max 9.23 ms, min 1.38 ms, lost 0.00 %, throughput bounded to 30fps'
+    value: 9.23
+- result:
+    category: workstation
+    datasource: perception/image
+    metric: power
+    metric_unit: W
+    timestampt: 07-07-2023
+    type: black
+    hardware: Intel i7-12700H    
+    note: 'lost 0.00 %, throughput bounded to 30fps'
+    value: 20.84
+- result:
+    category: workstation
+    datasource: perception/image
+    metric: latency
+    metric_unit: ms
+    timestampt: 07-07-2023
+    type: black
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060
+    note: 'mean 7.87 ms, rms 8.06 ms, max 14.76 ms, min 3.38 ms, lost 0.00 %, throughput bounded to 30fps'
+    value: 14.76
+- result:
+    category: workstation
+    datasource: perception/image
+    metric: power
+    metric_unit: W
+    timestampt: 07-07-2023
+    type: black
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060    
+    note: 'lost 0.00 %, throughput bounded to 30fps'
+    value: 42.68
+- result:
+    category: workstation
+    datasource: perception/image
+    metric: throughput
+    metric_unit: fps
+    timestampt: 07-07-2023
+    type: black
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060
+    note: 'mean 106.80 ms, rms 122.48 ms, max 243.64 ms, min 3.82 ms, lost 4.06 %'
+    value: 255.533
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.204346636213202, rms_benchmark 30.273858539984825, max_benchmark
+      36.46251208914602, min_benchmark 26.931846242965786, lost messages 0.00 %
+    timestampt: '2023-06-30 19:53:43'
+    type: black
+    value: 36.46251208914602
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 9.59008332142857, rms_benchmark 9.818872594532918, max_benchmark
+      10.612124, min_benchmark 3.820048, lost messages 7.14 %
+    timestampt: '2023-07-01 17:54:28'
+    type: grey
+    value: 10.612124
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-01 17:57:52'
+    type: grey
+    value: 6.592531204223633
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 28.13578647678196, rms_benchmark 29.073051247606564, max_benchmark
+      43.18326658783711, min_benchmark 5.915050470316012, lost messages 7.14 %
+    timestampt: '2023-07-01 18:01:23'
+    type: grey
+    value: 43.18326658783711
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 12.956591102941175, rms_benchmark 13.193771815681659, max_benchmark
+      19.59939, min_benchmark 5.019039, lost messages 0.00 %
+    timestampt: '2023-07-01 18:04:50'
+    type: grey
+    value: 19.59939
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-01 18:08:07'
+    type: grey
+    value: 6.1853766441345215
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.395764664758964, rms_benchmark 30.54505965326154, max_benchmark
+      37.38958341909571, min_benchmark 23.2270259454009, lost messages 0.00 %
+    timestampt: '2023-07-01 18:11:18'
+    type: grey
+    value: 37.38958341909571
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 12.712246926470588, rms_benchmark 12.86785854143323, max_benchmark
+      17.968975, min_benchmark 7.869791, lost messages 0.00 %
+    timestampt: '2023-07-01 18:14:34'
+    type: black
+    value: 17.968975
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-01 18:17:46'
+    type: black
+    value: 6.207215309143066
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.328278850221153, rms_benchmark 30.460221865736965, max_benchmark
+      40.56219527143775, min_benchmark 25.21200332384969, lost messages 0.00 %
+    timestampt: '2023-07-01 18:20:15'
+    type: black
+    value: 40.56219527143775
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 3.2632362115384614, rms_benchmark 3.353616084409562,\
+      \ max_benchmark 8.115169, min_benchmark 1.680432, lost messages 1.92 %"
+    timestampt: '2023-07-04 19:46:26'
+    type: grey
+    value: 8.115169
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-04 19:48:47'
+    type: grey
+    value: 5.1224822998046875
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 30.239173402022587, rms_benchmark 30.464668826611227,\
+      \ max_benchmark 37.26233199672132, min_benchmark 23.142795305308056, lost messages\
+      \ 1.92 %"
+    timestampt: '2023-07-04 19:51:21'
+    type: grey
+    value: 37.26233199672132
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 5.429152897058823, rms_benchmark 5.515728442462671, max_benchmark
+      6.9777700000000005, min_benchmark 2.681845, lost messages 0.00 %
+    timestampt: '2023-07-04 19:53:36'
+    type: grey
+    value: 6.9777700000000005
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-04 19:56:06'
+    type: grey
+    value: 5.200368881225586
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.0127357163602, rms_benchmark 30.02295529268755, max_benchmark
+      32.43596637480136, min_benchmark 27.894573130323742, lost messages 0.00 %
+    timestampt: '2023-07-04 19:58:28'
+    type: grey
+    value: 32.43596637480136
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: mean_latency 6.145216874666666, rms_latency 6.194175536920753, max_latency
+      8.685369, min_latency 3.583662, lost messages 0.00 %
+    timestampt: '2023-07-04 20:00:46'
+    type: black
+    value: 8.685369
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: lost messages 0.00 %
+    timestampt: '2023-07-04 20:03:15'
+    type: black
+    value: 5.3094861030578615
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 0.00 %
+    timestampt: '2023-07-04 20:05:35'
+    type: black
+    value: 30.196854326720178
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 5.449222871794872, rms_benchmark 5.756732733777163,\
+      \ max_benchmark 16.871945, min_benchmark 4.993907999999999, lost messages 2.56\
+      \ %"
+    timestampt: '2023-07-04 20:12:31'
+    type: grey
+    value: 16.871945
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-04 20:15:43'
+    type: grey
+    value: 6.629870891571045
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 27.890560387336976, rms_benchmark 28.888629446257834,\
+      \ max_benchmark 42.08145479965702, min_benchmark 2.9884181940302716, lost messages\
+      \ 2.56 %"
+    timestampt: '2023-07-04 20:18:53'
+    type: grey
+    value: 42.08145479965702
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 11.491341852941176, rms_benchmark 12.195063689406803, max_benchmark
+      21.872375, min_benchmark 2.860704, lost messages 0.00 %
+    timestampt: '2023-07-04 20:21:38'
+    type: grey
+    value: 21.872375
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-04 20:24:52'
+    type: grey
+    value: 6.624725818634033
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.157110660071357, rms_benchmark 30.323877503581596, max_benchmark
+      40.676121749815245, min_benchmark 23.214514791801314, lost messages 0.00 %
+    timestampt: '2023-07-04 20:28:07'
+    type: grey
+    value: 40.676121749815245
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: mean_latency 11.442050901333333, rms_latency 11.766105786582626, max_latency
+      18.426932, min_latency 2.641497, lost messages 0.00 %
+    timestampt: '2023-07-04 20:31:27'
+    type: black
+    value: 18.426932
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: lost messages 0.00 %
+    timestampt: '2023-07-04 20:34:43'
+    type: black
+    value: 6.716543388366699
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 0.00 %
+    timestampt: '2023-07-04 20:37:57'
+    type: black
+    value: 30.120681884380286
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 3.1901165128205125, rms_benchmark 3.312313252210505,\
+      \ max_benchmark 8.136816, min_benchmark 1.6772869999999998, lost messages 2.56\
+      \ %"
+    timestampt: '2023-07-05 04:00:09'
+    type: grey
+    value: 8.136816
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-05 04:02:47'
+    type: grey
+    value: 4.9160614013671875
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 27.21224613124761, rms_benchmark 28.387530691137346,\
+      \ max_benchmark 42.12568923946454, min_benchmark 2.7109843789772685, lost messages\
+      \ 2.56 %"
+    timestampt: '2023-07-05 04:05:06'
+    type: grey
+    value: 42.12568923946454
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 5.278054044117646, rms_benchmark 5.359485844312689, max_benchmark
+      8.348581, min_benchmark 2.6201019999999997, lost messages 0.00 %
+    timestampt: '2023-07-05 04:07:21'
+    type: grey
+    value: 8.348581
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-05 04:09:43'
+    type: grey
+    value: 5.277991771697998
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.010535929681286, rms_benchmark 30.019161198155523, max_benchmark
+      31.43886702874564, min_benchmark 28.319760568885123, lost messages 0.00 %
+    timestampt: '2023-07-05 04:12:16'
+    type: grey
+    value: 31.43886702874564
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: mean_latency 6.034210846666668, rms_latency 6.073023492521163, max_latency
+      8.536067, min_latency 3.272658, lost messages 0.00 %
+    timestampt: '2023-07-05 04:14:43'
+    type: black
+    value: 8.536067
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: lost messages 0.00 %
+    timestampt: '2023-07-05 04:17:04'
+    type: black
+    value: 5.274838161468506
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 0.00 %
+    timestampt: '2023-07-05 04:19:25'
+    type: black
+    value: 30.200422343710073
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 4.9676518, rms_benchmark 5.010658780484246, max_benchmark\
+      \ 5.202984, min_benchmark 1.7189670000000001, lost messages 4.00 %"
+    timestampt: '2023-07-05 04:26:30'
+    type: grey
+    value: 5.202984
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-05 04:28:54'
+    type: grey
+    value: 6.84242057800293
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 29.062982842825882, rms_benchmark 29.422296702739512,\
+      \ max_benchmark 39.185731472016315, min_benchmark 7.432974472051249, lost messages\
+      \ 4.00 %"
+    timestampt: '2023-07-05 04:32:07'
+    type: grey
+    value: 39.185731472016315
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 11.830756455882353, rms_benchmark 12.636022530306501, max_benchmark
+      33.27969, min_benchmark 2.6420470000000003, lost messages 0.00 %
+    timestampt: '2023-07-05 04:35:23'
+    type: grey
+    value: 33.27969
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-05 04:38:36'
+    type: grey
+    value: 6.514914512634277
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.401580578823086, rms_benchmark 30.566291579983183, max_benchmark
+      39.47494533114798, min_benchmark 25.0284448275465, lost messages 0.00 %
+    timestampt: '2023-07-05 04:41:50'
+    type: grey
+    value: 39.47494533114798
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: mean_latency 13.329088199999997, rms_latency 13.584127611032708, max_latency
+      20.207852, min_latency 3.248657, lost messages 0.00 %
+    timestampt: '2023-07-05 04:45:02'
+    type: black
+    value: 20.207852
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: lost messages 0.00 %
+    timestampt: '2023-07-05 04:48:15'
+    type: black
+    value: 6.592701625823975
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 0.00 %
+    timestampt: '2023-07-05 04:51:40'
+    type: black
+    value: 30.114860441777417
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 3.239095051724138, rms_benchmark 3.2970637123773323,\
+      \ max_benchmark 7.558236, min_benchmark 1.8424669999999999, lost messages 0.00\
+      \ %"
+    timestampt: '2023-07-05 13:31:48'
+    type: grey
+    value: 7.558236
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-05 13:34:20'
+    type: grey
+    value: 4.987146377563477
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 30.48770512358743, rms_benchmark 30.843880875014918,\
+      \ max_benchmark 55.56907118853643, min_benchmark 20.117633435635575, lost messages\
+      \ 0.00 %"
+    timestampt: '2023-07-05 13:36:50'
+    type: grey
+    value: 55.56907118853643
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 5.475033647058823, rms_benchmark 5.5578720347904715, max_benchmark
+      9.064127, min_benchmark 2.8366170000000004, lost messages 0.00 %
+    timestampt: '2023-07-05 13:39:11'
+    type: grey
+    value: 9.064127
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-05 13:41:41'
+    type: grey
+    value: 5.226265907287598
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.034191116226058, rms_benchmark 30.047050605450032, max_benchmark
+      32.182336364244314, min_benchmark 28.101039648543676, lost messages 0.00 %
+    timestampt: '2023-07-05 13:44:04'
+    type: grey
+    value: 32.182336364244314
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: mean_latency 6.493832766666666, rms_latency 6.530830855265177, max_latency
+      9.888069, min_latency 3.925823, lost messages 0.00 %
+    timestampt: '2023-07-05 13:46:28'
+    type: black
+    value: 9.888069
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: lost messages 0.00 %
+    timestampt: '2023-07-05 13:49:00'
+    type: black
+    value: 5.198787021636963
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 10.739824333333333, rms_benchmark 10.7997075304151,\
+      \ max_benchmark 12.088797, min_benchmark 7.329276, lost messages 3.70 %"
+    timestampt: '2023-07-05 13:51:05'
+    type: grey
+    value: 12.088797
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 0.00 %
+    timestampt: '2023-07-05 13:51:29'
+    type: black
+    value: 30.19541064316734
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-05 13:54:13'
+    type: grey
+    value: 6.666991233825684
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 27.470444028675335, rms_benchmark 28.563673658710997,\
+      \ max_benchmark 41.96534979818643, min_benchmark 3.739378020952356, lost messages\
+      \ 3.70 %"
+    timestampt: '2023-07-05 13:57:20'
+    type: grey
+    value: 41.96534979818643
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 9.357194029411765, rms_benchmark 10.108779488799406, max_benchmark
+      21.284289, min_benchmark 2.1858739999999997, lost messages 0.00 %
+    timestampt: '2023-07-05 14:00:33'
+    type: grey
+    value: 21.284289
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-05 14:04:02'
+    type: grey
+    value: 6.447017192840576
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.306872456197713, rms_benchmark 30.434213797403523, max_benchmark
+      39.98482975559103, min_benchmark 25.04051680822159, lost messages 0.00 %
+    timestampt: '2023-07-05 14:07:08'
+    type: grey
+    value: 39.98482975559103
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: mean_latency 13.137840932000003, rms_latency 13.365482184876006, max_latency
+      18.661343, min_latency 2.704476, lost messages 0.00 %
+    timestampt: '2023-07-05 14:10:28'
+    type: black
+    value: 18.661343
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: lost messages 0.00 %
+    timestampt: '2023-07-05 14:13:44'
+    type: black
+    value: 6.633075428009033
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 0.00 %
+    timestampt: '2023-07-05 14:16:56'
+    type: black
+    value: 30.115830605398493
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 3.3014271521739134, rms_benchmark 3.377277893064352,\
+      \ max_benchmark 7.946702999999999, min_benchmark 2.360006, lost messages 2.17\
+      \ %"
+    timestampt: '2023-07-05 20:15:02'
+    type: grey
+    value: 7.946702999999999
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-05 20:17:19'
+    type: grey
+    value: 4.971923828125
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 29.944932586604875, rms_benchmark 30.200260051055565,\
+      \ max_benchmark 36.73896024554262, min_benchmark 16.29670192724307, lost messages\
+      \ 2.17 %"
+    timestampt: '2023-07-05 20:19:57'
+    type: grey
+    value: 36.73896024554262
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 5.443791117647059, rms_benchmark 5.50335762268528, max_benchmark
+      7.0411150000000005, min_benchmark 2.8697920000000003, lost messages 0.00 %
+    timestampt: '2023-07-05 20:22:28'
+    type: grey
+    value: 7.0411150000000005
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-05 20:24:53'
+    type: grey
+    value: 5.207111358642578
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.011371574245178, rms_benchmark 30.020442503646855, max_benchmark
+      31.9552217868144, min_benchmark 28.569753567590798, lost messages 0.00 %
+    timestampt: '2023-07-05 20:27:16'
+    type: grey
+    value: 31.9552217868144
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: mean_latency 5.903046694666665, rms_latency 5.939775540057978, max_latency
+      7.720551, min_latency 3.880774, lost messages 0.00 %
+    timestampt: '2023-07-05 20:29:55'
+    type: black
+    value: 7.720551
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: lost messages 0.00 %
+    timestampt: '2023-07-05 20:32:24'
+    type: black
+    value: 5.316159915924072
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 0.00 %
+    timestampt: '2023-07-05 20:34:47'
+    type: black
+    value: 30.193271586439312
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 2.4906704, rms_benchmark 2.547484608930752, max_benchmark\
+      \ 5.344288000000001, min_benchmark 2.3175980000000003, lost messages 3.33 %"
+    timestampt: '2023-07-05 20:36:39'
+    type: grey
+    value: 5.344288000000001
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-05 20:39:46'
+    type: grey
+    value: 28.74805450439453
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 29.160939272199432, rms_benchmark 29.319582084034092,\
+      \ max_benchmark 31.795993851036325, min_benchmark 15.286963905475627, lost messages\
+      \ 3.33 %"
+    timestampt: '2023-07-05 20:42:55'
+    type: grey
+    value: 31.795993851036325
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 3.539163382352942, rms_benchmark 3.5846415382194032, max_benchmark
+      5.837413, min_benchmark 2.195883, lost messages 0.00 %
+    timestampt: '2023-07-05 20:45:18'
+    type: grey
+    value: 5.837413
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-05 20:48:32'
+    type: grey
+    value: 28.809751510620117
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.009037142434934, rms_benchmark 30.015515238053833, max_benchmark
+      31.505009422518196, min_benchmark 28.987437221544862, lost messages 0.00 %
+    timestampt: '2023-07-05 20:51:43'
+    type: grey
+    value: 31.505009422518196
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: mean_latency 3.7731453986666663, rms_latency 3.7960974368015763, max_latency
+      6.092733, min_latency 2.591204, lost messages 0.00 %
+    timestampt: '2023-07-05 20:55:05'
+    type: black
+    value: 6.092733
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: lost messages 0.00 %
+    timestampt: '2023-07-05 20:58:15'
+    type: black
+    value: 28.51482276916504
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 0.00 %
+    timestampt: '2023-07-05 21:01:29'
+    type: black
+    value: 30.2028953027178
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 3.201223944444445, rms_benchmark 3.2207680144619064,\
+      \ max_benchmark 4.863187000000001, min_benchmark 2.497456, lost messages 2.78\
+      \ %"
+    timestampt: '2023-07-06 06:47:39'
+    type: grey
+    value: 4.863187000000001
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-06 06:49:55'
+    type: grey
+    value: 4.916999340057373
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 28.35100162499542, rms_benchmark 29.252892934105525,\
+      \ max_benchmark 37.42562032217176, min_benchmark 1.8655366270581402, lost messages\
+      \ 2.78 %"
+    timestampt: '2023-07-06 06:52:21'
+    type: grey
+    value: 37.42562032217176
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 5.203407485294117, rms_benchmark 5.307527896288195, max_benchmark
+      7.658734999999999, min_benchmark 2.572607, lost messages 0.00 %
+    timestampt: '2023-07-06 06:54:40'
+    type: grey
+    value: 7.658734999999999
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-06 06:57:01'
+    type: grey
+    value: 5.20038366317749
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.045919518262995, rms_benchmark 30.061731678333214, max_benchmark
+      32.30346860432347, min_benchmark 28.070095857412376, lost messages 0.00 %
+    timestampt: '2023-07-06 06:59:35'
+    type: grey
+    value: 32.30346860432347
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: mean_latency 6.1631808359999996, rms_latency 6.199599269161347, max_latency
+      8.234453, min_latency 4.013544, lost messages 0.00 %
+    timestampt: '2023-07-06 07:02:00'
+    type: black
+    value: 8.234453
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: lost messages 0.00 %
+    timestampt: '2023-07-06 07:04:24'
+    type: black
+    value: 5.171384525299072
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 2.4841635087719296, rms_benchmark 2.5086613111137197,\
+      \ max_benchmark 4.34061, min_benchmark 1.6809129999999999, lost messages 0.00\
+      \ %"
+    timestampt: '2023-07-06 07:05:00'
+    type: grey
+    value: 4.34061
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 0.00 %
+    timestampt: '2023-07-06 07:06:43'
+    type: black
+    value: 30.198691066294238
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-06 07:08:09'
+    type: grey
+    value: 28.528194427490234
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 29.74496643292644, rms_benchmark 29.886391912696094,\
+      \ max_benchmark 42.555167135631855, min_benchmark 15.317716788314087, lost messages\
+      \ 0.00 %"
+    timestampt: '2023-07-06 07:11:16'
+    type: grey
+    value: 42.555167135631855
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 3.441520573529412, rms_benchmark 3.4857570155880206, max_benchmark
+      5.992582, min_benchmark 2.124014, lost messages 0.00 %
+    timestampt: '2023-07-06 07:14:28'
+    type: grey
+    value: 5.992582
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-06 07:17:37'
+    type: grey
+    value: 29.339990615844727
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.02609365593239, rms_benchmark 30.031814556459157, max_benchmark
+      31.852640004138287, min_benchmark 28.8592701069245, lost messages 0.00 %
+    timestampt: '2023-07-06 07:20:42'
+    type: grey
+    value: 31.852640004138287
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: mean_latency 3.8688374160000008, rms_latency 3.8911186004092, max_latency
+      5.233676, min_latency 2.627813, lost messages 0.00 %
+    timestampt: '2023-07-06 07:23:51'
+    type: black
+    value: 5.233676
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: lost messages 0.00 %
+    timestampt: '2023-07-06 07:26:54'
+    type: black
+    value: 28.828975677490234
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 0.00 %
+    timestampt: '2023-07-06 07:30:01'
+    type: black
+    value: 30.20542848714937
+short: Perception rectify ROS Component.

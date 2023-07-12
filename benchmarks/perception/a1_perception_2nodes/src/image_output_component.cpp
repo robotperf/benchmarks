@@ -5,7 +5,7 @@
    @@@@@ @@  @@    @@@@
    @@@@@ @@  @@    @@@@ Copyright (c) 2023, Acceleration Robotics®
    @@@@@ @@  @@    @@@@ Author: Víctor Mayoral Vilches <victor@accelerationrobotics.com>
-   @@@@@ @@  @@    @@@@
+   @@@@@ @@  @@    @@@@ Author: Alejandra Martínez Fariña <alex@accelerationrobotics.com>
    @@@@@@@@@&@@@@@@@@@@
    @@@@@@@@@@@@@@@@@@@@
 
@@ -29,6 +29,7 @@ limitations under the License.
 
 #include "tracetools_benchmark/tracetools.h"
 #include "a1_perception_2nodes/image_output_component.hpp"
+#include <rclcpp/serialization.hpp>
 
 namespace robotperf
 {
@@ -48,21 +49,51 @@ ImageOutputComponent::ImageOutputComponent(const rclcpp::NodeOptions & options)
       std::placeholders::_2), "raw");
 }
 
+size_t ImageOutputComponent::get_msg_size(sensor_msgs::msg::Image::ConstSharedPtr image_msg){
+  //Serialize the Image and CameraInfo messages
+  rclcpp::SerializedMessage serialized_data_img;
+  rclcpp::Serialization<sensor_msgs::msg::Image> image_serialization;
+  const void* image_ptr = reinterpret_cast<const void*>(image_msg.get());
+  image_serialization.serialize_message(image_ptr, &serialized_data_img);
+  size_t image_msg_size = serialized_data_img.size();
+  return image_msg_size;
+}
+
+size_t ImageOutputComponent::get_msg_size(sensor_msgs::msg::CameraInfo::ConstSharedPtr info_msg){
+  rclcpp::SerializedMessage serialized_data_info;
+  rclcpp::Serialization<sensor_msgs::msg::CameraInfo> info_serialization;
+  const void* info_ptr = reinterpret_cast<const void*>(info_msg.get());
+  info_serialization.serialize_message(info_ptr, &serialized_data_info);
+  size_t info_msg_size = serialized_data_info.size();
+  return info_msg_size;
+}
+
 void ImageOutputComponent::imageCb(
   sensor_msgs::msg::Image::ConstSharedPtr image_msg,
   sensor_msgs::msg::CameraInfo::ConstSharedPtr info_msg)
 {
+  
+
   TRACEPOINT(
     robotperf_image_output_cb_init,
     static_cast<const void *>(this),
     static_cast<const void *>(&(*image_msg)),
-    static_cast<const void *>(&(*info_msg)));
+    static_cast<const void *>(&(*info_msg)),
+    image_msg->header.stamp.nanosec,
+    image_msg->header.stamp.sec,
+    get_msg_size(image_msg),
+    get_msg_size(info_msg));
+
 
   TRACEPOINT(
     robotperf_image_output_cb_fini,
     static_cast<const void *>(this),
     static_cast<const void *>(&(*image_msg)),
-    static_cast<const void *>(&(*info_msg)));
+    static_cast<const void *>(&(*info_msg)),
+    image_msg->header.stamp.nanosec,
+    image_msg->header.stamp.sec,
+    get_msg_size(image_msg),
+    get_msg_size(info_msg));
 }
 
 }  // namespace perception

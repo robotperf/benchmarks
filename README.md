@@ -27,20 +27,11 @@ RobotPerf benchmarks aim to cover the **complete robotics pipeline** including p
 
 | `a` Perception | `b` Localization | `c` Control | `d` Navigation | `e` Manipulation |
 |:---:|:---:|:---:|:---:|:---:|
-| [![perception benchmarks](imgs/icon-perception.png)](#perception) | [![localization benchmarks](imgs/icon-localization.png)](#localization) | [![control benchmarks](imgs/icon-control.png)](#control) | [![navigation benchmarks](imgs/icon-navigation.png)](#navigation) | [![manipulation benchmarks](imgs/icon-manipulation.png)](#manipulation) | 
+| [![perception benchmarks](imgs/icon-perception.png)](benchmarks/perception) | [![localization benchmarks](imgs/icon-localization.png)](benchmarks/localization) | [![control benchmarks](imgs/icon-control.png)](benchmarks/control) | [![navigation benchmarks](imgs/icon-navigation.png)](benchmarks/navigation) | [![manipulation benchmarks](imgs/icon-manipulation.png)](benchmarks/manipulation) | 
 
 
 <!-- perception-benchmarks-init -->
 
-### Perception
-
-| ID | Graph | Summary | Metric | Hardware | Value | Category | Timestamp | Note | Data Source |
-| --- | --- | -------- | --- | ----------- | --- | --- | --- | --- | --- |
-| [a1](https://github.com/robotperf/benchmarks/tree/main//benchmarks/perception/a1_perception_2nodes) | ![](imgs/a1_perception_2nodes.svg) | Perception computational graph composed by 2 dataflow-connected *Components*, `rectify` and `resize`. | latency (ms) | ROBOTCORE | 66.82 | edge | 14-10-2022 |  | perception/image |
-| [a1](https://github.com/robotperf/benchmarks/tree/main//benchmarks/perception/a1_perception_2nodes) | ![](imgs/a1_perception_2nodes.svg) | Perception computational graph composed by 2 dataflow-connected *Components*, `rectify` and `resize`. | latency (ms) | Kria KR260 | 66.82 | edge | 14-10-2022 |  | perception/image |
-| [a1](https://github.com/robotperf/benchmarks/tree/main//benchmarks/perception/a1_perception_2nodes) | ![](imgs/a1_perception_2nodes.svg) | Perception computational graph composed by 2 dataflow-connected *Components*, `rectify` and `resize`. | latency (ms) | Jetson Nano | 238.13 | edge | 14-10-2022 |  | perception/image |
-| [a1](https://github.com/robotperf/benchmarks/tree/main//benchmarks/perception/a1_perception_2nodes) | ![](imgs/a1_perception_2nodes.svg) | Perception computational graph composed by 2 dataflow-connected *Components*, `rectify` and `resize`. | latency (ms) | Jetson AGX Xavier | 106.34 | edge | 14-10-2022 |  | perception/image |
-| [a2](https://github.com/robotperf/benchmarks/tree/main//benchmarks/perception/a2_rectify) | ![](imgs/a2_rectify.svg) | Perception rectify ROS Component. | latency (ms) | ROBOTCORE | 66.82 | edge | 14-10-2022 |  | perception/image |
 
 
 <!-- perception-benchmarks-fini -->

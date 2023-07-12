@@ -1,0 +1,101 @@
+id: b1
+name: b1_visual_slam
+description: |
+  A SLAM localization based on visual input, and optionally other sensors such as IMUs. Used to demonstrate the visual SLAM components.
+short: Visual SLAM ROS Component.
+graph: ../../../imgs/b1_visual_slam_stella.svg
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/localization/b1_visual_slam
+  and review the launch files to reproduce this package.
+
+# Data not valid at the moment, just a placeholder for now
+results:
+- result:
+    category: workstation
+    datasource: r2b_dataset/r2b_storage
+    metric: latency
+    metric_unit: ms
+    timestampt: '08-07-2023'
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060
+    type: black
+    note: 'mean 4.85 ms, rms 5.06 ms, max 9.71 ms, min 1.57 ms, lost 0.00 %, throughput targeting 10 FPS'
+    value: 9.71
+- result:
+    category: workstation
+    datasource: r2b_dataset/r2b_storage
+    metric: throughput
+    metric_unit: fps
+    timestampt: '08-07-2023'
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060
+    type: black
+    note: 'mean 4.85 ms, rms 5.06 ms, max 9.71 ms, min 1.57 ms, lost 0.00 %, throughput targeting 10 FPS'
+    value: 10
+- result:
+    category: edge
+    datasource: r2b_dataset/r2b_storage
+    metric: latency
+    metric_unit: ms
+    timestampt: '08-07-2023'
+    hardware: NVIDIA AGX Orin Dev. Kit (ROBOTCORE® Perception)
+    type: black
+    note: 'mean 9.97 ms, rms 10.38 ms, max 19.78 ms, min 4.24 ms, lost 0.00 %, throughput targeting 10 FPS'
+    value: 19.78
+- result:
+    category: edge
+    datasource: r2b_dataset/r2b_storage
+    metric: throughput
+    metric_unit: fps
+    timestampt: '08-07-2023'
+    hardware: NVIDIA AGX Orin Dev. Kit (ROBOTCORE® Perception)
+    type: black
+    note: 'mean 9.97 ms, rms 10.38 ms, max 19.78 ms, min 4.24 ms, lost 0.00 %, throughput targeting 10 FPS'
+    value: 10.203
+- result:
+    category: workstation
+    datasource: r2b_dataset/r2b_storage
+    metric: latency
+    metric_unit: ms
+    timestampt: '08-07-2023'
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE® Perception)
+    type: black
+    note: 'mean 14.80 ms, rms 18.10 ms, max 33.34 ms, min 1.30 ms, lost 0.41 %, throughput targeting 50 FPS'
+    value: 33.34
+- result:
+    category: workstation
+    datasource: r2b_dataset/r2b_storage
+    metric: throughput
+    metric_unit: fps
+    timestampt: '08-07-2023'
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE® Perception)
+    type: black
+    note: 'mean 14.80 ms, rms 18.10 ms, max 33.34 ms, min 1.30 ms, lost 0.41 %, throughput targeting 50 FPS'
+    value: 48.972
+- result:
+    category: workstation
+    datasource: r2b_dataset/r2b_storage
+    metric: power
+    metric_unit: W
+    timestampt: '08-07-2023'
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE® Perception)
+    type: black
+    note: 'mean 14.80 ms, rms 18.10 ms, max 33.34 ms, min 1.30 ms, lost 0.41 %, throughput targeting 50 FPS'
+    value: 31.56
+- result:
+    category: workstation
+    datasource: r2b_dataset/r2b_storage
+    metric: latency
+    metric_unit: ms
+    timestampt: '08-07-2023'
+    hardware: Intel i5-13600K + NVIDIA GeForce RTX 3060 (ROBOTCORE® Perception)
+    type: black
+    note: 'mean 12.20 ms, rms 15.95 ms, max 28.97 ms, min 0.82 ms lost 0.41 %, , throughput targeting 50 FPS'
+    value: 28.97
+- result:
+    category: workstation
+    datasource: r2b_dataset/r2b_storage
+    metric: throughput
+    metric_unit: fps
+    timestampt: '08-07-2023'
+    hardware: Intel i5-13600K + NVIDIA GeForce RTX 3060 (ROBOTCORE® Perception)
+    type: black
+    note: 'mean 12.20 ms, rms 15.95 ms, max 28.97 ms, min 0.82 ms lost 0.41 %, throughput targeting 50 FPS'    
+    value: 48.986    

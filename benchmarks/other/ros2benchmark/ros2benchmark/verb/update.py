@@ -44,7 +44,6 @@ class UpdateVerb(VerbExtension):
 
     def main(self, *, args):
         """
-        
         For each benchmarks in the workspace, update README.md file. Then, 
         update general README.md file.
 
@@ -82,4 +81,5 @@ class UpdateVerb(VerbExtension):
         for bench in benchmark_list:
             md+= bench.markdown_general()
 
-        self.update_general_readme_benchmarks(general_readme_path, new_content=md)
+        # self.update_general_readme_benchmarks(general_readme_path, new_content=md)
+        self.update_general_readme_benchmarks(general_readme_path, new_content="")

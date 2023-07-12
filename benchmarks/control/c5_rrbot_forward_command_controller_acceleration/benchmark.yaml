@@ -1,0 +1,51 @@
+id: c5
+name: c5_rrbot_forward_command_controller_acceleration
+description: |
+  A [ros2_control_demos](https://github.com/ros-controls/ros2_control_demos) used to demonstrate the [ros2_controllers](https://github.com/ros-controls/ros2_controllers) forward_command_controller with acceleration commands
+short: Forward command controller with acceleration commands
+graph: ../../../imgs/c3_rrbot_forward_command_controller_position.svg
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/control/c5_rrbot_forward_command_controller_acceleration
+  and review the launch files to reproduce this package.
+
+# Data not valid at the moment, just a placeholder for now
+results:
+- result:
+    category: workstation
+    datasource: N/A
+    metric: latency
+    metric_unit: ms
+    timestampt: '08-07-2023'
+    hardware: Intel i7-12700H
+    type: grey
+    note: 'mean 0.21 ms, rms 1.17 ms, max 10.04 ms, min 0.06 ms, lost 0.00%, update rate 10 Hz'
+    value: 10.04
+- result:
+    category: workstation
+    datasource: N/A
+    metric: power
+    metric_unit: W
+    timestampt: '08-07-2023'
+    hardware: Intel i7-12700H
+    type: grey
+    note: 'mean 0.21 ms, rms 1.17 ms, max 10.04 ms, min 0.06 ms, lost 0.00%, update rate 10 Hz'
+    value: 8.0799007415
+- result:
+    category: workstation
+    datasource: N/A
+    metric: latency
+    metric_unit: ms
+    timestampt: '08-07-2023'
+    hardware: Intel i5-13600K
+    type: grey
+    note: 'mean 0.02, ms, rms 0.05 ms, max 0.44 ms, min 0.009 ms, lost 0.00%, update rate 10 Hz'
+    value: 0.44
+- result:
+    category: workstation
+    datasource: N/A
+    metric: power
+    metric_unit: W
+    timestampt: '08-07-2023'
+    hardware: Intel i5-13600K
+    type: grey
+    note: 'mean 0.02, ms, rms 0.05 ms, max 0.44 ms, min 0.009 ms, lost 0.00%, update rate 10 Hz'
+    value: 35.25370407104492

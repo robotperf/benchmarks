@@ -1,0 +1,51 @@
+id: c3
+name: c3_rrbot_forward_command_controller_position
+description: |
+  A [ros2_control_demos](https://github.com/ros-controls/ros2_control_demos) used to demonstrate the [ros2_controllers](https://github.com/ros-controls/ros2_controllers) forward_command_controller
+short: Forward command controller Position
+graph: ../../../imgs/c3_rrbot_forward_command_controller_position.svg
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/control/c3_rrbot_forward_command_controller_position
+  and review the launch files to reproduce this package.
+
+# Data not valid at the moment, just a placeholder for now
+results:
+- result:
+    category: workstation
+    datasource: N/A
+    metric: latency
+    metric_unit: ms
+    timestampt: '10-07-2023'
+    hardware: Intel i7-12700H
+    type: grey
+    note: 'mean 0.02 ms, rms 0.02 ms. max 0.05 ms, min 0.009 ms, lost 0.00%, update rate 100 Hz, position control'
+    value: 0.05
+- result:
+    category: workstation
+    datasource: N/A
+    metric: power
+    metric_unit: W
+    timestampt: '10-07-2023'
+    hardware: Intel i7-12700H
+    type: grey
+    note: 'mean 0.02 ms, rms 0.02 ms. max 0.05 ms, min 0.009 ms, lost 0.00%, update rate 100 Hz, position control'
+    value: 8.90
+- result:
+    category: workstation
+    datasource: N/A
+    metric: latency
+    metric_unit: ms
+    timestampt: '10-07-2023'
+    hardware: Intel i5-13600K
+    type: grey
+    note: '0.009 ms 0.009 ms 0.01 ms 0.009 ms, lost 0.00%, update rate 100 Hz, position control'
+    value: 0.01
+- result:
+    category: workstation
+    datasource: N/A
+    metric: power
+    metric_unit: W
+    timestampt: '10-07-2023'
+    hardware: Intel i5-13600K
+    type: grey
+    note: '0.009 ms 0.009 ms 0.01 ms 0.009 ms, lost 0.00%, update rate 100 Hz, position control'
+    value: 29.24

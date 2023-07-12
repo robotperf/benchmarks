@@ -11,7 +11,7 @@ setup(
         ("share/" + package_name, ["package.xml"]),
         ("share/ament_index/resource_index/packages", ["resource/" + package_name]),
     ],
-    install_requires=["ros2cli", "pyyaml"],
+    install_requires=["ros2cli", "pyyaml", "arrow", "matplotlib"],
     zip_safe=True,
     author="Víctor Mayoral Vilches",
     author_email="victor@accelerationrobotics.com",
@@ -41,6 +41,8 @@ The package provides the benchmark command for the ROS 2 command line tools.""",
         "ros2benchmark.verb": [
             "list = ros2benchmark.verb.list:ListVerb",
             "update = ros2benchmark.verb.update:UpdateVerb",
+            "summary = ros2benchmark.verb.summary:SummaryVerb",
+            "report = ros2benchmark.verb.report:ReportVerb",
         ],
     },
 )

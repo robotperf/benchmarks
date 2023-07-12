@@ -1,0 +1,50 @@
+id: c1
+name: c1_rrbot_joint_trajectory_controller
+description: |
+  A [ros2_control_demos](https://github.com/ros-controls/ros2_control_demos) used to demonstrate the [ros2_controllers](https://github.com/ros-controls/ros2_controllers) joint_trajectory_controller
+short: Joint trajectory controller
+graph: ../../../imgs/c1_rrbot_joint_trajectory_controller.svg
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/control/c1_rrbot_joint_trajectory_controller
+  and review the launch files to reproduce this package.
+# Data not valid at the moment, just a placeholder for now
+results:
+- result:
+    category: workstation
+    datasource: N/A
+    metric: latency
+    metric_unit: ms
+    timestampt: '08-07-2023'
+    hardware: Intel i7-12700H
+    type: grey
+    note: 'mean 0.08 ms, rms 0.10 ms, max 0.55 ms, min 0.02 ms, lost 0.00%, update rate 10 Hz'
+    value: 0.55
+- result:
+    category: workstation
+    datasource: N/A
+    metric: power
+    metric_unit: W
+    timestampt: '08-07-2023'
+    hardware: Intel i7-12700H
+    type: grey
+    note: 'mean 0.08 ms, rms 0.10 ms, max 0.55 ms, min 0.02 ms, lost 0.00%, update rate 10 Hz'
+    value: 8.297782897949219
+- result:
+    category: workstation
+    datasource: N/A
+    metric: latency
+    metric_unit: ms
+    timestampt: '08-07-2023'
+    hardware: Intel i5-13600K
+    type: grey
+    note: 'mean 0.02 ms, rms 0.03 ms, max 0.13 ms, min 0.01 ms, lost 0.00%, update rate 10 Hz'
+    value: 0.13
+- result:
+    category: workstation
+    datasource: N/A
+    metric: power
+    metric_unit: W
+    timestampt: '08-07-2023'
+    hardware: Intel i5-13600K
+    type: grey
+    note: 'mean 0.02 ms, rms 0.03 ms, max 0.13 ms, min 0.01 ms, lost 0.00%, update rate 10 Hz'
+    value: 28.091297149658203
