@@ -25,9 +25,9 @@ Refer to the [Benchmark Specification](benchmarks/README.md) for more details.
 RobotPerf benchmarks aim to cover the **complete robotics pipeline** including perception, localization, control, manipulation and navigation. *In time, new benchmarks will be added and new categories may appear over time*. If you wish to contribute a new benchmark, please read the [contributing guidelines](#contributing).
 
 
-| `a` Perception | `b` Localization | `c` Control | `d` Navigation | `e` Manipulation |
+| `a` Perception | `b` Localization | `c` Control | `d` Manipulation | `e` Navigation |
 |:---:|:---:|:---:|:---:|:---:|
-| [![perception benchmarks](imgs/icon-perception.png)](benchmarks/perception) | [![localization benchmarks](imgs/icon-localization.png)](benchmarks/localization) | [![control benchmarks](imgs/icon-control.png)](benchmarks/control) | [![navigation benchmarks](imgs/icon-navigation.png)](benchmarks/navigation) | [![manipulation benchmarks](imgs/icon-manipulation.png)](benchmarks/manipulation) | 
+| [![perception benchmarks](imgs/icon-perception.png)](benchmarks/perception) | [![localization benchmarks](imgs/icon-localization.png)](benchmarks/localization) | [![control benchmarks](imgs/icon-control.png)](benchmarks/control) | [![manipulation benchmarks](imgs/icon-manipulation.png)](benchmarks/manipulation) | [![navigation benchmarks](imgs/icon-navigation.png)](benchmarks/navigation) | 
 
 
 <!-- perception-benchmarks-init -->
