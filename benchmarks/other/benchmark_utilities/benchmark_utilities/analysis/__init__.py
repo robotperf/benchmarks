@@ -2566,7 +2566,7 @@ class BenchmarkAnalyzer:
         else:
             power_consumption = None
         
-        if self.trace_sets_filter_type == "":
+        if not hasattr(self, 'trace_sets_filter_type'):
             self.set_trace_sets_filter_type()
 
         self.get_target_chain_traces(tracepath)        
@@ -2605,7 +2605,7 @@ class BenchmarkAnalyzer:
         else:
             power_consumption = None
 
-        if self.trace_sets_filter_type == "":
+        if not hasattr(self, 'trace_sets_filter_type'):
             self.set_trace_sets_filter_type()
         
         self.get_target_chain_traces(tracepath)        
@@ -2678,7 +2678,7 @@ class BenchmarkAnalyzer:
             return result["value"]
         else:
             # default to grey-box benchmarking
-            if self.trace_sets_filter_type == "":
+            if not hasattr(self, 'trace_sets_filter_type'):
                 self.set_trace_sets_filter_type()
 
             self.get_power_chain_traces(tracepath)        
@@ -2754,13 +2754,13 @@ class BenchmarkAnalyzer:
         """
 
         if self.hardware_device_type == "fpga":
-            print("FPGA traces can only be analyzed by name because vtf traces won't have a unique identifier")
+            print("FPGA trace sets can only be filtered by name because vtf traces won't have a unique identifier")
             # No need to set the analysis_type property since it is not evaluated down the road with FPGA hardware
             return
 
         if filter_type == "name" or filter_type == "ID":
-            print("Setting {} method")
+            print("Setting {} method for filtering trace sets".format(filter_type))
             self.trace_sets_filter_type = filter_type
         else:
-            print("Type {} for analyzing traces does not exist, setting message ID analysis type".format(filter_type))
+            print("Type {} for filtering trace sets does not exist, setting message ID analysis type".format(filter_type))
             self.trace_sets_filter_type = "ID"
