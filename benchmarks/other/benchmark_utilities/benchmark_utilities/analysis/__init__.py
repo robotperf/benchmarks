@@ -595,78 +595,8 @@ class BenchmarkAnalyzer:
                         new_set = []  # restart
 
             elif not target and image_pipeline_msgs[index].event.name in self.power_chain:  # optimization
-
-                if debug:
-                    print("---")
-                    print("new: " + image_pipeline_msgs[index].event.name)
-                    print("expected: " + str(self.power_chain[chain_index]))
-                    print("chain_index: " + str(chain_index))
-
-                # first one            
-                if (
-                    chain_index == 0
-                    and image_pipeline_msgs[index].event.name == self.power_chain[chain_index]
-                ):
-                    new_set.append(image_pipeline_msgs[index])
-                    vpid_chain = image_pipeline_msgs[index].event.common_context_field.get(
-                        "vpid"
-                    )
-                    chain_index += 1
-                    if debug:
-                        print(color("Found: " + str(image_pipeline_msgs[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
-                # last one
-                elif (
-                    image_pipeline_msgs[index].event.name == self.power_chain[chain_index]
-                    and self.power_chain[chain_index] == self.power_chain[-1]
-                    and new_set[-1].event.name == self.power_chain[-2]
-                    and image_pipeline_msgs[index].event.common_context_field.get("vpid")
-                    == vpid_chain
-                ):
-                    new_set.append(image_pipeline_msgs[index])
-                    image_pipeline_msg_sets.append(new_set)
-                    if debug:
-                        print(color("Found: " + str(image_pipeline_msgs[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
-                    chain_index = 0  # restart
-                    new_set = []  # restart
-                # match
-                elif (
-                    image_pipeline_msgs[index].event.name == self.power_chain[chain_index]
-                    and image_pipeline_msgs[index].event.common_context_field.get("vpid")
-                    == vpid_chain
-                ):
-                    new_set.append(image_pipeline_msgs[index])
-                    chain_index += 1
-                    if debug:
-                        print(color("Found: " + str(image_pipeline_msgs[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="green"))
-                # altered order
-                elif (
-                    image_pipeline_msgs[index].event.name in self.power_chain
-                    and image_pipeline_msgs[index].event.common_context_field.get("vpid")
-                    == vpid_chain
-                ):
-                    # pop ros2:callback_start in new_set, if followed by "ros2:callback_end"
-                    # NOTE: consider case of disconnected series of:
-                    #       "ros2:callback_start"
-                    #       "ros2:callback_end"
-                    if (image_pipeline_msgs[index].event.name == "ros2:callback_end"
-                        and self.power_chain[chain_index - 1] == "ros2:callback_start"):
-                        new_set.pop()
-                        chain_index -= 1
-                    # # it's been observed that "robotperf_benchmarks:robotperf_image_input_cb_init" triggers
-                    # # before "ros2_image_pipeline:image_proc_rectify_cb_fini" which leads to trouble
-                    # # Skip this as well as the next event
-                    # elif (image_pipeline_msgs[index].event.name == "robotperf_benchmarks:robotperf_image_input_cb_init"
-                    #     and self.power_chain[chain_index - 3] == "ros2_image_pipeline:image_proc_rectify_cb_fini"):
-                    #     print(color("Skipping: " + str(image_pipeline_msgs[index].event.name), fg="yellow"))
-                    # elif (image_pipeline_msgs[index].event.name == "robotperf_benchmarks:robotperf_image_input_cb_fini"
-                    #     and self.power_chain[chain_index - 3] == "ros2_image_pipeline:image_proc_rectify_cb_fini"):
-                    #     print(color("Skipping: " + str(image_pipeline_msgs[index].event.name), fg="yellow"))
-                    else:
-                        new_set.append(image_pipeline_msgs[index])
-                        if debug:
-                            print(color("Altered order: " + str([x.event.name for x in new_set]) + ", restarting", fg="red"))
-                        chain_index = 0  # restart
-                        new_set = []  # restart
+     
+                image_pipeline_msg_sets.append(image_pipeline_msgs[index])
 
         return image_pipeline_msg_sets
 
@@ -1422,10 +1352,9 @@ class BenchmarkAnalyzer:
                 # power_chain_joules.append(joules)
                 # power_chain_seconds.append(seconds)
             
-            image_pipeline_msg_sets_watts.append(power_chain_watts)
             # image_pipeline_msg_sets_joules.append(power_chain_joules)
             # image_pipeline_msg_sets_seconds.append(power_chain_seconds) 
-            total_watts = image_pipeline_msg_sets_watts[-1]
+            total_watts = power_chain_watts[-1]
             # total_joules = image_pipeline_msg_sets_joules[-1]
             # total_seconds = image_pipeline_msg_sets_seconds[-1]      
 
