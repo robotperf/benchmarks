@@ -596,6 +596,7 @@ class BenchmarkAnalyzer:
 
             elif not target and image_pipeline_msgs[index].event.name in self.power_chain:  # optimization
      
+                # NOTE: Modify this logic if more power traces are added in the future (currently there's only one)
                 image_pipeline_msg_sets.append(image_pipeline_msgs[index])
 
         return image_pipeline_msg_sets
