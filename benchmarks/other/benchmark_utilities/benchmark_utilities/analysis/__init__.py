@@ -2474,9 +2474,10 @@ class BenchmarkAnalyzer:
         if not trace_path:
             trace_path = "/tmp/analysis/trace"
 
-        if self.hardware_device_type == "cpu":
-            # self.image_pipeline_msg_sets \
-            #     = self.msgsets_from_trace(trace_path, True)
+        if self.hardware_device_type == "cpu" and self.trace_sets_filter_type == "name":
+            self.image_pipeline_msg_sets \
+                = self.msgsets_from_trace(trace_path, True)
+        elif self.hardware_device_type == "cpu" and self.trace_sets_filter_type == "ID":
             self.image_pipeline_msg_sets \
                 = self.msgsets_from_trace_identifier(trace_path, debug=True)
         elif self.hardware_device_type == "fpga":
@@ -2491,9 +2492,12 @@ class BenchmarkAnalyzer:
         if not trace_path:
             trace_path = "/tmp/analysis/trace"
 
-        if self.hardware_device_type == "cpu":
-            # self.image_pipeline_msg_sets \
-            #     = self.msgsets_from_trace(trace_path, True)
+        # NOTE: since power only has one trace, there's no real difference between the two methods
+        # The distinction is considered for consistency reasons with the 'get_target_chain_traces' method
+        if self.hardware_device_type == "cpu" and self.trace_sets_filter_type == "name":
+            self.image_pipeline_msg_sets \
+                = self.msgsets_from_trace(trace_path, debug=True, target=False)
+        elif self.hardware_device_type == "cpu" and self.trace_sets_filter_type == "ID":
             self.image_pipeline_msg_sets \
                 = self.msgsets_from_trace_identifier(trace_path, debug=True, target=False)
         elif self.hardware_device_type == "fpga":
@@ -2632,6 +2636,9 @@ class BenchmarkAnalyzer:
         else:
             power_consumption = None
         
+        if self.trace_sets_filter_type == "":
+            self.set_trace_sets_filter_type()
+
         self.get_target_chain_traces(tracepath)        
         self.bar_charts_latency()
         self.index_to_plot = self.get_index_to_plot_latency()
@@ -2668,7 +2675,9 @@ class BenchmarkAnalyzer:
         else:
             power_consumption = None
 
-
+        if self.trace_sets_filter_type == "":
+            self.set_trace_sets_filter_type()
+        
         self.get_target_chain_traces(tracepath)        
         barcharts_through_megabys_pot, barcharts_through_fps_pot = self.barchart_data_throughput(self.image_pipeline_msg_sets, 'potential')
         
@@ -2739,6 +2748,9 @@ class BenchmarkAnalyzer:
             return result["value"]
         else:
             # default to grey-box benchmarking
+            if self.trace_sets_filter_type == "":
+                self.set_trace_sets_filter_type()
+
             self.get_power_chain_traces(tracepath)        
             total_watts = self.barchart_data_power(self.image_pipeline_msg_sets)
 
@@ -2803,3 +2815,22 @@ class BenchmarkAnalyzer:
                         file.write(str(benchmark))
                     print(benchmark)
                     break        
+
+    def set_trace_sets_filter_type(self, filter_type="ID"):
+        """
+        Select weather trace sets will be filtered using msgsets_from_trace_identifier or msgsets_from_trace method
+
+        :param: filter_type: string defining which method to use
+        """
+
+        if self.hardware_device_type == "fpga":
+            print("FPGA traces can only be analyzed by name because vtf traces won't have a unique identifier")
+            # No need to set the analysis_type property since it is not evaluated down the road with FPGA hardware
+            return
+
+        if filter_type == "name" or filter_type == "ID":
+            print("Setting {} method")
+            self.trace_sets_filter_type = filter_type
+        else:
+            print("Type {} for analyzing traces does not exist, setting message ID analysis type".format(filter_type))
+            self.trace_sets_filter_type = "ID"
