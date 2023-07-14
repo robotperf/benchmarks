@@ -1456,6 +1456,8 @@ class BenchmarkAnalyzer:
         image_pipeline_msg_sets_bytes = []
         image_pipeline_msg_sets_frames = []
         image_pipeline_msg_sets_msgs = []
+        image_pipeline_msg_sets_update_rate = []
+        use_size = True
         
         # if multidimensional:
         if type(image_pipeline_msg_sets[0]) == list:
@@ -1465,6 +1467,7 @@ class BenchmarkAnalyzer:
                 target_chain_bytes = []
                 target_chain_msgs = []
                 target_chain_frames = []
+                target_chain_update_rate = []
                 
                 for msg_index in range(len(image_pipeline_msg_sets[set_index])):
                     target_chain_ns.append(
@@ -1475,13 +1478,18 @@ class BenchmarkAnalyzer:
                     # search for message sizes
                     msg_size = 0
                     msg_count = 0
+                    update_rate = 0
                     payload_fields = image_pipeline_msg_sets[set_index][msg_index].event.payload_field
                     for field_name, field_value in payload_fields.items():
                         if "msg_size" in field_name:
                             msg_size += image_pipeline_msg_sets[set_index][msg_index].event.payload_field[field_name]
                             msg_count += 1
+                        if "update_rate" in field_name:
+                            use_size = False
+                            update_rate = image_pipeline_msg_sets[set_index][msg_index].event.payload_field[field_name]
                     target_chain_bytes.append(msg_size)
                     target_chain_msgs.append(msg_count)
+                    target_chain_update_rate.append(update_rate)
                     if msg_count > 0:
                         target_chain_frames.append(1)
                     else:
@@ -1494,6 +1502,7 @@ class BenchmarkAnalyzer:
                 image_pipeline_msg_sets_bytes.append(target_chain_bytes)
                 image_pipeline_msg_sets_msgs.append(target_chain_msgs)
                 image_pipeline_msg_sets_frames.append(target_chain_frames)
+                image_pipeline_msg_sets_update_rate.append(target_chain_update_rate)
 
         else:  # not multidimensional
             aux_set = []
@@ -1501,6 +1510,7 @@ class BenchmarkAnalyzer:
             target_chain_bytes = []
             target_chain_msgs = []
             target_chain_frames = []
+            target_chain_update_rate = []
             for msg_index in range(len(image_pipeline_msg_sets)):
                 target_chain_ns.append(
                     image_pipeline_msg_sets[msg_index].default_clock_snapshot.ns_from_origin
@@ -1508,11 +1518,15 @@ class BenchmarkAnalyzer:
                 # search for message sizes
                 msg_size = 0
                 msg_count = 0
+                update_rate = 0
                 payload_fields = image_pipeline_msg_sets[msg_index].event.payload_field
                 for field_name, field_value in payload_fields.items():
                     if "msg_size" in field_name:
                         msg_size += image_pipeline_msg_sets[msg_index].event.payload_field[field_name]
                         msg_count += 1
+                    if "update_rate" in field_name:
+                        use_size = False
+                        update_rate = image_pipeline_msg_sets[msg_index].event.payload_field[field_name]
                 target_chain_bytes.append(msg_size)
                 target_chain_msgs.append(msg_count)
                 if msg_count > 0:
@@ -1527,7 +1541,8 @@ class BenchmarkAnalyzer:
             image_pipeline_msg_sets_bytes.append(target_chain_bytes)
             image_pipeline_msg_sets_msgs.append(target_chain_msgs)
             image_pipeline_msg_sets_frames.append(target_chain_frames)
-        
+            image_pipeline_msg_sets_update_rate.append(target_chain_update_rate)
+
         # Compute throughput from the output [-1]
         image_pipeline_msg_sets_megabyps = []
         image_pipeline_msg_sets_msgspers = []
@@ -1537,17 +1552,22 @@ class BenchmarkAnalyzer:
             for set_idx in range(len(image_pipeline_msg_sets_ns)):
                 tot_lat = image_pipeline_msg_sets_ns[set_idx][-1] - image_pipeline_msg_sets_ns[set_idx][0]
                 image_pipeline_msg_sets_megabyps.append(image_pipeline_msg_sets_bytes[set_idx][-2]/tot_lat/1e6*1e3)
-                image_pipeline_msg_sets_msgspers.append(image_pipeline_msg_sets_msgs[set_idx][-2]/tot_lat*1e3)
-                image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_frames[set_idx][-2]/tot_lat*1e3)
+                if use_size:
+                    image_pipeline_msg_sets_msgspers.append(image_pipeline_msg_sets_msgs[set_idx][-2]/tot_lat*1e3)
+                    image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_frames[set_idx][-2]/tot_lat*1e3)
+                else:
+                    image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_update_rate[set_idx][-1])
 
         elif option == 'real':
             for set_idx in range(len(image_pipeline_msg_sets_ns)-1):
                 tot_lat = image_pipeline_msg_sets_ns[set_idx+1][1] - image_pipeline_msg_sets_ns[set_idx][1]
                 image_pipeline_msg_sets_megabyps.append(image_pipeline_msg_sets_bytes[set_idx][-2]/tot_lat/1e6*1e3)
-                image_pipeline_msg_sets_msgspers.append(image_pipeline_msg_sets_msgs[set_idx][-2]/tot_lat*1e3)
-                image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_frames[set_idx][-2]/tot_lat*1e3)
-                
-                
+                if use_size:
+                    image_pipeline_msg_sets_msgspers.append(image_pipeline_msg_sets_msgs[set_idx][-2]/tot_lat*1e3)
+                    image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_frames[set_idx][-2]/tot_lat*1e3)
+                else:
+                    image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_update_rate[set_idx][-1])
+                    
         return image_pipeline_msg_sets_megabyps, image_pipeline_msg_sets_fps
 
 
@@ -1891,10 +1911,10 @@ class BenchmarkAnalyzer:
     
     def statistics_1d(self, image_pipeline_msg_sets_ms, verbose=False):
 
-        mean_benchmark = self.mean(image_pipeline_msg_sets_ms)
-        rms_benchmark = self.rms(image_pipeline_msg_sets_ms)
-        max_benchmark = self.max(image_pipeline_msg_sets_ms)
-        min_benchmark = self.min(image_pipeline_msg_sets_ms)
+        mean_benchmark = round(self.mean(image_pipeline_msg_sets_ms),2)
+        rms_benchmark = round(self.rms(image_pipeline_msg_sets_ms),2)
+        max_benchmark = round(self.max(image_pipeline_msg_sets_ms),2)
+        min_benchmark = round(self.min(image_pipeline_msg_sets_ms),2)
         #median_benchmark = self.median(image_pipeline_msg_sets_ms)
 
         if verbose:
