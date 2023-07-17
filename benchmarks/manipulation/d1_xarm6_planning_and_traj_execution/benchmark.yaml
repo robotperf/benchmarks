@@ -1,0 +1,20 @@
+id: d1
+name: d1_xarm6_planning_and_traj_execution
+description: |
+  A computational graph that uses [moveit2](https://github.com/ros-planning/moveit2) to compute motion planning and perform trajectory execution on a UFACTORY xArm6 manipulator
+short: xArm6 planning and trajectory execution
+graph: ../../../imgs/d1_xarm6_planning_and_traj_execution.svg
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/manipulation/d1_xarm6_planning_and_traj_execution
+  and review the launch files to reproduce this package.
+# Data not valid at the moment, just a placeholder for now
+results:
+- result:
+    category: workstation
+    datasource: N/A
+    metric: latency
+    metric_unit: ms
+    timestampt: '08-07-2023'
+    hardware: Intel i7-12700H
+    type: grey
+    note: 'mean 0.08 ms, rms 0.10 ms, max 0.55 ms, min 0.02 ms, lost 0.00%, update rate 10 Hz'
+    value: 0.55

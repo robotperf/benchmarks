@@ -11,6 +11,7 @@
     - [ROS 2-native](#ros-2-native)
     - [Computing Targets](#computing-targets)
     - [Metric](#metric)
+    - [Type](#type)
     - [Machine-readable definition of benchmarks](#machine-readable-definition-of-benchmarks)
     - [Readibility of benchmarks](#readibility-of-benchmarks)
   - [Creating a new benchmark](#creating-a-new-benchmark)
@@ -50,9 +51,9 @@ This specification follows [REP 2014](https://github.com/ros-infrastructure/rep/
 ### Category
 Each benchmark should be categorized as one of the following:
 
-| `a` Perception | `b` Localization | `c` Control | `d` Navigation | `e` Manipulation |
+| `a` Perception | `b` Localization | `c` Control | `d` Manipulation | `e` Navigation |
 |:---:|:---:|:---:|:---:|:---:|
-| ![perception benchmarks](../imgs/icon-perception.png) | ![localization benchmarks](../imgs/icon-localization.png)| ![control benchmarks](../imgs/icon-control.png) | ![navigation benchmarks](../imgs/icon-navigation.png) | ![manipulation benchmarks](../imgs/icon-manipulation.png) |
+| ![perception benchmarks](../imgs/icon-perception.png) | ![localization benchmarks](../imgs/icon-localization.png)| ![control benchmarks](../imgs/icon-control.png) | ![manipulation benchmarks](../imgs/icon-manipulation.png) | ![navigation benchmarks](../imgs/icon-navigation.png) |
 
 To reflect the category of the benchmark, the benchmark's ROS 2 package name should be prefixed with the corresponding **category identifier letter**  (*e.g. `a` if related to Perception*).
 ### IDs
