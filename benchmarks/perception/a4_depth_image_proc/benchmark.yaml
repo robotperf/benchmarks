@@ -10,7 +10,7 @@ results:
     category: edge
     datasource: perception/depth_image1
     hardware: Intel i5-13600K
-    metric: latecy
+    metric: latency
     metric_unit: ms
     note: 'mean 17.14 ms, rms 18.76 ms, max 57.40 ms, min 12.46 ms, lost 0.00 %. Fixed at 30 FPS'
     timestampt: '08-07-2023'
