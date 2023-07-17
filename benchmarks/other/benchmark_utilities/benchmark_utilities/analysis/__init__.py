@@ -595,78 +595,9 @@ class BenchmarkAnalyzer:
                         new_set = []  # restart
 
             elif not target and image_pipeline_msgs[index].event.name in self.power_chain:  # optimization
-
-                if debug:
-                    print("---")
-                    print("new: " + image_pipeline_msgs[index].event.name)
-                    print("expected: " + str(self.power_chain[chain_index]))
-                    print("chain_index: " + str(chain_index))
-
-                # first one            
-                if (
-                    chain_index == 0
-                    and image_pipeline_msgs[index].event.name == self.power_chain[chain_index]
-                ):
-                    new_set.append(image_pipeline_msgs[index])
-                    vpid_chain = image_pipeline_msgs[index].event.common_context_field.get(
-                        "vpid"
-                    )
-                    chain_index += 1
-                    if debug:
-                        print(color("Found: " + str(image_pipeline_msgs[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
-                # last one
-                elif (
-                    image_pipeline_msgs[index].event.name == self.power_chain[chain_index]
-                    and self.power_chain[chain_index] == self.power_chain[-1]
-                    and new_set[-1].event.name == self.power_chain[-2]
-                    and image_pipeline_msgs[index].event.common_context_field.get("vpid")
-                    == vpid_chain
-                ):
-                    new_set.append(image_pipeline_msgs[index])
-                    image_pipeline_msg_sets.append(new_set)
-                    if debug:
-                        print(color("Found: " + str(image_pipeline_msgs[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
-                    chain_index = 0  # restart
-                    new_set = []  # restart
-                # match
-                elif (
-                    image_pipeline_msgs[index].event.name == self.power_chain[chain_index]
-                    and image_pipeline_msgs[index].event.common_context_field.get("vpid")
-                    == vpid_chain
-                ):
-                    new_set.append(image_pipeline_msgs[index])
-                    chain_index += 1
-                    if debug:
-                        print(color("Found: " + str(image_pipeline_msgs[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="green"))
-                # altered order
-                elif (
-                    image_pipeline_msgs[index].event.name in self.power_chain
-                    and image_pipeline_msgs[index].event.common_context_field.get("vpid")
-                    == vpid_chain
-                ):
-                    # pop ros2:callback_start in new_set, if followed by "ros2:callback_end"
-                    # NOTE: consider case of disconnected series of:
-                    #       "ros2:callback_start"
-                    #       "ros2:callback_end"
-                    if (image_pipeline_msgs[index].event.name == "ros2:callback_end"
-                        and self.power_chain[chain_index - 1] == "ros2:callback_start"):
-                        new_set.pop()
-                        chain_index -= 1
-                    # # it's been observed that "robotperf_benchmarks:robotperf_image_input_cb_init" triggers
-                    # # before "ros2_image_pipeline:image_proc_rectify_cb_fini" which leads to trouble
-                    # # Skip this as well as the next event
-                    # elif (image_pipeline_msgs[index].event.name == "robotperf_benchmarks:robotperf_image_input_cb_init"
-                    #     and self.power_chain[chain_index - 3] == "ros2_image_pipeline:image_proc_rectify_cb_fini"):
-                    #     print(color("Skipping: " + str(image_pipeline_msgs[index].event.name), fg="yellow"))
-                    # elif (image_pipeline_msgs[index].event.name == "robotperf_benchmarks:robotperf_image_input_cb_fini"
-                    #     and self.power_chain[chain_index - 3] == "ros2_image_pipeline:image_proc_rectify_cb_fini"):
-                    #     print(color("Skipping: " + str(image_pipeline_msgs[index].event.name), fg="yellow"))
-                    else:
-                        new_set.append(image_pipeline_msgs[index])
-                        if debug:
-                            print(color("Altered order: " + str([x.event.name for x in new_set]) + ", restarting", fg="red"))
-                        chain_index = 0  # restart
-                        new_set = []  # restart
+     
+                # NOTE: Modify this logic if more power traces are added in the future (currently there's only one)
+                image_pipeline_msg_sets.append(image_pipeline_msgs[index])
 
         return image_pipeline_msg_sets
 
@@ -1422,10 +1353,9 @@ class BenchmarkAnalyzer:
                 # power_chain_joules.append(joules)
                 # power_chain_seconds.append(seconds)
             
-            image_pipeline_msg_sets_watts.append(power_chain_watts)
             # image_pipeline_msg_sets_joules.append(power_chain_joules)
             # image_pipeline_msg_sets_seconds.append(power_chain_seconds) 
-            total_watts = image_pipeline_msg_sets_watts[-1]
+            total_watts = power_chain_watts[-1]
             # total_joules = image_pipeline_msg_sets_joules[-1]
             # total_seconds = image_pipeline_msg_sets_seconds[-1]      
 
@@ -1456,6 +1386,8 @@ class BenchmarkAnalyzer:
         image_pipeline_msg_sets_bytes = []
         image_pipeline_msg_sets_frames = []
         image_pipeline_msg_sets_msgs = []
+        image_pipeline_msg_sets_update_rate = []
+        use_size = True
         
         # if multidimensional:
         if type(image_pipeline_msg_sets[0]) == list:
@@ -1465,6 +1397,7 @@ class BenchmarkAnalyzer:
                 target_chain_bytes = []
                 target_chain_msgs = []
                 target_chain_frames = []
+                target_chain_update_rate = []
                 
                 for msg_index in range(len(image_pipeline_msg_sets[set_index])):
                     target_chain_ns.append(
@@ -1475,13 +1408,18 @@ class BenchmarkAnalyzer:
                     # search for message sizes
                     msg_size = 0
                     msg_count = 0
+                    update_rate = 0
                     payload_fields = image_pipeline_msg_sets[set_index][msg_index].event.payload_field
                     for field_name, field_value in payload_fields.items():
                         if "msg_size" in field_name:
                             msg_size += image_pipeline_msg_sets[set_index][msg_index].event.payload_field[field_name]
                             msg_count += 1
+                        if "update_rate" in field_name:
+                            use_size = False
+                            update_rate = image_pipeline_msg_sets[set_index][msg_index].event.payload_field[field_name]
                     target_chain_bytes.append(msg_size)
                     target_chain_msgs.append(msg_count)
+                    target_chain_update_rate.append(update_rate)
                     if msg_count > 0:
                         target_chain_frames.append(1)
                     else:
@@ -1494,6 +1432,7 @@ class BenchmarkAnalyzer:
                 image_pipeline_msg_sets_bytes.append(target_chain_bytes)
                 image_pipeline_msg_sets_msgs.append(target_chain_msgs)
                 image_pipeline_msg_sets_frames.append(target_chain_frames)
+                image_pipeline_msg_sets_update_rate.append(target_chain_update_rate)
 
         else:  # not multidimensional
             aux_set = []
@@ -1501,6 +1440,7 @@ class BenchmarkAnalyzer:
             target_chain_bytes = []
             target_chain_msgs = []
             target_chain_frames = []
+            target_chain_update_rate = []
             for msg_index in range(len(image_pipeline_msg_sets)):
                 target_chain_ns.append(
                     image_pipeline_msg_sets[msg_index].default_clock_snapshot.ns_from_origin
@@ -1508,11 +1448,15 @@ class BenchmarkAnalyzer:
                 # search for message sizes
                 msg_size = 0
                 msg_count = 0
+                update_rate = 0
                 payload_fields = image_pipeline_msg_sets[msg_index].event.payload_field
                 for field_name, field_value in payload_fields.items():
                     if "msg_size" in field_name:
                         msg_size += image_pipeline_msg_sets[msg_index].event.payload_field[field_name]
                         msg_count += 1
+                    if "update_rate" in field_name:
+                        use_size = False
+                        update_rate = image_pipeline_msg_sets[msg_index].event.payload_field[field_name]
                 target_chain_bytes.append(msg_size)
                 target_chain_msgs.append(msg_count)
                 if msg_count > 0:
@@ -1527,7 +1471,8 @@ class BenchmarkAnalyzer:
             image_pipeline_msg_sets_bytes.append(target_chain_bytes)
             image_pipeline_msg_sets_msgs.append(target_chain_msgs)
             image_pipeline_msg_sets_frames.append(target_chain_frames)
-        
+            image_pipeline_msg_sets_update_rate.append(target_chain_update_rate)
+
         # Compute throughput from the output [-1]
         image_pipeline_msg_sets_megabyps = []
         image_pipeline_msg_sets_msgspers = []
@@ -1537,17 +1482,22 @@ class BenchmarkAnalyzer:
             for set_idx in range(len(image_pipeline_msg_sets_ns)):
                 tot_lat = image_pipeline_msg_sets_ns[set_idx][-1] - image_pipeline_msg_sets_ns[set_idx][0]
                 image_pipeline_msg_sets_megabyps.append(image_pipeline_msg_sets_bytes[set_idx][-2]/tot_lat/1e6*1e3)
-                image_pipeline_msg_sets_msgspers.append(image_pipeline_msg_sets_msgs[set_idx][-2]/tot_lat*1e3)
-                image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_frames[set_idx][-2]/tot_lat*1e3)
+                if use_size:
+                    image_pipeline_msg_sets_msgspers.append(image_pipeline_msg_sets_msgs[set_idx][-2]/tot_lat*1e3)
+                    image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_frames[set_idx][-2]/tot_lat*1e3)
+                else:
+                    image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_update_rate[set_idx][-1])
 
         elif option == 'real':
             for set_idx in range(len(image_pipeline_msg_sets_ns)-1):
                 tot_lat = image_pipeline_msg_sets_ns[set_idx+1][1] - image_pipeline_msg_sets_ns[set_idx][1]
                 image_pipeline_msg_sets_megabyps.append(image_pipeline_msg_sets_bytes[set_idx][-2]/tot_lat/1e6*1e3)
-                image_pipeline_msg_sets_msgspers.append(image_pipeline_msg_sets_msgs[set_idx][-2]/tot_lat*1e3)
-                image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_frames[set_idx][-2]/tot_lat*1e3)
-                
-                
+                if use_size:
+                    image_pipeline_msg_sets_msgspers.append(image_pipeline_msg_sets_msgs[set_idx][-2]/tot_lat*1e3)
+                    image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_frames[set_idx][-2]/tot_lat*1e3)
+                else:
+                    image_pipeline_msg_sets_fps.append(image_pipeline_msg_sets_update_rate[set_idx][-1])
+                    
         return image_pipeline_msg_sets_megabyps, image_pipeline_msg_sets_fps
 
 
@@ -1891,10 +1841,10 @@ class BenchmarkAnalyzer:
     
     def statistics_1d(self, image_pipeline_msg_sets_ms, verbose=False):
 
-        mean_benchmark = self.mean(image_pipeline_msg_sets_ms)
-        rms_benchmark = self.rms(image_pipeline_msg_sets_ms)
-        max_benchmark = self.max(image_pipeline_msg_sets_ms)
-        min_benchmark = self.min(image_pipeline_msg_sets_ms)
+        mean_benchmark = round(self.mean(image_pipeline_msg_sets_ms),2)
+        rms_benchmark = round(self.rms(image_pipeline_msg_sets_ms),2)
+        max_benchmark = round(self.max(image_pipeline_msg_sets_ms),2)
+        min_benchmark = round(self.min(image_pipeline_msg_sets_ms),2)
         #median_benchmark = self.median(image_pipeline_msg_sets_ms)
 
         if verbose:
@@ -2474,9 +2424,10 @@ class BenchmarkAnalyzer:
         if not trace_path:
             trace_path = "/tmp/analysis/trace"
 
-        if self.hardware_device_type == "cpu":
-            # self.image_pipeline_msg_sets \
-            #     = self.msgsets_from_trace(trace_path, True)
+        if self.hardware_device_type == "cpu" and self.trace_sets_filter_type == "name":
+            self.image_pipeline_msg_sets \
+                = self.msgsets_from_trace(trace_path, True)
+        elif self.hardware_device_type == "cpu" and self.trace_sets_filter_type == "ID":
             self.image_pipeline_msg_sets \
                 = self.msgsets_from_trace_identifier(trace_path, debug=True)
         elif self.hardware_device_type == "fpga":
@@ -2491,9 +2442,12 @@ class BenchmarkAnalyzer:
         if not trace_path:
             trace_path = "/tmp/analysis/trace"
 
-        if self.hardware_device_type == "cpu":
-            # self.image_pipeline_msg_sets \
-            #     = self.msgsets_from_trace(trace_path, True)
+        # NOTE: since power only has one trace, there's no real difference between the two methods
+        # The distinction is considered for consistency reasons with the 'get_target_chain_traces' method
+        if self.hardware_device_type == "cpu" and self.trace_sets_filter_type == "name":
+            self.image_pipeline_msg_sets \
+                = self.msgsets_from_trace(trace_path, debug=True, target=False)
+        elif self.hardware_device_type == "cpu" and self.trace_sets_filter_type == "ID":
             self.image_pipeline_msg_sets \
                 = self.msgsets_from_trace_identifier(trace_path, debug=True, target=False)
         elif self.hardware_device_type == "fpga":
@@ -2632,6 +2586,9 @@ class BenchmarkAnalyzer:
         else:
             power_consumption = None
         
+        if not hasattr(self, 'trace_sets_filter_type'):
+            self.set_trace_sets_filter_type()
+
         self.get_target_chain_traces(tracepath)        
         self.bar_charts_latency()
         self.index_to_plot = self.get_index_to_plot_latency()
@@ -2668,7 +2625,9 @@ class BenchmarkAnalyzer:
         else:
             power_consumption = None
 
-
+        if not hasattr(self, 'trace_sets_filter_type'):
+            self.set_trace_sets_filter_type()
+        
         self.get_target_chain_traces(tracepath)        
         barcharts_through_megabys_pot, barcharts_through_fps_pot = self.barchart_data_throughput(self.image_pipeline_msg_sets, 'potential')
         
@@ -2739,6 +2698,9 @@ class BenchmarkAnalyzer:
             return result["value"]
         else:
             # default to grey-box benchmarking
+            if not hasattr(self, 'trace_sets_filter_type'):
+                self.set_trace_sets_filter_type()
+
             self.get_power_chain_traces(tracepath)        
             total_watts = self.barchart_data_power(self.image_pipeline_msg_sets)
 
@@ -2803,3 +2765,22 @@ class BenchmarkAnalyzer:
                         file.write(str(benchmark))
                     print(benchmark)
                     break        
+
+    def set_trace_sets_filter_type(self, filter_type="ID"):
+        """
+        Select weather trace sets will be filtered using msgsets_from_trace_identifier or msgsets_from_trace method
+
+        :param: filter_type: string defining which method to use
+        """
+
+        if self.hardware_device_type == "fpga":
+            print("FPGA trace sets can only be filtered by name because vtf traces won't have a unique identifier")
+            # No need to set the analysis_type property since it is not evaluated down the road with FPGA hardware
+            return
+
+        if filter_type == "name" or filter_type == "ID":
+            print("Setting {} method for filtering trace sets".format(filter_type))
+            self.trace_sets_filter_type = filter_type
+        else:
+            print("Type {} for filtering trace sets does not exist, setting message ID analysis type".format(filter_type))
+            self.trace_sets_filter_type = "ID"
