@@ -33,9 +33,6 @@ import sys
 import argparse
 import json
 
-# Launch file with command:
-# 
-
 def main(argv):
     
     # Parse the command-line arguments
