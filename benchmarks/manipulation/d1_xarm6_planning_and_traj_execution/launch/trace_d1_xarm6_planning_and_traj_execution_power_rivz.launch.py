@@ -26,6 +26,8 @@
 # Based on xarm_ros2
 # https://github.com/xArm-Developer/xarm_ros2/blob/humble/xarm_moveit_config/launch/xarm6_moveit_fake.launch.py
 
+import os
+POWER_LIB = os.environ.get('POWER_LIB')
 
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, RegisterEventHandler
@@ -67,7 +69,7 @@ def generate_launch_description():
     geometry_mesh_tcp_xyz = LaunchConfiguration('geometry_mesh_tcp_xyz', default='"0 0 0"')
     geometry_mesh_tcp_rpy = LaunchConfiguration('geometry_mesh_tcp_rpy', default='"0 0 0"')
 
-    start_rviz = LaunchConfiguration('start_rviz', default='False')
+    start_rviz = LaunchConfiguration('start_rviz', default='True')
 
     # robot moveit fake launch
     # xarm_moveit_config/launch/_robot_moveit_fake.launch.py
@@ -149,7 +151,7 @@ def generate_launch_description():
                 name="power_component",
                 parameters=[
                     {"publish_rate": 20.0},
-                    {"hardware_device_type": "rapl"}
+                    {"power_lib": POWER_LIB}
                 ],
             ),
             
