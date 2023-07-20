@@ -1,51 +1,89 @@
+description: 'A [ros2_control_demos](https://github.com/ros-controls/ros2_control_demos)
+  used to demonstrate the [ros2_controllers](https://github.com/ros-controls/ros2_controllers)
+  forward_command_controller with velocity commands
+
+  '
+graph: ../../../imgs/c3_rrbot_forward_command_controller_position.svg
 id: c4
 name: c4_rrbot_forward_command_controller_velocity
-description: |
-  A [ros2_control_demos](https://github.com/ros-controls/ros2_control_demos) used to demonstrate the [ros2_controllers](https://github.com/ros-controls/ros2_controllers) forward_command_controller with velocity commands
-short: Forward command controller with velocity commands
-graph: ../../../imgs/c3_rrbot_forward_command_controller_position.svg
 reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/control/c4_rrbot_forward_command_controller_velocity
   and review the launch files to reproduce this package.
-
-# Data not valid at the moment, just a placeholder for now
 results:
 - result:
     category: workstation
     datasource: N/A
+    hardware: Intel i7-12700H
     metric: latency
     metric_unit: ms
-    timestampt: '08-07-2023'
-    hardware: Intel i7-12700H
+    note: mean 0.21 ms, rms 1.17 ms, max 10.04 ms, min 0.06 ms, lost 0.00%, update
+      rate 10 Hz
+    timestampt: 08-07-2023
     type: grey
-    note: 'mean 0.21 ms, rms 1.17 ms, max 10.04 ms, min 0.06 ms, lost 0.00%, update rate 10 Hz'
     value: 10.04
 - result:
     category: workstation
     datasource: N/A
+    hardware: Intel i7-12700H
     metric: power
     metric_unit: W
-    timestampt: '08-07-2023'
-    hardware: Intel i7-12700H
+    note: mean 0.21 ms, rms 1.17 ms, max 10.04 ms, min 0.06 ms, lost 0.00%, update
+      rate 10 Hz
+    timestampt: 08-07-2023
     type: grey
-    note: 'mean 0.21 ms, rms 1.17 ms, max 10.04 ms, min 0.06 ms, lost 0.00%, update rate 10 Hz'
     value: 8.0799007415
 - result:
     category: workstation
     datasource: N/A
+    hardware: Intel i5-13600K
     metric: latency
     metric_unit: ms
-    timestampt: '08-07-2023'
-    hardware: Intel i5-13600K
+    note: mean 0.02, ms, rms 0.05 ms, max 0.44 ms, min 0.009 ms, lost 0.00%, update
+      rate 10 Hz
+    timestampt: 08-07-2023
     type: grey
-    note: 'mean 0.02, ms, rms 0.05 ms, max 0.44 ms, min 0.009 ms, lost 0.00%, update rate 10 Hz'
     value: 0.44
 - result:
     category: workstation
     datasource: N/A
+    hardware: Intel i5-13600K
     metric: power
     metric_unit: W
-    timestampt: '08-07-2023'
-    hardware: Intel i5-13600K
+    note: mean 0.02, ms, rms 0.05 ms, max 0.44 ms, min 0.009 ms, lost 0.00%, update
+      rate 10 Hz
+    timestampt: 08-07-2023
     type: grey
-    note: 'mean 0.02, ms, rms 0.05 ms, max 0.44 ms, min 0.009 ms, lost 0.00%, update rate 10 Hz'
     value: 35.25370407104492
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.02008280421377184, rms_benchmark 0.02164900963633569,\
+      \ max_benchmark 0.09077700000000001, min_benchmark 0.003523, lost messages 0.03\
+      \ %"
+    timestampt: '2023-07-20 14:43:27'
+    type: grey
+    value: 0.09077700000000001
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-07-20 14:46:57'
+    type: grey
+    value: 5.9694318771362305
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 100.0, rms_benchmark 100.0, max_benchmark 108.34,\
+      \ min_benchmark 94.94, lost messages 0.03 %"
+    timestampt: '2023-07-20 14:50:57'
+    type: grey
+    value: 108.34
+short: Forward command controller with velocity commands
