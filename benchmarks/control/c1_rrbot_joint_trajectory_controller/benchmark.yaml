@@ -1,50 +1,68 @@
+description: 'A [ros2_control_demos](https://github.com/ros-controls/ros2_control_demos)
+  used to demonstrate the [ros2_controllers](https://github.com/ros-controls/ros2_controllers)
+  joint_trajectory_controller
+
+  '
+graph: ../../../imgs/c1_rrbot_joint_trajectory_controller.svg
 id: c1
 name: c1_rrbot_joint_trajectory_controller
-description: |
-  A [ros2_control_demos](https://github.com/ros-controls/ros2_control_demos) used to demonstrate the [ros2_controllers](https://github.com/ros-controls/ros2_controllers) joint_trajectory_controller
-short: Joint trajectory controller
-graph: ../../../imgs/c1_rrbot_joint_trajectory_controller.svg
 reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/control/c1_rrbot_joint_trajectory_controller
   and review the launch files to reproduce this package.
-# Data not valid at the moment, just a placeholder for now
 results:
 - result:
     category: workstation
     datasource: N/A
+    hardware: Intel i7-12700H
     metric: latency
     metric_unit: ms
-    timestampt: '08-07-2023'
-    hardware: Intel i7-12700H
+    note: mean 0.08 ms, rms 0.10 ms, max 0.55 ms, min 0.02 ms, lost 0.00%, update
+      rate 10 Hz
+    timestampt: 08-07-2023
     type: grey
-    note: 'mean 0.08 ms, rms 0.10 ms, max 0.55 ms, min 0.02 ms, lost 0.00%, update rate 10 Hz'
     value: 0.55
 - result:
     category: workstation
     datasource: N/A
+    hardware: Intel i7-12700H
     metric: power
     metric_unit: W
-    timestampt: '08-07-2023'
-    hardware: Intel i7-12700H
+    note: mean 0.08 ms, rms 0.10 ms, max 0.55 ms, min 0.02 ms, lost 0.00%, update
+      rate 10 Hz
+    timestampt: 08-07-2023
     type: grey
-    note: 'mean 0.08 ms, rms 0.10 ms, max 0.55 ms, min 0.02 ms, lost 0.00%, update rate 10 Hz'
     value: 8.297782897949219
 - result:
     category: workstation
     datasource: N/A
+    hardware: Intel i5-13600K
     metric: latency
     metric_unit: ms
-    timestampt: '08-07-2023'
-    hardware: Intel i5-13600K
+    note: mean 0.02 ms, rms 0.03 ms, max 0.13 ms, min 0.01 ms, lost 0.00%, update
+      rate 10 Hz
+    timestampt: 08-07-2023
     type: grey
-    note: 'mean 0.02 ms, rms 0.03 ms, max 0.13 ms, min 0.01 ms, lost 0.00%, update rate 10 Hz'
     value: 0.13
 - result:
     category: workstation
     datasource: N/A
+    hardware: Intel i5-13600K
     metric: power
     metric_unit: W
-    timestampt: '08-07-2023'
-    hardware: Intel i5-13600K
+    note: mean 0.02 ms, rms 0.03 ms, max 0.13 ms, min 0.01 ms, lost 0.00%, update
+      rate 10 Hz
+    timestampt: 08-07-2023
     type: grey
-    note: 'mean 0.02 ms, rms 0.03 ms, max 0.13 ms, min 0.01 ms, lost 0.00%, update rate 10 Hz'
     value: 28.091297149658203
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.036972090909090906, rms_benchmark 0.046425814648944845,\
+      \ max_benchmark 0.098052, min_benchmark 0.011147999999999998, lost messages\
+      \ 0.00 %"
+    timestampt: '2023-07-20 14:12:00'
+    type: grey
+    value: 0.098052
+short: Joint trajectory controller
