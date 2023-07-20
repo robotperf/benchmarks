@@ -41,4 +41,15 @@ results:
     timestampt: '2023-07-20 15:07:48'
     type: grey
     value: 6.039312362670898
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 0.0, rms_benchmark 0.0, max_benchmark 0.0, min_benchmark\
+      \ 0.0, lost messages 0.00 %"
+    timestampt: '2023-07-20 15:11:05'
+    type: grey
+    value: 0.0
 short: xArm6 planning and trajectory execution
