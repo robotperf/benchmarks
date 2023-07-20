@@ -65,4 +65,14 @@ results:
     timestampt: '2023-07-20 14:31:33'
     type: grey
     value: 0.13906400000000002
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-07-20 14:35:33'
+    type: grey
+    value: 5.978651523590088
 short: Forward command controller Position
