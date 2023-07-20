@@ -63,4 +63,15 @@ results:
     timestampt: '2023-07-20 14:24:25'
     type: grey
     value: 5.6572113037109375
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 10.0, rms_benchmark 10.0, max_benchmark 10.01, min_benchmark\
+      \ 9.99, lost messages 0.00 %"
+    timestampt: '2023-07-20 14:27:59'
+    type: grey
+    value: 10.01
 short: Differential driver controller
