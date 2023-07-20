@@ -1,50 +1,66 @@
+description: 'A [ros2_control_demos](https://github.com/ros-controls/ros2_control_demos)
+  used to demonstrate the [ros2_controllers](https://github.com/ros-controls/ros2_controllers)
+  diff_driver_controller
+
+  '
+graph: ../../../imgs/c2_diffbot_diff_driver_controller.svg
 id: c2
 name: c2_diffbot_diff_driver_controller
-description: |
-  A [ros2_control_demos](https://github.com/ros-controls/ros2_control_demos) used to demonstrate the [ros2_controllers](https://github.com/ros-controls/ros2_controllers) diff_driver_controller
-short: Differential driver controller
-graph: ../../../imgs/c2_diffbot_diff_driver_controller.svg
 reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/control/c2_diffbot_diff_driver_controller
   and review the launch files to reproduce this package.
-# Data not valid at the moment, just a placeholder for now
 results:
 - result:
     category: workstation
     datasource: N/A
+    hardware: Intel i7-12700H
     metric: latency
     metric_unit: ms
-    timestampt: '08-07-2023'
-    hardware: Intel i7-12700H
+    note: mean 0.21 ms, rms 1.17 ms, max 10.04 ms, min 0.06 ms, lost 0.00%, update
+      rate 10 Hz
+    timestampt: 08-07-2023
     type: grey
-    note: 'mean 0.21 ms, rms 1.17 ms, max 10.04 ms, min 0.06 ms, lost 0.00%, update rate 10 Hz'
     value: 10.04
 - result:
     category: workstation
     datasource: N/A
+    hardware: Intel i7-12700H
     metric: power
     metric_unit: W
-    timestampt: '08-07-2023'
-    hardware: Intel i7-12700H
+    note: mean 0.21 ms, rms 1.17 ms, max 10.04 ms, min 0.06 ms, lost 0.00%, update
+      rate 10 Hz
+    timestampt: 08-07-2023
     type: grey
-    note: 'mean 0.21 ms, rms 1.17 ms, max 10.04 ms, min 0.06 ms, lost 0.00%, update rate 10 Hz'
     value: 8.0799007415
 - result:
     category: workstation
     datasource: N/A
+    hardware: Intel i5-13600K
     metric: latency
     metric_unit: ms
-    timestampt: '08-07-2023'
-    hardware: Intel i5-13600K
+    note: mean 0.02, ms, rms 0.05 ms, max 0.44 ms, min 0.009 ms, lost 0.00%, update
+      rate 10 Hz
+    timestampt: 08-07-2023
     type: grey
-    note: 'mean 0.02, ms, rms 0.05 ms, max 0.44 ms, min 0.009 ms, lost 0.00%, update rate 10 Hz'
     value: 0.44
 - result:
     category: workstation
     datasource: N/A
+    hardware: Intel i5-13600K
     metric: power
     metric_unit: W
-    timestampt: '08-07-2023'
-    hardware: Intel i5-13600K
+    note: mean 0.02, ms, rms 0.05 ms, max 0.44 ms, min 0.009 ms, lost 0.00%, update
+      rate 10 Hz
+    timestampt: 08-07-2023
     type: grey
-    note: 'mean 0.02, ms, rms 0.05 ms, max 0.44 ms, min 0.009 ms, lost 0.00%, update rate 10 Hz'
     value: 35.25370407104492
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-07-20 14:24:25'
+    type: grey
+    value: 5.6572113037109375
+short: Differential driver controller
