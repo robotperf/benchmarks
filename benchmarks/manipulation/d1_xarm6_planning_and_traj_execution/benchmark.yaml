@@ -1,20 +1,34 @@
+description: 'A computational graph that uses [moveit2](https://github.com/ros-planning/moveit2)
+  to compute motion planning and perform trajectory execution on a UFACTORY xArm6
+  manipulator
+
+  '
+graph: ../../../imgs/d1_xarm6_planning_and_traj_execution.svg
 id: d1
 name: d1_xarm6_planning_and_traj_execution
-description: |
-  A computational graph that uses [moveit2](https://github.com/ros-planning/moveit2) to compute motion planning and perform trajectory execution on a UFACTORY xArm6 manipulator
-short: xArm6 planning and trajectory execution
-graph: ../../../imgs/d1_xarm6_planning_and_traj_execution.svg
 reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/manipulation/d1_xarm6_planning_and_traj_execution
   and review the launch files to reproduce this package.
-# Data not valid at the moment, just a placeholder for now
 results:
 - result:
     category: workstation
     datasource: N/A
+    hardware: Intel i7-12700H
     metric: latency
     metric_unit: ms
-    timestampt: '08-07-2023'
-    hardware: Intel i7-12700H
+    note: mean 0.08 ms, rms 0.10 ms, max 0.55 ms, min 0.02 ms, lost 0.00%, update
+      rate 10 Hz
+    timestampt: 08-07-2023
     type: grey
-    note: 'mean 0.08 ms, rms 0.10 ms, max 0.55 ms, min 0.02 ms, lost 0.00%, update rate 10 Hz'
     value: 0.55
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 8976.650255, rms_benchmark 9476.712474007052, max_benchmark\
+      \ 12340.02087, min_benchmark 4980.327211000001, lost messages 0.00 %"
+    timestampt: '2023-07-20 15:04:32'
+    type: grey
+    value: 12340.02087
+short: xArm6 planning and trajectory execution
