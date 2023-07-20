@@ -31,4 +31,14 @@ results:
     timestampt: '2023-07-20 15:04:32'
     type: grey
     value: 12340.02087
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-07-20 15:07:48'
+    type: grey
+    value: 6.039312362670898
 short: xArm6 planning and trajectory execution
