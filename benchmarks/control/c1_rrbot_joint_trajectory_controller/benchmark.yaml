@@ -75,4 +75,15 @@ results:
     timestampt: '2023-07-20 14:15:19'
     type: grey
     value: 11.228675842285156
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 10.0, rms_benchmark 10.0, max_benchmark 10.01, min_benchmark\
+      \ 9.99, lost messages 0.00 %"
+    timestampt: '2023-07-20 14:18:49'
+    type: grey
+    value: 10.01
 short: Joint trajectory controller
