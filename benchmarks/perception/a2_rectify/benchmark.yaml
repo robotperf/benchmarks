@@ -1197,4 +1197,15 @@ results:
     timestampt: '2023-07-21 16:34:46'
     type: grey
     value: 33.33
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.13, rms_benchmark 30.19, max_benchmark 35.67, min_benchmark
+      26.22, lost messages 0.00 %
+    timestampt: '2023-07-21 16:37:06'
+    type: grey
+    value: 35.67
 short: Perception rectify ROS Component.
