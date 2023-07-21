@@ -86,4 +86,15 @@ results:
     timestampt: '2023-07-20 14:18:49'
     type: grey
     value: 10.01
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.20849618525896416, rms_benchmark 0.236222650035889,\
+      \ max_benchmark 1.472075, min_benchmark 0.025216, lost messages 0.20 %"
+    timestampt: '2023-07-21 16:59:11'
+    type: grey
+    value: 1.472075
 short: Joint trajectory controller
