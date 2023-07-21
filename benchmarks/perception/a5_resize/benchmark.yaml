@@ -1110,4 +1110,15 @@ results:
     timestampt: '2023-07-21 16:44:16'
     type: grey
     value: 40.07
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.08, rms_benchmark 30.1, max_benchmark 33.43, min_benchmark
+      27.53, lost messages 0.00 %
+    timestampt: '2023-07-21 16:46:40'
+    type: grey
+    value: 33.43
 short: Perception resize ROS Component.
