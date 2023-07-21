@@ -26,6 +26,8 @@
 # Based on xarm_ros2
 # https://github.com/xArm-Developer/xarm_ros2/blob/humble/xarm_moveit_config/launch/xarm6_moveit_fake.launch.py
 
+import os
+POWER_LIB = os.environ.get('POWER_LIB')
 
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, RegisterEventHandler, EmitEvent
@@ -144,7 +146,7 @@ def generate_launch_description():
                 name="power_component",
                 parameters=[
                     {"publish_rate": 20.0},
-                    {"hardware_device_type": "rapl"}
+                    {"power_lib": POWER_LIB}
                 ],
             ),
             
