@@ -1230,4 +1230,14 @@ results:
     timestampt: '2023-07-21 18:19:48'
     type: black
     value: 27.158093
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 0.00 %
+    timestampt: '2023-07-21 18:29:46'
+    type: black
+    value: 30.198576051430802
 short: Perception resize ROS Component.
