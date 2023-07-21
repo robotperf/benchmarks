@@ -1224,4 +1224,14 @@ results:
     timestampt: '2023-07-21 16:51:35'
     type: grey
     value: 119.25313899999999
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-21 17:16:45'
+    type: grey
+    value: 11.331247329711914
 short: Perception computational graph to compute a disparity map for stereo images.
