@@ -1089,4 +1089,14 @@ results:
     timestampt: '2023-07-21 16:27:35'
     type: grey
     value: 0.0
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-21 16:29:56'
+    type: grey
+    value: 12.202873229980469
 short: Perception resize ROS Component.
