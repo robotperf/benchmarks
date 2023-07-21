@@ -107,4 +107,15 @@ results:
     timestampt: '2023-07-21 17:24:12'
     type: grey
     value: 10.891936302185059
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 10.0, rms_benchmark 10.0, max_benchmark 10.03, min_benchmark\
+      \ 9.98, lost messages 0.20 %"
+    timestampt: '2023-07-21 17:48:23'
+    type: grey
+    value: 10.03
 short: Joint trajectory controller
