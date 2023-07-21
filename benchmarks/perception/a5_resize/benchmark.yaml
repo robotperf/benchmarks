@@ -1219,4 +1219,15 @@ results:
     timestampt: '2023-07-21 18:17:27'
     type: black
     value: 24.209385
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: latency
+    metric_unit: ms
+    note: Fast-DDS mean_latency 13.38254698533333, rms_latency 13.616938592996433,
+      max_latency 27.158093, min_latency 6.964445, lost messages 0.00 %
+    timestampt: '2023-07-21 18:19:48'
+    type: black
+    value: 27.158093
 short: Perception resize ROS Component.
