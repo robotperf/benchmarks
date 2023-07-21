@@ -1256,4 +1256,15 @@ results:
     timestampt: '2023-07-21 18:07:52'
     type: black
     value: 900.381254
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: latency
+    metric_unit: ms
+    note: mean_latency 1159.978509025736, rms_latency 1347.2939190353122, max_latency
+      2636.580529, min_latency 28.881448, lost messages 40.67 %
+    timestampt: '2023-07-21 18:10:12'
+    type: black
+    value: 2636.580529
 short: Perception computational graph to compute a disparity map for stereo images.
