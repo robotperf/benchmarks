@@ -86,4 +86,16 @@ results:
     timestampt: '2023-07-20 15:01:14'
     type: grey
     value: 107.15
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.011955726917440157, rms_benchmark 0.015192538054428393,\
+      \ max_benchmark 0.5222470000000001, min_benchmark 0.001728, lost messages 0.07\
+      \ %"
+    timestampt: '2023-07-21 17:09:12'
+    type: grey
+    value: 0.5222470000000001
 short: Forward command controller with acceleration commands
