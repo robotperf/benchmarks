@@ -1133,4 +1133,15 @@ results:
     timestampt: '2023-07-21 16:54:14'
     type: grey
     value: 100.29058
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 13.444046, rms_benchmark 13.68611678346014, max_benchmark\
+      \ 19.560926000000002, min_benchmark 9.385097, lost messages 2.33 %"
+    timestampt: '2023-07-21 16:56:35'
+    type: grey
+    value: 19.560926000000002
 short: Perception resize ROS Component.
