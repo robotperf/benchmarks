@@ -1230,4 +1230,14 @@ results:
     timestampt: '2023-07-21 17:11:34'
     type: grey
     value: 0.0
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-21 17:14:22'
+    type: grey
+    value: 11.059441566467285
 short: Perception rectify ROS Component.
