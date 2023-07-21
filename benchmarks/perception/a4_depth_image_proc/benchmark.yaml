@@ -12,18 +12,19 @@ results:
     hardware: Intel i5-13600K
     metric: latency
     metric_unit: ms
-    note: 'mean 17.14 ms, rms 18.76 ms, max 57.40 ms, min 12.46 ms, lost 0.00 %. Fixed at 30 FPS'
-    timestampt: '08-07-2023'
+    note: mean 17.14 ms, rms 18.76 ms, max 57.40 ms, min 12.46 ms, lost 0.00 %. Fixed
+      at 30 FPS
+    timestampt: 08-07-2023
     type: black
-    value: 57.40
+    value: 57.4
 - result:
     category: edge
     datasource: perception/depth_image1
     hardware: Intel i5-13600K
     metric: power
     metric_unit: W
-    note: 'Fixed at 30 FPS. lost 0.00 %.'
-    timestampt: '08-07-2023'
+    note: Fixed at 30 FPS. lost 0.00 %.
+    timestampt: 08-07-2023
     type: black
     value: 32.44
 - result:
@@ -715,5 +716,15 @@ results:
     timestampt: '2023-07-06 08:26:19'
     type: black
     value: 30.149552710104523
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-21 16:32:26'
+    type: grey
+    value: 11.092668533325195
 short: Perception computational graph to compute a point cloud using a rectified depth
   image and a rectified color image.
