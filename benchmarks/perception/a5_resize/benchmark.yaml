@@ -1164,4 +1164,15 @@ results:
     timestampt: '2023-07-21 17:21:49'
     type: grey
     value: 11.309270858764648
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA Jetson Nano
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 48.72, rms_benchmark 80.5, max_benchmark 335.71,\
+      \ min_benchmark 7.62, lost messages 0.00 %"
+    timestampt: '2023-07-21 17:43:28'
+    type: grey
+    value: 335.71
 short: Perception resize ROS Component.
