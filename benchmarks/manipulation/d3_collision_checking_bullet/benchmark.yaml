@@ -1,0 +1,53 @@
+description: 'A computational graph that uses [moveit2](https://github.com/ros-planning/moveit2)
+  to compute collision checking with the [Bullet](https://github.com/bulletphysics/bullet3) library between a UFACTORY xArm6 manipulator and a cube-shaped collision object'
+graph: ../../../imgs/d3_collision_checking_bullet.svg
+id: d3
+name: d3_collision_checking_bullet
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/manipulation/d3_collision_checking_bullet
+  and review the launch files to reproduce this package.
+# Data not valid at the moment, just a placeholder for now
+results:
+- result:
+    category: workstation
+    datasource: N/A
+    hardware: Intel i7-12700H
+    metric: latency
+    metric_unit: ms
+    note: mean 0.08 ms, rms 0.10 ms, max 0.55 ms, min 0.02 ms, lost 0.00%, update
+      rate 10 Hz
+    timestampt: 08-07-2023
+    type: grey
+    value: 0.55
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 8976.650255, rms_benchmark 9476.712474007052, max_benchmark\
+      \ 12340.02087, min_benchmark 4980.327211000001, lost messages 0.00 %"
+    timestampt: '2023-07-20 15:04:32'
+    type: grey
+    value: 12340.02087
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-07-20 15:07:48'
+    type: grey
+    value: 6.039312362670898
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-8700K
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 0.0, rms_benchmark 0.0, max_benchmark 0.0, min_benchmark\
+      \ 0.0, lost messages 0.00 %"
+    timestampt: '2023-07-20 15:11:05'
+    type: grey
+    value: 0.0
+short: xArm6 planning and trajectory execution
