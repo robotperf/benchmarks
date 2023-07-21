@@ -98,4 +98,14 @@ results:
     timestampt: '2023-07-21 17:04:20'
     type: grey
     value: 0.129058
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-07-21 17:28:55'
+    type: grey
+    value: 11.005424499511719
 short: Forward command controller Position
