@@ -1201,4 +1201,15 @@ results:
     timestampt: '2023-07-21 16:22:57'
     type: grey
     value: 11.591771125793457
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 24.61, rms_benchmark 25.78, max_benchmark 32.53, min_benchmark
+      9.99, lost messages 38.89 %
+    timestampt: '2023-07-21 16:39:36'
+    type: grey
+    value: 32.53
 short: Perception computational graph to compute a disparity map for stereo images.
