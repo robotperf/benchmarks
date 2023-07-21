@@ -28,13 +28,14 @@
 
 
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, RegisterEventHandler
+from launch.actions import IncludeLaunchDescription, RegisterEventHandler, EmitEvent
 from launch_ros.actions import Node, ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
 from launch.event_handlers import OnProcessExit
+from launch.events import Shutdown
 
 from tracetools_launch.action import Trace
 from tracetools_trace.tools.names import DEFAULT_EVENTS_ROS
@@ -121,21 +122,17 @@ def generate_launch_description():
         # context_names=DEFAULT_CONTEXT,
     )
 
-    composable_node_container = ComposableNodeContainer(
-        name="container",
-        namespace="",
-        package="rclcpp_components",
-        executable="component_container",
-        composable_node_descriptions=[
-            ComposableNode(
-                package="robotcore_manipulation_moveit2",
-                plugin="xarm6_plan_and_execute::XArm6PlanAndExecuteNode",
-                name="xarm6_plan_and_execute",
-                extra_arguments=[{"use_intra_process_comms": True}],
-            )
-        ],
-        output="screen",
+    xarm6_manipulation_benchmarks = Node(
+        package='robotcore_manipulation_moveit2',
+        executable='xarm6_manipulation_benchmarks',
+        arguments=['d1'],
+        output='screen'
     )
+
+    shutdown_after_benchmark = RegisterEventHandler(event_handler=OnProcessExit(
+            target_action=xarm6_manipulation_benchmarks,
+            on_exit=[EmitEvent(event=Shutdown())]
+    ))
 
     power_container = ComposableNodeContainer(
         name="power_container",
@@ -158,6 +155,10 @@ def generate_launch_description():
         output="screen",
     )
     
-    return LaunchDescription(
-        [robot_moveit_fake_launch] + [trace] + [composable_node_container] + [power_container]
-    )
+    return LaunchDescription([
+        robot_moveit_fake_launch,
+        trace,
+        xarm6_manipulation_benchmarks,
+        shutdown_after_benchmark,
+        power_container
+    ])
