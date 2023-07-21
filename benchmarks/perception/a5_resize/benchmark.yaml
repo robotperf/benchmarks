@@ -1260,4 +1260,14 @@ results:
     timestampt: '2023-07-21 18:42:21'
     type: black
     value: 11.906664085388183
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA Jetson Nano
+    metric: power
+    metric_unit: W
+    note: lost messages 0.00 %
+    timestampt: '2023-07-21 18:44:57'
+    type: black
+    value: 0.0
 short: Perception resize ROS Component.
