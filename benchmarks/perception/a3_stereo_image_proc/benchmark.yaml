@@ -18,93 +18,96 @@ results:
 - result:
     category: workstation
     datasource: perception/image3
+    hardware: Intel i5-13600K
     metric: latency
     metric_unit: ms
+    note: mean 3.03 ms, rms 17.73 ms, max 43.09 ms, min 4.14 ms, lost 0.00 %, throughput
+      bounded to 30fps
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i5-13600K
-    note: 'mean 3.03 ms, rms 17.73 ms, max 43.09 ms, min 4.14 ms, lost 0.00 %, throughput bounded to 30fps'
     value: 43.09
 - result:
     category: workstation
     datasource: perception/image3
+    hardware: Intel i5-13600K
     metric: power
     metric_unit: W
+    note: lost 0.00 %, throughput bounded to 30fps
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i5-13600K
-    note: 'lost 0.00 %, throughput bounded to 30fps'
     value: 87.21
 - result:
     category: workstation
     datasource: perception/image3
+    hardware: Intel i7-12700H
     metric: latency
     metric_unit: ms
+    note: mean 20.80 ms, rms 24.38 ms, max 49.58 ms, min 5.51 ms, lost 0.00 %, throughput
+      bounded to 30fps
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i7-12700H
-    note: 'mean 20.80 ms, rms 24.38 ms, max 49.58 ms, min 5.51 ms, lost 0.00 %, throughput bounded to 30fps'
     value: 49.58
 - result:
     category: workstation
     datasource: perception/image3
+    hardware: Intel i7-12700H
     metric: power
     metric_unit: W
+    note: lost 0.00 %, throughput bounded to 30fps
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i7-12700H
-    note: 'lost 0.00 %, throughput bounded to 30fps'
     value: 14.35
-
 - result:
     category: workstation
     datasource: perception/image3
+    hardware: "Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE\xAE Perception)"
     metric: latency
     metric_unit: ms
+    note: mean 0.77 ms, rms 10.85 ms, max 15.06 ms, min 6.16 ms, lost 0.00 %, throughput
+      bounded to 30fps
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE® Perception)
-    note: 'mean 0.77 ms, rms 10.85 ms, max 15.06 ms, min 6.16 ms, lost 0.00 %, throughput bounded to 30fps'
     value: 15.06
 - result:
     category: workstation
     datasource: perception/image3
+    hardware: "Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE\xAE Perception)"
     metric: power
     metric_unit: W
+    note: lost 0.00 %, throughput bounded to 30fps
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE® Perception)
-    note: 'lost 0.00 %, throughput bounded to 30fps'
     value: 39.96
 - result:
     category: workstation
     datasource: perception/image3
+    hardware: "Intel i5-13600K + NVIDIA GeForce RTX 3060 (ROBOTCORE\xAE Perception)"
     metric: latency
     metric_unit: ms
+    note: mean 5.77 ms, rms 5.81 ms, max 10.49 ms, min 4.31 ms, lost 0.00 %, throughput
+      bounded to 30fps
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i5-13600K + NVIDIA GeForce RTX 3060 (ROBOTCORE® Perception)
-    note: 'mean 5.77 ms, rms 5.81 ms, max 10.49 ms, min 4.31 ms, lost 0.00 %, throughput bounded to 30fps'
     value: 10.49
 - result:
     category: workstation
     datasource: perception/image3
+    hardware: "Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE\xAE Perception)"
     metric: throughput
     metric_unit: fps
+    note: mean 13.63 ms, rms 14.44 ms, max 46.67 ms, min 5.01 ms, lost 0.00 %
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE® Perception)
-    note: 'mean 13.63 ms, rms 14.44 ms, max 46.67 ms, min 5.01 ms, lost 0.00 %'
     value: 291.567
 - result:
     category: workstation
     datasource: perception/image3
+    hardware: "Intel i5-13600K + NVIDIA GeForce RTX 3060 (ROBOTCORE\xAE Perception)"
     metric: throughput
     metric_unit: fps
+    note: mean 5.53 ms, rms 5.62 ms, max 9.46 ms, min 2.94 ms, lost 0.00 %
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i5-13600K + NVIDIA GeForce RTX 3060 (ROBOTCORE® Perception)
-    note: 'mean 5.53 ms, rms 5.62 ms, max 9.46 ms, min 2.94 ms, lost 0.00 %'
     value: 296.77
 - result:
     category: edge
@@ -1177,4 +1180,15 @@ results:
     timestampt: '2023-07-06 07:58:02'
     type: black
     value: 30.277107146802685
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 149.21034663888886, rms_benchmark 159.1349413954558, max_benchmark
+      199.638617, min_benchmark 43.925546, lost messages 38.89 %
+    timestampt: '2023-07-21 16:08:19'
+    type: grey
+    value: 199.638617
 short: Perception computational graph to compute a disparity map for stereo images.
