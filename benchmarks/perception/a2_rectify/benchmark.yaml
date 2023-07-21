@@ -1325,4 +1325,14 @@ results:
     timestampt: '2023-07-21 18:37:07'
     type: black
     value: 30.195955813100717
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA Jetson Nano
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 0.00 %
+    timestampt: '2023-07-21 18:39:44'
+    type: black
+    value: 30.213658880836114
 short: Perception rectify ROS Component.
