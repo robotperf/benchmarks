@@ -98,4 +98,14 @@ results:
     timestampt: '2023-07-21 17:01:38'
     type: grey
     value: 1.534866
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-07-21 17:26:36'
+    type: grey
+    value: 10.829459190368652
 short: Differential driver controller
