@@ -1240,4 +1240,15 @@ results:
     timestampt: '2023-07-21 17:14:22'
     type: grey
     value: 11.059441566467285
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 28.49, rms_benchmark 29.31, max_benchmark 38.77,\
+      \ min_benchmark 4.2, lost messages 0.00 %"
+    timestampt: '2023-07-21 17:38:45'
+    type: grey
+    value: 38.77
 short: Perception rectify ROS Component.
