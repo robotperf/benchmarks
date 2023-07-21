@@ -97,4 +97,14 @@ results:
     timestampt: '2023-07-21 16:59:11'
     type: grey
     value: 1.472075
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-07-21 17:24:12'
+    type: grey
+    value: 10.891936302185059
 short: Joint trajectory controller
