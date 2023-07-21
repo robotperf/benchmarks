@@ -1208,4 +1208,16 @@ results:
     timestampt: '2023-07-21 16:37:06'
     type: grey
     value: 35.67
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA Jetson Nano
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 23.18656178947368, rms_benchmark 26.242473833386374,\
+      \ max_benchmark 64.179151, min_benchmark 11.341195999999998, lost messages 0.00\
+      \ %"
+    timestampt: '2023-07-21 16:49:14'
+    type: grey
+    value: 64.179151
 short: Perception rectify ROS Component.
