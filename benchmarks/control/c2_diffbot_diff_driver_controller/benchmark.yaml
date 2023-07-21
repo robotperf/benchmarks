@@ -86,4 +86,16 @@ results:
     timestampt: '2023-07-20 15:13:35'
     type: grey
     value: 0.5223059999999999
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.15251065737051792, rms_benchmark 0.17216160760621912,\
+      \ max_benchmark 1.534866, min_benchmark 0.053665000000000004, lost messages\
+      \ 0.00 %"
+    timestampt: '2023-07-21 17:01:38'
+    type: grey
+    value: 1.534866
 short: Differential driver controller
