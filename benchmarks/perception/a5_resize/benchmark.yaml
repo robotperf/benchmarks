@@ -1057,4 +1057,15 @@ results:
     timestampt: '2023-07-06 08:53:31'
     type: black
     value: 30.203949756569422
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA Jetson Nano
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 54.07958676470588, rms_benchmark 54.32142963558273, max_benchmark
+      62.713607, min_benchmark 38.251629, lost messages 0.00 %
+    timestampt: '2023-07-21 16:15:36'
+    type: grey
+    value: 62.713607
 short: Perception resize ROS Component.
