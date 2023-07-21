@@ -1284,4 +1284,15 @@ results:
     timestampt: '2023-07-21 18:03:08'
     type: black
     value: 18.873035
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA Jetson Nano
+    metric: latency
+    metric_unit: ms
+    note: Fast-DDS mean_latency 14.995997777333333, rms_latency 15.044918874695934,
+      max_latency 20.232629, min_latency 11.910738, lost messages 0.00 %
+    timestampt: '2023-07-21 18:05:26'
+    type: black
+    value: 20.232629
 short: Perception rectify ROS Component.
