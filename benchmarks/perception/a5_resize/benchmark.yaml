@@ -1079,4 +1079,14 @@ results:
     timestampt: '2023-07-21 16:18:01'
     type: grey
     value: 24.596631
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA Jetson Nano
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-21 16:27:35'
+    type: grey
+    value: 0.0
 short: Perception resize ROS Component.
