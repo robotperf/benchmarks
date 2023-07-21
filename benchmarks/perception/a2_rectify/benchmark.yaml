@@ -1262,4 +1262,15 @@ results:
     timestampt: '2023-07-21 17:41:08'
     type: grey
     value: 375.61
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: latency
+    metric_unit: ms
+    note: mean_latency 15.343143980000004, rms_latency 15.524577340240251, max_latency
+      22.714836, min_latency 7.671293, lost messages 0.00 %
+    timestampt: '2023-07-21 18:00:31'
+    type: black
+    value: 22.714836
 short: Perception rectify ROS Component.
