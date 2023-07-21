@@ -1220,4 +1220,14 @@ results:
     timestampt: '2023-07-21 16:49:14'
     type: grey
     value: 64.179151
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA Jetson Nano
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-21 17:11:34'
+    type: grey
+    value: 0.0
 short: Perception rectify ROS Component.
