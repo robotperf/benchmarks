@@ -21,7 +21,4 @@ Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/manipulati
 | Type | Hardware | Metric | Value | Category | Timestamp | Note | Data Source |
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-12700H | latency | 0.55 | workstation | 08-07-2023 | mean 0.08 ms, rms 0.10 ms, max 0.55 ms, min 0.02 ms, lost 0.00%, update rate 10 Hz | [N/A](https://github.com/robotperf/rosbags/tree/main/N/A) |
-| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | latency | 12340.02087 | workstation | 2023-07-20 15:04:32 | ✋mean_benchmark 8976.650255, rms_benchmark 9476.712474007052, max_benchmark 12340.02087, min_benchmark 4980.327211000001, lost messages 0.00 % | [simulation](https://github.com/robotperf/rosbags/tree/main/simulation) |
-| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | power | 6.039312362670898 | workstation | 2023-07-20 15:07:48 | ✋ | [simulation](https://github.com/robotperf/rosbags/tree/main/simulation) |
-| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-8700K | throughput | 0.0 | workstation | 2023-07-20 15:11:05 | ✋mean_benchmark 0.0, rms_benchmark 0.0, max_benchmark 0.0, min_benchmark 0.0, lost messages 0.00 % | [simulation](https://github.com/robotperf/rosbags/tree/main/simulation) |
 
