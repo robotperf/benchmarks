@@ -1,6 +1,6 @@
 # d3_collision_checking_bullet
 
-xArm6 planning and trajectory execution
+Collision checking between xArm6 and a box using Bullet library.
 
 ### ID
 d3

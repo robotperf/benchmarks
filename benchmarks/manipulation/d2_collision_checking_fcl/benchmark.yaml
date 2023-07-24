@@ -18,4 +18,4 @@ results:
     timestampt: 08-07-2023
     type: grey
     value: 0.55
-short: xArm6 planning and trajectory execution
+short: Collision checking between xArm6 and a box using FCL library.

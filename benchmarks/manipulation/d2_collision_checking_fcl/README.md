@@ -1,6 +1,6 @@
 # d2_collision_checking_fcl
 
-xArm6 planning and trajectory execution
+Collision checking between xArm6 and a box using FCL library.
 
 ### ID
 d2
