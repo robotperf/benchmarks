@@ -1,14 +1,12 @@
 # d2_collision_checking_fcl
 
-Collision checking between xArm6 and a box using FCL library.
+xArm6 planning and trajectory execution
 
 ### ID
 d2
 
 ### Description
-A computational graph that uses [moveit2](https://github.com/ros-planning/moveit2)
-  to compute collision checking with the [FCL](https://github.com/flexible-collision-library/fcl) library between a UFACTORY xArm6 manipulator and a cube-shaped collision object.
-
+A computational graph that uses [moveit2](https://github.com/ros-planning/moveit2) to compute collision checking with the [FCL](https://github.com/flexible-collision-library/fcl) library between a UFACTORY xArm6 manipulator and a cube-shaped collision object
 
 ![](../../../imgs/d2_collision_checking_fcl.svg)
 
@@ -19,8 +17,6 @@ Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/manipulati
 ```
 
 ## Results
-
-Data not valid at the moment, just a placeholder for now
 
 | Type | Hardware | Metric | Value | Category | Timestamp | Note | Data Source |
 | --- | --- | --- | --- | --- | --- | --- | --- |

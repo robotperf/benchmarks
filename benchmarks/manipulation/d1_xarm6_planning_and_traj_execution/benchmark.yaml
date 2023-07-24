@@ -11,17 +11,6 @@ reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchma
 results:
 - result:
     category: workstation
-    datasource: N/A
-    hardware: Intel i7-12700H
-    metric: latency
-    metric_unit: ms
-    note: mean 0.08 ms, rms 0.10 ms, max 0.55 ms, min 0.02 ms, lost 0.00%, update
-      rate 10 Hz
-    timestampt: 08-07-2023
-    type: grey
-    value: 0.55
-- result:
-    category: workstation
     datasource: simulation
     hardware: Intel i7-8700K
     metric: latency
