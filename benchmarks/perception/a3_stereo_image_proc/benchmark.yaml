@@ -1331,4 +1331,14 @@ results:
     timestampt: '2023-07-24 15:51:07'
     type: grey
     value: 243.683562
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-24 15:53:28'
+    type: grey
+    value: 3.9700000286102295
 short: Perception computational graph to compute a disparity map for stereo images.
