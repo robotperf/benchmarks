@@ -141,4 +141,15 @@ results:
     timestampt: '2023-07-24 08:13:14'
     type: grey
     value: 2.604661
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA Jetson Nano
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 10.0, rms_benchmark 10.0, max_benchmark 10.19, min_benchmark\
+      \ 9.82, lost messages 0.00 %"
+    timestampt: '2023-07-24 08:15:37'
+    type: grey
+    value: 10.19
 short: Differential driver controller
