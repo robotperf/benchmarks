@@ -1287,4 +1287,16 @@ results:
     timestampt: '2023-07-21 18:34:38'
     type: black
     value: 17.421949626337533
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 133.82940217041053, rms_benchmark 136.0694606563822,\
+      \ max_benchmark 423.716119, min_benchmark 60.328526000000004, lost messages\
+      \ 0.00 %"
+    timestampt: '2023-07-24 15:26:15'
+    type: grey
+    value: 423.716119
 short: Perception computational graph to compute a disparity map for stereo images.
