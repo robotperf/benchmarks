@@ -174,4 +174,15 @@ results:
     timestampt: '2023-07-24 21:39:51'
     type: grey
     value: 3.5199999809265137
+- result:
+    category: edge
+    datasource: simulation
+    hardware: Kria KV260
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 10.0, rms_benchmark 10.0, max_benchmark 10.01, min_benchmark\
+      \ 9.99, lost messages 0.00 %"
+    timestampt: '2023-07-24 21:42:14'
+    type: grey
+    value: 10.01
 short: Differential driver controller
