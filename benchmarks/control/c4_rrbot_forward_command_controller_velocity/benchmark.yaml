@@ -172,4 +172,15 @@ results:
     timestampt: '2023-07-24 23:39:26'
     type: grey
     value: 3.630000114440918
+- result:
+    category: edge
+    datasource: simulation
+    hardware: Kria KV260
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 100.0, rms_benchmark 100.0, max_benchmark 103.41,\
+      \ min_benchmark 96.77, lost messages 0.04 %"
+    timestampt: '2023-07-24 23:42:04'
+    type: grey
+    value: 103.41
 short: Forward command controller with velocity commands
