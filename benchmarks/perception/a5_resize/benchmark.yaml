@@ -1356,4 +1356,14 @@ results:
     timestampt: '2023-07-24 19:24:12'
     type: black
     value: 3.059999942779541
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 41.33 %
+    timestampt: '2023-07-24 19:26:40'
+    type: black
+    value: 18.22812521540363
 short: Perception resize ROS Component.
