@@ -1282,4 +1282,14 @@ results:
     timestampt: '2023-07-24 18:45:01'
     type: grey
     value: 157.245696
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-24 18:47:25'
+    type: grey
+    value: 3.0899999141693115
 short: Perception resize ROS Component.
