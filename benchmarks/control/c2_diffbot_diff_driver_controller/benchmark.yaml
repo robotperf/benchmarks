@@ -119,4 +119,14 @@ results:
     timestampt: '2023-07-21 17:50:39'
     type: grey
     value: 10.03
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA Jetson Nano
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-07-24 08:10:48'
+    type: grey
+    value: 0.0
 short: Differential driver controller
