@@ -1398,4 +1398,15 @@ results:
     timestampt: '2023-07-24 19:37:01'
     type: grey
     value: 214.44
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: latency
+    metric_unit: ms
+    note: Fast-DDS mean_latency 1309.3866764833867, rms_latency 1408.6469681290841,
+      max_latency 2234.292503, min_latency 403.14324, lost messages 37.33 %
+    timestampt: '2023-07-24 19:40:21'
+    type: black
+    value: 2234.292503
 short: Perception resize ROS Component.
