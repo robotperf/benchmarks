@@ -746,5 +746,15 @@ results:
     timestampt: '2023-07-24 17:52:35'
     type: grey
     value: 3.559999942779541
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-24 17:59:47'
+    type: grey
+    value: 3.0899999141693115
 short: Perception computational graph to compute a point cloud using a rectified depth
   image and a rectified color image.
