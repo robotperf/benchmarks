@@ -1363,4 +1363,14 @@ results:
     timestampt: '2023-07-24 16:14:07'
     type: black
     value: 2933.83521
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: power
+    metric_unit: W
+    note: lost messages 50.00 %
+    timestampt: '2023-07-24 16:16:39'
+    type: black
+    value: 3.2300000190734863
 short: Perception computational graph to compute a disparity map for stereo images.
