@@ -1366,4 +1366,15 @@ results:
     timestampt: '2023-07-24 19:26:40'
     type: black
     value: 18.22812521540363
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 126.4740654, rms_benchmark 131.27447100538808, max_benchmark\
+      \ 173.201235, min_benchmark 67.885568, lost messages 0.00 %"
+    timestampt: '2023-07-24 19:31:54'
+    type: grey
+    value: 173.201235
 short: Perception resize ROS Component.
