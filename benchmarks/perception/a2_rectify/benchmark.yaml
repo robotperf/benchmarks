@@ -1485,4 +1485,14 @@ results:
     timestampt: '2023-07-24 15:33:45'
     type: grey
     value: 105.88134199999999
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-24 15:36:07'
+    type: grey
+    value: 3.049999952316284
 short: Perception rectify ROS Component.
