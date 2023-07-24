@@ -1383,4 +1383,15 @@ results:
     timestampt: '2023-07-24 16:19:34'
     type: black
     value: 14.17244565449379
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: latency
+    metric_unit: ms
+    note: Fast-DDS mean_latency 1451.4598928742307, rms_latency 1660.7310059528913,
+      max_latency 2861.762961, min_latency 73.134612, lost messages 48.67 %
+    timestampt: '2023-07-24 16:39:11'
+    type: black
+    value: 2861.762961
 short: Perception computational graph to compute a disparity map for stereo images.
