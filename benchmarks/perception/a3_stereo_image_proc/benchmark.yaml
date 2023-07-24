@@ -1341,4 +1341,15 @@ results:
     timestampt: '2023-07-24 15:53:28'
     type: grey
     value: 3.9700000286102295
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 15.2, rms_benchmark 15.82, max_benchmark 34.14, min_benchmark
+      9.8, lost messages 108.33 %
+    timestampt: '2023-07-24 15:55:52'
+    type: grey
+    value: 34.14
 short: Perception computational graph to compute a disparity map for stereo images.
