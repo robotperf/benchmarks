@@ -119,4 +119,37 @@ results:
     timestampt: '2023-07-21 17:50:39'
     type: grey
     value: 10.03
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA Jetson Nano
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-07-24 08:10:48'
+    type: grey
+    value: 0.0
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA Jetson Nano
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.15753297540983607, rms_benchmark 0.3083908127742882,\
+      \ max_benchmark 2.604661, min_benchmark 0.053334999999999994, lost messages\
+      \ 0.00 %"
+    timestampt: '2023-07-24 08:13:14'
+    type: grey
+    value: 2.604661
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA Jetson Nano
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 10.0, rms_benchmark 10.0, max_benchmark 10.19, min_benchmark\
+      \ 9.82, lost messages 0.00 %"
+    timestampt: '2023-07-24 08:15:37'
+    type: grey
+    value: 10.19
 short: Differential driver controller

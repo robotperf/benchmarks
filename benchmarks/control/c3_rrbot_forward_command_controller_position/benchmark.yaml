@@ -119,4 +119,36 @@ results:
     timestampt: '2023-07-21 18:47:20'
     type: grey
     value: 39111.39
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA Jetson Nano
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.03043539281388777, rms_benchmark 0.031015526416291777,\
+      \ max_benchmark 0.166567, min_benchmark 0.016563, lost messages 0.00 %"
+    timestampt: '2023-07-24 09:39:58'
+    type: grey
+    value: 0.166567
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA Jetson Nano
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-07-24 09:42:22'
+    type: grey
+    value: 0.0
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA Jetson Nano
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 100.01, rms_benchmark 100.02, max_benchmark 116.35,\
+      \ min_benchmark 87.72, lost messages 0.00 %"
+    timestampt: '2023-07-24 09:44:43'
+    type: grey
+    value: 116.35
 short: Forward command controller Position
