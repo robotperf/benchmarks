@@ -118,4 +118,16 @@ results:
     timestampt: '2023-07-21 17:53:03'
     type: grey
     value: 40530.13
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA Jetson Nano
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.0325762216120808, rms_benchmark 0.043266747737856784,\
+      \ max_benchmark 1.990149, min_benchmark 0.016562999999999998, lost messages\
+      \ 0.04 %"
+    timestampt: '2023-07-24 11:13:08'
+    type: grey
+    value: 1.990149
 short: Forward command controller with velocity commands
