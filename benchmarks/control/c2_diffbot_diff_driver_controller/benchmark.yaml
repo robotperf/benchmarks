@@ -164,4 +164,14 @@ results:
     timestampt: '2023-07-24 21:37:32'
     type: grey
     value: 8.686646000000001
+- result:
+    category: edge
+    datasource: simulation
+    hardware: Kria KV260
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-07-24 21:39:51'
+    type: grey
+    value: 3.5199999809265137
 short: Differential driver controller
