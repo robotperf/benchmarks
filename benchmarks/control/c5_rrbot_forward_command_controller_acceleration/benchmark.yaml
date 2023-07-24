@@ -140,4 +140,15 @@ results:
     timestampt: '2023-07-24 12:50:11'
     type: grey
     value: 0.0
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA Jetson Nano
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 100.01, rms_benchmark 100.02, max_benchmark 131.27,\
+      \ min_benchmark 90.59, lost messages 0.04 %"
+    timestampt: '2023-07-24 12:53:20'
+    type: grey
+    value: 131.27
 short: Forward command controller with acceleration commands
