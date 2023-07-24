@@ -185,4 +185,15 @@ results:
     timestampt: '2023-07-24 21:42:14'
     type: grey
     value: 10.01
+- result:
+    category: edge
+    datasource: simulation
+    hardware: Kria KR260
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.09961544008264464, rms_benchmark 0.37533319744221433,\
+      \ max_benchmark 8.048019, min_benchmark 0.073131, lost messages 0.00 %"
+    timestampt: '2023-07-24 22:39:37'
+    type: grey
+    value: 8.048019
 short: Differential driver controller
