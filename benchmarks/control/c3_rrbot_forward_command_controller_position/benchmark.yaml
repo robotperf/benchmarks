@@ -162,4 +162,14 @@ results:
     timestampt: '2023-07-24 22:37:00'
     type: grey
     value: 0.363504
+- result:
+    category: edge
+    datasource: simulation
+    hardware: Kria KV260
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-07-24 22:46:43'
+    type: grey
+    value: 3.359999895095825
 short: Forward command controller Position
