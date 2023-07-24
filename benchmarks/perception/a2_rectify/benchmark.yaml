@@ -1389,4 +1389,15 @@ results:
     timestampt: '2023-07-24 14:25:11'
     type: grey
     value: 3.359999895095825
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.06, rms_benchmark 30.28, max_benchmark 46.75, min_benchmark
+      15.0, lost messages 1.49 %
+    timestampt: '2023-07-24 14:27:38'
+    type: grey
+    value: 46.75
 short: Perception rectify ROS Component.
