@@ -3184,5 +3184,15 @@ results:
     timestampt: '2023-07-24 13:59:39'
     type: grey
     value: 293.61375400000003
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-24 14:09:27'
+    type: grey
+    value: 3.4600000381469727
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
