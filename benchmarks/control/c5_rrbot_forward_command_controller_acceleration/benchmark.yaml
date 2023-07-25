@@ -151,4 +151,15 @@ results:
     timestampt: '2023-07-24 12:53:20'
     type: grey
     value: 131.27
+- result:
+    category: edge
+    datasource: simulation
+    hardware: Kria KV260
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.03631871313294331, rms_benchmark 0.037524251132079925,\
+      \ max_benchmark 0.496105, min_benchmark 0.010331, lost messages 0.04 %"
+    timestampt: '2023-07-25 00:36:52'
+    type: grey
+    value: 0.496105
 short: Forward command controller with acceleration commands
