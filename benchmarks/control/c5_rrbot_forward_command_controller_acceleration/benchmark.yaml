@@ -162,4 +162,14 @@ results:
     timestampt: '2023-07-25 00:36:52'
     type: grey
     value: 0.496105
+- result:
+    category: edge
+    datasource: simulation
+    hardware: Kria KV260
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-07-25 00:39:09'
+    type: grey
+    value: 3.609999895095825
 short: Forward command controller with acceleration commands
