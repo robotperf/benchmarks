@@ -12,153 +12,162 @@ results:
 - result:
     category: workstation
     datasource: perception/image
+    hardware: Intel i7-12700H
     metric: latency
     metric_unit: ms
+    note: mean 14.73 ms, RMS 14.84 ms, max 20.40 ms, min 6.03 ms, throughput bounded
+      to 30fps
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i7-12700H
-    note: 'mean 14.73 ms, RMS 14.84 ms, max 20.40 ms, min 6.03 ms, throughput bounded to 30fps'
-    value: 20.40
+    value: 20.4
 - result:
     category: workstation
     datasource: perception/image
+    hardware: Intel i7-12700H
     metric: power
     metric_unit: W
+    note: throughput bounded to 30fps, estimated with RAPL
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i7-12700H
-    note: 'throughput bounded to 30fps, estimated with RAPL'
     value: 12.46
 - result:
     category: workstation
     datasource: perception/image
+    hardware: "Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE\xAE Perception)"
     metric: latency
     metric_unit: ms
+    note: mean 11.94 ms, RMS 12.06 ms, max 17.47 ms, min 7.41 ms, throughput bounded
+      to 30fps
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE® Perception)
-    note: 'mean 11.94 ms, RMS 12.06 ms, max 17.47 ms, min 7.41 ms, throughput bounded to 30fps'
     value: 17.47
 - result:
     category: workstation
     datasource: perception/image
+    hardware: "Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE\xAE Perception)"
     metric: power
     metric_unit: W
+    note: throughput bounded to 30fps, estimated with RAPL and NVML
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE® Perception)
-    note: 'throughput bounded to 30fps, estimated with RAPL and NVML'
-    value: 39.40
+    value: 39.4
 - result:
     category: workstation
     datasource: perception/image
+    hardware: Intel i7-12700H
     metric: latency
     metric_unit: ms
+    note: mean 66.17 ms, rms 71.71 ms, max 180.26 ms, min 3.92 ms, % frames lost 1.92
+      %. Throughput configured in the 30-500 FPS range. Mean FPS observed 174.432.
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i7-12700H
-    note: 'mean 66.17 ms, rms 71.71 ms, max 180.26 ms, min 3.92 ms, % frames lost 1.92 %. Throughput configured in the 30-500 FPS range. Mean FPS observed 174.432.'
     value: 180.26
 - result:
     category: workstation
     datasource: perception/image
+    hardware: Intel i7-12700H
     metric: power
     metric_unit: W
+    note: Throughput configured in the 30-500 FPS range. Mean FPS observed 174.432.
+      Estimated with RAPL
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i7-12700H
-    note: 'Throughput configured in the 30-500 FPS range. Mean FPS observed 174.432. Estimated with RAPL'
     value: 41.44
 - result:
     category: workstation
     datasource: perception/image
+    hardware: Intel i7-12700H
     metric: throughput
     metric_unit: fps
+    note: Throughput configured in the 30-500 FPS range. Mean FPS observed 174.432.
+      % frames lost 1.92 %
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i7-12700H
-    note: 'Throughput configured in the 30-500 FPS range. Mean FPS observed 174.432. % frames lost 1.92 %'
     value: 174.432
 - result:
     category: workstation
     datasource: perception/image
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060
     metric: latency
     metric_unit: ms
+    note: mean 88.81 ms, rms 101.41 ms, max 197.53 ms, min 3.22 ms, % frames lost
+      3.24 %. Throughput configured in the 30-500 FPS range. Mean FPS observed 220.91.
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060
-    note: 'mean 88.81 ms, rms 101.41 ms, max 197.53 ms, min 3.22 ms, % frames lost 3.24 %. Throughput configured in the 30-500 FPS range. Mean FPS observed 220.91.'
     value: 197.53
 - result:
     category: workstation
     datasource: perception/image
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060
     metric: power
     metric_unit: W
+    note: Estimated with RAPL and NVML. Throughput configured in the 30-500 FPS range.
+      Mean FPS observed 220.91.
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060
-    note: 'Estimated with RAPL and NVML. Throughput configured in the 30-500 FPS range. Mean FPS observed 220.91.'
     value: 42.08
 - result:
     category: workstation
     datasource: perception/image
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060
     metric: throughput
     metric_unit: fps
+    note: Throughput configured in the 30-500 FPS range. Mean FPS observed 220.91.
+      % frames lost 3.24 %
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060
-    note: 'Throughput configured in the 30-500 FPS range. Mean FPS observed 220.91. % frames lost 3.24 %'
     value: 220.91
 - result:
     category: workstation
     datasource: perception/image
+    hardware: Intel i5-13600K
     metric: latency
     metric_unit: ms
+    note: throughput bounded to 30fps
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i5-13600K
-    note: 'throughput bounded to 30fps'
     value: 24.67
 - result:
     category: workstation
     datasource: perception/image
+    hardware: Intel i5-13600K
     metric: power
     metric_unit: W
+    note: throughput bounded to 30fps, estimated with RAPL
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i5-13600K
-    note: 'throughput bounded to 30fps, estimated with RAPL'
     value: 21.37
 - result:
     category: edge
     datasource: perception/image
-    hardware: Kria KR260 (ROBOTCORE® Perception)
+    hardware: "Kria KR260 (ROBOTCORE\xAE Perception)"
     metric: latency
     metric_unit: ms
-    note: 'Leveraging ROBOTCORE® Perception, the Kria KR260 is able to achieve a latency of 66.82 ms.'
+    note: "Leveraging ROBOTCORE\xAE Perception, the Kria KR260 is able to achieve\
+      \ a latency of 66.82 ms."
     timestampt: 14-10-2022
     type: grey
     value: 66.82
 - result:
     category: edge
     datasource: perception/image
-    hardware: Kria KR260 (ROBOTCORE® Perception)
+    hardware: "Kria KR260 (ROBOTCORE\xAE Perception)"
     metric: throughput
     metric_unit: fps
-    note: 'Leveraging ROBOTCORE® Perception.'
+    note: "Leveraging ROBOTCORE\xAE Perception."
     timestampt: 14-10-2022
     type: grey
-    value: 30.00
+    value: 30.0
 - result:
     category: edge
     datasource: perception/image
-    hardware: Kria KR260 (ROBOTCORE® Perception)
+    hardware: "Kria KR260 (ROBOTCORE\xAE Perception)"
     metric: power
     metric_unit: W
-    note: 'Leveraging ROBOTCORE® Perception.'
+    note: "Leveraging ROBOTCORE\xAE Perception."
     timestampt: 14-10-2022
     type: grey
-    value: 7.05    
+    value: 7.05
 - result:
     category: edge
     datasource: perception/image
@@ -2315,7 +2324,7 @@ results:
     note: lost messages 60.67 %
     timestampt: '2023-07-05 22:12:50'
     type: black
-    value: 0
+    value: 0.0
 - result:
     category: edge
     datasource: perception/image
@@ -3164,5 +3173,69 @@ results:
     timestampt: '2023-07-06 09:37:42'
     type: black
     value: 29.660449255611734
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 183.72465275, rms_benchmark 213.68157493975468, max_benchmark\
+      \ 293.61375400000003, min_benchmark 66.924984, lost messages 0.00 %"
+    timestampt: '2023-07-24 13:59:39'
+    type: grey
+    value: 293.61375400000003
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-24 14:09:27'
+    type: grey
+    value: 3.4600000381469727
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 72.42, rms_benchmark 117.38, max_benchmark 202.98,\
+      \ min_benchmark 3.29, lost messages 0.00 %"
+    timestampt: '2023-07-24 14:11:54'
+    type: grey
+    value: 202.98
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 182.62679403125, rms_benchmark 185.17181854350687, max_benchmark
+      307.8152, min_benchmark 139.811312, lost messages 112.50 %
+    timestampt: '2023-07-24 14:17:47'
+    type: grey
+    value: 307.8152
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-24 14:20:19'
+    type: grey
+    value: 4.880000114440918
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 16.54, rms_benchmark 17.98, max_benchmark 34.5, min_benchmark
+      4.29, lost messages 112.50 %
+    timestampt: '2023-07-24 14:30:06'
+    type: grey
+    value: 34.5
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.

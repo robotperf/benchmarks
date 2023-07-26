@@ -86,4 +86,134 @@ results:
     timestampt: '2023-07-20 14:39:15'
     type: grey
     value: 100.86
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.012688248354693453, rms_benchmark 0.013911629579628325,\
+      \ max_benchmark 0.129058, min_benchmark 0.0017919999999999998, lost messages\
+      \ 0.07 %"
+    timestampt: '2023-07-21 17:04:20'
+    type: grey
+    value: 0.129058
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-07-21 17:28:55'
+    type: grey
+    value: 11.005424499511719
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 1625.22, rms_benchmark 7098.91, max_benchmark 39111.39,\
+      \ min_benchmark 0.35, lost messages 0.07 %"
+    timestampt: '2023-07-21 18:47:20'
+    type: grey
+    value: 39111.39
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA Jetson Nano
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.03043539281388777, rms_benchmark 0.031015526416291777,\
+      \ max_benchmark 0.166567, min_benchmark 0.016563, lost messages 0.00 %"
+    timestampt: '2023-07-24 09:39:58'
+    type: grey
+    value: 0.166567
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA Jetson Nano
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-07-24 09:42:22'
+    type: grey
+    value: 0.0
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA Jetson Nano
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 100.01, rms_benchmark 100.02, max_benchmark 116.35,\
+      \ min_benchmark 87.72, lost messages 0.00 %"
+    timestampt: '2023-07-24 09:44:43'
+    type: grey
+    value: 116.35
+- result:
+    category: edge
+    datasource: simulation
+    hardware: Kria KV260
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.03608016535433071, rms_benchmark 0.03650452117458101,\
+      \ max_benchmark 0.363504, min_benchmark 0.01086, lost messages 0.02 %"
+    timestampt: '2023-07-24 22:37:00'
+    type: grey
+    value: 0.363504
+- result:
+    category: edge
+    datasource: simulation
+    hardware: Kria KV260
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-07-24 22:46:43'
+    type: grey
+    value: 3.359999895095825
+- result:
+    category: edge
+    datasource: simulation
+    hardware: Kria KV260
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 100.0, rms_benchmark 100.0, max_benchmark 124.39,\
+      \ min_benchmark 83.64, lost messages 0.02 %"
+    timestampt: '2023-07-24 22:49:16'
+    type: grey
+    value: 124.39
+- result:
+    category: edge
+    datasource: simulation
+    hardware: Kria KR260
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.05087436282801995, rms_benchmark 0.055017706254678896,\
+      \ max_benchmark 0.263374, min_benchmark 0.011219999999999999, lost messages\
+      \ 0.00 %"
+    timestampt: '2023-07-25 00:27:02'
+    type: grey
+    value: 0.263374
+- result:
+    category: edge
+    datasource: simulation
+    hardware: Kria KR260
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-07-25 00:29:17'
+    type: grey
+    value: 3.549999952316284
+- result:
+    category: edge
+    datasource: simulation
+    hardware: Kria KR260
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 100.0, rms_benchmark 100.0, max_benchmark 104.27,\
+      \ min_benchmark 96.03, lost messages 0.00 %"
+    timestampt: '2023-07-25 00:31:46'
+    type: grey
+    value: 104.27
 short: Forward command controller Position

@@ -86,4 +86,36 @@ results:
     timestampt: '2023-07-20 14:18:49'
     type: grey
     value: 10.01
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.20849618525896416, rms_benchmark 0.236222650035889,\
+      \ max_benchmark 1.472075, min_benchmark 0.025216, lost messages 0.20 %"
+    timestampt: '2023-07-21 16:59:11'
+    type: grey
+    value: 1.472075
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-07-21 17:24:12'
+    type: grey
+    value: 10.891936302185059
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 10.0, rms_benchmark 10.0, max_benchmark 10.03, min_benchmark\
+      \ 9.98, lost messages 0.20 %"
+    timestampt: '2023-07-21 17:48:23'
+    type: grey
+    value: 10.03
 short: Joint trajectory controller

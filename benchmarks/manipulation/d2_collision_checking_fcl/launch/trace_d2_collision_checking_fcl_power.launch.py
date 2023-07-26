@@ -26,6 +26,8 @@
 # Based on xarm_ros2
 # https://github.com/xArm-Developer/xarm_ros2/blob/humble/xarm_moveit_config/launch/xarm6_moveit_fake.launch.py
 
+import os
+POWER_LIB = os.environ.get('POWER_LIB')
 
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, RegisterEventHandler, EmitEvent
@@ -41,9 +43,6 @@ from tracetools_launch.action import Trace
 from tracetools_trace.tools.names import DEFAULT_EVENTS_ROS
 from tracetools_trace.tools.names import DEFAULT_EVENTS_KERNEL
 from tracetools_trace.tools.names import DEFAULT_CONTEXT
-
-import os
-POWER_LIB = os.environ.get('POWER_LIB')
 
 def generate_launch_description():
     prefix = LaunchConfiguration('prefix', default='')
@@ -104,7 +103,7 @@ def generate_launch_description():
     )
 
     trace = Trace(
-        session_name="d1_xarm6_planning_and_traj_execution",
+        session_name="d2_collision_checking_fcl",
         events_ust=[
             "ros2:*",
             "robotcore_manipulation:*",
@@ -125,7 +124,7 @@ def generate_launch_description():
     xarm6_manipulation_benchmarks = Node(
         package='robotcore_manipulation_moveit2',
         executable='xarm6_manipulation_benchmarks',
-        arguments=['d1'],
+        arguments=['d2'],
         output='screen'
     )
 

@@ -10,52 +10,54 @@ results:
 - result:
     category: workstation
     datasource: perception/image
+    hardware: Intel i7-12700H
     metric: latency
     metric_unit: ms
+    note: mean 5.41 ms, rms 5.85 ms, max 9.23 ms, min 1.38 ms, lost 0.00 %, throughput
+      bounded to 30fps
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i7-12700H
-    note: 'mean 5.41 ms, rms 5.85 ms, max 9.23 ms, min 1.38 ms, lost 0.00 %, throughput bounded to 30fps'
     value: 9.23
 - result:
     category: workstation
     datasource: perception/image
+    hardware: Intel i7-12700H
     metric: power
     metric_unit: W
+    note: lost 0.00 %, throughput bounded to 30fps
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i7-12700H    
-    note: 'lost 0.00 %, throughput bounded to 30fps'
     value: 20.84
 - result:
     category: workstation
     datasource: perception/image
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060
     metric: latency
     metric_unit: ms
+    note: mean 7.87 ms, rms 8.06 ms, max 14.76 ms, min 3.38 ms, lost 0.00 %, throughput
+      bounded to 30fps
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060
-    note: 'mean 7.87 ms, rms 8.06 ms, max 14.76 ms, min 3.38 ms, lost 0.00 %, throughput bounded to 30fps'
     value: 14.76
 - result:
     category: workstation
     datasource: perception/image
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060
     metric: power
     metric_unit: W
+    note: lost 0.00 %, throughput bounded to 30fps
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060    
-    note: 'lost 0.00 %, throughput bounded to 30fps'
     value: 42.68
 - result:
     category: workstation
     datasource: perception/image
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060
     metric: throughput
     metric_unit: fps
+    note: mean 106.80 ms, rms 122.48 ms, max 243.64 ms, min 3.82 ms, lost 4.06 %
     timestampt: 07-07-2023
     type: black
-    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060
-    note: 'mean 106.80 ms, rms 122.48 ms, max 243.64 ms, min 3.82 ms, lost 4.06 %'
     value: 255.533
 - result:
     category: edge
@@ -1130,4 +1132,420 @@ results:
     timestampt: '2023-07-06 07:30:01'
     type: black
     value: 30.20542848714937
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 11.200943333333331, rms_benchmark 11.408252700483262,\
+      \ max_benchmark 16.127288, min_benchmark 4.7902629999999995, lost messages 0.00\
+      \ %"
+    timestampt: '2023-07-21 15:10:18'
+    type: grey
+    value: 16.127288
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA Jetson Nano
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 13.780262338235293, rms_benchmark 14.131039616035181, max_benchmark
+      37.951399, min_benchmark 11.80751, lost messages 0.00 %
+    timestampt: '2023-07-21 16:05:57'
+    type: grey
+    value: 37.951399
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 14.418539749999997, rms_benchmark 14.662834465467691, max_benchmark
+      19.877356, min_benchmark 5.034556, lost messages 0.00 %
+    timestampt: '2023-07-21 16:13:13'
+    type: grey
+    value: 19.877356
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA Jetson Nano
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-21 16:20:24'
+    type: grey
+    value: 0.0
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-21 16:25:16'
+    type: grey
+    value: 11.570393562316895
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA Jetson Nano
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.1, rms_benchmark 30.12, max_benchmark 33.33, min_benchmark
+      27.64, lost messages 0.00 %
+    timestampt: '2023-07-21 16:34:46'
+    type: grey
+    value: 33.33
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.13, rms_benchmark 30.19, max_benchmark 35.67, min_benchmark
+      26.22, lost messages 0.00 %
+    timestampt: '2023-07-21 16:37:06'
+    type: grey
+    value: 35.67
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA Jetson Nano
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 23.18656178947368, rms_benchmark 26.242473833386374,\
+      \ max_benchmark 64.179151, min_benchmark 11.341195999999998, lost messages 0.00\
+      \ %"
+    timestampt: '2023-07-21 16:49:14'
+    type: grey
+    value: 64.179151
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA Jetson Nano
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-21 17:11:34'
+    type: grey
+    value: 0.0
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-21 17:14:22'
+    type: grey
+    value: 11.059441566467285
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 28.49, rms_benchmark 29.31, max_benchmark 38.77,\
+      \ min_benchmark 4.2, lost messages 0.00 %"
+    timestampt: '2023-07-21 17:38:45'
+    type: grey
+    value: 38.77
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA Jetson Nano
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 68.76, rms_benchmark 101.23, max_benchmark 375.61,\
+      \ min_benchmark 9.03, lost messages 0.00 %"
+    timestampt: '2023-07-21 17:41:08'
+    type: grey
+    value: 375.61
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: latency
+    metric_unit: ms
+    note: mean_latency 15.343143980000004, rms_latency 15.524577340240251, max_latency
+      22.714836, min_latency 7.671293, lost messages 0.00 %
+    timestampt: '2023-07-21 18:00:31'
+    type: black
+    value: 22.714836
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: latency
+    metric_unit: ms
+    note: Fast-DDS mean_latency 13.264798849333332, rms_latency 13.38312903517522,
+      max_latency 18.873035, min_latency 6.331472, lost messages 0.00 %
+    timestampt: '2023-07-21 18:03:08'
+    type: black
+    value: 18.873035
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA Jetson Nano
+    metric: latency
+    metric_unit: ms
+    note: Fast-DDS mean_latency 14.995997777333333, rms_latency 15.044918874695934,
+      max_latency 20.232629, min_latency 11.910738, lost messages 0.00 %
+    timestampt: '2023-07-21 18:05:26'
+    type: black
+    value: 20.232629
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA Jetson Nano
+    metric: power
+    metric_unit: W
+    note: lost messages 0.00 %
+    timestampt: '2023-07-21 18:22:33'
+    type: black
+    value: 0.0
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: power
+    metric_unit: W
+    note: lost messages 0.00 %
+    timestampt: '2023-07-21 18:24:52'
+    type: black
+    value: 11.315988159179687
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 0.00 %
+    timestampt: '2023-07-21 18:37:07'
+    type: black
+    value: 30.195955813100717
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: NVIDIA Jetson Nano
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 0.00 %
+    timestampt: '2023-07-21 18:39:44'
+    type: black
+    value: 30.213658880836114
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 66.20903820000001, rms_benchmark 68.38418692433405,\
+      \ max_benchmark 92.61247900000001, min_benchmark 32.651871, lost messages 20.00\
+      \ %"
+    timestampt: '2023-07-24 14:02:02'
+    type: grey
+    value: 92.61247900000001
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-24 14:04:41'
+    type: grey
+    value: 3.2300000190734863
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 66.26, rms_benchmark 94.04, max_benchmark 228.65,\
+      \ min_benchmark 16.78, lost messages 20.00 %"
+    timestampt: '2023-07-24 14:07:04'
+    type: grey
+    value: 228.65
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 44.174261134328354, rms_benchmark 62.69256713044546, max_benchmark
+      202.990591, min_benchmark 20.773719, lost messages 1.49 %
+    timestampt: '2023-07-24 14:22:42'
+    type: grey
+    value: 202.990591
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-24 14:25:11'
+    type: grey
+    value: 3.359999895095825
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.06, rms_benchmark 30.28, max_benchmark 46.75, min_benchmark
+      15.0, lost messages 1.49 %
+    timestampt: '2023-07-24 14:27:38'
+    type: grey
+    value: 46.75
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: latency
+    metric_unit: ms
+    note: mean_latency 25.800186132, rms_latency 25.83864579178976, max_latency 36.957962,
+      min_latency 22.554599, lost messages 0.00 %
+    timestampt: '2023-07-24 14:43:35'
+    type: black
+    value: 36.957962
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: power
+    metric_unit: W
+    note: lost messages 0.00 %
+    timestampt: '2023-07-24 14:46:02'
+    type: black
+    value: 3.9540000915527345
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 0.00 %
+    timestampt: '2023-07-24 14:48:28'
+    type: black
+    value: 30.213882003078595
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: latency
+    metric_unit: ms
+    note: Fast-DDS mean_latency 19.86409408933333, rms_latency 19.90206589054597,
+      max_latency 28.935423, min_latency 17.97328, lost messages 0.00 %
+    timestampt: '2023-07-24 15:03:33'
+    type: black
+    value: 28.935423
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 65.96616692857143, rms_benchmark 74.23774125664279,\
+      \ max_benchmark 143.909518, min_benchmark 32.150071, lost messages 0.00 %"
+    timestampt: '2023-07-24 15:12:14'
+    type: grey
+    value: 143.909518
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-24 15:14:54'
+    type: grey
+    value: 3.1700000762939453
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 66.35, rms_benchmark 90.87, max_benchmark 217.98,\
+      \ min_benchmark 6.57, lost messages 0.00 %"
+    timestampt: '2023-07-24 15:17:46'
+    type: grey
+    value: 217.98
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 29.104391191176465, rms_benchmark 34.97386411385136, max_benchmark
+      105.88134199999999, min_benchmark 19.397658, lost messages 0.00 %
+    timestampt: '2023-07-24 15:33:45'
+    type: grey
+    value: 105.88134199999999
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-24 15:36:07'
+    type: grey
+    value: 3.049999952316284
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 30.27, rms_benchmark 30.37, max_benchmark 40.44, min_benchmark
+      23.34, lost messages 0.00 %
+    timestampt: '2023-07-24 15:38:35'
+    type: grey
+    value: 40.44
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: latency
+    metric_unit: ms
+    note: mean_latency 25.339815001333335, rms_latency 25.37012796999186, max_latency
+      42.346125, min_latency 23.351751, lost messages 0.00 %
+    timestampt: '2023-07-24 15:48:32'
+    type: black
+    value: 42.346125
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: power
+    metric_unit: W
+    note: lost messages 0.00 %
+    timestampt: '2023-07-24 15:58:11'
+    type: black
+    value: 3.744000053405762
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 0.00 %
+    timestampt: '2023-07-24 16:00:44'
+    type: black
+    value: 30.211961294935314
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: latency
+    metric_unit: ms
+    note: Fast-DDS mean_latency 22.775299647999997, rms_latency 22.845523345266248,
+      max_latency 30.181252, min_latency 18.302495, lost messages 0.00 %
+    timestampt: '2023-07-24 16:07:25'
+    type: black
+    value: 30.181252
 short: Perception rectify ROS Component.

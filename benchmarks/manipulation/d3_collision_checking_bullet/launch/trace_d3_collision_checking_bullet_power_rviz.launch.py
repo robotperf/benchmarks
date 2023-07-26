@@ -26,24 +26,23 @@
 # Based on xarm_ros2
 # https://github.com/xArm-Developer/xarm_ros2/blob/humble/xarm_moveit_config/launch/xarm6_moveit_fake.launch.py
 
+import os
+POWER_LIB = os.environ.get('POWER_LIB')
 
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, RegisterEventHandler, EmitEvent
+from launch.actions import IncludeLaunchDescription, RegisterEventHandler, EmitEvent, TimerAction
 from launch_ros.actions import Node, ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
-from launch.event_handlers import OnProcessExit
+from launch.event_handlers import OnProcessExit, OnExecutionComplete
 from launch.events import Shutdown
 
 from tracetools_launch.action import Trace
 from tracetools_trace.tools.names import DEFAULT_EVENTS_ROS
 from tracetools_trace.tools.names import DEFAULT_EVENTS_KERNEL
 from tracetools_trace.tools.names import DEFAULT_CONTEXT
-
-import os
-POWER_LIB = os.environ.get('POWER_LIB')
 
 def generate_launch_description():
     prefix = LaunchConfiguration('prefix', default='')
@@ -69,7 +68,7 @@ def generate_launch_description():
     geometry_mesh_tcp_xyz = LaunchConfiguration('geometry_mesh_tcp_xyz', default='"0 0 0"')
     geometry_mesh_tcp_rpy = LaunchConfiguration('geometry_mesh_tcp_rpy', default='"0 0 0"')
 
-    start_rviz = LaunchConfiguration('start_rviz', default='False')
+    start_rviz = LaunchConfiguration('start_rviz', default='True')
 
     # robot moveit fake launch
     # xarm_moveit_config/launch/_robot_moveit_fake.launch.py
@@ -104,7 +103,7 @@ def generate_launch_description():
     )
 
     trace = Trace(
-        session_name="d1_xarm6_planning_and_traj_execution",
+        session_name="d3_collision_checking_bullet",
         events_ust=[
             "ros2:*",
             "robotcore_manipulation:*",
@@ -121,18 +120,6 @@ def generate_launch_description():
         # events_kernel=DEFAULT_EVENTS_KERNEL,
         # context_names=DEFAULT_CONTEXT,
     )
-
-    xarm6_manipulation_benchmarks = Node(
-        package='robotcore_manipulation_moveit2',
-        executable='xarm6_manipulation_benchmarks',
-        arguments=['d1'],
-        output='screen'
-    )
-
-    shutdown_after_benchmark = RegisterEventHandler(event_handler=OnProcessExit(
-            target_action=xarm6_manipulation_benchmarks,
-            on_exit=[EmitEvent(event=Shutdown())]
-    ))
 
     power_container = ComposableNodeContainer(
         name="power_container",
@@ -154,11 +141,29 @@ def generate_launch_description():
         ],
         output="screen",
     )
+
+    xarm6_manipulation_benchmarks = Node(
+        package='robotcore_manipulation_moveit2',
+        executable='xarm6_manipulation_benchmarks',
+        arguments=['d3'],
+        output='screen'
+    )
+
+    # Allow RViz to completely launch before running the benchmark
+    delay_xarm6_manipulation_benchmarks = TimerAction(
+        period=5.0,
+        actions=[xarm6_manipulation_benchmarks],
+    )
+
+    shutdown_after_benchmark = RegisterEventHandler(event_handler=OnProcessExit(
+            target_action=xarm6_manipulation_benchmarks,
+            on_exit=[EmitEvent(event=Shutdown())]
+    ))
     
     return LaunchDescription([
         robot_moveit_fake_launch,
         trace,
-        xarm6_manipulation_benchmarks,
+        delay_xarm6_manipulation_benchmarks,
         shutdown_after_benchmark,
         power_container
     ])

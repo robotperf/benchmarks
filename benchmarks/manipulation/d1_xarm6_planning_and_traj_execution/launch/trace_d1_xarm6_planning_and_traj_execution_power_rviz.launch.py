@@ -26,9 +26,11 @@
 # Based on xarm_ros2
 # https://github.com/xArm-Developer/xarm_ros2/blob/humble/xarm_moveit_config/launch/xarm6_moveit_fake.launch.py
 
+import os
+POWER_LIB = os.environ.get('POWER_LIB')
 
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, RegisterEventHandler, EmitEvent
+from launch.actions import IncludeLaunchDescription, RegisterEventHandler, EmitEvent, TimerAction
 from launch_ros.actions import Node, ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
 from launch.launch_description_sources import PythonLaunchDescriptionSource
@@ -42,8 +44,7 @@ from tracetools_trace.tools.names import DEFAULT_EVENTS_ROS
 from tracetools_trace.tools.names import DEFAULT_EVENTS_KERNEL
 from tracetools_trace.tools.names import DEFAULT_CONTEXT
 
-import os
-POWER_LIB = os.environ.get('POWER_LIB')
+
 
 def generate_launch_description():
     prefix = LaunchConfiguration('prefix', default='')
@@ -69,7 +70,7 @@ def generate_launch_description():
     geometry_mesh_tcp_xyz = LaunchConfiguration('geometry_mesh_tcp_xyz', default='"0 0 0"')
     geometry_mesh_tcp_rpy = LaunchConfiguration('geometry_mesh_tcp_rpy', default='"0 0 0"')
 
-    start_rviz = LaunchConfiguration('start_rviz', default='False')
+    start_rviz = LaunchConfiguration('start_rviz', default='True')
 
     # robot moveit fake launch
     # xarm_moveit_config/launch/_robot_moveit_fake.launch.py
@@ -129,6 +130,12 @@ def generate_launch_description():
         output='screen'
     )
 
+    # Allow RViz to completely launch before running the benchmark
+    delay_xarm6_manipulation_benchmarks = TimerAction(
+        period=5.0,
+        actions=[xarm6_manipulation_benchmarks],
+    )
+
     shutdown_after_benchmark = RegisterEventHandler(event_handler=OnProcessExit(
             target_action=xarm6_manipulation_benchmarks,
             on_exit=[EmitEvent(event=Shutdown())]
@@ -158,7 +165,7 @@ def generate_launch_description():
     return LaunchDescription([
         robot_moveit_fake_launch,
         trace,
-        xarm6_manipulation_benchmarks,
+        delay_xarm6_manipulation_benchmarks,
         shutdown_after_benchmark,
         power_container
     ])

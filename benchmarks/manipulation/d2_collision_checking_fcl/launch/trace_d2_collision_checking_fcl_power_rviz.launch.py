@@ -30,20 +30,19 @@ import os
 POWER_LIB = os.environ.get('POWER_LIB')
 
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription, RegisterEventHandler
+from launch.actions import IncludeLaunchDescription, RegisterEventHandler, EmitEvent, TimerAction
 from launch_ros.actions import Node, ComposableNodeContainer
 from launch_ros.descriptions import ComposableNode
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
-from launch.event_handlers import OnProcessExit
+from launch.event_handlers import OnProcessExit, OnExecutionComplete
+from launch.events import Shutdown
 
 from tracetools_launch.action import Trace
 from tracetools_trace.tools.names import DEFAULT_EVENTS_ROS
 from tracetools_trace.tools.names import DEFAULT_EVENTS_KERNEL
 from tracetools_trace.tools.names import DEFAULT_CONTEXT
-
-
 
 def generate_launch_description():
     prefix = LaunchConfiguration('prefix', default='')
@@ -104,7 +103,7 @@ def generate_launch_description():
     )
 
     trace = Trace(
-        session_name="d1_xarm6_planning_and_traj_execution",
+        session_name="xarm6_moveit_fake",
         events_ust=[
             "ros2:*",
             "robotcore_manipulation:*",
@@ -120,22 +119,6 @@ def generate_launch_description():
         },
         # events_kernel=DEFAULT_EVENTS_KERNEL,
         # context_names=DEFAULT_CONTEXT,
-    )
-
-    composable_node_container = ComposableNodeContainer(
-        name="container",
-        namespace="",
-        package="rclcpp_components",
-        executable="component_container",
-        composable_node_descriptions=[
-            ComposableNode(
-                package="robotcore_manipulation_moveit2",
-                plugin="xarm6_plan_and_execute::XArm6PlanAndExecuteNode",
-                name="xarm6_plan_and_execute",
-                extra_arguments=[{"use_intra_process_comms": True}],
-            )
-        ],
-        output="screen",
     )
 
     power_container = ComposableNodeContainer(
@@ -158,7 +141,29 @@ def generate_launch_description():
         ],
         output="screen",
     )
-    
-    return LaunchDescription(
-        [robot_moveit_fake_launch] + [trace] + [composable_node_container] + [power_container]
+
+    xarm6_manipulation_benchmarks = Node(
+        package='robotcore_manipulation_moveit2',
+        executable='xarm6_manipulation_benchmarks',
+        arguments=['d2'],
+        output='screen'
     )
+
+    # Allow RViz to completely launch before running the benchmark
+    delay_xarm6_manipulation_benchmarks = TimerAction(
+        period=5.0,
+        actions=[xarm6_manipulation_benchmarks],
+    )
+
+    shutdown_after_benchmark = RegisterEventHandler(event_handler=OnProcessExit(
+            target_action=xarm6_manipulation_benchmarks,
+            on_exit=[EmitEvent(event=Shutdown())]
+    ))
+    
+    return LaunchDescription([
+        robot_moveit_fake_launch,
+        trace,
+        delay_xarm6_manipulation_benchmarks,
+        shutdown_after_benchmark,
+        power_container
+    ])
