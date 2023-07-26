@@ -18,36 +18,4 @@ results:
     timestampt: 08-07-2023
     type: grey
     value: 0.55
-- result:
-    category: workstation
-    datasource: simulation
-    hardware: Intel i7-8700K
-    metric: latency
-    metric_unit: ms
-    note: "\u270Bmean_benchmark 8976.650255, rms_benchmark 9476.712474007052, max_benchmark\
-      \ 12340.02087, min_benchmark 4980.327211000001, lost messages 0.00 %"
-    timestampt: '2023-07-20 15:04:32'
-    type: grey
-    value: 12340.02087
-- result:
-    category: workstation
-    datasource: simulation
-    hardware: Intel i7-8700K
-    metric: power
-    metric_unit: W
-    note: "\u270B"
-    timestampt: '2023-07-20 15:07:48'
-    type: grey
-    value: 6.039312362670898
-- result:
-    category: workstation
-    datasource: simulation
-    hardware: Intel i7-8700K
-    metric: throughput
-    metric_unit: fps
-    note: "\u270Bmean_benchmark 0.0, rms_benchmark 0.0, max_benchmark 0.0, min_benchmark\
-      \ 0.0, lost messages 0.00 %"
-    timestampt: '2023-07-20 15:11:05'
-    type: grey
-    value: 0.0
-short: xArm6 planning and trajectory execution
+short: Collision checking between xArm6 and a box using FCL library.
