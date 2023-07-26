@@ -152,4 +152,69 @@ results:
     timestampt: '2023-07-24 08:15:37'
     type: grey
     value: 10.19
+- result:
+    category: edge
+    datasource: simulation
+    hardware: Kria KV260
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.1016960552016985, rms_benchmark 0.40903048302745487,\
+      \ max_benchmark 8.686646000000001, min_benchmark 0.07356, lost messages 0.00\
+      \ %"
+    timestampt: '2023-07-24 21:37:32'
+    type: grey
+    value: 8.686646000000001
+- result:
+    category: edge
+    datasource: simulation
+    hardware: Kria KV260
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-07-24 21:39:51'
+    type: grey
+    value: 3.5199999809265137
+- result:
+    category: edge
+    datasource: simulation
+    hardware: Kria KV260
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 10.0, rms_benchmark 10.0, max_benchmark 10.01, min_benchmark\
+      \ 9.99, lost messages 0.00 %"
+    timestampt: '2023-07-24 21:42:14'
+    type: grey
+    value: 10.01
+- result:
+    category: edge
+    datasource: simulation
+    hardware: Kria KR260
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.09961544008264464, rms_benchmark 0.37533319744221433,\
+      \ max_benchmark 8.048019, min_benchmark 0.073131, lost messages 0.00 %"
+    timestampt: '2023-07-24 22:39:37'
+    type: grey
+    value: 8.048019
+- result:
+    category: edge
+    datasource: simulation
+    hardware: Kria KR260
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-07-24 22:42:01'
+    type: grey
+    value: 3.740000009536743
+- result:
+    category: edge
+    datasource: simulation
+    hardware: Kria KR260
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 10.0, rms_benchmark 10.0, max_benchmark 10.0, min_benchmark\
+      \ 10.0, lost messages 0.00 %"
+    timestampt: '2023-07-24 22:44:25'
+    type: grey
+    value: 10.0
 short: Differential driver controller

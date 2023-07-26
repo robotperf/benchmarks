@@ -1287,4 +1287,121 @@ results:
     timestampt: '2023-07-21 18:34:38'
     type: black
     value: 17.421949626337533
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 133.82940217041053, rms_benchmark 136.0694606563822,\
+      \ max_benchmark 423.716119, min_benchmark 60.328526000000004, lost messages\
+      \ 0.00 %"
+    timestampt: '2023-07-24 15:26:15'
+    type: grey
+    value: 423.716119
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-24 15:28:37'
+    type: grey
+    value: 3.369999885559082
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 7.47, rms_benchmark 8.5, max_benchmark 112.77, min_benchmark\
+      \ 3.28, lost messages 0.00 %"
+    timestampt: '2023-07-24 15:31:04'
+    type: grey
+    value: 112.77
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 222.62721958333336, rms_benchmark 222.95085706519268, max_benchmark
+      243.683562, min_benchmark 197.702725, lost messages 108.33 %
+    timestampt: '2023-07-24 15:51:07'
+    type: grey
+    value: 243.683562
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-24 15:53:28'
+    type: grey
+    value: 3.9700000286102295
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 15.2, rms_benchmark 15.82, max_benchmark 34.14, min_benchmark
+      9.8, lost messages 108.33 %
+    timestampt: '2023-07-24 15:55:52'
+    type: grey
+    value: 34.14
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: latency
+    metric_unit: ms
+    note: mean_latency 1486.575719141349, rms_latency 1701.986186261744, max_latency
+      2933.83521, min_latency 76.617939, lost messages 50.00 %
+    timestampt: '2023-07-24 16:14:07'
+    type: black
+    value: 2933.83521
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: power
+    metric_unit: W
+    note: lost messages 50.00 %
+    timestampt: '2023-07-24 16:16:39'
+    type: black
+    value: 3.2300000190734863
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 50.00 %
+    timestampt: '2023-07-24 16:19:34'
+    type: black
+    value: 14.17244565449379
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: latency
+    metric_unit: ms
+    note: Fast-DDS mean_latency 1451.4598928742307, rms_latency 1660.7310059528913,
+      max_latency 2861.762961, min_latency 73.134612, lost messages 48.67 %
+    timestampt: '2023-07-24 16:39:11'
+    type: black
+    value: 2861.762961
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-24 16:44:49'
+    type: grey
+    value: 3.059999942779541
 short: Perception computational graph to compute a disparity map for stereo images.

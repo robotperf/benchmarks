@@ -1270,4 +1270,206 @@ results:
     timestampt: '2023-07-21 18:44:57'
     type: black
     value: 0.0
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 135.05602549999998, rms_benchmark 136.69634079127712,\
+      \ max_benchmark 157.245696, min_benchmark 83.84622100000001, lost messages 37.50\
+      \ %"
+    timestampt: '2023-07-24 18:45:01'
+    type: grey
+    value: 157.245696
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-24 18:47:25'
+    type: grey
+    value: 3.0899999141693115
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 18.07, rms_benchmark 19.27, max_benchmark 25.29,\
+      \ min_benchmark 2.58, lost messages 37.50 %"
+    timestampt: '2023-07-24 18:49:44'
+    type: grey
+    value: 25.29
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 295.83793347619047, rms_benchmark 306.43506353167953, max_benchmark
+      374.1884840000001, min_benchmark 115.79734400000001, lost messages 223.81 %
+    timestampt: '2023-07-24 19:03:20'
+    type: grey
+    value: 374.1884840000001
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-24 19:05:43'
+    type: grey
+    value: 3.0799999237060547
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 18.5, rms_benchmark 21.29, max_benchmark 34.83, min_benchmark
+      1.9, lost messages 223.81 %
+    timestampt: '2023-07-24 19:08:02'
+    type: grey
+    value: 34.83
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: latency
+    metric_unit: ms
+    note: mean_latency 1427.7203067418566, rms_latency 1538.3138145051448, max_latency
+      2437.400464, min_latency 397.588729, lost messages 41.33 %
+    timestampt: '2023-07-24 19:21:50'
+    type: black
+    value: 2437.400464
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: power
+    metric_unit: W
+    note: lost messages 41.33 %
+    timestampt: '2023-07-24 19:24:12'
+    type: black
+    value: 3.059999942779541
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 41.33 %
+    timestampt: '2023-07-24 19:26:40'
+    type: black
+    value: 18.22812521540363
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: latency
+    metric_unit: ms
+    note: "\u270B mean_benchmark 126.4740654, rms_benchmark 131.27447100538808, max_benchmark\
+      \ 173.201235, min_benchmark 67.885568, lost messages 0.00 %"
+    timestampt: '2023-07-24 19:31:54'
+    type: grey
+    value: 173.201235
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-07-24 19:34:37'
+    type: grey
+    value: 3.440000057220459
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 62.02, rms_benchmark 107.76, max_benchmark 214.44,\
+      \ min_benchmark 6.64, lost messages 0.00 %"
+    timestampt: '2023-07-24 19:37:01'
+    type: grey
+    value: 214.44
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KV260
+    metric: latency
+    metric_unit: ms
+    note: Fast-DDS mean_latency 1309.3866764833867, rms_latency 1408.6469681290841,
+      max_latency 2234.292503, min_latency 403.14324, lost messages 37.33 %
+    timestampt: '2023-07-24 19:40:21'
+    type: black
+    value: 2234.292503
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: latency
+    metric_unit: ms
+    note: mean_benchmark 304.21905699999996, rms_benchmark 314.1356238045953, max_benchmark
+      375.28024999999997, min_benchmark 139.367793, lost messages 353.33 %
+    timestampt: '2023-07-24 19:51:13'
+    type: grey
+    value: 375.28024999999997
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: power
+    metric_unit: W
+    note: ''
+    timestampt: '2023-07-24 19:53:38'
+    type: grey
+    value: 3.240000009536743
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: throughput
+    metric_unit: fps
+    note: mean_benchmark 18.62, rms_benchmark 22.52, max_benchmark 37.82, min_benchmark
+      1.2, lost messages 353.33 %
+    timestampt: '2023-07-24 19:56:10'
+    type: grey
+    value: 37.82
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: latency
+    metric_unit: ms
+    note: mean_latency 1665.3133597113992, rms_latency 1764.734554427403, max_latency
+      2888.078617, min_latency 403.878564, lost messages 44.67 %
+    timestampt: '2023-07-24 20:12:43'
+    type: black
+    value: 2888.078617
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: power
+    metric_unit: W
+    note: lost messages 44.67 %
+    timestampt: '2023-07-24 20:15:07'
+    type: black
+    value: 3.2480000019073487
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260
+    metric: throughput
+    metric_unit: fps
+    note: lost messages 44.67 %
+    timestampt: '2023-07-24 20:18:10'
+    type: black
+    value: 18.541965997156815
 short: Perception resize ROS Component.
