@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="3">
+  <name>d5_inverse_kinematics_lma</name>
+  <version>0.1.0</version>
+  <description>
+    A computational graph that uses [moveit2](https://github.com/ros-planning/moveit2) to compute inverse kinematics with the 
+    [LMA](https://moveit.picknik.ai/main/doc/examples/kinematics_configuration/kinematics_configuration_tutorial.html#the-lma-kinematics-plugin) plugin for a UFACTORY xArm6 manipulator.
+  </description>
+  <maintainer email="martinho@accelerationrobotics.com">Martiño Crespo Álvarez</maintainer>
+  <license>Apache License 2.0</license>
+  <author email="martinho@accelerationrobotics.com">Martiño Crespo Álvarez</author>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
