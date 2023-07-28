@@ -1,0 +1,28 @@
+description: 'A computational graph that uses [moveit2](https://github.com/ros-planning/moveit2) to compute direct kinematics for a UFACTORY xArm6 manipulator.'
+graph: ../../../imgs/d6_direct_kinematics.svg
+id: d6
+name: d6_direct_kinematics
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/manipulation/d6_direct_kinematics
+  and review the launch files to reproduce this package.
+results:
+- result:
+    category: workstation
+    datasource: N/A
+    hardware: Intel i5-13600K
+    metric: latency
+    metric_unit: ms
+    note: mean 0.01 ms ms, rms 0.01 ms ms, max 0.01 ms ms, min 0.00 ms, lost 0.00%
+    timestampt: 28-07-2023
+    type: grey
+    value: 0.01
+- result:
+    category: workstation
+    datasource: N/A
+    hardware: Intel i5-13600K
+    metric: power
+    metric_unit: W
+    note: mean 0.01 ms ms, rms 0.01 ms ms, max 0.01 ms ms, min 0.00 ms, lost 0.00%
+    timestampt: 28-07-2023
+    type: grey
+    value: 31.654253005981445
+short: Direct kinematics computation for xArm6.
