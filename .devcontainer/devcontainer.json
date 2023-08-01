@@ -15,7 +15,12 @@
 			"NODE_VERSION": "lts/*"
 		}
 	},
-	"workspaceMount": "source=${localWorkspaceFolder},target=/tmp/benchmark_ws/src/benchmarks,type=bind,consistency=cached", 
+	
+	"mounts": [
+		"source=${localWorkspaceFolder},target=/tmp/benchmark_ws/src/benchmarks,type=bind,consistency=cached",
+		"source=${localWorkspaceFolder}/../rosbags,target=/tmp/benchmark_ws/src/rosbags,type=bind,consistency=cached"
+	],
+	// "workspaceMount": "source=${localWorkspaceFolder},target=/tmp/benchmark_ws/src/benchmarks,type=bind,consistency=cached", 
 	"workspaceFolder": "/tmp/benchmark_ws/",
 
 	// Configure tool-specific properties.
@@ -64,9 +69,21 @@
 	// // Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	// "remoteUser": "vscode"
 
+
 	"runArgs": [
-					"--privileged",
-					"-e", "DISPLAY=host.docker.internal:0",
-    				"-v", "/tmp/.X11-unix:/tmp/.X11-unix"
-				]
+		"--privileged",
+		"-e", "DISPLAY=host.docker.internal:0",
+		"-v", "/tmp/.X11-unix:/tmp/.X11-unix"
+	]
 }
+
+
+// "runArgs": [
+// 	"--privileged",
+// 	"-e", "DISPLAY=host.docker.internal:0",
+// 	"-v", "/tmp/.X11-unix:/tmp/.X11-unix"
+// ]
+
+
+//  docker network create --subnet=192.168.0.0/20 --gateway=192.168.0.1 my_custom_network
+// 		"--network", "my_custom_network"
