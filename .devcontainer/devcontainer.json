@@ -76,14 +76,3 @@
 		"-v", "/tmp/.X11-unix:/tmp/.X11-unix"
 	]
 }
-
-
-// "runArgs": [
-// 	"--privileged",
-// 	"-e", "DISPLAY=host.docker.internal:0",
-// 	"-v", "/tmp/.X11-unix:/tmp/.X11-unix"
-// ]
-
-
-//  docker network create --subnet=192.168.0.0/20 --gateway=192.168.0.1 my_custom_network
-// 		"--network", "my_custom_network"
