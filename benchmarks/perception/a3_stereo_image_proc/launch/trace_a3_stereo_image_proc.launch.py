@@ -63,8 +63,8 @@ def generate_launch_description():
                     {"input_topic_name":"/robotperf/input/left_input/left_image_raw"}
                 ],
                 remappings=[
-                    ("image", "/left_camera/image_raw"),
-                    ("camera_info", "/left_camera/camera_info"),
+                    ("image", "/hawk_0_left_rgb_image"),
+                    ("camera_info", "/hawk_0_left_rgb_camera_info")
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],
             ),
@@ -77,8 +77,8 @@ def generate_launch_description():
                     {"input_topic_name":"/robotperf/input/right_input/right_image_raw"}
                 ],
                 remappings=[
-                    ("image", "/right_camera/image_raw"),
-                    ("camera_info", "/right_camera/camera_info"),
+                    ("image", "/hawk_0_right_rgb_image"),
+                    ("camera_info", "/hawk_0_right_rgb_camera_info")
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],
             ),
@@ -96,12 +96,25 @@ def generate_launch_description():
                 extra_arguments=[{'use_intra_process_comms': True}],
             ),
             ComposableNode(
-                package="a3_stereo_image_proc",
+                namespace="robotperf/benchmark",
+                package="stereo_image_proc",
+                plugin="stereo_image_proc::PointCloudNode",
+                name="stereo_image_proc_pc_node",
+                remappings=[
+                    ('left/camera_info', '/robotperf/input/left_input/camera_info'),
+                    ('left/image_rect_color', '/robotperf/input/left_input/left_image_raw'),
+                    ('right/camera_info', '/robotperf/input/right_input/camera_info'),
+                    ('disparity', '/robotperf/benchmark/disparity'),                         
+                ],
+                extra_arguments=[{'use_intra_process_comms': True}],
+            ),
+            ComposableNode(
+                package="a8_stereo_image_proc_pc",
                 namespace="robotperf",
-                plugin="robotperf::perception::DisparityOutputComponent",
-                name="disparity_output_component",
+                plugin="robotperf::perception::PcOutputComponent",
+                name="pc_output_component",
                 parameters=[
-                    {"output_topic_name":"/robotperf/benchmark/disparity"}
+                    {"output_topic_name":"/robotperf/benchmark/points2"}
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],
             ),

@@ -15,7 +15,12 @@
 			"NODE_VERSION": "lts/*"
 		}
 	},
-	"workspaceMount": "source=${localWorkspaceFolder},target=/tmp/benchmark_ws/src/benchmarks,type=bind,consistency=cached", 
+	// "workspaceMount": "source=${localWorkspaceFolder},target=/tmp/benchmark_ws/src/benchmarks,type=bind,consistency=cached", 
+	"mounts": [
+		"source=${localWorkspaceFolder},target=/tmp/benchmark_ws/src/benchmarks,type=bind,consistency=cached",
+		"source=${localWorkspaceFolder}/../rosbags,target=/tmp/benchmark_ws/src/rosbags,type=bind,consistency=cached",
+		"source=${localWorkspaceFolder}/../ros2_benchmark,target=/tmp/benchmark_ws/src/ros2_benchmark,type=bind,consistency=cached"],
+
 	"workspaceFolder": "/tmp/benchmark_ws/",
 
 	// Configure tool-specific properties.

@@ -36,6 +36,11 @@ package = os.environ.get('PACKAGE')
 type = os.environ.get('TYPE')
 metric = os.environ.get('METRIC')
 
+rosbag = 'perception/r2b_cafe'
+package='a8_stereo_image_proc_pc'
+type='grey'
+metric = 'latency'
+
 POWER_LIB = os.environ.get('POWER_LIB')
 IMAGE_RESOLUTION = ImageResolution.HD
 ROSBAG_PATH = '/tmp/benchmark_ws/src/rosbags/' + rosbag # '/home/amf/benchmark_ws/src/rosbags/perception/image3' # NOTE: hardcoded, modify accordingly
