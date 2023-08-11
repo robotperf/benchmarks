@@ -71,30 +71,31 @@ def generate_launch_description():
                 plugin="robotperf::perception::ImageInputComponent",
                 name="image_input_component",
                 parameters=[
-                    {"input_topic_name":"/robotperf/input"}
+                    {"input_topic_name":"/robotperf/input/depth/depth_image"}
                 ],
                 remappings=[
                     ("image", "/robotperf/preprocessing/depth"),
                     ("camera_info", "/robotperf/preprocessing/depth_camera_info"),
-                ]
+                ], 
+                extra_arguments=[{'use_intra_process_comms': True}],
             ),
 
 
-            # Convert Depth Image to Laserscan
+            # Convert Depth Image to Laserscan (node of interest)
             ComposableNode(
                 namespace="robotperf/benchmark",
                 package='depthimage_to_laserscan',
                 plugin='depthimage_to_laserscan::DepthImageToLaserScanROS',
                 name='depthimage_to_laserscan',
                 remappings=[
-                    ('depth_camera_info', '/robotperf/preprocessing/depth_camera_info'),
-                    ('depth', '/robotperf/input'),                  
+                    ('depth_camera_info', '/robotperf/input/depth/camera_info'),
+                    ('depth', '/robotperf/input/depth/depth_image'),                  
                 ], 
                 parameters=[ {'range_min': 0.1,
                               'range_max': 200.0,
                               'scan_time': 0.000000001, 
                               'output_frame_id': 'camera_depth_frame'} # Set frame in RVIZ to this to visualize scan
-                            ]
+                ]
             ), 
 
             # Record Final Tracepoint once scan is produced
@@ -107,7 +108,6 @@ def generate_launch_description():
                     {'output_topic_name': '/robotperf/benchmark/scan'}
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],
-
             ),
 
         ],

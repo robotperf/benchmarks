@@ -1,27 +1,36 @@
-description: 'The [stereo_image_proc](https://github.com/ros-perception/image_pipeline/tree/humble/stereo_image_proc)
-  package computes the disparity map using a left and right image. A disparity map
-  represents the difference in pixel position between corresponding points in the
-  stereo images. Disparity images are images that show the difference in displacement
-  or distance between corresponding points in a pair of stereo images. Stereo images
-  are two images of the same scene taken from slightly different viewpoints, such
-  as from the left and right eyes of a human observer or from two cameras. Disparity
-  images are often used in computer vision and image processing applications, such
-  as 3D reconstruction, depth estimation, and object recognition. By analyzing the
-  disparities between corresponding points in stereo images, it is possible to infer
-  the depth of objects in the scene and create a 3D representation of the environment. '
-graph: ../../../imgs/a3_stereo_image_proc.png
+description: 'The [depthimage_to_laserscan](https://github.com/ros-perception/depthimage_to_laserscan/tree/ros2)
+  package converts a depth image to a laser scan. The a6_depthimage_to_laserscan image evaluates 
+  the performance of the DepthImageToLaserScanROS node within the depthimage_to_laserscan 
+  package. This benchmark constructs a preprocessing pipeline that converts two stereo 
+  images into a disparity map using the [stereo_image_proc](https://github.com/ros-perception/image_pipeline/tree/humble/stereo_image_proc) 
+  package. This resulting disparity map is then transformed into a depth image before undergoing the final 
+  conversion into a laser scan.'
+graph: ../../../imgs/a6_depthimage_to_laserscan_graph_grey_box.png
 id: a6
 name: a6_depthimage_to_laserscan
-reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/perception/a3_stereo_image_proc
-  and review the launch files to reproduce this package.
+reproduction: 
+
+  # Build the Benchmark
+	colcon build --merge-install --packages-up-to a6_depthimage_to_laserscan
+
+  # Source the overlay
+	source install/setup.bash
+
+  # Automatically run the benchmark. (Remember to set your environment variables):
+  export ROSBAG="perception/r2b_cafe"
+  export PACKAGE="a6_depthimage_to_laserscan"
+  export TYPE="black"
+  export METRIC="latency"
+  launch_test src/benchmarks/benchmarks/perception/a6_depthimage_to_laserscan/launch/trace_a6_depthimage_to_laserscan_auto.launch.py 
+
+  # Or manually run the benchmark using the grey-box methodology:
+  ros2 bag play --loop <path_to_ros_bag>
+	ros2 launch a6_depthimage_to_laserscan trace_a6_depthimage_to_laserscan.launch.py
+
+  # Analyze the trace data
+  cd /tmp/
+	mkdir analysis
+	ros2 launch a6_depthimage_to_laserscan analyze_a6_depthimage_to_laserscan.launch.py trace_path:=$HOME/.ros/tracing
+
 results:
-- result:
-    category: 
-    datasource: 
-    hardware: 
-    metric: 
-    metric_unit: 
-    note: 
-    timestampt: 
-    type: 
-    value: 
+

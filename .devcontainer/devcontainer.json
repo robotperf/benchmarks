@@ -65,12 +65,13 @@
 																		// the dockerfile to cache
 																		// requirements in container
 
+																		// Use 'postCreateCommand' to run commands after the container is created.
+
 	// "postStartCommand": ["nohup", "ros2", "topic", "hz", "&"],
 
 	// // Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	// "remoteUser": "vscode"
-
-
+	
 	"runArgs": [
 		"--privileged",
 		"-e", "DISPLAY=host.docker.internal:0",

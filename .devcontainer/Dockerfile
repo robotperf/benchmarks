@@ -10,7 +10,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
         python3-babeltrace ros-humble-stereo-image-proc \
         ros-humble-theora-image-transport ros-humble-gazebo-msgs \
         ros-humble-rqt* ros-humble-depthimage-to-laserscan \
-        ros-humble-rviz2 libogre-1.12-dev
+        ros-humble-rviz2 libogre-1.12-dev ros-humble-launch-testing
 
 RUN pip3 install wasabi bokeh==2.4.3 selenium plotly kaleido arrow
 RUN pip3 install xacro
@@ -30,6 +30,10 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive && apt-get -y instal
         python3-lttng python3-lttnganalyses python3-lttngust \
         python3-bt2 babeltrace2 ros-humble-rqt-graph && \
         rm -rf /var/lib/apt/lists/*      
+
+
+RUN echo "source /opt/ros/humble/setup.bash" >> /root/.bashrc && \
+    echo "cd /tmp/benchmark_ws && rosdep update || true && apt-get update && rosdep install --from-paths src --ignore-src --rosdistro humble -y" >> /root/.bashrc
 
 # setup entrypoint
 COPY .devcontainer/ros_entrypoint.sh /

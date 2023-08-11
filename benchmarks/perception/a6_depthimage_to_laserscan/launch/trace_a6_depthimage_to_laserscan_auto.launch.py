@@ -31,16 +31,10 @@ from ros2_benchmark import ImageResolution
 from ros2_benchmark import ROS2BenchmarkConfig, ROS2BenchmarkTest
 
 # These are provided as environment variables for CI, you can manually hardcord them for other uses
-rosbag = os.environ.get('ROSBAG')
-package = os.environ.get('PACKAGE')
-type = os.environ.get('TYPE')
-metric = os.environ.get('METRIC')
-
-
-rosbag = 'perception/r2b_cafe'
-package = 'a6_depthimage_to_laserscan'
-type = 'black'
-metric = 'latency'
+rosbag = os.environ.get('ROSBAG') # Example: 'perception/r2b_cafe'
+package = os.environ.get('PACKAGE') # Example: 'a6_depthimage_to_laserscan'
+type = os.environ.get('TYPE') # Example: 'grey'
+metric = os.environ.get('METRIC') # Example: 'latency'
 
 POWER_LIB = os.environ.get('POWER_LIB')
 IMAGE_RESOLUTION = ImageResolution.HD
@@ -56,11 +50,11 @@ else:
     POWER = "off"
 
 def launch_setup(container_prefix, container_sigterm_timeout):
-    """Generate launch description for benchmarking depthimage_to_laserscan  DepthImageToLaserScanROS"""
+    """Generate launch description for benchmarking depthimage_to_laserscan DepthImageToLaserScanROS"""
 
     data_loader_node = ComposableNode(
         name='DataLoaderNode',
-        namespace=TestDisparityNode.generate_namespace(),
+        namespace=TestDepthImageToLaserScanNode.generate_namespace(),
         package='ros2_benchmark',
         plugin='ros2_benchmark::DataLoaderNode',
         remappings=[('/r2b/hawk_0_left_rgb_image', 'data_loader/left_camera/image'),
@@ -72,7 +66,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
     # Publish input messages by using the messages stored in the buffer
     playback_node = ComposableNode(
         name='PlaybackNode',
-        namespace=TestDisparityNode.generate_namespace(),
+        namespace=TestDepthImageToLaserScanNode.generate_namespace(),
         package='ros2_benchmark',
         plugin='ros2_benchmark::PlaybackNode',
         parameters=[{
@@ -131,7 +125,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         plugin="robotperf::perception::ImageInputComponent",
         name="image_input_component",
         parameters=[
-            {"input_topic_name":"/robotperf/input"}
+            {"input_topic_name":"/robotperf/input/depth/depth_image"}
         ],
         remappings=[
             ("image", "/robotperf/preprocessing/depth"),
@@ -141,15 +135,33 @@ def launch_setup(container_prefix, container_sigterm_timeout):
     )
     
 
-    # Convert Depth Image to Laserscan
-    laserscan_node = ComposableNode(
+    # Grey Box: Convert Depth Image to Laserscan
+    laserscan_node_grey_box = ComposableNode(
+        namespace="robotperf/benchmark",
+        package='depthimage_to_laserscan',
+        plugin='depthimage_to_laserscan::DepthImageToLaserScanROS',
+        name='depthimage_to_laserscan',
+        remappings=[
+            ('depth_camera_info', '/robotperf/input/depth/camera_info'),
+            ('depth', '/robotperf/input/depth/depth_image'),                  
+        ], 
+        parameters=[ {'range_min': 0.1,
+                        'range_max': 200.0,
+                        'scan_time': 0.000000001, 
+                        'output_frame_id': 'camera_depth_frame'} # Set frame in RVIZ to this to visualize scan
+                    ]
+    )
+
+
+    # Black Box: Convert Depth Image to Laserscan
+    laserscan_node_black_box = ComposableNode(
         namespace="robotperf/benchmark",
         package='depthimage_to_laserscan',
         plugin='depthimage_to_laserscan::DepthImageToLaserScanROS',
         name='depthimage_to_laserscan',
         remappings=[
             ('depth_camera_info', '/robotperf/preprocessing/depth_camera_info'),
-            ('depth', '/robotperf/input'),                  
+            ('depth', '/robotperf/preprocessing/depth'),                  
         ], 
         parameters=[ {'range_min': 0.1,
                         'range_max': 200.0,
@@ -173,7 +185,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
 
     monitor_node = ComposableNode(
         name='MonitorNode',
-        namespace=TestDisparityNode.generate_namespace(),
+        namespace=TestDepthImageToLaserScanNode.generate_namespace(),
         package='ros2_benchmark',
         plugin='ros2_benchmark::MonitorNode',
         parameters=[{
@@ -190,9 +202,7 @@ def launch_setup(container_prefix, container_sigterm_timeout):
             playback_node,
             disparity_node,
             depth_image_node, 
-            depth_image_input_node, 
-            laserscan_node, 
-            output_node, 
+            laserscan_node_black_box,  
             monitor_node           
         ]
     else:
@@ -202,13 +212,13 @@ def launch_setup(container_prefix, container_sigterm_timeout):
             disparity_node,
             depth_image_node, 
             depth_image_input_node, 
-            laserscan_node, 
+            laserscan_node_grey_box, 
             output_node
         ]
 
     composable_node_container = ComposableNodeContainer(
         name='container',
-        namespace=TestDisparityNode.generate_namespace(),
+        namespace=TestDepthImageToLaserScanNode.generate_namespace(),
         package='rclcpp_components',
         executable='component_container_mt',
         prefix=container_prefix,
@@ -243,12 +253,12 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         return [composable_node_container]
 
 
-class TestDisparityNode(ROS2BenchmarkTest):
-    """Performance test for stereo_image_proc DisparityNode."""
+class TestDepthImageToLaserScanNode(ROS2BenchmarkTest):
+    """Performance test for depthimage_to_laserscan DepthImageToLaserScanROS."""
 
     # Custom configurations
     config = ROS2BenchmarkConfig(
-        benchmark_name='stereo_image_proc::DisparityNode Benchmark',
+        benchmark_name='depthimage_to_laserscan::DepthImageToLaserScanROS Benchmark',
         input_data_path=ROSBAG_PATH,
         # Upper and lower bounds of peak throughput search window
         publisher_upper_frequency=30.0,
@@ -293,4 +303,4 @@ class TestDisparityNode(ROS2BenchmarkTest):
             print(str_out)
      
 def generate_test_description():
-    return TestDisparityNode.generate_test_description_with_nsys(launch_setup)
+    return TestDepthImageToLaserScanNode.generate_test_description_with_nsys(launch_setup)
