@@ -206,6 +206,86 @@ DECLARE_TRACEPOINT(
   uint32_t image_input_header_sec_arg,
   size_t pointcloud_output_msg_size)
 
+/// `robotperf_laserscan_input_cb_init`
+/**
+ * Tracepoint while initiating the callback of robotperf::perception::LaserscanInputComponent component
+ *
+ * Notes the `tracetools_benchmark` version automatically.
+ *
+ * \param[in] laserscan_input_node rclcpp::node::Node subject to the callback
+ * \param[in] laserscan_input_scan_msg laserscan ROS message stored as sensor_msgs::msg::LaserScan::SharedPtr
+ * \param[in] laserscan_input_header_nsec_arg nanosec field of the header (std_msgs/Header) of sensor_msgs::msg::LaserScan's ROS message 
+ * \param[in] laserscan_input_header_sec_arg sec field of the header (std_msgs/Header) of sensor_msgs::msg::LaserScan's ROS message 
+ * \param[in] laserscan_input_msg_size size of laserscan ROS message stored as bytes
+ */
+DECLARE_TRACEPOINT(
+  robotperf_laserscan_input_cb_init,
+  const void * laserscan_input_node,
+  const void * laserscan_input_scan_msg,
+  uint32_t laserscan_input_header_nsec_arg,
+  uint32_t laserscan_input_header_sec_arg,
+  size_t laserscan_input_msg_size)
+
+/// `robotperf_laserscan_input_cb_fini`
+/**
+ * Tracepoint while finishing the callback of robotperf::perception::LaserscanInputComponent component
+ *
+ * Notes the `tracetools_benchmark` version automatically.
+ *
+ * \param[in] laserscan_input_node rclcpp::node::Node subject to the callback
+ * \param[in] laserscan_input_scan_msg laserscan ROS message stored as sensor_msgs::msg::LaserScan::SharedPtr
+ * \param[in] laserscan_input_header_nsec_arg nanosec field of the header (std_msgs/Header) of sensor_msgs::msg::LaserScan's ROS message 
+ * \param[in] laserscan_input_header_sec_arg sec field of the header (std_msgs/Header) of sensor_msgs::msg::LaserScan's ROS message 
+ * \param[in] laserscan_input_msg_size size of laserscan ROS message stored as bytes
+ */
+DECLARE_TRACEPOINT(
+  robotperf_laserscan_input_cb_fini,
+  const void * laserscan_input_node,
+  const void * laserscan_input_scan_msg,
+  uint32_t laserscan_input_header_nsec_arg,
+  uint32_t laserscan_input_header_sec_arg,
+  size_t laserscan_input_msg_size)
+
+/// `robotperf_laserscan_output_cb_init`
+/**
+ * Tracepoint while initiating the callback of robotperf::perception::LaserscanOutputComponent component
+ *
+ * Notes the `tracetools_benchmark` version automatically.
+ *
+ * \param[in] laserscan_output_node rclcpp::node::Node subject to the callback
+ * \param[in] laserscan_output_scan_msg laserscan ROS message stored as sensor_msgs::msg::LaserScan::SharedPtr
+ * \param[in] laserscan_output_header_nsec_arg nanosec field of the header (std_msgs/Header) of sensor_msgs::msg::LaserScan's ROS message 
+ * \param[in] laserscan_output_header_sec_arg sec field of the header (std_msgs/Header) of sensor_msgs::msg::LaserScan's ROS message 
+ * \param[in] laserscan_output_msg_size size of laserscan ROS message stored as bytes
+ */
+DECLARE_TRACEPOINT(
+  robotperf_laserscan_output_cb_init,
+  const void * laserscan_output_node,
+  const void * laserscan_output_scan_msg,
+  uint32_t laserscan_output_header_nsec_arg,
+  uint32_t laserscan_output_header_sec_arg,
+  size_t laserscan_output_msg_size)
+
+/// `robotperf_laserscan_output_cb_fini`
+/**
+ * Tracepoint while finishing the callback of robotperf::perception::LaserscanOutputComponent component
+ *
+ * Notes the `tracetools_benchmark` version automatically.
+ *
+ * \param[in] laserscan_output_node rclcpp::node::Node subject to the callback
+ * \param[in] laserscan_output_scan_msg laserscan ROS message stored as sensor_msgs::msg::LaserScan::SharedPtr
+ * \param[in] laserscan_output_header_nsec_arg nanosec field of the header (std_msgs/Header) of sensor_msgs::msg::LaserScan's ROS message 
+ * \param[in] laserscan_output_header_sec_arg sec field of the header (std_msgs/Header) of sensor_msgs::msg::LaserScan's ROS message 
+ * \param[in] laserscan_output_msg_size size of laserscan ROS message stored as bytes
+ */
+DECLARE_TRACEPOINT(
+  robotperf_laserscan_output_cb_fini,
+  const void * laserscan_output_node,
+  const void * laserscan_output_scan_msg,
+  uint32_t laserscan_output_header_nsec_arg,
+  uint32_t laserscan_output_header_sec_arg,
+  size_t laserscan_output_msg_size)
+
 #ifdef __cplusplus
 }
 #endif

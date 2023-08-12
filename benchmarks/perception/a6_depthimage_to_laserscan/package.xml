@@ -3,9 +3,14 @@
 <package format="3">
   <name>a6_depthimage_to_laserscan</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>
+      This package evaluates the performance of the depthimage_to_laserscan package which 
+      converts depth images to laser scans. This package also contains the necessary preprocessing 
+      pipeline to convert stereo images into depth images.   
+  </description>
   <maintainer email="jasonjabbour@g.harvard.edu">Jason Jabbour</maintainer>
   <license>TODO: License declaration</license>
+  <author email="jasonjabbour@g.harvard.edu">Jason Jabbour</author>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
