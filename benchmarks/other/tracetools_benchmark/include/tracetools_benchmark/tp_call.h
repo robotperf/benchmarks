@@ -138,6 +138,46 @@ TRACEPOINT_EVENT(
   )
 )
 
+// robotperf pointcloud_input init callback
+TRACEPOINT_EVENT(
+  TRACEPOINT_PROVIDER,
+  robotperf_pointcloud_input_cb_init,
+  TP_ARGS(
+    const void *, pointcloud_input_node_arg,
+    const void *, pointcloud_input_pointcloud_msg_arg,
+    uint32_t, pointcloud_input_header_nsec_arg,
+    uint32_t, pointcloud_input_header_sec_arg,
+    size_t, pointcloud_input_msg_size_arg),
+  TP_FIELDS(
+    ctf_integer_hex(const void *, pointcloud_input_node, pointcloud_input_node_arg)
+    ctf_integer_hex(const void *, pointcloud_input_pointcloud_msg, pointcloud_input_pointcloud_msg_arg)
+    ctf_integer(uint32_t, pointcloud_input_header_nsec, pointcloud_input_header_nsec_arg)
+    ctf_integer(uint32_t, pointcloud_input_header_sec, pointcloud_input_header_sec_arg)
+    ctf_integer(size_t, pointcloud_input_msg_size, pointcloud_input_msg_size_arg)
+    ctf_string(version, tracetools_benchmark_VERSION)
+  )
+)
+
+// robotperf pointcloud_input end of callback (after publication)
+TRACEPOINT_EVENT(
+  TRACEPOINT_PROVIDER,
+  robotperf_pointcloud_input_cb_fini,
+  TP_ARGS(
+    const void *, pointcloud_input_node_arg,
+    const void *, pointcloud_input_pointcloud_msg_arg,
+    uint32_t, pointcloud_input_header_nsec_arg,
+    uint32_t, pointcloud_input_header_sec_arg,
+    size_t, pointcloud_input_msg_size_arg),
+  TP_FIELDS(
+    ctf_integer_hex(const void *, pointcloud_input_node, pointcloud_input_node_arg)
+    ctf_integer_hex(const void *, pointcloud_input_pointcloud_msg, pointcloud_input_pointcloud_msg_arg)
+    ctf_integer(uint32_t, pointcloud_input_header_nsec, pointcloud_input_header_nsec_arg)
+    ctf_integer(uint32_t, pointcloud_input_header_sec, pointcloud_input_header_sec_arg)
+    ctf_integer(size_t, pointcloud_input_msg_size, pointcloud_input_msg_size_arg)
+    ctf_string(version, tracetools_benchmark_VERSION)
+  )
+)
+
 TRACEPOINT_EVENT(
   TRACEPOINT_PROVIDER,
   robotperf_pointcloud_output_cb_init,

@@ -1,0 +1,36 @@
+description: 'The [depthimage_to_laserscan](https://github.com/ros-perception/depthimage_to_laserscan/tree/ros2)
+  package converts a depth image to a laser scan. The a6_depthimage_to_laserscan image evaluates 
+  the performance of the DepthImageToLaserScanROS node within the depthimage_to_laserscan 
+  package. This benchmark constructs a preprocessing pipeline that converts two stereo 
+  images into a disparity map using the [stereo_image_proc](https://github.com/ros-perception/image_pipeline/tree/humble/stereo_image_proc) 
+  package. This resulting disparity map is then transformed into a depth image before undergoing the final 
+  conversion into a laser scan.'
+graph: ../../../imgs/a6_depthimage_to_laserscan_graph_grey_box.png
+id: a7
+name: a7_pointcloud_to_laserscan
+reproduction: 
+
+  # Build the Benchmark
+	colcon build --merge-install --packages-up-to a6_depthimage_to_laserscan
+
+  # Source the overlay
+	source install/setup.bash
+
+  # Automatically run the benchmark. (Remember to set your environment variables):
+  export ROSBAG="perception/r2b_cafe"
+  export PACKAGE="a6_depthimage_to_laserscan"
+  export TYPE="black"
+  export METRIC="latency"
+  launch_test src/benchmarks/benchmarks/perception/a6_depthimage_to_laserscan/launch/trace_a6_depthimage_to_laserscan_auto.launch.py 
+
+  # Or manually run the benchmark using the grey-box methodology:
+  ros2 bag play --loop <path_to_ros_bag>
+	ros2 launch a6_depthimage_to_laserscan trace_a6_depthimage_to_laserscan.launch.py
+
+  # Analyze the trace data
+  cd /tmp/
+	mkdir analysis
+	ros2 launch a6_depthimage_to_laserscan analyze_a6_depthimage_to_laserscan.launch.py trace_path:=$HOME/.ros/tracing
+
+results:
+

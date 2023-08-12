@@ -166,6 +166,49 @@ DECLARE_TRACEPOINT(
   size_t image_output_image_msg_size,
   size_t image_output_info_msg_size)
 
+
+/// `robotperf_pointcloud_input_cb_init`
+/**
+ * Trace point while initiating the callback of robotperf::perception::PointCloudInputComponent component
+ * 
+ * Notes the `tracetools_benchmark` version autonmatically
+ * 
+ * \param[in] pointcloud_input_node rclcpp::node::Node subject to the callback
+ * \param[in] pointcloud_input_pointcloud_msg pointcloud ROS message stored as sensor_msgs::msg::PointCloud2::ConstSharedPtr
+ * \param[in] pointcloud_input_header_nsec_arg nanosec field of the header (std_msgs/Header) of sensor_msgs::msg::PointCloud2's ROS message
+ * \param[in] pointcloud_input_header_sec_arg sec field of the header (std_msgs/Header) of sensor_msgs::msg::PointCloud2's ROS message
+ * \param[in] pointcloud_input_msg_size size of the pointcloud ROS message stored as bytes
+ */
+
+ DECLARE_TRACEPOINT(
+  robotperf_pointcloud_input_cb_init, 
+  const void * pointcloud_input_node, 
+  const void * pointcloud_input_pointcloud_msg, 
+  uint32_t pointcloud_input_header_nsec_arg, 
+  uint32_t pointcloud_input_header_sec_arg, 
+  size_t pointcloud_input_msg_size)
+
+/// `robotperf_pointcloud_input_cb_fini`
+/**
+ * Tracepoint while finishing the callback of robotperf::perception::PointCloudInputComponent componnet
+ * 
+ * Notes the `tracetools_benchmark` version automatically. 
+ * 
+ * \param[in] pointcloud_input_node rclcpp::node::Node subject the callback
+ * \param[in] pointcloud_input_pointcloud_msg pointcloud ROS message stored as sensor_msgs::msg::PointCloud2::ConstSharedPtr
+ * \param[in] pointcloud_input_header_nsec_arg nanosec field of the header (std_msgs/Header) of sensor_msgs::msg::PointCloud2's ROS message
+ * \param[in] pointcloud_input_header_sec_arg sec field of the header (std_msgs/Header) of sensor_msgs::msg::PointCloud2's ROS message
+ * \param[in] pointcloud_input_msg_size size of pointcloud ROS message stored as bytes
+*/
+
+DECLARE_TRACEPOINT(
+  robotperf_pointcloud_input_cb_fini, 
+  const void * pointcloud_input_node, 
+  const void * pointcloud_input_pointcloud_msg, 
+  uint32_t pointcloud_input_header_nsec_arg, 
+  uint32_t pointcloud_input_header_sec_arg, 
+  size_t pointcloud_input_msg_size)
+
 /// `robotperf_pointcloud_output_cb_init`
 /**
  * Tracepoint while initiating the callback of robotperf::perception::PointCloudOutputComponent component

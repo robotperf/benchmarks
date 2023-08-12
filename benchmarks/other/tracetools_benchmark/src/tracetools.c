@@ -135,6 +135,42 @@ void TRACEPOINT(
     image_output_info_msg_size_arg);
 }
 
+// pointcloud_input
+void TRACEPOINT(
+  robotperf_pointcloud_input_cb_init, 
+  const void * pointcloud_input_node_arg, 
+  const void * pointcloud_input_pointcloud_msg_arg, 
+  uint32_t pointcloud_input_header_nsec_arg, 
+  uint32_t pointcloud_input_header_sec_arg, 
+  size_t pointcloud_input_msg_size_arg)
+{
+  CONDITIONAL_TP(
+    robotperf_pointcloud_input_cb_init, 
+    pointcloud_input_node_arg, 
+    pointcloud_input_pointcloud_msg_arg,
+    pointcloud_input_header_nsec_arg, 
+    pointcloud_input_header_sec_arg, 
+    pointcloud_input_msg_size_arg);
+}
+
+void TRACEPOINT(
+  robotperf_pointcloud_input_cb_fini, 
+  const void * pointcloud_input_node_arg, 
+  const void * pointcloud_input_pointcloud_msg_arg, 
+  uint32_t pointcloud_input_header_nsec_arg, 
+  uint32_t pointcloud_input_header_sec_arg, 
+  size_t pointcloud_input_msg_size_arg)
+{
+  CONDITIONAL_TP(
+    robotperf_pointcloud_input_cb_fini, 
+    pointcloud_input_node_arg, 
+    pointcloud_input_pointcloud_msg_arg,
+    pointcloud_input_header_nsec_arg, 
+    pointcloud_input_header_sec_arg, 
+    pointcloud_input_msg_size_arg);
+}
+
+// pointcloud_output
 void TRACEPOINT(
   robotperf_pointcloud_output_cb_init,
   const void * pointcloud_output_node,
