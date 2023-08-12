@@ -3,7 +3,9 @@
 <package format="3">
   <name>a7_pointcloud_to_laserscan</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>The a7_pointcloud_to_laserscan benchmark evaluates 
+  the performance of the PointCloudToLaserScanNode node within the pointcloud_to_laserscan 
+  package.</description>
   <maintainer email="jasonjabbour@g.harvard.edu">Jason Jabbour</maintainer>
   <author email="jasonjabbour@g.harvard.edu">Jason Jabbour</author>
   <license>TODO: License declaration</license>

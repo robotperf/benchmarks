@@ -33,7 +33,6 @@ def generate_launch_description():
         executable="component_container",
         composable_node_descriptions=[
             
-
             # Place Input Tracepoint
             ComposableNode(
                 namespace="robotperf/input",

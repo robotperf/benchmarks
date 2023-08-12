@@ -15,7 +15,7 @@ ament_auto_find_build_dependencies()
 
 
 find_package(tracetools_benchmark REQUIRED)
-find_package(depthimage_to_laserscan REQUIRED)
+find_package(pointcloud_to_laserscan REQUIRED)
 
 include_directories(include)
 

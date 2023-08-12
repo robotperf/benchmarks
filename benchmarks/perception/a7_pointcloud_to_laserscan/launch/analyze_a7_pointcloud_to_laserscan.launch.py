@@ -49,25 +49,25 @@ def main(argv):
     metrics = json.loads(json.dumps(metrics_elements))
  
     # Instantiate the class
-    ba = BenchmarkAnalyzer('a6_depthimage_to_laserscan', hardware_device_type)
+    ba = BenchmarkAnalyzer('a7_pointcloud_to_laserscan', hardware_device_type)
 
     if hardware_device_type == 'cpu':
         target_chain = [
         # "ros2:callback_start",
-        'robotperf_benchmarks:robotperf_image_input_cb_init',
-        'robotperf_benchmarks:robotperf_image_input_cb_fini',
+        'robotperf_benchmarks:robotperf_pointcloud_input_cb_init',
+        'robotperf_benchmarks:robotperf_pointcloud_input_cb_fini',
         # 'ros2:callback_end',
         # "ros2:callback_start",
-        'robotperf_benchmarks:robotperf_image_output_cb_init',
-        'robotperf_benchmarks:robotperf_image_output_cb_fini',
+        'robotperf_benchmarks:robotperf_laserscan_output_cb_init',
+        'robotperf_benchmarks:robotperf_laserscan_output_cb_fini',
         # "ros2:callback_end",
         ]
 
         # add parameters for analyzing the traces
         ba.add_target(
             {
-                "name": "robotperf_benchmarks:robotperf_image_input_cb_init",
-                "name_disambiguous": "robotperf_benchmarks:robotperf_image_input_cb_init",
+                "name": "robotperf_benchmarks:robotperf_pointcloud_input_cb_init",
+                "name_disambiguous": "robotperf_benchmarks:robotperf_pointcloud_input_cb_init",
                 "colors_fg": "blue",
                 "colors_fg_bokeh": "silver",
                 "layer": "userland",
@@ -77,8 +77,8 @@ def main(argv):
         )
         ba.add_target(
             {
-                "name": "robotperf_benchmarks:robotperf_image_input_cb_fini",
-                "name_disambiguous": "robotperf_benchmarks:robotperf_image_input_cb_fini",
+                "name": "robotperf_benchmarks:robotperf_pointcloud_input_cb_fini",
+                "name_disambiguous": "robotperf_benchmarks:robotperf_pointcloud_input_cb_fini",
                 "colors_fg": "blue",
                 "colors_fg_bokeh": "darkgray",
                 "layer": "benchmark",
@@ -88,8 +88,8 @@ def main(argv):
         )
         ba.add_target(
             {
-                "name": "robotperf_benchmarks:robotperf_image_output_cb_init",
-                "name_disambiguous": "robotperf_benchmarks:robotperf_image_output_cb_init",
+                "name": "robotperf_benchmarks:robotperf_laserscan_output_cb_init",
+                "name_disambiguous": "robotperf_benchmarks:robotperf_laserscan_output_cb_init",
                 "colors_fg": "red",
                 "colors_fg_bokeh": "red",
                 "layer": "benchmark",
@@ -99,8 +99,8 @@ def main(argv):
         )
         ba.add_target(
             {
-                "name": "robotperf_benchmarks:robotperf_image_output_cb_fini",
-                "name_disambiguous": "robotperf_benchmarks:robotperf_image_output_cb_fini",
+                "name": "robotperf_benchmarks:robotperf_laserscan_output_cb_fini",
+                "name_disambiguous": "robotperf_benchmarks:robotperf_laserscan_output_cb_fini",
                 "colors_fg": "red",
                 "colors_fg_bokeh": "lavender",
                 "layer": "userland",
@@ -170,7 +170,7 @@ def generate_launch_description():
     # Define the ExecuteProcess action to run the Python script
     analyzer = ExecuteProcess(
         cmd=[
-            'python3', "src/benchmarks/benchmarks/perception/a6_depthimage_to_laserscan/launch/analyze_a6_depthimage_to_laserscan.launch.py",
+            'python3', "src/benchmarks/benchmarks/perception/a7_pointcloud_to_laserscan/launch/analyze_a7_pointcloud_to_laserscan.launch.py",
             '--hardware_device_type', LaunchConfiguration('hardware_device_type'),
             '--trace_path', LaunchConfiguration('trace_path'),
             '--metrics', LaunchConfiguration('metrics')],

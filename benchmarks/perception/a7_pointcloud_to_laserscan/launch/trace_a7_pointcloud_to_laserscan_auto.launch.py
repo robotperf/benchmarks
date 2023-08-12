@@ -32,7 +32,7 @@ from ros2_benchmark import ROS2BenchmarkConfig, ROS2BenchmarkTest
 
 # These are provided as environment variables for CI, you can manually hardcord them for other uses
 rosbag = os.environ.get('ROSBAG') # Example: 'perception/r2b_cafe'
-package = os.environ.get('PACKAGE') # Example: 'a6_depthimage_to_laserscan'
+package = os.environ.get('PACKAGE') # Example: 'a7_pointcloud_to_laserscan'
 type = os.environ.get('TYPE') # Example: 'grey'
 metric = os.environ.get('METRIC') # Example: 'latency'
 
@@ -54,143 +54,89 @@ def launch_setup(container_prefix, container_sigterm_timeout):
 
     data_loader_node = ComposableNode(
         name='DataLoaderNode',
-        namespace=TestDepthImageToLaserScanNode.generate_namespace(),
+        namespace=TestPointCloudToLaserScanNode.generate_namespace(),
         package='ros2_benchmark',
         plugin='ros2_benchmark::DataLoaderNode',
-        remappings=[('/r2b/hawk_0_left_rgb_image', 'data_loader/left_camera/image'),
-                    ('/r2b/hawk_0_left_rgb_camera_info', 'data_loader/left_camera/camera_info'),
-                    ('/r2b/hawk_0_right_rgb_image', 'data_loader/right_camera/image'),
-                    ('/r2b/hawk_0_right_rgb_camera_info', 'data_loader/right_camera/camera_info')]                    
+        remappings=[('/r2b/pandar_xt_32_0_lidar', 'data_loader/pandar_xt_32_0_lidar')]                    
     )
 
     # Publish input messages by using the messages stored in the buffer
     playback_node = ComposableNode(
         name='PlaybackNode',
-        namespace=TestDepthImageToLaserScanNode.generate_namespace(),
+        namespace=TestPointCloudToLaserScanNode.generate_namespace(),
         package='ros2_benchmark',
         plugin='ros2_benchmark::PlaybackNode',
         parameters=[{
             'data_formats': [
-                'sensor_msgs/msg/Image',
-                'sensor_msgs/msg/CameraInfo',
-                'sensor_msgs/msg/Image',
-                'sensor_msgs/msg/CameraInfo'],
+                'sensor_msgs/msg/PointCloud2'],
         }],
-        remappings=[('buffer/input0', '/r2b/data_loader/left_camera/image'),
-                    ('input0', 'left_camera/image_raw'),
-                    ('buffer/input1', '/r2b/data_loader/left_camera/camera_info'),
-                    ('input1', 'left_camera/camera_info'),
-                    ('buffer/input2', '/r2b/data_loader/right_camera/image'),
-                    ('input2', 'right_camera/image_raw'),
-                    ('buffer/input3', '/r2b/data_loader/right_camera/camera_info'),
-                    ('input3', 'right_camera/camera_info')],                   
-    )
-
-    # Create the disparity map using stereo images
-    disparity_node = ComposableNode(
-        namespace="robotperf/preprocessing",
-        package="stereo_image_proc",
-        plugin="stereo_image_proc::DisparityNode",
-        name="stereo_image_proc_disparity_node",
-        remappings=[
-            ('left/camera_info', '/r2b/left_camera/camera_info'),
-            ('left/image_rect', '/r2b/left_camera/image_raw'),
-            ('right/camera_info', '/r2b/right_camera/camera_info'),
-            ('right/image_rect', '/r2b/right_camera/image_raw'),                    
-        ],
-        extra_arguments=[{'use_intra_process_comms': True}],
-    )
-
-    # Convert disparity map to depth image
-    depth_image_node = ComposableNode(
-        namespace="robotperf/preprocessing",
-        package="a6_depthimage_to_laserscan",
-        plugin="robotperf::perception::DisparityToDepthImageComponent",
-        name="disparity_to_depthimage_node",
-        remappings=[
-            ('/depth', '/robotperf/preprocessing/depth') , 
-            ('/depth_camera_info', '/robotperf/preprocessing/depth_camera_info')                  
-        ],
-        parameters=[
-            {"disparity_topic_name":"/robotperf/preprocessing/disparity", 
-                "disparity_camera_info": "/r2b/left_camera/camera_info"}
-        ], 
-        extra_arguments=[{'use_intra_process_comms': True}],
+        remappings=[('buffer/input0', '/r2b/data_loader/pandar_xt_32_0_lidar'),
+                    ('input0', 'pandar_xt_32_0_lidar')],                   
     )
 
     # Place Input Tracepoint
-    depth_image_input_node = ComposableNode(
-        namespace="robotperf/input",
-        package="a1_perception_2nodes",
-        plugin="robotperf::perception::ImageInputComponent",
-        name="image_input_component",
-        parameters=[
-            {"input_topic_name":"/robotperf/input/depth/depth_image"}
-        ],
-        remappings=[
-            ("image", "/robotperf/preprocessing/depth"),
-            ("camera_info", "/robotperf/preprocessing/depth_camera_info"),
-        ], 
-        extra_arguments=[{'use_intra_process_comms': True}],
-    )
-    
-
-    # Grey Box: Convert Depth Image to Laserscan
-    laserscan_node_grey_box = ComposableNode(
-        namespace="robotperf/benchmark",
-        package='depthimage_to_laserscan',
-        plugin='depthimage_to_laserscan::DepthImageToLaserScanROS',
-        name='depthimage_to_laserscan',
-        remappings=[
-            ('depth_camera_info', '/robotperf/input/depth/camera_info'),
-            ('depth', '/robotperf/input/depth/depth_image'),                  
-        ], 
-        parameters=[ {'range_min': 0.1,
-                        'range_max': 200.0,
-                        'scan_time': 0.000000001, 
-                        'output_frame_id': 'camera_depth_frame'} # Set frame in RVIZ to this to visualize scan
-                    ]
+    pointcloud_input_node = ComposableNode(
+                namespace="robotperf/input",
+                package="a7_pointcloud_to_laserscan",
+                plugin="robotperf::perception::PointCloudInputComponent",
+                name="pointcloud_input_component",
+                parameters=[
+                    {"input_topic_name":"/robotperf/input/pandar_xt_32_0_lidar"}
+                ],
+                remappings=[
+                    ("cloud", "/r2b/pandar_xt_32_0_lidar"),
+                ], 
+                extra_arguments=[{'use_intra_process_comms': True}],
     )
 
 
-    # Black Box: Convert Depth Image to Laserscan
-    laserscan_node_black_box = ComposableNode(
-        namespace="robotperf/benchmark",
-        package='depthimage_to_laserscan',
-        plugin='depthimage_to_laserscan::DepthImageToLaserScanROS',
-        name='depthimage_to_laserscan',
-        remappings=[
-            ('depth_camera_info', '/robotperf/preprocessing/depth_camera_info'),
-            ('depth', '/robotperf/preprocessing/depth'),                  
-        ], 
-        parameters=[ {'range_min': 0.1,
-                        'range_max': 200.0,
-                        'scan_time': 0.000000001, 
-                        'output_frame_id': 'camera_depth_frame'} # Set frame in RVIZ to this to visualize scan
-                    ]
+    # Convert PointCloud to Laserscan (node of interest)
+    pointcloud_to_laserscan_node_grey_box = ComposableNode(
+                namespace="robotperf/benchmark",
+                package='pointcloud_to_laserscan',
+                plugin='pointcloud_to_laserscan::PointCloudToLaserScanNode',
+                name='pointcloud_to_laserscan',
+                remappings=[
+                    ('cloud_in', '/robotperf/input/pandar_xt_32_0_lidar'),
+                ], 
+                parameters=[ {'scan_time': 0.000000001} 
+                ]
+    )
+
+    # Convert PointCloud to Laserscan (node of interest)
+    pointcloud_to_laserscan_node_black_box = ComposableNode(
+                namespace="robotperf/benchmark",
+                package='pointcloud_to_laserscan',
+                plugin='pointcloud_to_laserscan::PointCloudToLaserScanNode',
+                name='pointcloud_to_laserscan',
+                remappings=[
+                    ('cloud_in', '/r2b/pandar_xt_32_0_lidar'),
+                ], 
+                parameters=[ {'scan_time': 0.000000001} 
+                ]
     )
 
     # Record Final Tracepoint once scan is produced
-    output_node = ComposableNode(
-        namespace="robotperf",
-        package='a6_depthimage_to_laserscan', 
-        plugin='robotperf::perception::LaserscanOutputComponent', 
-        name='laserscan_output_component',
-        parameters=[
-            {'output_topic_name': '/robotperf/benchmark/scan'}
-        ],
-        extra_arguments=[{'use_intra_process_comms': True}],
-
+    laserscan_output_node = ComposableNode(
+                namespace="robotperf",
+                package='a6_depthimage_to_laserscan', 
+                plugin='robotperf::perception::LaserscanOutputComponent', 
+                name='laserscan_output_component',
+                parameters=[
+                    {'output_topic_name': '/robotperf/benchmark/scan'}
+                ],
+                extra_arguments=[{'use_intra_process_comms': True}],
     )
 
     monitor_node = ComposableNode(
         name='MonitorNode',
-        namespace=TestDepthImageToLaserScanNode.generate_namespace(),
+        namespace=TestPointCloudToLaserScanNode.generate_namespace(),
         package='ros2_benchmark',
         plugin='ros2_benchmark::MonitorNode',
         parameters=[{
             'monitor_data_format': 'sensor_msgs/msg/LaserScan',
             # 'monitor_power_data_format': 'power_msgs/msg/Power',
+            'qos_type':'sensor'
         }],
         remappings=[
             ('output', '/robotperf/benchmark/scan')],
@@ -200,25 +146,21 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         composable_node_descriptions_option=[
             data_loader_node,
             playback_node,
-            disparity_node,
-            depth_image_node, 
-            laserscan_node_black_box,  
+            pointcloud_to_laserscan_node_black_box,  
             monitor_node           
         ]
     else:
         composable_node_descriptions_option=[
             data_loader_node,
             playback_node,
-            disparity_node,
-            depth_image_node, 
-            depth_image_input_node, 
-            laserscan_node_grey_box, 
-            output_node
+            pointcloud_input_node,
+            pointcloud_to_laserscan_node_grey_box, 
+            laserscan_output_node
         ]
 
     composable_node_container = ComposableNodeContainer(
         name='container',
-        namespace=TestDepthImageToLaserScanNode.generate_namespace(),
+        namespace=TestPointCloudToLaserScanNode.generate_namespace(),
         package='rclcpp_components',
         executable='component_container_mt',
         prefix=container_prefix,
@@ -253,12 +195,12 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         return [composable_node_container]
 
 
-class TestDepthImageToLaserScanNode(ROS2BenchmarkTest):
-    """Performance test for depthimage_to_laserscan DepthImageToLaserScanROS."""
+class TestPointCloudToLaserScanNode(ROS2BenchmarkTest):
+    """Performance test for pointcloud_to_laserscan PointCloudToLaserScanNode."""
 
     # Custom configurations
     config = ROS2BenchmarkConfig(
-        benchmark_name='depthimage_to_laserscan::DepthImageToLaserScanROS Benchmark',
+        benchmark_name='pointcloud_to_laserscan::PointCloudToLaserScanNode Benchmark',
         input_data_path=ROSBAG_PATH,
         # Upper and lower bounds of peak throughput search window
         publisher_upper_frequency=30.0,
@@ -303,4 +245,4 @@ class TestDepthImageToLaserScanNode(ROS2BenchmarkTest):
             print(str_out)
      
 def generate_test_description():
-    return TestDepthImageToLaserScanNode.generate_test_description_with_nsys(launch_setup)
+    return TestPointCloudToLaserScanNode.generate_test_description_with_nsys(launch_setup)
