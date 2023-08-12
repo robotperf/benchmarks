@@ -205,6 +205,76 @@ void TRACEPOINT(
     pointcloud_output_msg_size_arg);
 }
 
+// laserscan_input
+void TRACEPOINT(
+  robotperf_laserscan_input_cb_init,
+  const void * laserscan_input_node_arg,
+  const void * laserscan_input_scan_msg_arg,
+  uint32_t laserscan_input_header_nsec_arg,
+  uint32_t laserscan_input_header_sec_arg,
+  size_t laserscan_input_msg_size_arg)
+{
+  CONDITIONAL_TP(
+    robotperf_laserscan_input_cb_init,
+    laserscan_input_node_arg,
+    laserscan_input_scan_msg_arg,
+    laserscan_input_header_nsec_arg,
+    laserscan_input_header_sec_arg,
+    laserscan_input_msg_size_arg);
+}
+
+void TRACEPOINT(
+  robotperf_laserscan_input_cb_fini,
+  const void * laserscan_input_node_arg,
+  const void * laserscan_input_scan_msg_arg,
+  uint32_t laserscan_input_header_nsec_arg,
+  uint32_t laserscan_input_header_sec_arg,
+  size_t laserscan_input_msg_size_arg)
+{
+  CONDITIONAL_TP(
+    robotperf_laserscan_input_cb_fini,
+    laserscan_input_node_arg,
+    laserscan_input_scan_msg_arg,
+    laserscan_input_header_nsec_arg,
+    laserscan_input_header_sec_arg,
+    laserscan_input_msg_size_arg);
+}
+
+// laserscan_output
+void TRACEPOINT(
+  robotperf_laserscan_output_cb_init,
+  const void * laserscan_output_node_arg,
+  const void * laserscan_output_scan_msg_arg,
+  uint32_t laserscan_output_header_nsec_arg,
+  uint32_t laserscan_output_header_sec_arg,
+  size_t laserscan_output_msg_size_arg)
+{
+  CONDITIONAL_TP(
+    robotperf_laserscan_output_cb_init,
+    laserscan_output_node_arg,
+    laserscan_output_scan_msg_arg,
+    laserscan_output_header_nsec_arg,
+    laserscan_output_header_sec_arg,
+    laserscan_output_msg_size_arg);
+}
+
+void TRACEPOINT(
+  robotperf_laserscan_output_cb_fini,
+  const void * laserscan_output_node_arg,
+  const void * laserscan_output_scan_msg_arg,
+  uint32_t laserscan_output_header_nsec_arg,
+  uint32_t laserscan_output_header_sec_arg,
+  size_t laserscan_output_msg_size_arg)
+{
+  CONDITIONAL_TP(
+    robotperf_laserscan_output_cb_fini,
+    laserscan_output_node_arg,
+    laserscan_output_scan_msg_arg,
+    laserscan_output_header_nsec_arg,
+    laserscan_output_header_sec_arg,
+    laserscan_output_msg_size_arg);
+}
+
 #ifndef _WIN32
 # pragma GCC diagnostic pop
 #else

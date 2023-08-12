@@ -58,8 +58,8 @@ def main(argv):
         'robotperf_benchmarks:robotperf_image_input_cb_fini',
         # 'ros2:callback_end',
         # "ros2:callback_start",
-        'robotperf_benchmarks:robotperf_image_output_cb_init',
-        'robotperf_benchmarks:robotperf_image_output_cb_fini',
+        'robotperf_benchmarks:robotperf_laserscan_output_cb_init',
+        'robotperf_benchmarks:robotperf_laserscan_output_cb_fini',
         # "ros2:callback_end",
         ]
 
@@ -88,8 +88,8 @@ def main(argv):
         )
         ba.add_target(
             {
-                "name": "robotperf_benchmarks:robotperf_image_output_cb_init",
-                "name_disambiguous": "robotperf_benchmarks:robotperf_image_output_cb_init",
+                "name": "robotperf_benchmarks:robotperf_laserscan_output_cb_init",
+                "name_disambiguous": "robotperf_benchmarks:robotperf_laserscan_output_cb_init",
                 "colors_fg": "red",
                 "colors_fg_bokeh": "red",
                 "layer": "benchmark",
@@ -99,8 +99,8 @@ def main(argv):
         )
         ba.add_target(
             {
-                "name": "robotperf_benchmarks:robotperf_image_output_cb_fini",
-                "name_disambiguous": "robotperf_benchmarks:robotperf_image_output_cb_fini",
+                "name": "robotperf_benchmarks:robotperf_laserscan_output_cb_fini",
+                "name_disambiguous": "robotperf_benchmarks:robotperf_laserscan_output_cb_fini",
                 "colors_fg": "red",
                 "colors_fg_bokeh": "lavender",
                 "layer": "userland",

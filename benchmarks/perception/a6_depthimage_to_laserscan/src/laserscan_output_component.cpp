@@ -57,24 +57,20 @@ namespace perception
         const sensor_msgs::msg::LaserScan::SharedPtr scan_msg)
     {
         TRACEPOINT(
-            robotperf_image_output_cb_init,
+            robotperf_laserscan_output_cb_init,
             static_cast<const void *>(this),
             static_cast<const void *>(&(*scan_msg)),
-            nullptr,
             scan_msg->header.stamp.nanosec,
             scan_msg->header.stamp.sec,
-            get_msg_size(scan_msg),
-            size_t(0));
+            get_msg_size(scan_msg));
 
         TRACEPOINT(
-            robotperf_image_output_cb_fini,    
+            robotperf_laserscan_output_cb_fini,    
             static_cast<const void *>(this),
             static_cast<const void *>(&(*scan_msg)),
-            nullptr,
             scan_msg->header.stamp.nanosec,
             scan_msg->header.stamp.sec,
-            get_msg_size(scan_msg),
-            size_t(0));
+            get_msg_size(scan_msg));
 
     }
 } // namespace perception
