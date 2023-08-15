@@ -43,14 +43,16 @@ DisparityInputComponent::DisparityInputComponent(const rclcpp::NodeOptions & opt
 : rclcpp::Node("DisparityInputComponent", options)
 {
   // Get the input_topic_name parameter from the parameter server with default value "input"
-  std::string input_topic_name = this->declare_parameter<std::string>("input_topic_name", "/benchmark/disparity");
-
-  // Create image pub
-  pub_disparity_ = this->create_publisher<stereo_msgs::msg::DisparityImage>(input_topic_name, rclcpp::QoS(10));
-
+  std::string prev_topic_name = this->declare_parameter<std::string>("prev_topic_name", "/benchmark/disparity");
   //Create subscriber to Disparity image with callback function
   sub_disparity_ = this->create_subscription<stereo_msgs::msg::DisparityImage>(
-    input_topic_name, rclcpp::QoS(10), std::bind(&DisparityInputComponent::disparityCb, this, std::placeholders::_1));
+    prev_topic_name, rclcpp::QoS(10), std::bind(&DisparityInputComponent::disparityCb, this, std::placeholders::_1));
+
+  // Create image pub
+  std::string post_topic_name = this->declare_parameter<std::string>("post_topic_name", "/benchmark/input/disparity");
+  pub_disparity_ = this->create_publisher<stereo_msgs::msg::DisparityImage>(post_topic_name, rclcpp::QoS(10));
+
+  
 
 }
 

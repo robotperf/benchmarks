@@ -55,10 +55,23 @@ def generate_launch_description():
         executable="component_container",
         composable_node_descriptions=[
             ComposableNode(
+                namespace="robotperf/preprocessing",
+                package="stereo_image_proc",
+                plugin="stereo_image_proc::DisparityNode",
+                name="stereo_image_proc_disparity_node",
+                remappings=[
+                    ('left/camera_info', '/hawk_0_left_rgb_camera_info'),
+                    ('left/image_rect', '/hawk_0_left_rgb_image'),
+                    ('right/camera_info', '/hawk_0_right_rgb_camera_info'),
+                    ('right/image_rect', '/hawk_0_right_rgb_image'),                    
+                ],
+                extra_arguments=[{'use_intra_process_comms': True}],
+            ),
+            ComposableNode(
                 package="a1_perception_2nodes",
                 plugin="robotperf::perception::ImageInputComponent",
-                name="image_input_component",
-                namespace="robotperf",
+                name="image_input_component_left",
+                namespace="robotperf/input",
                 parameters=[
                     {"input_topic_name":"/robotperf/input/left_input/left_image_raw"}
                 ],
@@ -71,8 +84,8 @@ def generate_launch_description():
             ComposableNode(
                 package="a1_perception_2nodes",
                 plugin="robotperf::perception::ImageInputComponent",
-                name="image_input_component",
-                namespace="robotperf",
+                name="image_input_component_right",
+                namespace="robotperf/input",
                 parameters=[
                     {"input_topic_name":"/robotperf/input/right_input/right_image_raw"}
                 ],
@@ -82,29 +95,15 @@ def generate_launch_description():
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],
             ),
-            ComposableNode(
-                namespace="robotperf/benchmark",
-                package="stereo_image_proc",
-                plugin="stereo_image_proc::DisparityNode",
-                name="stereo_image_proc_disparity_node",
-                remappings=[
-                    ('left/camera_info', '/robotperf/input/left_input/camera_info'),
-                    ('left/image_rect', '/robotperf/input/left_input/left_image_raw'),
-                    ('right/camera_info', '/robotperf/input/right_input/camera_info'),
-                    ('right/image_rect', '/robotperf/input/right_input/right_image_raw'),                    
-                ],
-                extra_arguments=[{'use_intra_process_comms': True}],
-            ),
+
             ComposableNode(
                 package="a8_stereo_image_proc_pc",
-                namespace="robotperf",
+                namespace="robotperf/input",
                 plugin="robotperf::perception::DisparityInputComponent",
                 name="disparity_input_component",
-                remappings=[
-                    ('left/camera_info', '/robotperf/input/left_input/camera_info'),
-                    ('left/image_rect', '/robotperf/input/left_input/left_image_raw'),
-                    ('right/camera_info', '/robotperf/input/right_input/camera_info'),
-                    ('right/image_rect', '/robotperf/input/right_input/right_image_raw'),                    
+                parameters=[
+                    {"prev_topic_name":"/robotperf/preprocessing/disparity",
+                    "post_topic_name":"/robotperf/input/disparity"}
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],
             ),
@@ -117,7 +116,7 @@ def generate_launch_description():
                     ('left/image_rect_color', '/robotperf/input/left_input/left_image_raw'),
                     ('left/camera_info', '/robotperf/input/left_input/camera_info'),
                     ('right/camera_info', '/robotperf/input/right_input/camera_info'),
-                    ('disparity', '/robotperf/input/benchmark/disparity'),     
+                    ('disparity', '/robotperf/input/disparity'),     
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],
             ),
@@ -127,7 +126,7 @@ def generate_launch_description():
                 plugin="robotperf::perception::PcOutputComponent",
                 name="pc_output_component",
                 parameters=[
-                    {"output_topic_name":"/robotperf/benchmark/pc"}
+                    {"output_topic_name":"/robotperf/benchmark/points2"}
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],
             ),

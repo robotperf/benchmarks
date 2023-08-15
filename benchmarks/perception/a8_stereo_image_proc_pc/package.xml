@@ -3,8 +3,11 @@
 <package format="3">
   <name>a8_stereo_image_proc_pc</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
-  <maintainer email="jasonjabbour@g.harvard.edu">jason</maintainer>
+  <description>RobotPerf package that evaluates the performance of the stereo_image_proc::PointCloudNode node.</description>
+  <maintainer email="yushun_hsiao@g.harvard.edu">Yu-Shun Hsiao</maintainer>
+  <maintainer email="jasonjabbour@g.harvard.edu">Jason Jabbour</maintainer>
+  <author email="yushun_hsiao@g.harvard.edu">Yu-Shun Hsiao</author>
+  <author email="jasonjabbour@g.harvard.edu">Jason Jabbour</author>
   <license>TODO: License declaration</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
