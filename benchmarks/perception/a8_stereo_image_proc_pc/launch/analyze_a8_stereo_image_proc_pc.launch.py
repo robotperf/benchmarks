@@ -49,7 +49,7 @@ def main(argv):
     metrics = json.loads(json.dumps(metrics_elements))
  
     # Instantiate the class
-    ba = BenchmarkAnalyzer('a3_stereo_image_proc', hardware_device_type)
+    ba = BenchmarkAnalyzer('a8_stereo_image_proc_pc', hardware_device_type)
 
     if hardware_device_type == 'cpu':
         target_chain = [
@@ -62,6 +62,8 @@ def main(argv):
         'robotperf_benchmarks:robotperf_image_input_cb_fini',
         # 'ros2:callback_end',
         # "ros2:callback_start",
+        'robotperf_benchmarks:robotperf_image_input_cb_init',
+        'robotperf_benchmarks:robotperf_image_input_cb_fini',
         'robotperf_benchmarks:robotperf_image_output_cb_init',
         'robotperf_benchmarks:robotperf_image_output_cb_fini',
         # "ros2:callback_end",
@@ -105,6 +107,28 @@ def main(argv):
             {
                 "name": "robotperf_benchmarks:robotperf_image_input_cb_fini",
                 "name_disambiguous": "robotperf_benchmarks:robotperf_image_input_cb_fini (2)",
+                "colors_fg": "yellow",
+                "colors_fg_bokeh": "darksalmon",
+                "layer": "benchmark",
+                "label_layer": 5,
+                "marker": "plus",
+            }
+        )
+        ba.add_target(
+            {
+                "name": "robotperf_benchmarks:robotperf_image_input_cb_init",
+                "name_disambiguous": "robotperf_benchmarks:robotperf_image_input_cb_init (3)",
+                "colors_fg": "yellow",
+                "colors_fg_bokeh": "salmon",
+                "layer": "userland",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+        )
+        ba.add_target(
+            {
+                "name": "robotperf_benchmarks:robotperf_image_input_cb_fini",
+                "name_disambiguous": "robotperf_benchmarks:robotperf_image_input_cb_fini (3)",
                 "colors_fg": "yellow",
                 "colors_fg_bokeh": "darksalmon",
                 "layer": "benchmark",
@@ -196,7 +220,7 @@ def generate_launch_description():
     # Define the ExecuteProcess action to run the Python script
     analyzer = ExecuteProcess(
         cmd=[
-            'python3', "src/benchmarks/benchmarks/perception/a3_stereo_image_proc/launch/analyze_a3_stereo_image_proc.launch.py",
+            'python3', "src/benchmarks/benchmarks/perception/a8_stereo_image_proc_pc/launch/analyze_a8_stereo_image_proc_pc.launch.py",
             '--hardware_device_type', LaunchConfiguration('hardware_device_type'),
             '--trace_path', LaunchConfiguration('trace_path'),
             '--metrics', LaunchConfiguration('metrics')],

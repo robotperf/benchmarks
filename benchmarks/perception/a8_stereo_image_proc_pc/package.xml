@@ -35,6 +35,8 @@
   <depend>babeltrace</depend>
   <depend>stereo_image_proc</depend> 
   <depend>ros2_benchmark</depend>
+  <depend>benchmark_utilities</depend>
+  <depend>ros2benchmark</depend>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
   <!-- <buildtool_depend>ament_vitis</buildtool_depend> -->

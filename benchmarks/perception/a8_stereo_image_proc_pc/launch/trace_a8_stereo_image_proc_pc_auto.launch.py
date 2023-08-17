@@ -38,7 +38,7 @@ metric = os.environ.get('METRIC')
 
 rosbag = 'perception/r2b_cafe'
 package='a8_stereo_image_proc_pc'
-type='black'
+type='grey'
 metric = 'latency'
 
 POWER_LIB = os.environ.get('POWER_LIB')
