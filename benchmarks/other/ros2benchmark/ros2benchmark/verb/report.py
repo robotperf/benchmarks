@@ -7,12 +7,15 @@ from ros2cli.node.strategy import add_arguments as add_strategy_node_arguments
 from ros2cli.node.strategy import NodeStrategy
 from ros2benchmark.verb import VerbExtension, Benchmark, run, search_benchmarks
 from ros2benchmark.verb.summary import SummaryVerb
+from collections import defaultdict
 import os
 import yaml
 import pprint
 import matplotlib.pyplot as plt
+import numpy as np
 import arrow
 import random
+import sys
 
 
 class ReportVerb(VerbExtension):
@@ -49,6 +52,16 @@ class ReportVerb(VerbExtension):
 
         :param data_sample: dict with the data
         """
+        # if data_sample['category'] == "workstation":
+        #     return "🖥️" + data_sample['name']
+        # elif data_sample['category'] == "edge":
+        #     return "📟" + data_sample['name']            
+        # elif data_sample['category'] == "cloud":
+        #     return "⛅" + data_sample['name']            
+        # elif data_sample['category'] == "datacenter":
+        #     return "🗄" + data_sample['name']            
+        # else:
+        #     return data_sample['name']
         return data_sample['name']
 
     @staticmethod
@@ -66,6 +79,27 @@ class ReportVerb(VerbExtension):
             return_str += data_sample['hardware'].replace("ROBOTCORE®", "$\mathbf{ROBOTCORE®}$")
         else:
             return_str += data_sample['hardware']
+
+
+        if data_sample['type'].lower() == "grey":
+            return_str += "⚪"
+        elif data_sample['type'].lower() == "black":
+            return_str += "⚫"
+        else:
+            return_str += "?"
+
+        return return_str
+
+    @staticmethod
+    def plot_function_id_withbenchtype(data_sample):
+        """
+        Extract the "name" from a data_sample
+
+        :param data_sample: dict with the data
+        """
+
+        return_str = ""         
+        return_str += data_sample['id']
 
 
         if data_sample['type'].lower() == "grey":
@@ -103,7 +137,7 @@ class ReportVerb(VerbExtension):
         :param filterout: list of tuples (hardware, type) to filter out and not consider
         """
 
-        plotpath = '/tmp/report-' + title + '-latency.png'
+        plotpath = '/tmp/report-' + title + '.png'
         if filter:
             # Filter data using the provided function
             filtered_data = [d for d in data if filter(d)]
@@ -161,6 +195,477 @@ class ReportVerb(VerbExtension):
         
         return plotpath
 
+    @staticmethod
+    def radar_plot_data(data, 
+                  title,
+                  xlabel,
+                  ylabel,
+                  name_function=plot_function_names,
+                  value_function=plot_function_values, 
+                  filter=None, 
+                  unique=False,
+                  sortedata=False, 
+                  sortedatareverse=False,
+                  filterout=None):
+        """
+        Produces a radar plot of the data saves it to a file.
+
+        :param data: list of dicts with the data to plot
+        :param title: title of the plot
+        :param name_function: function to extract the name from the data
+        :param value_function: function to extract the value from the data
+        :param filter: function to filter the data
+        :param unique: if True, only the most recent entry for each 'name', 'hardware', 'type', 'datasource' combination is plotted
+        :param sortedata: if True, the data is sorted by value
+        :param sortedatareverse: if True, the data is sorted by value in reverse order
+        :param filterout: list of tuples (hardware, type) to filter out and not consider
+        """
+
+        plotpath = '/tmp/report-' + title + '-radar.png'
+        if filter:
+            # Filter data using the provided function
+            filtered_data = [d for d in data if filter(d)]
+        else:
+            filtered_data = data
+
+        if unique:
+            # Use a dictionary to hold the most recent entry for each 'name', 
+            # 'hardware', 'type', 'datasource' combination
+            filtered_dict = {}
+            for entry in filtered_data:
+                name = entry['name'] + entry['hardware'] + entry['type'] + entry['datasource']
+            
+                # NOTE: condition 1: if not in dict or more recent than the one in the dict
+                # if name not in filtered_dict or arrow.get(entry['timestampt'], ['D-M-YYYY', 'YYYY-MM-DD HH:mm:ss']).datetime > arrow.get(filtered_dict[name]['timestampt'], ['D-M-YYYY', 'YYYY-MM-DD HH:mm:ss']).datetime:
+
+                # NOTE: condition 2: if not in dict or lower "value" than the one in the dict
+                # not in filterout and greater then 0.001 (heuristic to remove outliers, close to zero)
+                if (name not in filtered_dict or entry['value'] < filtered_dict[name]['value']) and (filterout is None or (entry['hardware'], entry['type']) not in filterout) and (entry['value'] > 0.001):
+                    filtered_dict[name] = entry
+
+            filtered_data = filtered_dict.values()            
+
+        # order list using "value"
+        if sortedata:
+            filtered_data = sorted(filtered_data, key=lambda x: x['value'])
+        if sortedatareverse:
+            filtered_data = sorted(filtered_data, key=lambda x: x['value'], reverse=True)
+
+        # extract
+        names = [name_function(d) for d in filtered_data]
+        values = [value_function(d) for d in filtered_data]
+        # Radar plot requires the data to be circular so append the first value to the end of the dataset
+        values += values[:1]
+        names += names[:1]
+
+        # Calculate the number of variables
+        num_vars = len(names)
+
+        # Compute angle for each axis
+        angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
+
+        # Radar plot
+        fig, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
+
+        ax.xaxis.grid(True, color="#888888", linestyle='solid', linewidth=0.5)
+        ax.yaxis.grid(True, color="#888888", linestyle='dashed', linewidth=0.5)
+        ax.spines["polar"].set_color("#222222")
+        ax.set_facecolor("#FAFAFA")
+
+        # Plot the data
+        ax.plot(angles, values, color='#4d4cf5', linewidth=2)
+        ax.fill(angles, values, color='#4d4cf5', alpha=0.25)
+
+        ax.fill(angles, values, color='#4d4cf5', alpha=0.25)
+        ax.set_yticklabels([])
+        ax.set_xticks(angles)                
+        ax.set_xticklabels(names, fontsize=6)  # Adjust fontsize here        
+        plt.title(title, size=15, color='black', y=1.1)  # Adjust title fontsize here
+        ax.set_rlabel_position(30)
+
+        plt.savefig(plotpath, bbox_inches='tight')
+        plt.close()
+
+        return plotpath
+
+    @staticmethod
+    def radar_plot_data_byid(data_dict, title, xlabel, ylabel, name_function=plot_function_names,
+                                value_function=plot_function_values, filter=None, unique=False,
+                                sortedata=False, sortedatareverse=False, filterout=None,
+                                benchmark_ids=["a5", "a2", "a1"]):
+        """
+        Produces a radar plot with multiple areas corresponding to multiple data sets.
+
+        :param data_dict: dict of data (each key corresponds with a list of dicts)
+        :param title: title of the plot
+        :param name_function: function to extract the name from the data
+        :param value_function: function to extract the value from the data
+        :param filter: function to filter the data
+        :param unique: if True, only the most recent entry for each 'name', 'hardware', 'type', 'datasource' combination is plotted
+        :param sortedata: if True, the data is sorted by value
+        :param sortedatareverse: if True, the data is sorted by value in reverse order
+        :param filterout: list of tuples (hardware, type) to filter out and not consider
+        :param benchmark_ids: list of benchmark ids to plot
+        """
+
+        # Filter data for benchmarks tested
+        filtered_data_dict = {key: data_dict[key] for key in benchmark_ids if key in data_dict}
+        data_dict = filtered_data_dict        
+
+        # Initialize the figure
+        fig, ax = plt.subplots(figsize=(8, 8), subplot_kw=dict(polar=True))
+        ax.xaxis.grid(True, color="#888888", linestyle='solid', linewidth=0.5)
+        ax.yaxis.grid(True, color="#888888", linestyle='dashed', linewidth=0.5)
+        ax.spines["polar"].set_color("#222222")
+        ax.set_facecolor("#FAFAFA")
+        plt.title(title, size=14, color='black', y=1.15)
+
+        # filter out a common list of names, so that angles are the same for all datasets
+        common_names_sets = [set(name_function(d) for d in data_dict[key]) for key in data_dict.keys()]
+        common_names = set.intersection(*common_names_sets)
+
+        if len(common_names) == 0:
+            print("No common names found. Not producing radar plot, exiting")
+            sys.exit(0)
+        
+        # # debug
+        # print("common_names: ", common_names)
+        max_value = max([entry['value'] for sublist in data_dict.values() for entry in sublist if name_function(entry) in common_names])
+        # NOTE: this value must be updated afterwards, after all the filtering and sorting
+
+        # Get a lits of colors
+        # colormap = plt.cm.viridis
+        colormap = plt.cm.tab10
+
+        # Plots a radar plot with multiple areas, each corresponding to
+        #     hardware:
+        #         ['AMD Ryzen 5 PRO 4650G⚪',
+        #         'AMD Ryzen 5 PRO 4650G⚫',
+        #         ...
+        #         'NVIDIA Jetson Nano⚫']
+        #     values:
+        #         [0.0011886436060327226,
+        #         ...
+        #         0.00771485232493554,
+        #         0.007821293572182123]
+        #     angles:
+        #         [0.0,
+        #         ...
+        #         5.654866776461628]
+
+        colors = [colormap(i) for i in np.linspace(0, 1, len(data_dict))]
+        # Process each dataset in data_dict and plot it
+        for idx, datakey in enumerate(data_dict.keys()):
+
+            if filter:
+                # Filter datakey using the provided function
+                filtered_data = [d for d in data_dict[datakey] if filter(d)]
+            else:
+                filtered_data = data_dict[datakey]
+
+            # re-filter for common names
+            filtered_data = [entry for entry in filtered_data if name_function(entry) in common_names]
+
+            if unique:
+                # Use a dictionary to hold the most recent entry for each 'name', 
+                # 'hardware', 'type', 'datasource' combination
+                filtered_dict = {}
+                for entry in filtered_data:
+                    name = entry['name'] + entry['hardware'] + entry['type'] + entry['datasource']
+                
+                    # NOTE: condition 1: if not in dict or more recent than the one in the dict
+                    # if name not in filtered_dict or arrow.get(entry['timestampt'], ['D-M-YYYY', 'YYYY-MM-DD HH:mm:ss']).datetime > arrow.get(filtered_dict[name]['timestampt'], ['D-M-YYYY', 'YYYY-MM-DD HH:mm:ss']).datetime:
+
+                    # NOTE: condition 2: if not in dict or lower "value" than the one in the dict
+                    # not in filterout and greater then 0.001 (heuristic to remove outliers, close to zero)
+                    #
+                    # IMPORTANT: This makes sense for latency and power, but not for throughput
+                    # TODO: reverse this if for throughput
+                    #
+                    if (name not in filtered_dict or entry['value'] < filtered_dict[name]['value']) and (filterout is None or (entry['hardware'], entry['type']) not in filterout) and (entry['value'] > 0.001):
+                        filtered_dict[name] = entry
+
+                filtered_data = filtered_dict.values()            
+
+            # order list using "hardware", to avoid Order of Processing issues
+            if sortedata:
+                filtered_data = sorted(filtered_data, key=lambda x: x['hardware'])
+            if sortedatareverse:
+                filtered_data = sorted(filtered_data, key=lambda x: x['hardware'], reverse=True)
+
+            # extract
+            names = [name_function(d) for d in filtered_data]
+            # Normalize values
+            real_values = [value_function(d) for d in filtered_data]
+            values = [value_function(d) / max_value for d in filtered_data]
+
+            # # Radar plot requires the data to be circular so append the first value to the end of the dataset
+            # values += values[:1]
+            # names += names[:1]            
+
+            # Calculate the number of variables
+            num_vars = len(names)
+
+            # Compute angle for each axis
+            angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
+
+            # pprint.pprint(names)
+            # pprint.pprint(values)
+            # pprint.pprint(angles)
+
+            # Plot the data for this dataset
+            current_color = colors[idx]
+            ax.plot(angles, values, linewidth=2, label=datakey, color=current_color)
+            ax.fill(angles, values, alpha=0.25, color=current_color)
+            # Close the loop by connecting the start and end points
+            ax.plot([angles[0], angles[-1]], [values[0], values[-1]], linewidth=2, color=current_color)                
+
+            # Constants for the offsets. You can tune these for better aesthetics.
+            offset_scale = 15
+            # Annotate the points with their real values
+            for angle, value, real_value in zip(angles, values, real_values):
+                
+                # Calculate x and y
+                x = value * np.cos(angle)
+                y = value * np.sin(angle)
+                
+                # Normalize x and y
+                norm_x = x / np.sqrt(x**2 + y**2)
+                norm_y = y / np.sqrt(x**2 + y**2)
+                
+                # Determine the offsets based on normalized x and y and the scale
+                distancex = offset_scale * norm_x
+                distancey = offset_scale * norm_y
+                
+                # Decide on horizontal alignment based on x
+                ha = 'right' if x < 0 else 'left'
+                
+                ax.annotate(str(round(real_value, 1)), 
+                            xy=(angle, value),
+                            xytext=(distancex, distancey),  # proportional distance from the point
+                            textcoords='offset points',
+                            horizontalalignment=ha,
+                            verticalalignment='center',
+                            fontsize=6,
+                            color=current_color)
+
+
+        # Add legend
+        # NOTE: using the last angles and names        
+        ax.set_xticks(angles)
+        ax.set_yticklabels([])
+        ax.set_xticklabels(names, fontsize=6)
+        ax.legend(loc='upper right', bbox_to_anchor=(1.1, 1.1))
+
+        title_file = title.lower().replace(" ", "-")
+        plotpath = '/tmp/report-' + title_file + '-multi-radar.png'
+        plt.savefig(plotpath, bbox_inches='tight')
+        plt.close()
+
+        return plotpath
+
+
+    @staticmethod
+    def radar_plot_data_byhardware(data_dict, title, xlabel, ylabel, name_function=plot_function_names,
+                                value_function=plot_function_values, filter=None, unique=False,
+                                sortedata=False, sortedatareverse=False, filterout=None,
+                                benchmark_ids=["a5", "a2", "a1"], benchmark_hardware=None, 
+                                decimal_resolution=1, proportional_independent=False):
+        """
+        Produces a radar plot with multiple areas corresponding to multiple data sets.
+
+        :param data_dict: dict of data (each key corresponds with a list of dicts)
+        :param title: title of the plot
+        :param name_function: function to extract the name from the data
+        :param value_function: function to extract the value from the data
+        :param filter: function to filter the data
+        :param unique: if True, only the most recent entry for each 'name', 'hardware', 'type', 'datasource' combination is plotted
+        :param sortedata: if True, the data is sorted by value
+        :param sortedatareverse: if True, the data is sorted by value in reverse order
+        :param filterout: list of tuples (hardware, type) to filter out and not consider        
+        :param benchmark_ids: list of benchmark ids to plot
+        :param benchmark_hardware: list of benchmark hardware to plot
+        :param decimal_resolution: number of decimal places to round the values to
+        :param proportional_independent: if True, the values are normalized by the max value of the same type of benchmark (e.g., "c1" or "a2") and not by the max value of all benchmarks
+        """
+
+        # Filter data for benchmarks tested
+        filtered_data_dict = {key: data_dict[key] for key in benchmark_ids if key in data_dict}
+        data_dict = filtered_data_dict        
+
+        # Initialize the figure
+        fig, ax = plt.subplots(figsize=(8, 8), subplot_kw=dict(polar=True))
+        ax.xaxis.grid(True, color="#888888", linestyle='solid', linewidth=0.5)
+        ax.yaxis.grid(True, color="#888888", linestyle='dashed', linewidth=0.5)
+        ax.spines["polar"].set_color("#222222")
+        ax.set_facecolor("#FAFAFA")
+        plt.title(title, size=14, color='black', y=1.15)
+
+        # filter out a common list of names, so that angles are the same for all datasets
+        common_names_sets = [set(name_function(d) for d in data_dict[key]) for key in data_dict.keys()]
+        common_names = set.intersection(*common_names_sets)
+
+        if len(common_names) == 0:
+            print("No common names found. Not producing radar plot, exiting")
+            sys.exit(0)
+        
+        # TODO: Implement the concepto of "proportionalindependent" normalization,
+        # wherein the values are normalized by the max value of the same type of benchmark
+        # (e.g., "c1" or "a2") and not by the max value of all benchmarks
+        if proportional_independent:
+            max_values = {}
+            for id in benchmark_ids:
+                max_values[id] = max([entry['value'] for sublist in data_dict.values() for entry in sublist
+                                      if name_function(entry) in common_names and id in entry['id']])
+                
+        else:
+            max_value = max([entry['value'] for sublist in data_dict.values() for entry in sublist if name_function(entry) in common_names])
+                                
+
+        # Get a lits of colors
+        # colormap = plt.cm.viridis
+        colormap = plt.cm.tab10
+        # Plots a radar plot with multiple areas, each corresponding to
+        #     benchmark id:
+        #         ['a1',
+        #         'a2',
+        #         ...
+        #         'a3']
+        #     values:
+        #         [0.0011886436060327226,
+        #         ...
+        #         0.00771485232493554,
+        #         0.007821293572182123]
+        #     angles:
+        #         [0.0,
+        #         ...
+        #         5.654866776461628]            
+        colors = [colormap(i) for i in np.linspace(0, 1, len(common_names))]
+
+        # transform data_dict to have the hardware as keys
+        merged_data_list = [item for sublist in data_dict.values() for item in sublist if name_function(item) in common_names]
+        list_hardware = SummaryVerb.extract_unique_x(merged_data_list, "hardware")
+        if benchmark_hardware is not None:
+            list_hardware = [h for h in list_hardware if h in benchmark_hardware]
+        data_dict = defaultdict(list)
+        for benchmark in merged_data_list:
+            if benchmark["hardware"] in list_hardware:
+                data_dict[benchmark["hardware"]].append(benchmark)
+
+        # Process each dataset in data_dict and plot it
+        for idx, datakey in enumerate(data_dict.keys()):
+
+            if filter:
+                # Filter datakey using the provided function
+                filtered_data = [d for d in data_dict[datakey] if filter(d)]
+            else:
+                filtered_data = data_dict[datakey]
+
+            if unique:
+                # Use a dictionary to hold the most recent entry for each 'name', 
+                # 'hardware', 'datasource' combination
+                # NOTE: does not consider "type"
+                #
+                filtered_dict = {}
+                for entry in filtered_data:
+                    name = entry['name'] + entry['hardware'] + entry['datasource']
+                
+                    # NOTE: condition 1: if not in dict or more recent than the one in the dict
+                    # if name not in filtered_dict or arrow.get(entry['timestampt'], ['D-M-YYYY', 'YYYY-MM-DD HH:mm:ss']).datetime > arrow.get(filtered_dict[name]['timestampt'], ['D-M-YYYY', 'YYYY-MM-DD HH:mm:ss']).datetime:
+
+                    # NOTE: condition 2: if not in dict or lower "value" than the one in the dict
+                    # not in filterout and greater then 0.001 (heuristic to remove outliers, close to zero)
+                    #
+                    # IMPORTANT: This makes sense for latency and power, but not for throughput
+                    # TODO: reverse this if for throughput
+                    #
+                    if (name not in filtered_dict or entry['value'] < filtered_dict[name]['value']) and (filterout is None or (entry['hardware'], entry['type']) not in filterout) and (entry['value'] > 0.001):
+                        filtered_dict[name] = entry
+
+                filtered_data = filtered_dict.values()
+            
+            # order list using "hardware", to avoid Order of Processing issues
+            if sortedata:
+                filtered_data = sorted(filtered_data, key=lambda x: x['id'])
+            if sortedatareverse:
+                filtered_data = sorted(filtered_data, key=lambda x: x['id'], reverse=True)
+
+            # max_value = max([entry['value'] for entry in filtered_data])
+
+            # extract
+            # names = [ReportVerb.plot_function_id_withbenchtype(d) for d in filtered_data]  # NOTE this requires all
+            #                                                                                # benchmarks to have all
+            #                                                                                # types (grey, black)
+            names = [d["id"] for d in filtered_data]
+            
+            # Normalize values
+            real_values = [value_function(d) for d in filtered_data]
+            if proportional_independent:
+                values = [value_function(d) / max_values[d["id"]] for d in filtered_data]
+            else:
+                values = [value_function(d) / max_value for d in filtered_data]
+
+            # Calculate the number of variables
+            num_vars = len(names)
+
+            # Compute angle for each axis
+            angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
+
+            # pprint.pprint(names)
+            # pprint.pprint(values)
+            # pprint.pprint(angles)
+
+            # Plot the data for this dataset
+            current_color = colors[idx]
+            ax.plot(angles, values, linewidth=2, label=datakey, color=current_color)
+            ax.fill(angles, values, alpha=0.25, color=current_color)
+            # Close the loop by connecting the start and end points
+            ax.plot([angles[0], angles[-1]], [values[0], values[-1]], linewidth=2, color=current_color)                
+
+            # Constants for the offsets. You can tune these for better aesthetics.
+            offset_scale = 15
+            # Annotate the points with their real values
+            for angle, value, real_value in zip(angles, values, real_values):
+                
+                # Calculate x and y
+                x = value * np.cos(angle)
+                y = value * np.sin(angle)
+                
+                # Normalize x and y
+                norm_x = x / np.sqrt(x**2 + y**2)
+                norm_y = y / np.sqrt(x**2 + y**2)
+                
+                # Determine the offsets based on normalized x and y and the scale
+                distancex = offset_scale * norm_x
+                distancey = offset_scale * norm_y
+                
+                # Decide on horizontal alignment based on x
+                ha = 'right' if x < 0 else 'left'
+                
+                ax.annotate(str(round(real_value, decimal_resolution)), 
+                            xy=(angle, value),
+                            xytext=(distancex, distancey),  # proportional distance from the point
+                            textcoords='offset points',
+                            horizontalalignment=ha,
+                            verticalalignment='center',
+                            fontsize=6,
+                            color=current_color)
+
+        # Add legend
+        # NOTE: using the last angles and names        
+        ax.set_xticks(angles)
+        ax.set_yticklabels([])
+        ax.set_xticklabels(names, fontsize=6)
+        ax.legend(loc='upper right', bbox_to_anchor=(1.1, 1.1))
+
+        title_file = title.lower().replace(" ", "-")
+        plotpath = '/tmp/report-' + title_file + '-multi-radar.png'
+        plt.savefig(plotpath, bbox_inches='tight')
+        plt.close()
+
+        return plotpath
+
+################################################ 
 
     def main(self, *, args):
         # get paths of "benchmark.yaml" files for each benchmark
@@ -179,6 +684,7 @@ class ReportVerb(VerbExtension):
         benchmark_id_report += "## Table of Contents\n"
         benchmark_id_report += "- [Intro](#intro)\n"
         benchmark_id_report += "- [Legend](#legend)\n"
+        benchmark_id_report += "- [Summarized results](#summarized-results)\n"
         benchmark_id_report += "- [Benchmark results by `id`](#benchmark-results-by-id)\n"
         for benchmark_id in alphabetical_list_ids:
             benchmark_id_report += "  - [Benchmark `{}`](#benchmark-{})\n".format(benchmark_id, benchmark_id)
@@ -219,13 +725,57 @@ class ReportVerb(VerbExtension):
         ######################################################        
         # 1. Print all results for each benchmark
         ######################################################
-        benchmark_id_report += "## Benchmark results by `id`\n"
-
         # unique condition
         unique_condition = True
-
+        
+        # /////////////////////////////////////////////////
+        benchmark_id_report += "## Summarized results\n"
+        latency_data_dict = {}
         for benchmark_id in alphabetical_list_ids:
-            
+            filtered_data = [item for item in list_results if (item['id'] == benchmark_id and item['metric'] == "latency")]
+            sorted_filtered_data = sorted(filtered_data, key=lambda x: x['value'])
+            latency_data_dict[benchmark_id] = sorted_filtered_data
+        
+        filter_out = [("Kria KR260", "black"), ("Kria KV260", "black")]
+        plotpath = (ReportVerb.radar_plot_data_byid(latency_data_dict,
+                                            xlabel="Hardware (timestamp)",
+                                            ylabel="Latency (ms)",
+                                            name_function=ReportVerb.plot_function_names_forid,
+                                            value_function=ReportVerb.plot_function_values,
+                                            title="RobotPerf latency benchmarking by id",
+                                            unique=unique_condition,
+                                            sortedata=True,
+                                            filterout = filter_out,
+                                            benchmark_ids=["a5", "a2", "a1"]))
+                
+        benchmark_id_report += f"\n![{plotpath}]({plotpath})\n"
+
+        plotpath = (ReportVerb.radar_plot_data_byhardware(latency_data_dict,
+                                            xlabel="Hardware (timestamp)",
+                                            ylabel="Latency (ms)",
+                                            name_function=ReportVerb.plot_function_names_forid,
+                                            value_function=ReportVerb.plot_function_values,
+                                            title="RobotPerf latency benchmarking by hardware",
+                                            unique=unique_condition,
+                                            sortedata=True,
+                                            filterout = filter_out,
+                                            # benchmark_ids=["a1", "a2", "a5"],
+                                            benchmark_ids=["a1", "a2", "a5", "c1", "c2", "c3"],
+                                            decimal_resolution=3,
+                                            proportional_independent=True,
+                                            # benchmark_hardware=['AMD Ryzen 5 PRO 4650G',
+                                            #                     'Intel i7-8700K',
+                                            #                     'NVIDIA AGX Orin Dev. Kit',
+                                            #                     'Kria KR260',
+                                            #                     'NVIDIA Jetson Nano']
+                                            ))
+                
+        benchmark_id_report += f"\n![{plotpath}]({plotpath})\n"
+
+
+        # /////////////////////////////////////////////////
+        benchmark_id_report += "## Benchmark results by `id`\n"
+        for benchmark_id in alphabetical_list_ids:            
             benchmark_id_report += f"### Benchmark `{benchmark_id}`\n"
 
             # ## all of it (metric-agnostic)
@@ -255,6 +805,18 @@ class ReportVerb(VerbExtension):
                                              sortedata=True,
                                              filterout = filter_out))
             benchmark_id_report += f"\n![{plotpath}]({plotpath})\n"
+
+            plotpath_radar = (ReportVerb.radar_plot_data(sorted_filtered_data,
+                                             xlabel="Hardware (timestamp)",
+                                             ylabel="Latency (ms)",
+                                             name_function=ReportVerb.plot_function_names_forid,
+                                             value_function=ReportVerb.plot_function_values,
+                                             title=benchmark_id + "-latency",
+                                             unique=unique_condition,
+                                             sortedata=True,
+                                             filterout = filter_out))
+            benchmark_id_report += f"\n![{plotpath_radar}]({plotpath_radar})\n"
+
             benchmark_id_report += SummaryVerb.to_markdown_table(sorted_filtered_data, 
                                                                  benchmark_id+"-latency",
                                                                  unique=unique_condition,
@@ -275,6 +837,18 @@ class ReportVerb(VerbExtension):
                                              sortedata=True,
                                              filterout = filter_out))
             benchmark_id_report += f"\n![{plotpath}]({plotpath})\n"
+
+            plotpath_radar = (ReportVerb.radar_plot_data(sorted_filtered_data,
+                                             xlabel="Hardware (timestamp)",
+                                             ylabel="Power (W)",
+                                             name_function=ReportVerb.plot_function_names_forid,
+                                             value_function=ReportVerb.plot_function_values,
+                                             title=benchmark_id + "-power",
+                                             unique=unique_condition,
+                                             sortedata=True,
+                                             filterout = filter_out))
+            benchmark_id_report += f"\n![{plotpath_radar}]({plotpath_radar})\n"
+
             benchmark_id_report += SummaryVerb.to_markdown_table(sorted_filtered_data, 
                                                                  benchmark_id+"-power",
                                                                  unique=unique_condition,
@@ -295,6 +869,18 @@ class ReportVerb(VerbExtension):
                                              sortedatareverse=True,
                                              filterout = filter_out))
             benchmark_id_report += f"\n![{plotpath}]({plotpath})\n"
+
+            plotpath_radar = (ReportVerb.radar_plot_data(sorted_filtered_data,
+                                             xlabel="Hardware (timestamp)",
+                                             ylabel="Throughput (FPS)",
+                                             name_function=ReportVerb.plot_function_names_forid,
+                                             value_function=ReportVerb.plot_function_values,
+                                             title=benchmark_id + "-throughput",
+                                             unique=unique_condition,
+                                             sortedatareverse=True,
+                                             filterout = filter_out))
+            benchmark_id_report += f"\n![{plotpath_radar}]({plotpath_radar})\n"
+
             benchmark_id_report += SummaryVerb.to_markdown_table(sorted_filtered_data, 
                                                                  benchmark_id+"-throughput",
                                                                  unique=unique_condition,
