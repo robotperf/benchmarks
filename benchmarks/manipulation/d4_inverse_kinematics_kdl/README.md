@@ -22,3 +22,4 @@ Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/manipulati
 | --- | --- | --- | --- | --- | --- | --- | --- |
 | [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i5-13600K | latency | 4.41 | workstation | 27-07-2023 | mean 1.68 ms, rms 2.56 ms, max 4.41 ms, min 0.15 ms, lost 0.00% | [N/A](https://github.com/robotperf/rosbags/tree/main/N/A) |
 | [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i5-13600K | power | 48.451541900634766 | workstation | 27-07-2023 | mean 1.68 ms, rms 2.56 ms, max 4.41 ms, min 0.15 ms, lost 0.00% | [N/A](https://github.com/robotperf/rosbags/tree/main/N/A) |
+
