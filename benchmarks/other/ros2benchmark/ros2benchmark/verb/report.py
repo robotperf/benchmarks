@@ -496,7 +496,7 @@ class ReportVerb(VerbExtension):
                                 sortedata=False, sortedatareverse=False, filterout=None,
                                 benchmark_ids=["a5", "a2", "a1"], benchmark_hardware=None, 
                                 decimal_resolution=1, proportional_independent=False,
-                                colors_dict=None):
+                                colors_dict=None, a=750):
         """
         Produces a radar plot with multiple areas corresponding to multiple data sets.
 
@@ -514,6 +514,7 @@ class ReportVerb(VerbExtension):
         :param decimal_resolution: number of decimal places to round the values to
         :param proportional_independent: if True, the values are normalized by the max value of the same type of benchmark (e.g., "c1" or "a2") and not by the max value of all benchmarks
         :param colors_dict: dict of colors to use for each hardware as key
+        :param a: scaling factor for normalization
         """
 
         # Filter data for benchmarks tested
@@ -588,9 +589,6 @@ class ReportVerb(VerbExtension):
         for benchmark in merged_data_list:
             if benchmark["hardware"] in list_hardware:
                 data_dict[benchmark["hardware"]].append(benchmark)
-
-        # Scaling factor for normalization
-        a = 750  # You can adjust this value
 
         # Process each dataset in data_dict and plot it
         # NOTE: datakey is the "hardware" value of each benchmark
@@ -672,7 +670,7 @@ class ReportVerb(VerbExtension):
             ax.plot([angles[0], angles[-1]], [values[0], values[-1]], linewidth=2, color=current_color)                
             # Add dots to each data point
             # ax.scatter(angles, values, color=current_color, s=50)  # You can adjust the size (s) as desired
-            ax.scatter(angles, values, c=current_color, s=50, edgecolors='black', linewidths=0.5)
+            ax.scatter(angles, values, color=current_color, s=50, edgecolors='black', linewidths=0.5)
 
             # Constants for the offsets. You can tune these for better aesthetics.
             offset_scale = 5
@@ -928,6 +926,7 @@ class ReportVerb(VerbExtension):
                                                     #                     'NVIDIA AGX Orin Dev. Kit',
                                                     #                     'Kria KR260'],
                                                     colors_dict=colors_dict,
+                                                    a = 500
                                                     ))
                 benchmark_id_report += f"![{plotpath}]({plotpath}) | "
             benchmark_id_report += f"\n"
