@@ -254,15 +254,19 @@ class ReportVerb(VerbExtension):
         # extract
         names = [name_function(d) for d in filtered_data]
         values = [value_function(d) for d in filtered_data]
-        # Radar plot requires the data to be circular so append the first value to the end of the dataset
-        values += values[:1]
-        names += names[:1]
 
         # Calculate the number of variables
         num_vars = len(names)
 
         # Compute angle for each axis
         angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
+
+        if len(angles) != len(values):
+            print("WARNING: angles and values have different lengths for " + title)
+            return
+        elif len(angles) < 1:
+            print("WARNING: angles and values have zero length for " + title)
+            return
 
         # Radar plot
         fig, ax = plt.subplots(figsize=(6, 6), subplot_kw=dict(polar=True))
@@ -271,6 +275,8 @@ class ReportVerb(VerbExtension):
         ax.yaxis.grid(True, color="#888888", linestyle='dashed', linewidth=0.5)
         ax.spines["polar"].set_color("#222222")
         ax.set_facecolor("#FAFAFA")
+        # Close the loop by connecting the start and end points            
+        ax.plot([angles[0], angles[-1]], [values[0], values[-1]], linewidth=2, color='#4d4cf5') 
 
         # Plot the data
         ax.plot(angles, values, color='#4d4cf5', linewidth=2)
@@ -325,8 +331,8 @@ class ReportVerb(VerbExtension):
         common_names = set.intersection(*common_names_sets)
 
         if len(common_names) == 0:
-            print("No common names found. Not producing radar plot, exiting")
-            sys.exit(0)
+            print("No common names found. Not producing radar plot for " + title + ", metric name: " + ylabel)
+            return
         
         # # debug
         # print("common_names: ", common_names)
@@ -394,10 +400,15 @@ class ReportVerb(VerbExtension):
                 filtered_data = sorted(filtered_data, key=lambda x: x['hardware'], reverse=True)
 
             # extract
-            names = [name_function(d) for d in filtered_data]
+            # names = [name_function(d) for d in filtered_data]  # id
+            names = [d["name"] for d in filtered_data]
             # Normalize values
             real_values = [value_function(d) for d in filtered_data]
             values = [value_function(d) / max_value for d in filtered_data]
+
+            a = 500  # You can adjust this value
+            real_values = [value_function(d) for d in filtered_data]
+            values = [np.log(1 + a * (value_function(d) / max_value)) for d in filtered_data]
 
             # # Radar plot requires the data to be circular so append the first value to the end of the dataset
             # values += values[:1]
@@ -408,6 +419,13 @@ class ReportVerb(VerbExtension):
 
             # Compute angle for each axis
             angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
+
+            if len(angles) != len(values):
+                print("WARNING: angles and values have different lengths for " + title + " " + datakey)
+                continue
+            elif len(angles) < 1:
+                print("WARNING: angles and values have zero length for " + title + " " + datakey)
+                continue
 
             # pprint.pprint(names)
             # pprint.pprint(values)
@@ -421,7 +439,7 @@ class ReportVerb(VerbExtension):
             ax.plot([angles[0], angles[-1]], [values[0], values[-1]], linewidth=2, color=current_color)                
 
             # Constants for the offsets. You can tune these for better aesthetics.
-            offset_scale = 15
+            offset_scale = 5
             # Annotate the points with their real values
             for angle, value, real_value in zip(angles, values, real_values):
                 
@@ -452,8 +470,16 @@ class ReportVerb(VerbExtension):
 
         # Add legend
         # NOTE: using the last angles and names        
+        
+        # define y-ticks
+        ytick_values = ax.get_yticks()
+        # Use the inverse of the modified log function to get the original values for the y-ticks
+        def inverse_modified_log(y, a=1000):
+            return (np.exp(y) - 1) / a
+        transformed_ytick_labels = [f'{inverse_modified_log(val, a) * max_value:.2f}' for val in ytick_values]
+        ax.set_yticklabels(transformed_ytick_labels, fontsize=6)     
+
         ax.set_xticks(angles)
-        ax.set_yticklabels([])
         ax.set_xticklabels(names, fontsize=6)
         ax.legend(loc='upper right', bbox_to_anchor=(1.1, 1.1))
 
@@ -470,7 +496,8 @@ class ReportVerb(VerbExtension):
                                 value_function=plot_function_values, filter=None, unique=False,
                                 sortedata=False, sortedatareverse=False, filterout=None,
                                 benchmark_ids=["a5", "a2", "a1"], benchmark_hardware=None, 
-                                decimal_resolution=1, proportional_independent=False):
+                                decimal_resolution=1, proportional_independent=False,
+                                colors_dict=None):
         """
         Produces a radar plot with multiple areas corresponding to multiple data sets.
 
@@ -487,6 +514,7 @@ class ReportVerb(VerbExtension):
         :param benchmark_hardware: list of benchmark hardware to plot
         :param decimal_resolution: number of decimal places to round the values to
         :param proportional_independent: if True, the values are normalized by the max value of the same type of benchmark (e.g., "c1" or "a2") and not by the max value of all benchmarks
+        :param colors_dict: dict of colors to use for each hardware as key
         """
 
         # Filter data for benchmarks tested
@@ -506,8 +534,8 @@ class ReportVerb(VerbExtension):
         common_names = set.intersection(*common_names_sets)
 
         if len(common_names) == 0:
-            print("No common names found. Not producing radar plot, exiting")
-            sys.exit(0)
+            print("WARNING: No common names found. Not producing radar plot for " + title + ", metric name: " + ylabel)
+            return
         
         # TODO: Implement the concepto of "proportionalindependent" normalization,
         # wherein the values are normalized by the max value of the same type of benchmark
@@ -523,8 +551,14 @@ class ReportVerb(VerbExtension):
                                 
 
         # Get a lits of colors
-        # colormap = plt.cm.viridis
-        colormap = plt.cm.tab10
+        if colors_dict is None:
+            common_names_sets = [set(d["hardware"] for d in data_dict[key]) for key in data_dict.keys()]
+            list_hardware = list(set.intersection(*common_names_sets))            
+            # colormap = plt.cm.tab10
+            colormap = plt.cm.viridis
+            colors = [colormap(i) for i in np.linspace(0, 1, len(list_hardware))]
+            colors_dict = dict(zip(list_hardware, colors))  # explicit dict to ensure order
+
         # Plots a radar plot with multiple areas, each corresponding to
         #     benchmark id:
         #         ['a1',
@@ -539,8 +573,7 @@ class ReportVerb(VerbExtension):
         #     angles:
         #         [0.0,
         #         ...
-        #         5.654866776461628]            
-        colors = [colormap(i) for i in np.linspace(0, 1, len(common_names))]
+        #         5.654866776461628]                    
 
         # transform data_dict to have the hardware as keys
         merged_data_list = [item for sublist in data_dict.values() for item in sublist if name_function(item) in common_names]
@@ -553,8 +586,8 @@ class ReportVerb(VerbExtension):
                 data_dict[benchmark["hardware"]].append(benchmark)
 
         # Process each dataset in data_dict and plot it
+        # NOTE: datakey is the "hardware" value of each benchmark
         for idx, datakey in enumerate(data_dict.keys()):
-
             if filter:
                 # Filter datakey using the provided function
                 filtered_data = [d for d in data_dict[datakey] if filter(d)]
@@ -593,37 +626,48 @@ class ReportVerb(VerbExtension):
             # max_value = max([entry['value'] for entry in filtered_data])
 
             # extract
-            # names = [ReportVerb.plot_function_id_withbenchtype(d) for d in filtered_data]  # NOTE this requires all
+            # names = [ReportVerb.plot_function_id_withbenchtype(d) for d in filtered_data]    # NOTE this requires all
             #                                                                                # benchmarks to have all
             #                                                                                # types (grey, black)
-            names = [d["id"] for d in filtered_data]
+            names = [d["name"] for d in filtered_data]
             
-            # Normalize values
+            
+            # Normalize values and apply modified log transformation
+            # Scaling factor
+            a = 750  # You can adjust this value
             real_values = [value_function(d) for d in filtered_data]
             if proportional_independent:
-                values = [value_function(d) / max_values[d["id"]] for d in filtered_data]
+                values = [np.log(1 + a * (value_function(d) / max_values[d["id"]])) for d in filtered_data]
             else:
-                values = [value_function(d) / max_value for d in filtered_data]
-
+                values = [np.log(1 + a * (value_function(d) / max_value)) for d in filtered_data]
+                
             # Calculate the number of variables
             num_vars = len(names)
 
             # Compute angle for each axis
             angles = np.linspace(0, 2 * np.pi, num_vars, endpoint=False).tolist()
+            
+            if len(angles) != len(values):
+                print("WARNING: angles and values have different lengths for " + title + ", " + datakey + ", " + ylabel)
+                continue
+            elif len(angles) < 1:
+                print("WARNING: angles and values have zero length for " + title + ", " + datakey + ", " + ylabel)
+                continue
 
+            ## debug
             # pprint.pprint(names)
             # pprint.pprint(values)
             # pprint.pprint(angles)
 
             # Plot the data for this dataset
-            current_color = colors[idx]
+            current_color = colors_dict[datakey]
             ax.plot(angles, values, linewidth=2, label=datakey, color=current_color)
             ax.fill(angles, values, alpha=0.25, color=current_color)
-            # Close the loop by connecting the start and end points
+            # Close the loop by connecting the start and end points            
             ax.plot([angles[0], angles[-1]], [values[0], values[-1]], linewidth=2, color=current_color)                
 
             # Constants for the offsets. You can tune these for better aesthetics.
-            offset_scale = 15
+            offset_scale = 5
             # Annotate the points with their real values
             for angle, value, real_value in zip(angles, values, real_values):
                 
@@ -652,12 +696,60 @@ class ReportVerb(VerbExtension):
                             color=current_color)
 
         # Add legend
-        # NOTE: using the last angles and names        
+
+        # # highlighting
+        # ## highlighting the group
+        # highlighted_axes_indices = [0, 2]  # example indices of axes you want to highlight        
+        # label_angle = np.mean([angles[i] for i in highlighted_axes_indices])
+        # ax.annotate('Perception benchmarks', xy=(label_angle, ax.get_ylim()[1]*0.8), ha='center', color='red')
+
+        # ## highlighting the axes
+        # highlighted_axes_angles = [angles[0], angles[2]]  # replace with the angles of the axes you want to highlight
+        # for angle in highlighted_axes_angles:
+        #     # Create a line at the specified angle
+        #     line = plt.Line2D([0, np.cos(angle) * ax.get_ylim()[1]], 
+        #                     [0, np.sin(angle) * ax.get_ylim()[1]], 
+        #                     transform=ax.transData._b, 
+        #                     color='red', 
+        #                     linewidth=2)  # or any other color
+        #     ax.add_line(line)
+
+        # ## highlighting the group
+        # highlighted_axes_indices = [3, 5]  # example indices of axes you want to highlight        
+        # label_angle = np.mean([angles[i] for i in highlighted_axes_indices])
+        # ax.annotate('Control benchmarks', xy=(label_angle, ax.get_ylim()[1]*0.8), ha='center', color='blue')
+
+        # ## highlighting the axes
+        # highlighted_axes_angles = [angles[3], angles[5]]  # replace with the angles of the axes you want to highlight
+        # for angle in highlighted_axes_angles:
+        #     # Create a line at the specified angle
+        #     line = plt.Line2D([0, np.cos(angle) * ax.get_ylim()[1]], 
+        #                     [0, np.sin(angle) * ax.get_ylim()[1]], 
+        #                     transform=ax.transData._b, 
+        #                     color='blue', 
+        #                     linewidth=2)  # or any other color
+        #     ax.add_line(line)
+
+        # ## highlighting the area
+        # # TODO: implement this
+
+        # define y-ticks
+        ytick_values = ax.get_yticks()
+        # Use the inverse of the modified log function to get the original values for the y-ticks
+        def inverse_modified_log(y, a=1000):
+            return (np.exp(y) - 1) / a
+        if proportional_independent:
+            transformed_ytick_labels = [f'{inverse_modified_log(val, a) * max_values[d["id"]]:.2f}' for val in ytick_values]
+        else:
+            transformed_ytick_labels = [f'{inverse_modified_log(val, a) * max_value:.2f}' for val in ytick_values]
+        ax.set_yticklabels(transformed_ytick_labels, fontsize=6)
+
+        # define x-ticks
         ax.set_xticks(angles)
-        ax.set_yticklabels([])
         ax.set_xticklabels(names, fontsize=6)
         ax.legend(loc='upper right', bbox_to_anchor=(1.1, 1.1))
 
+        # title and save
         title_file = title.lower().replace(" ", "-")
         plotpath = '/tmp/report-' + title_file + '-multi-radar.png'
         plt.savefig(plotpath, bbox_inches='tight')
@@ -665,7 +757,11 @@ class ReportVerb(VerbExtension):
 
         return plotpath
 
-################################################ 
+
+# #####################################################
+# #####################################################
+# #####################################################
+# ##################################################### 
 
     def main(self, *, args):
         # get paths of "benchmark.yaml" files for each benchmark
@@ -730,48 +826,96 @@ class ReportVerb(VerbExtension):
         
         # /////////////////////////////////////////////////
         benchmark_id_report += "## Summarized results\n"
+
+        # group by metric
         latency_data_dict = {}
         for benchmark_id in alphabetical_list_ids:
             filtered_data = [item for item in list_results if (item['id'] == benchmark_id and item['metric'] == "latency")]
             sorted_filtered_data = sorted(filtered_data, key=lambda x: x['value'])
             latency_data_dict[benchmark_id] = sorted_filtered_data
-        
-        filter_out = [("Kria KR260", "black"), ("Kria KV260", "black")]
-        plotpath = (ReportVerb.radar_plot_data_byid(latency_data_dict,
-                                            xlabel="Hardware (timestamp)",
-                                            ylabel="Latency (ms)",
-                                            name_function=ReportVerb.plot_function_names_forid,
-                                            value_function=ReportVerb.plot_function_values,
-                                            title="RobotPerf latency benchmarking by id",
-                                            unique=unique_condition,
-                                            sortedata=True,
-                                            filterout = filter_out,
-                                            benchmark_ids=["a5", "a2", "a1"]))
-                
-        benchmark_id_report += f"\n![{plotpath}]({plotpath})\n"
 
-        plotpath = (ReportVerb.radar_plot_data_byhardware(latency_data_dict,
-                                            xlabel="Hardware (timestamp)",
-                                            ylabel="Latency (ms)",
-                                            name_function=ReportVerb.plot_function_names_forid,
-                                            value_function=ReportVerb.plot_function_values,
-                                            title="RobotPerf latency benchmarking by hardware",
-                                            unique=unique_condition,
-                                            sortedata=True,
-                                            filterout = filter_out,
-                                            # benchmark_ids=["a1", "a2", "a5"],
-                                            benchmark_ids=["a1", "a2", "a5", "c1", "c2", "c3"],
-                                            decimal_resolution=3,
-                                            proportional_independent=True,
-                                            # benchmark_hardware=['AMD Ryzen 5 PRO 4650G',
-                                            #                     'Intel i7-8700K',
-                                            #                     'NVIDIA AGX Orin Dev. Kit',
-                                            #                     'Kria KR260',
-                                            #                     'NVIDIA Jetson Nano']
-                                            ))
-                
-        benchmark_id_report += f"\n![{plotpath}]({plotpath})\n"
+        throughput_data_dict = {}
+        for benchmark_id in alphabetical_list_ids:
+            filtered_data = [item for item in list_results if (item['id'] == benchmark_id and item['metric'] == "throughput")]
+            sorted_filtered_data = sorted(filtered_data, key=lambda x: x['value'])
+            throughput_data_dict[benchmark_id] = sorted_filtered_data
 
+        power_data_dict = {}
+        for benchmark_id in alphabetical_list_ids:
+            filtered_data = [item for item in list_results if (item['id'] == benchmark_id and item['metric'] == "power")]
+            sorted_filtered_data = sorted(filtered_data, key=lambda x: x['value'])
+            power_data_dict[benchmark_id] = sorted_filtered_data
+
+        metric_names = ["Latency (ms)", "Throughput (FPS)", "Power (W)"]
+        metric_groups = [latency_data_dict, throughput_data_dict, power_data_dict]
+
+        # create category groups
+        perception_group = ["a1", "a2", "a5"]
+        localization_group = ["b1", "b2", "b3"]
+        control_group = ["c1", "c2", "c3", "c4", "c5"]
+        manipulation_group = ["d1", "d2", "d3", "d4", "d5", "d6"]
+
+        category_groups = [perception_group, localization_group, control_group, manipulation_group]
+        category_names = ["Perception", "Localization", "Control", "Manipulation"]
+
+
+        # colors
+        list_hardware = SummaryVerb.extract_unique_x(list_results, "hardware") # find all unique "hardware" values across benchmarks
+        list_hardware = sorted(list_hardware)
+        # colormap = plt.cm.tab10
+        # colormap = plt.cm.viridis
+        colormap = plt.cm.bwr
+        colormap = plt.cm.seismic
+        colormap = plt.cm.tab20
+        colors = [colormap(i) for i in np.linspace(0, 1, len(list_hardware))]        
+        colors_dict = dict(zip(list_hardware, colors))  # explicit dict to ensure order
+
+        # header of table
+        benchmark_id_report_aux = "|   | " + " | ".join("{{}}".format() for _ in category_names) + " |\n"        
+        benchmark_id_report_aux += "|---| " + " | ".join("---" for _ in category_names) + " |\n"
+        benchmark_id_report_aux = benchmark_id_report_aux.format(*category_names)
+        benchmark_id_report += benchmark_id_report_aux
+
+        for metric_name, metric_group in zip(metric_names, metric_groups):
+            benchmark_id_report += "| " + str(metric_name) + " | "
+            for idx, category in enumerate(category_groups):
+                filter_out = [("Kria KR260", "black"), ("Kria KV260", "black")]
+
+                # plotpath = (ReportVerb.radar_plot_data_byid(metric_group,
+                #                                     xlabel="Hardware (timestamp)",
+                #                                     ylabel=metric_name,
+                #                                     name_function=ReportVerb.plot_function_names_forid,
+                #                                     value_function=ReportVerb.plot_function_values,
+                #                                     title="RobotPerf benchmarking (by hardware) " + category_names[idx] + " " + metric_name,
+                #                                     unique=unique_condition,
+                #                                     sortedata=True,
+                #                                     filterout = filter_out,
+                #                                     benchmark_ids=category))
+                # benchmark_id_report += f"\n![{plotpath}]({plotpath})\n"
+
+                plotpath = (ReportVerb.radar_plot_data_byhardware(metric_group,
+                                                    xlabel="Hardware (timestamp)",
+                                                    ylabel=metric_name,
+                                                    name_function=ReportVerb.plot_function_names_forid,
+                                                    value_function=ReportVerb.plot_function_values,
+                                                    title="Benchmarking Robotics " + category_names[idx] + " " + metric_name,
+                                                    unique=unique_condition,
+                                                    sortedata=True,
+                                                    filterout = filter_out,
+                                                    benchmark_ids=category,
+                                                    decimal_resolution=2,
+                                                    proportional_independent=False,
+                                                    colors_dict=colors_dict,
+                                                    # benchmark_hardware=['AMD Ryzen 5 PRO 4650G',
+                                                    #                     'Intel i7-8700K',
+                                                    #                     'NVIDIA AGX Orin Dev. Kit',
+                                                    #                     'Kria KR260',
+                                                    #                     'NVIDIA Jetson Nano']
+                                                    ))
+                benchmark_id_report += f"![{plotpath}]({plotpath}) | "
+            benchmark_id_report += f"\n"
+
+        # sys.exit(0)
 
         # /////////////////////////////////////////////////
         benchmark_id_report += "## Benchmark results by `id`\n"
