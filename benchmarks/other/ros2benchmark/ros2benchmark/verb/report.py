@@ -490,7 +490,6 @@ class ReportVerb(VerbExtension):
 
         return plotpath
 
-
     @staticmethod
     def radar_plot_data_byhardware(data_dict, title, xlabel, ylabel, name_function=plot_function_names,
                                 value_function=plot_function_values, filter=None, unique=False,
@@ -580,10 +579,18 @@ class ReportVerb(VerbExtension):
         list_hardware = SummaryVerb.extract_unique_x(merged_data_list, "hardware")
         if benchmark_hardware is not None:
             list_hardware = [h for h in list_hardware if h in benchmark_hardware]
+        
+        if len(list_hardware) == 0:
+            print("WARNING: No common hardware found. Not producing radar plot for " + title + ", metric name: " + ylabel)
+            return            
+            
         data_dict = defaultdict(list)
         for benchmark in merged_data_list:
             if benchmark["hardware"] in list_hardware:
                 data_dict[benchmark["hardware"]].append(benchmark)
+
+        # Scaling factor for normalization
+        a = 750  # You can adjust this value
 
         # Process each dataset in data_dict and plot it
         # NOTE: datakey is the "hardware" value of each benchmark
@@ -633,8 +640,6 @@ class ReportVerb(VerbExtension):
             
             
             # Normalize values and apply modified log transformation
-            # Scaling factor
-            a = 750  # You can adjust this value
             real_values = [value_function(d) for d in filtered_data]
             if proportional_independent:
                 values = [np.log(1 + a * (value_function(d) / max_values[d["id"]])) for d in filtered_data]
@@ -661,10 +666,13 @@ class ReportVerb(VerbExtension):
 
             # Plot the data for this dataset
             current_color = colors_dict[datakey]
-            ax.plot(angles, values, linewidth=2, label=datakey, color=current_color)
-            ax.fill(angles, values, alpha=0.25, color=current_color)
+            ax.plot(angles, values, linewidth=2, label=datakey, color=current_color, alpha=0.7)
+            ax.fill(angles, values, alpha=0.2, color=current_color)
             # Close the loop by connecting the start and end points            
             ax.plot([angles[0], angles[-1]], [values[0], values[-1]], linewidth=2, color=current_color)                
+            # Add dots to each data point
+            # ax.scatter(angles, values, color=current_color, s=50)  # You can adjust the size (s) as desired
+            ax.scatter(angles, values, c=current_color, s=50, edgecolors='black', linewidths=0.5)
 
             # Constants for the offsets. You can tune these for better aesthetics.
             offset_scale = 5
@@ -754,6 +762,16 @@ class ReportVerb(VerbExtension):
         plotpath = '/tmp/report-' + title_file + '-multi-radar.png'
         plt.savefig(plotpath, bbox_inches='tight')
         plt.close()
+
+        # grid style
+        ax.xaxis.grid(True, color="#888888", linestyle='dashed', linewidth=1.5)
+        ax.yaxis.grid(True, color="#888888", linestyle='dashed', linewidth=1.5)
+
+        #background color
+        ax.set_facecolor('white')
+
+        # # Hide Spines, outer circular spine
+        # ax.spines["polar"].set_visible(False)
 
         return plotpath
 
@@ -905,12 +923,11 @@ class ReportVerb(VerbExtension):
                                                     benchmark_ids=category,
                                                     decimal_resolution=2,
                                                     proportional_independent=False,
-                                                    colors_dict=colors_dict,
                                                     # benchmark_hardware=['AMD Ryzen 5 PRO 4650G',
                                                     #                     'Intel i7-8700K',
                                                     #                     'NVIDIA AGX Orin Dev. Kit',
-                                                    #                     'Kria KR260',
-                                                    #                     'NVIDIA Jetson Nano']
+                                                    #                     'Kria KR260'],
+                                                    colors_dict=colors_dict,
                                                     ))
                 benchmark_id_report += f"![{plotpath}]({plotpath}) | "
             benchmark_id_report += f"\n"
