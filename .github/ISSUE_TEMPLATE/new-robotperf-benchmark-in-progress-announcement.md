@@ -21,7 +21,7 @@ Which category does your benchmark fall under?
 - [ ] Navigation
 
 What metric are you benchmarking?
-*ex. latency (ms)* Please refer to: [REP-2014](https://github.com/ros-infrastructure/rep/pull/364/files?short_path=26ca124#diff-26ca1241a786a8a285a3dc326474f69a9b971c06eab2db73c0ddd53f8a74ae1c)
+*ex. latency (ms)* Please refer to the [Benhcmark Specification](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md)
 
 What is your estimated date of completion?
 *ex. May 5th, 2023*
