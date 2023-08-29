@@ -59,14 +59,14 @@ def main(argv):
     if hardware_device_type == 'cpu':
         target_chain = [
         # "ros2:callback_start",
-        # "robotperf_benchmarks:robotcore_tf2_lookup_cb_init",
-        # "robotperf_benchmarks:robotcore_tf2_lookup_cb_fini",
+        "robotperf_benchmarks:robotcore_tf2_lookup_cb_init",
+        "robotperf_benchmarks:robotcore_tf2_lookup_cb_fini",
         # "ros2:callback_end",
         # "ros2:callback_start",
         # "ros2:callback_end",
         # "ros2:callback_start",
-        "robotperf_benchmarks:robotcore_tf2_set_cb_init",
-        "robotperf_benchmarks:robotcore_tf2_set_cb_fini",
+        # "robotperf_benchmarks:robotcore_tf2_set_cb_init",
+        # "robotperf_benchmarks:robotcore_tf2_set_cb_fini",
         # "ros2:callback_end",
         ]
 
@@ -82,28 +82,28 @@ def main(argv):
         #         "marker": "diamond",
         #     }
         # )
-        # ba.add_target(
-        #     {
-        #         "name": "robotperf_benchmarks:robotcore_tf2_lookup_cb_init",
-        #         "name_disambiguous": "robotperf_benchmarks:robotcore_tf2_lookup_cb_init",
-        #         "colors_fg": "blue",
-        #         "colors_fg_bokeh": "silver",
-        #         "layer": "userland",
-        #         "label_layer": 4,
-        #         "marker": "plus",
-        #     }
-        # )
-        # ba.add_target(
-        #     {
-        #         "name": "robotperf_benchmarks:robotcore_tf2_lookup_cb_fini",
-        #         "name_disambiguous": "robotperf_benchmarks:robotcore_tf2_lookup_cb_fini",
-        #         "colors_fg": "blue",
-        #         "colors_fg_bokeh": "darkgray",
-        #         "layer": "benchmark",
-        #         "label_layer": 5,
-        #         "marker": "plus",
-        #     }
-        # )
+        ba.add_target(
+            {
+                "name": "robotperf_benchmarks:robotcore_tf2_lookup_cb_init",
+                "name_disambiguous": "robotperf_benchmarks:robotcore_tf2_lookup_cb_init",
+                "colors_fg": "blue",
+                "colors_fg_bokeh": "silver",
+                "layer": "userland",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+        )
+        ba.add_target(
+            {
+                "name": "robotperf_benchmarks:robotcore_tf2_lookup_cb_fini",
+                "name_disambiguous": "robotperf_benchmarks:robotcore_tf2_lookup_cb_fini",
+                "colors_fg": "blue",
+                "colors_fg_bokeh": "darkgray",
+                "layer": "benchmark",
+                "label_layer": 5,
+                "marker": "plus",
+            }
+        )
         # ba.add_target(
         #     {
         #         "name": "ros2:callback_end",
@@ -148,28 +148,28 @@ def main(argv):
         #         "marker": "diamond",
         #     }
         # )
-        ba.add_target(
-            {
-                "name": "robotperf_benchmarks:robotcore_tf2_set_cb_init",
-                "name_disambiguous": "robotperf_benchmarks:robotcore_tf2_set_cb_init",
-                "colors_fg": "blue",
-                "colors_fg_bokeh": "chocolate",
-                "layer": "benchmark",
-                "label_layer": 5,
-                "marker": "plus",
-            }
-        )
-        ba.add_target(
-            {
-                "name": "robotperf_benchmarks:robotcore_tf2_set_cb_fini",
-                "name_disambiguous": "robotperf_benchmarks:robotcore_tf2_set_cb_fini",
-                "colors_fg": "blue",
-                "colors_fg_bokeh": "coral",
-                "layer": "userland",
-                "label_layer": 4,
-                "marker": "plus",
-            }
-        )
+        # ba.add_target(
+        #     {
+        #         "name": "robotperf_benchmarks:robotcore_tf2_set_cb_init",
+        #         "name_disambiguous": "robotperf_benchmarks:robotcore_tf2_set_cb_init",
+        #         "colors_fg": "blue",
+        #         "colors_fg_bokeh": "chocolate",
+        #         "layer": "benchmark",
+        #         "label_layer": 5,
+        #         "marker": "plus",
+        #     }
+        # )
+        # ba.add_target(
+        #     {
+        #         "name": "robotperf_benchmarks:robotcore_tf2_set_cb_fini",
+        #         "name_disambiguous": "robotperf_benchmarks:robotcore_tf2_set_cb_fini",
+        #         "colors_fg": "blue",
+        #         "colors_fg_bokeh": "coral",
+        #         "layer": "userland",
+        #         "label_layer": 4,
+        #         "marker": "plus",
+        #     }
+        # )
         # ba.add_target(
         #     {
         #         "name": "ros2:callback_end",
