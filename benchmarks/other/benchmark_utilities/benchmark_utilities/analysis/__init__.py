@@ -39,11 +39,98 @@ import argparse
 # color("{:02x}".format(x), fg=16, bg="green")
 # debug = True  # debug flag, set to True if desired
 
+class FrameHierarchy:
+    def __init__(self):
+        self.frames = {}
+
+    def add_frame(self, parent_frame, child_frame):
+        if parent_frame not in self.frames:
+            self.frames[parent_frame] = []
+        self.frames[parent_frame].append(child_frame)
+
+    def find_parent(self, child_frame, current_frame="world"):
+        children = self.get_children(current_frame)
+        
+        if child_frame in children:
+            return current_frame
+        
+        for child in children:
+            parent = self.find_parent(child_frame, child)
+            if parent:
+                return parent
+        
+        return None
+        
+    def get_parents(self, child_frame):
+        parents = []
+        parent = child_frame
+        parents.append(parent)
+        while parent != None:
+            parent = self.find_parent(parent)
+            parents.append(parent)
+        
+        return parents
+    
+    def get_children(self, parent_frame):
+        return self.frames.get(parent_frame, [])
+
+    def find_explicit_path(self, start_frame, target_frame, current_path=None):
+        if current_path is None:
+            current_path = []
+
+        current_path.append(start_frame)
+        
+        if start_frame == target_frame:
+            return current_path
+        
+        children = self.get_children(start_frame)
+        
+        for child in children:
+            new_path = self.find_explicit_path(child, target_frame, current_path.copy())
+            if new_path:
+                return new_path
+        
+        return None
+        
+    def find_path(self, start_frame, target_frame):
+        path = self.find_explicit_path(start_frame, target_frame)
+        if path == None:
+            parents_start_frame = self.get_parents(start_frame)  
+            parents_end_frame = self.get_parents(target_frame)
+            print(parents_start_frame)
+            print(parents_end_frame)
+            for i in range(len(parents_start_frame)):
+                for j in range(len(parents_end_frame)):
+                    if parents_start_frame[i] == None:
+                        return None
+                    elif parents_start_frame[i] == parents_end_frame[j]:
+                        path = []
+                        for k in range(0,i):
+                            path.append(parents_start_frame[k])
+                            print(path)
+                        for l in range(j,0,-1):
+                            path.append(parents_end_frame[l])
+                            print(path)
+                            
+                        path.append(target_frame)
+                        return path
+            return None
+        else:
+            return path
+        
+
+    def print_hierarchy(self, parent_frame, indent=0):
+        print(" " * indent + parent_frame)
+        children = self.get_children(parent_frame)
+        for child in children:
+            self.print_hierarchy(child, indent + 2)
 
 class BenchmarkAnalyzer:
-    def __init__(self, benchmark_name, hardware_device_type="cpu"):
+    def __init__(self, benchmark_name, hardware_device_type="cpu", tf_tree=None):
         self.benchmark_name = benchmark_name
         self.hardware_device_type = hardware_device_type
+        if tf_tree:
+            self.tf_tree = tf_tree
 
         # initialize arrays where tracing configuration will be stored
         self.target_chain = []
