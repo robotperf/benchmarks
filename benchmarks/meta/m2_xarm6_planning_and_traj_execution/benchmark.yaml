@@ -1,0 +1,22 @@
+description: 'A meta computational graph that uses [moveit2](https://github.com/ros-planning/moveit2)
+  to compute motion planning and perform trajectory execution on a UFACTORY xArm6
+  manipulator. Used to demonstrate a complex tranformation using the [geometry2](https://github.com/ros2/geometry2) package.
+
+  '
+graph: ../../../imgs/d1_xarm6_planning_and_traj_execution.svg
+id: m2
+name: m2_xarm6_planning_and_traj_execution
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/meta/m2_xarm6_planning_and_traj_execution
+  and review the launch files to reproduce this package.
+results:
+- result:
+    category: placeholder
+    datasource: placeholder
+    hardware: placeholder
+    metric: placeholder
+    metric_unit: placeholder
+    note: placeholder
+    timestampt: placeholder
+    type: placeholder
+    value: placeholder
+short: Meta computational graph composed by xArm6 planning and trajectory execution
