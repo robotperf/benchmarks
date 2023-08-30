@@ -1,0 +1,21 @@
+description: 'A meta computational graph that uses [moveit2](https://github.com/ros-planning/moveit2)
+  to compute collision checking with the [Bullet](https://github.com/bulletphysics/bullet3) library between a UFACTORY xArm6 manipulator and a cube-shaped collision object. 
+  Used to demonstrate a complex tranformation using the [geometry2](https://github.com/ros2/geometry2) package.'
+graph: ../../../imgs/d3_collision_checking_bullet.svg
+id: m4
+name: m4_collision_checking_bullet
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/manipulation/m4_collision_checking_bullet
+  and review the launch files to reproduce this package.
+# Data not valid at the moment, just a placeholder for now
+results:
+- result:
+    category: placeholder
+    datasource: placeholder
+    hardware: placeholder
+    metric: placeholder
+    metric_unit: placeholder
+    note: placeholder
+    timestampt: placeholder
+    type: placeholder
+    value: placeholder
+short: Meta computational graph composed by collision checking between xArm6 and a box using Bullet library.
