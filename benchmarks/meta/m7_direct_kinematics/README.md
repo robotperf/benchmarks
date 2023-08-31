@@ -20,3 +20,6 @@ Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/meta/m7_di
 
 | Type | Hardware | Metric | Value | Category | Timestamp | Note | Data Source |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-12700H (ROBOTCORE Transforms) | latency | 0.0226 | workstation | 31-08-2023 | mean 0.0063 ms, RMS 0.0072 ms, max 0.0226 ms, min 0.0014 ms | [simulation](https://github.com/robotperf/rosbags/tree/main/simulation) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-12700H | latency | 0.3157 | workstation | 31-08-2023 | mean 0.0186 ms, RMS 0.0319 ms, max 0.3157 ms, min 0.0027 ms | [simulation](https://github.com/robotperf/rosbags/tree/main/simulation) |
+

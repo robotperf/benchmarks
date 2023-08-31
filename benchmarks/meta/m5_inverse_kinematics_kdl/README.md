@@ -20,3 +20,6 @@ Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/meta/m5_in
 
 | Type | Hardware | Metric | Value | Category | Timestamp | Note | Data Source |
 | --- | --- | --- | --- | --- | --- | --- | --- |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-12700H (ROBOTCORE Transforms) | latency | 0.0388 | workstation | 31-08-2023 | mean 0.0082 ms, RMS 0.0092 ms, max 0.0388 ms, min 0.0023 ms | [simulation](https://github.com/robotperf/rosbags/tree/main/simulation) |
+| [:white_circle:](https://github.com/robotperf/benchmarks/blob/main/benchmarks/README.md#type) | Intel i7-12700H | latency | 0.4492 | workstation | 31-08-2023 | mean 0.0224 ms, RMS 0.0330 ms, max 0.4492 ms, min 0.0029 ms | [simulation](https://github.com/robotperf/rosbags/tree/main/simulation) |
+
