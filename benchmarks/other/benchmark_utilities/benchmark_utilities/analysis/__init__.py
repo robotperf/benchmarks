@@ -1744,16 +1744,11 @@ class BenchmarkAnalyzer:
                             msg_index
                         ].default_clock_snapshot.ns_from_origin
                     )
-                print('Length set')
-                print(len(image_pipeline_msg_sets[set_index]))
+                
                 for msg_index in range(len(image_pipeline_msg_sets[set_index])):
                     if msg_index < len(image_pipeline_msg_sets[set_index])/2:
                         previous = target_chain_ns[msg_index]
                     else:
-                        print('Msg index')
-                        print(msg_index)
-                        print('Length set /2')
-                        print(int(len(image_pipeline_msg_sets[set_index])/2))
                         previous = target_chain_ns[msg_index - int(len(image_pipeline_msg_sets[set_index])/2)]
                     aux_set.append((target_chain_ns[msg_index] - previous) / 1e6)
 
