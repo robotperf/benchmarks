@@ -1719,6 +1719,117 @@ class BenchmarkAnalyzer:
             image_pipeline_msg_sets_ns.append(aux_set)
 
         return image_pipeline_msg_sets_ns
+    
+    def barchart_data_latency_disordered(self, image_pipeline_msg_sets):
+        """
+        Converts a tracing message list into its corresponding
+        relative (to the previous tracepoint) latency list in
+        millisecond units.
+
+        Args:
+            image_pipeline_msg_sets ([type]): [description]
+
+        Returns:
+            list: list of relative latencies, in ms
+        """
+        image_pipeline_msg_sets_ns = []
+        # if multidimensional:list
+        if type(image_pipeline_msg_sets[0]) == list:
+            for set_index in range(len(image_pipeline_msg_sets)):
+                aux_set = []
+                target_chain_ns = []
+                for msg_index in range(len(image_pipeline_msg_sets[set_index])):
+                    target_chain_ns.append(
+                        image_pipeline_msg_sets[set_index][
+                            msg_index
+                        ].default_clock_snapshot.ns_from_origin
+                    )
+                print('Length set')
+                print(len(image_pipeline_msg_sets[set_index]))
+                for msg_index in range(len(image_pipeline_msg_sets[set_index])):
+                    if msg_index < len(image_pipeline_msg_sets[set_index])/2:
+                        previous = target_chain_ns[msg_index]
+                    else:
+                        print('Msg index')
+                        print(msg_index)
+                        print('Length set /2')
+                        print(int(len(image_pipeline_msg_sets[set_index])/2))
+                        previous = target_chain_ns[msg_index - int(len(image_pipeline_msg_sets[set_index])/2)]
+                    aux_set.append((target_chain_ns[msg_index] - previous) / 1e6)
+
+                for aux_idx in range(int(len(aux_set)/2)):
+                    image_pipeline_msg_sets_ns.append([aux_set[aux_idx], aux_set[aux_idx + int(len(aux_set)/2)]])
+        else:  # not multidimensional
+            aux_set = []
+            target_chain_ns = []
+            for msg_index in range(len(image_pipeline_msg_sets)):
+                target_chain_ns.append(
+                    image_pipeline_msg_sets[msg_index].default_clock_snapshot.ns_from_origin
+                )
+            for msg_index in range(len(image_pipeline_msg_sets)):
+                    if msg_index < len(image_pipeline_msg_sets)/2:
+                        previous = target_chain_ns[msg_index]
+                    else:
+                        previous = target_chain_ns[msg_index - len(image_pipeline_msg_sets)/2]
+                    aux_set.append((target_chain_ns[msg_index] - previous) / 1e6)
+            
+            for aux_idx in range(len(aux_set)/2):
+                    image_pipeline_msg_sets_ns.append([aux_set[aux_idx, aux_idx + len(aux_set)/2]])
+
+        return image_pipeline_msg_sets_ns
+    
+    def barchart_data_latency_disordered_2(self, image_pipeline_msg_sets):
+        """
+        Converts a tracing message list into its corresponding
+        relative (to the previous tracepoint) latency list in
+        millisecond units.
+
+        Args:
+            image_pipeline_msg_sets ([type]): [description]
+
+        Returns:
+            list: list of relative latencies, in ms
+        """
+        image_pipeline_msg_sets_ns = []
+        # if multidimensional:list
+        if type(image_pipeline_msg_sets[0]) == list:
+            for set_index in range(len(image_pipeline_msg_sets)):
+                aux_set = []
+                target_chain_ns = []
+                for msg_index in range(len(image_pipeline_msg_sets[set_index])):
+                    target_chain_ns.append(
+                        image_pipeline_msg_sets[set_index][
+                            msg_index
+                        ].default_clock_snapshot.ns_from_origin
+                    )
+                print('Length set')
+                print(len(image_pipeline_msg_sets[set_index]))
+                for msg_index in range(len(image_pipeline_msg_sets[set_index])):
+                    if msg_index == 0:
+                        previous = target_chain_ns[msg_index]
+                    aux_set.append((target_chain_ns[msg_index] - previous) / 1e6)
+                
+                # add the result as many times as it is repeated -> weight
+                for ijk in range(int(len(image_pipeline_msg_sets[set_index])/2)):
+                    image_pipeline_msg_sets_ns.append([aux_set[0], aux_set[-1]/int(len(image_pipeline_msg_sets[set_index])/2)])
+        else:  # not multidimensional
+            aux_set = []
+            target_chain_ns = []
+            for msg_index in range(len(image_pipeline_msg_sets)):
+                target_chain_ns.append(
+                    image_pipeline_msg_sets[msg_index].default_clock_snapshot.ns_from_origin
+                )
+            for msg_index in range(len(image_pipeline_msg_sets)):
+                    if msg_index == 0:
+                        previous = target_chain_ns[msg_index]
+                    aux_set.append((target_chain_ns[msg_index] - previous) / 1e6)
+            
+            # add the result as many times as it is repeated -> weight
+            for ijk in range(int(len(image_pipeline_msg_sets[set_index])/2)):
+                    image_pipeline_msg_sets_ns.append([aux_set[0], aux_set[-1]/int(len(image_pipeline_msg_sets[set_index])/2)])
+
+        return image_pipeline_msg_sets_ns
+
 
     def print_timeline(self, image_pipeline_msg_sets):
 
@@ -2197,25 +2308,25 @@ class BenchmarkAnalyzer:
                         if from_baseline:
                             if row[element_index] > baseline[element_index]:
                                 row_str += (
-                                    "**{:.2f} {}**".format(row[element_index], units)
+                                    "**{:.4f} {}**".format(row[element_index], units)
                                     + " (:small_red_triangle_down: `"
-                                    + "{:.2f}".format(
+                                    + "{:.4f}".format(
                                         self.get_change(row[element_index], baseline[element_index])
                                     )
                                     + "`%) | "
                                 )
                             else:
                                 row_str += (
-                                    "**{:.2f} {}**".format(row[element_index], units)
+                                    "**{:.4f} {}**".format(row[element_index], units)
                                     + "{}**".format(units) 
                                     + " (`"
-                                    + "{:.2f}".format(
+                                    + "{:.4f}".format(
                                         self.get_change(row[element_index], baseline[element_index])
                                     )
                                     + "`%) | "
                                 )
                         else:
-                            row_str += ("**{:.2f} {}**".format(row[element_index], units) + " | ")
+                            row_str += ("**{:.4f} {}**".format(row[element_index], units) + " | ")
                     else:
                         row_str += row[element_index] + " | "
 
@@ -2225,24 +2336,24 @@ class BenchmarkAnalyzer:
                         if from_baseline:
                             if row[element_index] > baseline[element_index]:
                                 row_str += (
-                                    "{:.2f} {}".format(row[element_index], units) 
+                                    "{:.4f} {}".format(row[element_index], units) 
                                     + " (:small_red_triangle_down: `"
-                                    + "{:.2f}".format(
+                                    + "{:.4f}".format(
                                         self.get_change(row[element_index], baseline[element_index])
                                     )
                                     + "`%) | "
                                 )
                             else:
                                 row_str += (
-                                    "{:.2f} {}".format(row[element_index], units) 
+                                    "{:.4f} {}".format(row[element_index], units) 
                                     + " (`"
-                                    + "{:.2f}".format(
+                                    + "{:.4f}".format(
                                         self.get_change(row[element_index], baseline[element_index])
                                     )
                                     + "`%) | "
                                 )
                         else:
-                            row_str += ("{:.2f} {}".format(row[element_index], units) + " | ")
+                            row_str += ("{:.4f} {}".format(row[element_index], units) + " | ")
 
                     else:
                         row_str += row[element_index] + " | "
@@ -2726,7 +2837,10 @@ class BenchmarkAnalyzer:
             self.traces_fpga(msg_set)
 
     def bar_charts_latency(self):
-        self.image_pipeline_msg_sets_barchart = self.barchart_data_latency(self.image_pipeline_msg_sets)
+        if not self.trace_sets_filter_type == "UID":
+            self.image_pipeline_msg_sets_barchart = self.barchart_data_latency(self.image_pipeline_msg_sets)
+        else:
+            self.image_pipeline_msg_sets_barchart = self.barchart_data_latency_disordered_2(self.image_pipeline_msg_sets)
 
 
     def plot_latency_results(self):
@@ -2807,7 +2921,7 @@ class BenchmarkAnalyzer:
         if not hasattr(self, 'trace_sets_filter_type'):
             self.set_trace_sets_filter_type()
 
-        self.get_target_chain_traces(tracepath)        
+        self.get_target_chain_traces(tracepath)      
         self.bar_charts_latency()
 
         if self.trace_sets_filter_type != "UID":
