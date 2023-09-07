@@ -1,0 +1,29 @@
+description: 'A meta computational graph that uses [moveit2](https://github.com/ros-planning/moveit2) to compute direct kinematics for a UFACTORY xArm6 manipulator.
+Used to demonstrate a complex tranformation using the [geometry2](https://github.com/ros2/geometry2) package.'
+graph: ../../../imgs/d6_direct_kinematics.svg
+id: m7
+name: m7_direct_kinematics
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/meta/m7_direct_kinematics
+  and review the launch files to reproduce this package.
+results:
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-12700H (ROBOTCORE Transforms)
+    metric: latency
+    metric_unit: ms
+    note: mean 0.0063 ms, RMS 0.0072 ms, max 0.0226 ms, min 0.0014 ms
+    timestampt: 31-08-2023
+    type: grey
+    value: 0.0226
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-12700H 
+    metric: latency
+    metric_unit: ms
+    note: mean 0.0186 ms, RMS 0.0319 ms, max 0.3157 ms, min 0.0027 ms
+    timestampt: 31-08-2023
+    type: grey
+    value: 0.3157
+short: Meta computational graph composed by direct kinematics computation for xArm6.

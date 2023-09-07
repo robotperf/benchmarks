@@ -39,11 +39,98 @@ import argparse
 # color("{:02x}".format(x), fg=16, bg="green")
 # debug = True  # debug flag, set to True if desired
 
+class FrameHierarchy:
+    def __init__(self):
+        self.frames = {}
+
+    def add_frame(self, parent_frame, child_frame):
+        if parent_frame not in self.frames:
+            self.frames[parent_frame] = []
+        self.frames[parent_frame].append(child_frame)
+
+    def find_parent(self, child_frame, current_frame="world"):
+        children = self.get_children(current_frame)
+        
+        if child_frame in children:
+            return current_frame
+        
+        for child in children:
+            parent = self.find_parent(child_frame, child)
+            if parent:
+                return parent
+        
+        return None
+        
+    def get_parents(self, child_frame):
+        parents = []
+        parent = child_frame
+        parents.append(parent)
+        while parent != None:
+            parent = self.find_parent(parent)
+            parents.append(parent)
+        
+        return parents
+    
+    def get_children(self, parent_frame):
+        return self.frames.get(parent_frame, [])
+
+    def find_explicit_path(self, start_frame, target_frame, current_path=None):
+        if current_path is None:
+            current_path = []
+
+        current_path.append(start_frame)
+        
+        if start_frame == target_frame:
+            return current_path
+        
+        children = self.get_children(start_frame)
+        
+        for child in children:
+            new_path = self.find_explicit_path(child, target_frame, current_path.copy())
+            if new_path:
+                return new_path
+        
+        return None
+        
+    def find_path(self, start_frame, target_frame):
+        path = self.find_explicit_path(start_frame, target_frame)
+        if path == None:
+            parents_start_frame = self.get_parents(start_frame)  
+            parents_end_frame = self.get_parents(target_frame)
+            print(parents_start_frame)
+            print(parents_end_frame)
+            for i in range(len(parents_start_frame)):
+                for j in range(len(parents_end_frame)):
+                    if parents_start_frame[i] == None:
+                        return None
+                    elif parents_start_frame[i] == parents_end_frame[j]:
+                        path = []
+                        for k in range(0,i):
+                            path.append(parents_start_frame[k])
+                            print(path)
+                        for l in range(j,0,-1):
+                            path.append(parents_end_frame[l])
+                            print(path)
+                            
+                        path.append(target_frame)
+                        return path
+            return None
+        else:
+            return path
+        
+
+    def print_hierarchy(self, parent_frame, indent=0):
+        print(" " * indent + parent_frame)
+        children = self.get_children(parent_frame)
+        for child in children:
+            self.print_hierarchy(child, indent + 2)
 
 class BenchmarkAnalyzer:
-    def __init__(self, benchmark_name, hardware_device_type="cpu"):
+    def __init__(self, benchmark_name, hardware_device_type="cpu", tf_tree=None):
         self.benchmark_name = benchmark_name
         self.hardware_device_type = hardware_device_type
+        if tf_tree:
+            self.tf_tree = tf_tree
 
         # initialize arrays where tracing configuration will be stored
         self.target_chain = []
@@ -375,13 +462,26 @@ class BenchmarkAnalyzer:
 
         id = id_sec + id_nanosecs/1e9
         return id
+    
+    def tf2_uid_identifier(self, msg):
+        """
+        Returns random number as unique identifier
+        from a CTF msg
+        """    
+        payload_fields = msg.event.payload_field
+        for field_name, field_value in payload_fields.items():
+            if "tf2_uid" in field_name:
+                id = msg.event.payload_field[field_name]          
+                                
+        return id
 
     def msgsets_from_trace_identifier(
         self, 
         tracename, 
         unique_funq=None, 
         debug=False,
-        target=True
+        target=True,
+        order=True
     ):
         """
         Returns a list of message sets ready to be used
@@ -399,6 +499,8 @@ class BenchmarkAnalyzer:
         """
         if unique_funq is None:
             unique_funq = self.timestamp_identifier
+        elif unique_funq == "tf2_uid":
+            unique_funq = self.tf2_uid_identifier
 
         msg_it = bt2.TraceCollectionMessageIterator(tracename)
 
@@ -421,61 +523,130 @@ class BenchmarkAnalyzer:
         new_set = []  # used to track new complete sets
         chain_index = 0  # track where in the chain we are so far
 
-        for msg in image_pipeline_msgs:
-            id = unique_funq(msg)
-            if id in image_pipeline_msg_dict.keys():
+        if order == True: # use the target_chain or power_chain order to create the sets
+            for msg in image_pipeline_msgs:
+                id = unique_funq(msg)
+                if id in image_pipeline_msg_dict.keys():
+                    if target:
+                        if (len(image_pipeline_msg_dict[id]) < len(self.target_chain)):
+                            image_pipeline_msg_dict[id].append(msg)
+                        else:
+                            pass
+                            if debug:
+                                print(color("Message with id: " + str(id) + " already fully propagated, discarding - " + str(msg.event.name), fg="yellow"))
+                    elif not target:
+                        if (len(image_pipeline_msg_dict[id]) < len(self.power_chain)):
+                            image_pipeline_msg_dict[id].append(msg)
+                        else:
+                            pass
+                            if debug:
+                                print(color("Message with id: " + str(id) + " already fully propagated, discarding - " + str(msg.event.name), fg="yellow"))
+
+                else:
+                    image_pipeline_msg_dict[id] = [msg]
+
+            del_list = []
+            for key_id, value_list in image_pipeline_msg_dict.items():
+                names_value_list = [msg.event.name for msg in value_list]
                 if target:
-                    if (len(image_pipeline_msg_dict[id]) < len(self.target_chain)):
-                        image_pipeline_msg_dict[id].append(msg)
-                    else:
-                        pass
+                    if len(value_list) != (len(self.target_chain)):
                         if debug:
-                            print(color("Message with id: " + str(id) + " already fully propagated, discarding - " + str(msg.event.name), fg="yellow"))
+                            print(color("Message with id: " + str(key_id) + " not fully propagated (missing number), discarding chain - " + str([x.event.name for x in value_list]), fg="orange"))
+                        # del image_pipeline_msg_dict[key_id]  # this leads to error:
+                        #                                      # dictionary changed size during iteration
+                        del_list.append(key_id)
+                        continue
                 elif not target:
-                    if (len(image_pipeline_msg_dict[id]) < len(self.power_chain)):
-                        image_pipeline_msg_dict[id].append(msg)
-                    else:
-                        pass
+                    if len(value_list) != (len(self.power_chain)):
                         if debug:
-                            print(color("Message with id: " + str(id) + " already fully propagated, discarding - " + str(msg.event.name), fg="yellow"))
+                            print(color("Message with id: " + str(key_id) + " not fully propagated (missing number), discarding chain - " + str([x.event.name for x in value_list]), fg="orange"))
+                        # del image_pipeline_msg_dict[key_id]  # this leads to error:
+                        #                                      # dictionary changed size during iteration
+                        del_list.append(key_id)
+                        continue
 
-            else:
-                image_pipeline_msg_dict[id] = [msg]
+                if target:
+                    if not all(item in names_value_list for item in self.target_chain):
+                        if debug:
+                            print(color("Message with id: " + str(key_id) + " does not have all tracepoints, discarding chain - " + str([x.event.name for x in value_list]), fg="red"))
+                        del_list.append(key_id)
+                elif not target:
+                    if not all(item in names_value_list for item in self.power_chain):
+                        if debug:
+                            print(color("Message with id: " + str(key_id) + " does not have all tracepoints, discarding chain - " + str([x.event.name for x in value_list]), fg="red"))
+                        del_list.append(key_id)
 
-        del_list = []
-        for key_id, value_list in image_pipeline_msg_dict.items():
-            names_value_list = [msg.event.name for msg in value_list]
-            if target:
-                if len(value_list) != (len(self.target_chain)):
-                    if debug:
-                        print(color("Message with id: " + str(key_id) + " not fully propagated (missing number), discarding chain - " + str([x.event.name for x in value_list]), fg="orange"))
-                    # del image_pipeline_msg_dict[key_id]  # this leads to error:
-                    #                                      # dictionary changed size during iteration
-                    del_list.append(key_id)
-                    continue
-            elif not target:
-                if len(value_list) != (len(self.power_chain)):
-                    if debug:
-                        print(color("Message with id: " + str(key_id) + " not fully propagated (missing number), discarding chain - " + str([x.event.name for x in value_list]), fg="orange"))
-                    # del image_pipeline_msg_dict[key_id]  # this leads to error:
-                    #                                      # dictionary changed size during iteration
-                    del_list.append(key_id)
-                    continue
+            for key in del_list:
+                del image_pipeline_msg_dict[key]
+                self.lost_msgs += 1
 
-            if target:
-                if not all(item in names_value_list for item in self.target_chain):
-                    if debug:
-                        print(color("Message with id: " + str(key_id) + " does not have all tracepoints, discarding chain - " + str([x.event.name for x in value_list]), fg="red"))
-                    del_list.append(key_id)
-            elif not target:
-                if not all(item in names_value_list for item in self.power_chain):
-                    if debug:
-                        print(color("Message with id: " + str(key_id) + " does not have all tracepoints, discarding chain - " + str([x.event.name for x in value_list]), fg="red"))
-                    del_list.append(key_id)
+        else: # do not use the target_chain or power_chain order to create the sets
+            for msg in image_pipeline_msgs:
+                id = unique_funq(msg)
+                if id in image_pipeline_msg_dict.keys():
+                    image_pipeline_msg_dict[id].append(msg)
+                else:
+                    image_pipeline_msg_dict[id] = [msg]
 
-        for key in del_list:
-            del image_pipeline_msg_dict[key]
-            self.lost_msgs += 1
+
+            # remove the sets that have an init but no fini
+            del_list = []
+            for key_id, value_list in image_pipeline_msg_dict.items():
+                names_value_list = [msg.event.name for msg in value_list]
+                # print(names_value_list)
+                if target:
+                    missing_fini_events = []
+                    for init_event in filter(lambda x: x.endswith("_init"), self.target_chain):
+                        fini_event = init_event[:-5] + "_fini"
+                        if init_event in names_value_list and fini_event not in names_value_list:
+                            missing_fini_events.append((init_event, fini_event))
+
+                    if missing_fini_events:
+                        if debug:
+                            for init_event, fini_event in missing_fini_events:
+                                print(color(f"Missing fini event for init event '{init_event}', key_id: {key_id}", fg="red"))
+                        del_list.append(key_id)
+
+                    missing_init_events = []
+                    for fini_event in filter(lambda x: x.endswith("_fini"), self.target_chain):
+                        init_event = fini_event[:-5] + "_init"
+                        if fini_event in names_value_list and init_event not in names_value_list:
+                            missing_init_events.append((fini_event, init_event))
+
+                    if missing_init_events:
+                        if debug:
+                            for fini_event, init_event in missing_init_events:
+                                print(color(f"Missing init event for fini event '{fini_event}', key_id: {key_id}", fg="red"))
+                        del_list.append(key_id)
+
+                elif not target:
+                    missing_fini_events = []
+                    for init_event in filter(lambda x: x.endswith("_init"), self.power_chain):
+                        fini_event = init_event[:-5] + "_fini"
+                        if init_event in names_value_list and fini_event not in names_value_list:
+                            missing_fini_events.append((init_event, fini_event))
+
+                    if missing_fini_events:
+                        if debug:
+                            for init_event, fini_event in missing_fini_events:
+                                print(color(f"Missing fini event for init event '{init_event}', key_id: {key_id}", fg="red"))
+                        del_list.append(key_id)
+
+                    missing_init_events = []
+                    for fini_event in filter(lambda x: x.endswith("_fini"), self.power_chain):
+                        init_event = fini_event[:-5] + "_init"
+                        if fini_event in names_value_list and init_event not in names_value_list:
+                            missing_init_events.append((fini_event, init_event))
+
+                    if missing_init_events:
+                        if debug:
+                            for fini_event, init_event in missing_init_events:
+                                print(color(f"Missing init event for fini event '{fini_event}', key_id: {key_id}", fg="red"))
+                        del_list.append(key_id)
+
+            for key in del_list:
+                del image_pipeline_msg_dict[key]
+                self.lost_msgs += 1
 
         # survivors
         return list(image_pipeline_msg_dict.values())
@@ -1548,6 +1719,112 @@ class BenchmarkAnalyzer:
             image_pipeline_msg_sets_ns.append(aux_set)
 
         return image_pipeline_msg_sets_ns
+    
+    def barchart_data_latency_disordered(self, image_pipeline_msg_sets):
+        """
+        Converts a tracing message list into its corresponding
+        relative (to the previous tracepoint) latency list in
+        millisecond units.
+
+        Args:
+            image_pipeline_msg_sets ([type]): [description]
+
+        Returns:
+            list: list of relative latencies, in ms
+        """
+        image_pipeline_msg_sets_ns = []
+        # if multidimensional:list
+        if type(image_pipeline_msg_sets[0]) == list:
+            for set_index in range(len(image_pipeline_msg_sets)):
+                aux_set = []
+                target_chain_ns = []
+                for msg_index in range(len(image_pipeline_msg_sets[set_index])):
+                    target_chain_ns.append(
+                        image_pipeline_msg_sets[set_index][
+                            msg_index
+                        ].default_clock_snapshot.ns_from_origin
+                    )
+                
+                for msg_index in range(len(image_pipeline_msg_sets[set_index])):
+                    if msg_index < len(image_pipeline_msg_sets[set_index])/2:
+                        previous = target_chain_ns[msg_index]
+                    else:
+                        previous = target_chain_ns[msg_index - int(len(image_pipeline_msg_sets[set_index])/2)]
+                    aux_set.append((target_chain_ns[msg_index] - previous) / 1e6)
+
+                for aux_idx in range(int(len(aux_set)/2)):
+                    image_pipeline_msg_sets_ns.append([aux_set[aux_idx], aux_set[aux_idx + int(len(aux_set)/2)]])
+        else:  # not multidimensional
+            aux_set = []
+            target_chain_ns = []
+            for msg_index in range(len(image_pipeline_msg_sets)):
+                target_chain_ns.append(
+                    image_pipeline_msg_sets[msg_index].default_clock_snapshot.ns_from_origin
+                )
+            for msg_index in range(len(image_pipeline_msg_sets)):
+                    if msg_index < len(image_pipeline_msg_sets)/2:
+                        previous = target_chain_ns[msg_index]
+                    else:
+                        previous = target_chain_ns[msg_index - len(image_pipeline_msg_sets)/2]
+                    aux_set.append((target_chain_ns[msg_index] - previous) / 1e6)
+            
+            for aux_idx in range(len(aux_set)/2):
+                    image_pipeline_msg_sets_ns.append([aux_set[aux_idx, aux_idx + len(aux_set)/2]])
+
+        return image_pipeline_msg_sets_ns
+    
+    def barchart_data_latency_disordered_2(self, image_pipeline_msg_sets):
+        """
+        Converts a tracing message list into its corresponding
+        relative (to the previous tracepoint) latency list in
+        millisecond units.
+
+        Args:
+            image_pipeline_msg_sets ([type]): [description]
+
+        Returns:
+            list: list of relative latencies, in ms
+        """
+        image_pipeline_msg_sets_ns = []
+        # if multidimensional:list
+        if type(image_pipeline_msg_sets[0]) == list:
+            for set_index in range(len(image_pipeline_msg_sets)):
+                aux_set = []
+                target_chain_ns = []
+                for msg_index in range(len(image_pipeline_msg_sets[set_index])):
+                    target_chain_ns.append(
+                        image_pipeline_msg_sets[set_index][
+                            msg_index
+                        ].default_clock_snapshot.ns_from_origin
+                    )
+                print('Length set')
+                print(len(image_pipeline_msg_sets[set_index]))
+                for msg_index in range(len(image_pipeline_msg_sets[set_index])):
+                    if msg_index == 0:
+                        previous = target_chain_ns[msg_index]
+                    aux_set.append((target_chain_ns[msg_index] - previous) / 1e6)
+                
+                # add the result as many times as it is repeated -> weight
+                for ijk in range(int(len(image_pipeline_msg_sets[set_index])/2)):
+                    image_pipeline_msg_sets_ns.append([aux_set[0], aux_set[-1]/int(len(image_pipeline_msg_sets[set_index])/2)])
+        else:  # not multidimensional
+            aux_set = []
+            target_chain_ns = []
+            for msg_index in range(len(image_pipeline_msg_sets)):
+                target_chain_ns.append(
+                    image_pipeline_msg_sets[msg_index].default_clock_snapshot.ns_from_origin
+                )
+            for msg_index in range(len(image_pipeline_msg_sets)):
+                    if msg_index == 0:
+                        previous = target_chain_ns[msg_index]
+                    aux_set.append((target_chain_ns[msg_index] - previous) / 1e6)
+            
+            # add the result as many times as it is repeated -> weight
+            for ijk in range(int(len(image_pipeline_msg_sets[set_index])/2)):
+                    image_pipeline_msg_sets_ns.append([aux_set[0], aux_set[-1]/int(len(image_pipeline_msg_sets[set_index])/2)])
+
+        return image_pipeline_msg_sets_ns
+
 
     def print_timeline(self, image_pipeline_msg_sets):
 
@@ -1770,26 +2047,26 @@ class BenchmarkAnalyzer:
 
 
     def statistics(self, image_pipeline_msg_sets_ms, verbose=False):
-
         mean_ = self.mean_sets(image_pipeline_msg_sets_ms)
         rms_ = self.rms_sets(image_pipeline_msg_sets_ms)
         min_ = self.min_sets(image_pipeline_msg_sets_ms)
         max_ = self.max_sets(image_pipeline_msg_sets_ms)
         #median_ = self.median_sets(image_pipeline_msg_sets_ms)
 
-        first_target = self.target_chain[0]
-        last_target = self.target_chain[-1]
+        if self.trace_sets_filter_type != "UID":
+            first_target = self.target_chain[0]
+            last_target = self.target_chain[-1]
 
-        indices = [i for i in range(
-                    self.target_chain_dissambiguous.index(first_target),
-                    1 + self.target_chain_dissambiguous.index(last_target),
-                    )
-                ]
+            indices = [i for i in range(
+                        self.target_chain_dissambiguous.index(first_target),
+                        1 + self.target_chain_dissambiguous.index(last_target),
+                        )
+                    ]
 
-        mean_benchmark = self.mean_sets(image_pipeline_msg_sets_ms,indices)
-        rms_benchmark = self.rms_sets(image_pipeline_msg_sets_ms, indices)
-        max_benchmark = self.max_sets(image_pipeline_msg_sets_ms, indices)
-        min_benchmark = self.min_sets(image_pipeline_msg_sets_ms, indices)
+            mean_benchmark = self.mean_sets(image_pipeline_msg_sets_ms,indices)
+            rms_benchmark = self.rms_sets(image_pipeline_msg_sets_ms, indices)
+            max_benchmark = self.max_sets(image_pipeline_msg_sets_ms, indices)
+            min_benchmark = self.min_sets(image_pipeline_msg_sets_ms, indices)
         #median_benchmark = self.median_sets(image_pipeline_msg_sets_ms, indices)
         
         if verbose:
@@ -1799,24 +2076,34 @@ class BenchmarkAnalyzer:
             print(color("max: " + str(max_), fg="red"))
             #print(color("median: " + str(max_), fg="yellow"))
 
-            print(color("mean benchmark: " + str(mean_benchmark), fg="yellow"))
-            print("rms benchmark: " + str(rms_benchmark))
-            print("min benchmark: " + str(min_benchmark))
-            print(color("max benchmark: " + str(max_benchmark), fg="red"))
-            #print(color("median benchmark: " + str(max_benchmark), fg="yellow"))
+            if self.trace_sets_filter_type != "UID":
+                print(color("mean benchmark: " + str(mean_benchmark), fg="yellow"))
+                print("rms benchmark: " + str(rms_benchmark))
+                print("min benchmark: " + str(min_benchmark))
+                print(color("max benchmark: " + str(max_benchmark), fg="red"))
+                #print(color("median benchmark: " + str(max_benchmark), fg="yellow"))
 
-        return [
-            mean_benchmark,
-            rms_benchmark,
-            max_benchmark,
-            min_benchmark,
-            #median_benchmark,
-            mean_,
-            rms_,
-            max_,
-            min_,
-            #median_,
-        ]
+        if self.trace_sets_filter_type != "UID":
+            return [
+                mean_benchmark,
+                rms_benchmark,
+                max_benchmark,
+                min_benchmark,
+                #median_benchmark,
+                mean_,
+                rms_,
+                max_,
+                min_,
+                #median_,
+            ]
+        else: 
+            return [
+                mean_,
+                rms_,
+                max_,
+                min_,
+                #median_,
+            ]
     
     def statistics_1d(self, image_pipeline_msg_sets_ms, verbose=False):
 
@@ -1869,77 +2156,127 @@ class BenchmarkAnalyzer:
             for stat_list_index in range(len(list_statistics)):
                 list_statistics[stat_list_index].insert(0, list_sets_names[stat_list_index])
 
-            # add headers
-            list_statistics.insert(
-                0,
-                [
-                    "---",
-                    "---",
-                    "---",
-                    "---",
-                    "---",
-                    "---",
-                    "---",
-                    "---",
-                    #"---",
-                    #"---",
-                    "---",
-                ],
-            )
-            list_statistics.insert(
-                0,
-                [
-                    " ",
-                    "Benchmark Mean",
-                    "Benchmark RMS",
-                    "Benchmark Max ",
-                    "Benchmark Min",
-                    #"Benchmark Median",
-                    "Mean",
-                    "RMS",
-                    "Max",
-                    "Min",
-                    #"Median",
-                ],
-            )
+            if self.trace_sets_filter_type != "UID":
+                # add headers
+                list_statistics.insert(
+                    0,
+                    [
+                        "---",
+                        "---",
+                        "---",
+                        "---",
+                        "---",
+                        "---",
+                        "---",
+                        "---",
+                        #"---",
+                        #"---",
+                        "---",
+                    ],
+                )
+                list_statistics.insert(
+                    0,
+                    [
+                        " ",
+                        "Benchmark Mean",
+                        "Benchmark RMS",
+                        "Benchmark Max ",
+                        "Benchmark Min",
+                        #"Benchmark Median",
+                        "Mean",
+                        "RMS",
+                        "Max",
+                        "Min",
+                        #"Median",
+                    ],
+                )
+            else :
+                # add headers
+                list_statistics.insert(
+                    0,
+                    [
+                        "---",
+                        "---",
+                        "---",
+                        "---",
+                        #"---",
+                        "---",
+                    ],
+                )
+                list_statistics.insert(
+                    0,
+                    [
+                        " ",
+                        "Mean",
+                        "RMS",
+                        "Max",
+                        "Min",
+                        #"Median",
+                    ],
+                )
         else:
             # Add name to each statistics list
             for stat_list_index in range(len(list_statistics)):
                 list_statistics[stat_list_index].insert(0, list_sets_names[stat_list_index])
                 
-            # add headers
-            list_statistics.insert(
-                0,
-                [
-                    "---",
-                    "---",
-                    "---",
-                    "---",
-                    "---",
-                    "---",
-                    "---",
-                    "---",
-                    #"---",
-                    #"---",
-                    "---",
-                ],
-            )
-            list_statistics.insert(
-                0,
-                [
-                    " ",
-                    "Benchmark Mean",
-                    "Benchmark RMS",
-                    "Benchmark Max ",
-                    "Benchmark Min",
-                    #"Benchmark Median",
-                    "Mean",
-                    "RMS",
-                    "Max",
-                    "Min",
-                    #"Median",
-                ],
-            )
+            if self.trace_sets_filter_type != "UID":
+                # add headers
+                list_statistics.insert(
+                    0,
+                    [
+                        "---",
+                        "---",
+                        "---",
+                        "---",
+                        "---",
+                        "---",
+                        "---",
+                        "---",
+                        #"---",
+                        #"---",
+                        "---",
+                    ],
+                )
+                list_statistics.insert(
+                    0,
+                    [
+                        " ",
+                        "Benchmark Mean",
+                        "Benchmark RMS",
+                        "Benchmark Max ",
+                        "Benchmark Min",
+                        #"Benchmark Median",
+                        "Mean",
+                        "RMS",
+                        "Max",
+                        "Min",
+                        #"Median",
+                    ],
+                )
+            else:
+                # add headers
+                list_statistics.insert(
+                    0,
+                    [
+                        "---",
+                        "---",
+                        "---",
+                        "---",
+                        #"---",
+                        "---",
+                    ],
+                )
+                list_statistics.insert(
+                    0,
+                    [
+                        " ",
+                        "Mean",
+                        "RMS",
+                        "Max",
+                        "Min",
+                        #"Median",
+                    ],
+                )
         baseline = list_statistics[2]  # baseline for %
 
         # add missing messages at the end
@@ -1966,25 +2303,25 @@ class BenchmarkAnalyzer:
                         if from_baseline:
                             if row[element_index] > baseline[element_index]:
                                 row_str += (
-                                    "**{:.2f} {}**".format(row[element_index], units)
+                                    "**{:.4f} {}**".format(row[element_index], units)
                                     + " (:small_red_triangle_down: `"
-                                    + "{:.2f}".format(
+                                    + "{:.4f}".format(
                                         self.get_change(row[element_index], baseline[element_index])
                                     )
                                     + "`%) | "
                                 )
                             else:
                                 row_str += (
-                                    "**{:.2f} {}**".format(row[element_index], units)
+                                    "**{:.4f} {}**".format(row[element_index], units)
                                     + "{}**".format(units) 
                                     + " (`"
-                                    + "{:.2f}".format(
+                                    + "{:.4f}".format(
                                         self.get_change(row[element_index], baseline[element_index])
                                     )
                                     + "`%) | "
                                 )
                         else:
-                            row_str += ("**{:.2f} {}**".format(row[element_index], units) + " | ")
+                            row_str += ("**{:.4f} {}**".format(row[element_index], units) + " | ")
                     else:
                         row_str += row[element_index] + " | "
 
@@ -1994,24 +2331,24 @@ class BenchmarkAnalyzer:
                         if from_baseline:
                             if row[element_index] > baseline[element_index]:
                                 row_str += (
-                                    "{:.2f} {}".format(row[element_index], units) 
+                                    "{:.4f} {}".format(row[element_index], units) 
                                     + " (:small_red_triangle_down: `"
-                                    + "{:.2f}".format(
+                                    + "{:.4f}".format(
                                         self.get_change(row[element_index], baseline[element_index])
                                     )
                                     + "`%) | "
                                 )
                             else:
                                 row_str += (
-                                    "{:.2f} {}".format(row[element_index], units) 
+                                    "{:.4f} {}".format(row[element_index], units) 
                                     + " (`"
-                                    + "{:.2f}".format(
+                                    + "{:.4f}".format(
                                         self.get_change(row[element_index], baseline[element_index])
                                     )
                                     + "`%) | "
                                 )
                         else:
-                            row_str += ("{:.2f} {}".format(row[element_index], units) + " | ")
+                            row_str += ("{:.4f} {}".format(row[element_index], units) + " | ")
 
                     else:
                         row_str += row[element_index] + " | "
@@ -2409,6 +2746,9 @@ class BenchmarkAnalyzer:
         elif self.hardware_device_type == "cpu" and self.trace_sets_filter_type == "ID":
             self.image_pipeline_msg_sets \
                 = self.msgsets_from_trace_identifier(trace_path, debug=True)
+        elif self.hardware_device_type == "cpu" and self.trace_sets_filter_type == "UID":
+            self.image_pipeline_msg_sets \
+                = self.msgsets_from_trace_identifier(trace_path, debug=True, unique_funq = "tf2_uid", order=False)
         elif self.hardware_device_type == "fpga":
             # NOTE: can't use msgsets_from_trace_identifier because vtf traces
             # won't have the unique identifier
@@ -2423,12 +2763,15 @@ class BenchmarkAnalyzer:
 
         # NOTE: since power only has one trace, there's no real difference between the two methods
         # The distinction is considered for consistency reasons with the 'get_target_chain_traces' method
-        if self.hardware_device_type == "cpu" and self.trace_sets_filter_type == "name":
+        if self.hardware_device_type == "cpu" and self.power_trace_sets_filter_type == "name":
             self.image_pipeline_msg_sets \
                 = self.msgsets_from_trace(trace_path, debug=True, target=False)
-        elif self.hardware_device_type == "cpu" and self.trace_sets_filter_type == "ID":
+        elif self.hardware_device_type == "cpu" and self.power_trace_sets_filter_type == "ID":
             self.image_pipeline_msg_sets \
                 = self.msgsets_from_trace_identifier(trace_path, debug=True, target=False)
+        elif self.hardware_device_type == "cpu" and self.power_trace_sets_filter_type == "UID":
+            self.image_pipeline_msg_sets \
+                = self.msgsets_from_trace_identifier(trace_path, debug=True, unique_funq = "tf2_uid", order=False)
         elif self.hardware_device_type == "fpga":
             # NOTE: can't use msgsets_from_trace_identifier because vtf traces
             # won't have the unique identifier
@@ -2489,7 +2832,10 @@ class BenchmarkAnalyzer:
             self.traces_fpga(msg_set)
 
     def bar_charts_latency(self):
-        self.image_pipeline_msg_sets_barchart = self.barchart_data_latency(self.image_pipeline_msg_sets)
+        if not self.trace_sets_filter_type == "UID":
+            self.image_pipeline_msg_sets_barchart = self.barchart_data_latency(self.image_pipeline_msg_sets)
+        else:
+            self.image_pipeline_msg_sets_barchart = self.barchart_data_latency_disordered_2(self.image_pipeline_msg_sets)
 
 
     def plot_latency_results(self):
@@ -2561,6 +2907,8 @@ class BenchmarkAnalyzer:
         """        
 
         if add_power:
+            if not hasattr(self, 'power_trace_sets_filter_type'):
+                self.set_power_trace_sets_filter_type()
             power_consumption = self.analyze_power(tracepath)
         else:
             power_consumption = None
@@ -2568,11 +2916,13 @@ class BenchmarkAnalyzer:
         if not hasattr(self, 'trace_sets_filter_type'):
             self.set_trace_sets_filter_type()
 
-        self.get_target_chain_traces(tracepath)        
+        self.get_target_chain_traces(tracepath)      
         self.bar_charts_latency()
-        self.index_to_plot = self.get_index_to_plot_latency()
-        self.print_timing_pipeline()
-        # self.draw_tracepoints()
+
+        if self.trace_sets_filter_type != "UID":
+            self.index_to_plot = self.get_index_to_plot_latency()
+            self.print_timing_pipeline()
+            # self.draw_tracepoints()
                     
         self.print_markdown_table(
             [self.image_pipeline_msg_sets_barchart],
@@ -2583,13 +2933,13 @@ class BenchmarkAnalyzer:
             power_consumption=power_consumption
         )
 
-        if os.environ.get('TYPE') == "black":
-            result = self.results_json(metric=os.environ.get('METRIC'))
-            self.add_result(result)
-        else:
-            # default to grey-box benchmarking
-            self.plot_latency_results()
-            # self.upload_results()  # performed in CI/CD pipelines instead
+        # if os.environ.get('TYPE') == "black":
+        #     result = self.results_json(metric=os.environ.get('METRIC'))
+        #     self.add_result(result)
+        # else:
+        #     # default to grey-box benchmarking
+        #     self.plot_latency_results()
+        #     # self.upload_results()  # performed in CI/CD pipelines instead
 
 
     def analyze_throughput(self, tracepath=None, add_power=False):
@@ -2600,6 +2950,8 @@ class BenchmarkAnalyzer:
                 Path of the CTF tracefiles. Defaults to None.
         """
         if add_power:
+            if not hasattr(self, 'power_trace_sets_filter_type'):
+                self.set_power_trace_sets_filter_type()
             power_consumption = self.analyze_power(tracepath)
         else:
             power_consumption = None
@@ -2677,8 +3029,8 @@ class BenchmarkAnalyzer:
             return result["value"]
         else:
             # default to grey-box benchmarking
-            if not hasattr(self, 'trace_sets_filter_type'):
-                self.set_trace_sets_filter_type()
+            if not hasattr(self, 'power_trace_sets_filter_type'):
+                self.set_power_trace_sets_filter_type()
 
             self.get_power_chain_traces(tracepath)        
             total_watts = self.barchart_data_power(self.image_pipeline_msg_sets)
@@ -2757,9 +3109,28 @@ class BenchmarkAnalyzer:
             # No need to set the analysis_type property since it is not evaluated down the road with FPGA hardware
             return
 
-        if filter_type == "name" or filter_type == "ID":
+        if filter_type == "name" or filter_type == "ID" or filter_type == "UID":
             print("Setting {} method for filtering trace sets".format(filter_type))
             self.trace_sets_filter_type = filter_type
         else:
             print("Type {} for filtering trace sets does not exist, setting message ID analysis type".format(filter_type))
             self.trace_sets_filter_type = "ID"
+
+    def set_power_trace_sets_filter_type(self, filter_type="ID"):
+        """
+        Select weather trace sets will be filtered using msgsets_from_trace_identifier or msgsets_from_trace method
+
+        :param: filter_type: string defining which method to use
+        """
+
+        if self.hardware_device_type == "fpga":
+            print("FPGA trace sets can only be filtered by name because vtf traces won't have a unique identifier")
+            # No need to set the analysis_type property since it is not evaluated down the road with FPGA hardware
+            return
+
+        if filter_type == "name" or filter_type == "ID" or filter_type == "UID":
+            print("Setting {} method for filtering power trace sets".format(filter_type))
+            self.power_trace_sets_filter_type = filter_type
+        else:
+            print("Type {} for filtering power trace sets does not exist, setting message ID analysis type".format(filter_type))
+            self.power_trace_sets_filter_type = "ID"
