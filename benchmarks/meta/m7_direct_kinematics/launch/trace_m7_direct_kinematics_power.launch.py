@@ -27,7 +27,7 @@
 # https://github.com/xArm-Developer/xarm_ros2/blob/humble/xarm_moveit_config/launch/xarm6_moveit_fake.launch.py
 
 import os
-POWER_LIB = 'rapl' # os.environ.get('POWER_LIB')
+POWER_LIB = os.environ.get('POWER_LIB') # 'rapl'
 
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, RegisterEventHandler, EmitEvent, TimerAction
@@ -107,7 +107,7 @@ def generate_launch_description():
     )
 
     trace = Trace(
-        session_name="m7_direct_kinematics_newtf2",
+        session_name="m7_direct_kinematics",
         events_ust=[
             "ros2:*",
             "robotperf_benchmarks:*",

@@ -34,7 +34,7 @@ from tracetools_trace.tools.names import DEFAULT_EVENTS_ROS
 from tracetools_trace.tools.names import DEFAULT_EVENTS_KERNEL
 from tracetools_trace.tools.names import DEFAULT_CONTEXT
 
-POWER_LIB = 'rapl' #os.environ.get('POWER_LIB')
+POWER_LIB = os.environ.get('POWER_LIB') # 'rapl'
 
 def generate_launch_description():
     target_frame_arg = DeclareLaunchArgument(
