@@ -26,4 +26,25 @@ results:
     timestampt: 31-08-2023
     type: grey
     value: 0.3157
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.0166, rms_benchmark 0.0306, max_benchmark\
+      \ 0.5770, min_benchmark 0.0015, lost messages 0.00 %"
+    timestampt: '08-09-2023'
+    type: grey
+    value: 0.1925
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '08-09-2023'
+    type: grey
+    value: 8.938907623291016
 short: Meta computational graph composed by direct kinematics computation for xArm6.
