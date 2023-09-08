@@ -5,17 +5,47 @@ id: d2
 name: d2_collision_checking_fcl
 reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/manipulation/d2_collision_checking_fcl
   and review the launch files to reproduce this package.
-# Data not valid at the moment, just a placeholder for now
 results:
 - result:
     category: workstation
-    datasource: N/A
+    datasource: simulation
     hardware: Intel i7-12700H
     metric: latency
     metric_unit: ms
-    note: mean 0.08 ms, rms 0.10 ms, max 0.55 ms, min 0.02 ms, lost 0.00%, update
-      rate 10 Hz
-    timestampt: 08-07-2023
+    note: "\u270Bmean_benchmark 9.1100, rms_benchmark 9.3270, max_benchmark\
+      \ 10.9649, min_benchmark 6.3328, lost messages 0.00 %"
+    timestampt: '08-09-2023'
     type: grey
-    value: 0.55
+    value: 10.9649
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-12700H
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '08-09-2023'
+    type: grey
+    value: 9.9816255569458
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 12.0303, rms_benchmark 14.5932, max_benchmark\
+      \ 23.1109, min_benchmark 3.2861, lost messages 0.00 %"
+    timestampt: '08-09-2023'
+    type: grey
+    value: 23.1109 
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '08-09-2023'
+    type: grey
+    value: 13.847026824951172
 short: Collision checking between xArm6 and a box using FCL library.
