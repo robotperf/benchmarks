@@ -26,4 +26,46 @@ results:
     timestampt: 27-07-2023
     type: grey
     value: 48.451541900634766
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-12700H
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 1.5618, rms_benchmark 1.8012, max_benchmark\
+      \ 2.8296, min_benchmark 0.8779, lost messages 0.00 %"
+    timestampt: '08-09-2023'
+    type: grey
+    value: 2.8296
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-12700H
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '08-09-2023'
+    type: grey
+    value: 10.178995132446289
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-8700K
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 1.8365, rms_benchmark 2.0962, max_benchmark\
+      \ 3.2425, min_benchmark 0.9111, lost messages 0.00 %"
+    timestampt: '08-09-2023'
+    type: grey
+    value: 3.2425 
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i7-8700K
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '08-09-2023'
+    type: grey
+    value: 7.025374412536621
 short: Inverse kinematics computation for xArm6 using the KDL plugin.

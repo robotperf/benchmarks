@@ -869,7 +869,8 @@ class ReportVerb(VerbExtension):
         perception_group = ["a1", "a2", "a5"]
         localization_group = ["b1", "b2", "b3"]
         control_group = ["c1", "c2", "c3", "c4", "c5"]
-        manipulation_group = ["d1", "d2", "d3", "d4", "d5", "d6"]
+        # manipulation_group = ["d1", "d2", "d3", "d4", "d5", "d6"]
+        manipulation_group = ["d2", "d3", "d4", "d5", "d6"]
 
         category_groups = [perception_group, localization_group, control_group, manipulation_group]
         category_names = ["Perception", "Localization", "Control", "Manipulation"]
