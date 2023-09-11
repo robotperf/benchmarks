@@ -137,9 +137,9 @@ def analyze_planning(argv):
     
     for metric in metrics:
         if metric == 'latency':
-            ba.analyze_latency(trace_path, add_power)
+            ba.analyze_latency(trace_path, add_power, debug=False)
         elif metric == 'throughput':
-            ba.analyze_throughput(trace_path, add_power)
+            ba.analyze_throughput(trace_path, add_power, debug=False)
         elif metric == 'power': 
             if num_metrics == 0: # launch independently iff no other metric is requested
                 total_consumption = ba.analyze_power(trace_path)
@@ -296,9 +296,9 @@ def analyze_collision_checking(argv):
     
     for metric in metrics:
         if metric == 'latency':
-            ba.analyze_latency(trace_path, add_power)
+            ba.analyze_latency(trace_path, add_power, debug=False)
         elif metric == 'throughput':
-            ba.analyze_throughput(trace_path, add_power)
+            ba.analyze_throughput(trace_path, add_power, debug=False)
         elif metric == 'power': 
             if num_metrics == 0: # launch independently iff no other metric is requested
                 total_consumption = ba.analyze_power(trace_path)
@@ -325,7 +325,7 @@ def analyze_direct_kinematics(argv):
     integrated = args.integrated
 
     # Instantiate the class
-    ba = BenchmarkAnalyzer('d1_xarm6_planning_and_traj_execution', hardware_device_type)
+    ba = BenchmarkAnalyzer('d7_dual_arm_static_avoidance', hardware_device_type)
 
     # Manipulation traces cannot be identified, since no ID is being stored in the tracepoints
     ba.set_trace_sets_filter_type('name')
@@ -406,9 +406,9 @@ def analyze_direct_kinematics(argv):
     
     for metric in metrics:
         if metric == 'latency':
-            ba.analyze_latency(trace_path, add_power)
+            ba.analyze_latency(trace_path, add_power, debug=False)
         elif metric == 'throughput':
-            ba.analyze_throughput(trace_path, add_power)
+            ba.analyze_throughput(trace_path, add_power, debug=False)
         elif metric == 'power': 
             if num_metrics == 0: # launch independently iff no other metric is requested
                 total_consumption = ba.analyze_power(trace_path)
@@ -452,8 +452,7 @@ def generate_launch_description():
             '--hardware_device_type', LaunchConfiguration('hardware_device_type'),
             '--trace_path', LaunchConfiguration('trace_path'),
             '--metrics', LaunchConfiguration('metrics'),
-            '--integrated', LaunchConfiguration('integrated'),
-            '--debug', LaunchConfiguration('debug')],
+            '--integrated', LaunchConfiguration('integrated')],
         output='screen'
     )
 
