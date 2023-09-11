@@ -416,6 +416,29 @@ def analyze_direct_kinematics(argv):
         else:
             print('The metric ' + metric + ' is not yet implemented\n')
 
+def print_total_benchmark_time(argv):
+    # Parse the command-line arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--hardware_device_type', type=str, help='Hardware Device Type (e.g. cpu or fpga)', default ='cpu')
+    parser.add_argument('--trace_path', type=str, help='Path to trace files (e.g. /tmp/analysis/trace)', default = '/tmp/analysis/trace')
+    parser.add_argument('--metrics', type=str, help='List of metrics to be analyzed (e.g. latency and/or throughput)', default = ['latency'])
+    parser.add_argument('--integrated', type=str, help='Integrated or separated version of the Resize and Rectify nodes (only for fpga now)', default='false') 
+    args = parser.parse_args(argv)
+
+    # Get the values of the arguments
+    hardware_device_type = args.hardware_device_type
+    trace_path = args.trace_path
+    metrics_string = args.metrics
+    metrics_elements = [element.strip() for element in metrics_string.strip("[]").split(",")]
+    metrics = json.loads(json.dumps(metrics_elements))
+    integrated = args.integrated
+
+    # Instantiate the class
+    ba = BenchmarkAnalyzer('d7_dual_arm_static_avoidance', hardware_device_type)
+
+    target_chain_name = ['robotcore_moveit2_planning', 'robotcore_moveit2_fcl_check', 'robotcore_moveit2_direct_kinematics']
+    ba.get_time_spent_in_specified_target_chains(trace_path, target_chain_name)
+
 def generate_launch_description():
     # Declare the launch arguments
     hardware_device_type_arg = DeclareLaunchArgument(
@@ -471,3 +494,6 @@ if __name__ == '__main__':
     analyze_planning(sys.argv[1:])
     analyze_collision_checking(sys.argv[1:])
     analyze_direct_kinematics(sys.argv[1:])
+    print_total_benchmark_time(sys.argv[1:])
+    
+    
