@@ -2736,19 +2736,19 @@ class BenchmarkAnalyzer:
             errs = None
         return outs, errs
 
-    def get_target_chain_traces(self, trace_path):
+    def get_target_chain_traces(self, trace_path, debug):
         if not trace_path:
             trace_path = "/tmp/analysis/trace"
 
         if self.hardware_device_type == "cpu" and self.trace_sets_filter_type == "name":
             self.image_pipeline_msg_sets \
-                = self.msgsets_from_trace(trace_path, True)
+                = self.msgsets_from_trace(trace_path, debug=debug)
         elif self.hardware_device_type == "cpu" and self.trace_sets_filter_type == "ID":
             self.image_pipeline_msg_sets \
-                = self.msgsets_from_trace_identifier(trace_path, debug=True)
+                = self.msgsets_from_trace_identifier(trace_path, debug=debug)
         elif self.hardware_device_type == "cpu" and self.trace_sets_filter_type == "UID":
             self.image_pipeline_msg_sets \
-                = self.msgsets_from_trace_identifier(trace_path, debug=True, unique_funq = "tf2_uid", order=False)
+                = self.msgsets_from_trace_identifier(trace_path, debug=debug, unique_funq = "tf2_uid", order=False)
         elif self.hardware_device_type == "fpga":
             # NOTE: can't use msgsets_from_trace_identifier because vtf traces
             # won't have the unique identifier
@@ -2898,7 +2898,7 @@ class BenchmarkAnalyzer:
         outs, err = run('cd /tmp/benchmarks && git log -1', shell=True)
         print(outs)
 
-    def analyze_latency(self, tracepath=None, add_power=False):
+    def analyze_latency(self, tracepath=None, add_power=False, debug=True):
         """Analyze latency of the image pipeline
 
         Args:
@@ -2916,7 +2916,7 @@ class BenchmarkAnalyzer:
         if not hasattr(self, 'trace_sets_filter_type'):
             self.set_trace_sets_filter_type()
 
-        self.get_target_chain_traces(tracepath)      
+        self.get_target_chain_traces(tracepath, debug)      
         self.bar_charts_latency()
 
         if self.trace_sets_filter_type != "UID":
@@ -2942,7 +2942,7 @@ class BenchmarkAnalyzer:
         #     # self.upload_results()  # performed in CI/CD pipelines instead
 
 
-    def analyze_throughput(self, tracepath=None, add_power=False):
+    def analyze_throughput(self, tracepath=None, add_power=False, debug=True):
         """Analyze throughput of the image pipeline
 
         Args:
@@ -2959,7 +2959,7 @@ class BenchmarkAnalyzer:
         if not hasattr(self, 'trace_sets_filter_type'):
             self.set_trace_sets_filter_type()
         
-        self.get_target_chain_traces(tracepath)        
+        self.get_target_chain_traces(tracepath, debug)        
         barcharts_through_megabys_pot, barcharts_through_fps_pot = self.barchart_data_throughput(self.image_pipeline_msg_sets, 'potential')
         
 
