@@ -9,13 +9,34 @@ reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchma
 results:
 - result:
     category: workstation
-    datasource: N/A
-    hardware: Intel i7-12700H
+    datasource: simulation
+    hardware: Intel i5-13600K
     metric: latency
     metric_unit: ms
-    note: mean 0.08 ms, rms 0.10 ms, max 0.55 ms, min 0.02 ms, lost 0.00%, update
-      rate 10 Hz
-    timestampt: 08-07-2023
+    note: "\u270Bmean_benchmark 1.8055, rms_benchmark 2.0244, max_benchmark\
+      \ 3.0874, min_benchmark 1.0066, lost messages 0.00 %"
+    timestampt: '2023-09-11 09:20:32'
     type: grey
-    value: 0.55
+    value: 3.0874
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i5-13600K
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-09-11 09:20:32'
+    type: grey
+    value: 81.74083709716797
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i5-13600K
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 0.0, rms_benchmark 0.0, max_benchmark 0.0, min_benchmark\
+      \ 0.0, lost messages 0.00 %"
+    timestampt: '2023-09-11 09:20:32'
+    type: grey
+    value: 0.0
 short: Collision checking between xArm6 and a box using FCL library.

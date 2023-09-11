@@ -41,4 +41,36 @@ results:
     timestampt: '2023-07-20 15:11:05'
     type: grey
     value: 0.0
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i5-13600K
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 8953.2444, rms_benchmark 9444.0619, max_benchmark\
+      \ 12279.9022, min_benchmark 4999.8081, lost messages 0.00 %"
+    timestampt: '2023-09-11 09:20:32'
+    type: grey
+    value: 12279.9022
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i5-13600K
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-09-11 09:20:32'
+    type: grey
+    value: 76.66064453125
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i5-13600K
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 0.0, rms_benchmark 0.0, max_benchmark 0.0, min_benchmark\
+      \ 0.0, lost messages 0.00 %"
+    timestampt: '2023-09-11 09:20:32'
+    type: grey
+    value: 0.0
 short: xArm6 planning and trajectory execution
