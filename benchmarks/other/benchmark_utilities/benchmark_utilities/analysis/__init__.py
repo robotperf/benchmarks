@@ -3156,3 +3156,33 @@ class BenchmarkAnalyzer:
             testing_time_ns += (msg_set[-1].default_clock_snapshot.ns_from_origin - msg_set[0].default_clock_snapshot.ns_from_origin)
 
         return testing_time_ns/1e6
+
+    def get_time_spent_in_specified_target_chains(self, trace_path, target_chain_name=[]):
+        """
+        Compute the amount of time during which the traces of a specific target_chain were being generated
+
+        Args:
+            tracepath (string, optional):
+                Path of the CTF tracefiles. Defaults to None.
+
+            target_chain_name (list):
+                Strings of the targets to be considered for computing the time.
+        """
+        msg_it = bt2.TraceCollectionMessageIterator(trace_path)
+
+        # Iterate the trace messages and pick specified ones
+        first_time = True
+        first_trace_ns = 0.0
+        last_trace_ns = 0.0
+        for msg in msg_it:
+            if type(msg) is bt2._EventMessageConst:
+                event = msg.event
+                for target in target_chain_name:
+                    if (target in event.name) and first_time:
+                        first_trace_ns = msg.default_clock_snapshot.ns_from_origin
+                        first_time = False
+                    elif target in event.name:
+                        last_trace_ns = msg.default_clock_snapshot.ns_from_origin
+
+        print("Time in ms: " + str((last_trace_ns - first_trace_ns)/1e6))
+
