@@ -306,57 +306,6 @@ def analyze_collision_checking(argv):
         else:
             print('The metric ' + metric + ' is not yet implemented\n')
 
-def generate_launch_description():
-    # Declare the launch arguments
-    hardware_device_type_arg = DeclareLaunchArgument(
-        'hardware_device_type',
-        default_value='cpu',
-        description='Hardware Device Type (e.g. cpu or fpga)'
-    )
-
-    trace_path_arg = DeclareLaunchArgument(
-        'trace_path',
-        default_value='/tmp/analysis/trace',
-        description='Path to trace files (e.g. /tmp/analysis/trace)'
-    )
-
-    metrics_arg = DeclareLaunchArgument(
-        'metrics',
-        default_value=['latency'],
-        description='List of metrics to be analyzed (e.g. latency and/or throughput)'
-    )
-    
-    integrated_arg = DeclareLaunchArgument(
-        'integrated',
-        default_value="false",
-        description='Integrated or separated version of the Resize and Rectify nodes (only for fpga now)'
-    )
-
-    # Create the launch description
-    ld = LaunchDescription()
-    
-    # Define the ExecuteProcess action to run the Python script
-    analyzer = ExecuteProcess(
-        cmd=[
-            'python3', "src/benchmarks/benchmarks/manipulation/d7_dual_arm_static_avoidance/launch/analyze_d7_dual_arm_static_avoidance.launch.py",
-            '--hardware_device_type', LaunchConfiguration('hardware_device_type'),
-            '--trace_path', LaunchConfiguration('trace_path'),
-            '--metrics', LaunchConfiguration('metrics'),
-            '--integrated', LaunchConfiguration('integrated')],
-        output='screen'
-    )
-
-    # Add the declared launch arguments to the launch description
-    ld.add_action(hardware_device_type_arg)
-    ld.add_action(trace_path_arg)
-    ld.add_action(metrics_arg)
-    ld.add_action(integrated_arg)
-    
-    # Add the ExecuteProcess action to the launch description
-    ld.add_action(analyzer)
-
-    return ld
-
 def analyze_direct_kinematics(argv):
     
     # Parse the command-line arguments
@@ -466,6 +415,58 @@ def analyze_direct_kinematics(argv):
                 print("The average consumption is {} W".format(total_consumption))
         else:
             print('The metric ' + metric + ' is not yet implemented\n')
+
+def generate_launch_description():
+    # Declare the launch arguments
+    hardware_device_type_arg = DeclareLaunchArgument(
+        'hardware_device_type',
+        default_value='cpu',
+        description='Hardware Device Type (e.g. cpu or fpga)'
+    )
+
+    trace_path_arg = DeclareLaunchArgument(
+        'trace_path',
+        default_value='/tmp/analysis/trace',
+        description='Path to trace files (e.g. /tmp/analysis/trace)'
+    )
+
+    metrics_arg = DeclareLaunchArgument(
+        'metrics',
+        default_value=['latency'],
+        description='List of metrics to be analyzed (e.g. latency and/or throughput)'
+    )
+    
+    integrated_arg = DeclareLaunchArgument(
+        'integrated',
+        default_value="false",
+        description='Integrated or separated version of the Resize and Rectify nodes (only for fpga now)'
+    )
+
+    # Create the launch description
+    ld = LaunchDescription()
+    
+    # Define the ExecuteProcess action to run the Python script
+    analyzer = ExecuteProcess(
+        cmd=[
+            'python3', "src/benchmarks/benchmarks/manipulation/d7_dual_arm_static_avoidance/launch/analyze_d7_dual_arm_static_avoidance.launch.py",
+            '--hardware_device_type', LaunchConfiguration('hardware_device_type'),
+            '--trace_path', LaunchConfiguration('trace_path'),
+            '--metrics', LaunchConfiguration('metrics'),
+            '--integrated', LaunchConfiguration('integrated'),
+            '--debug', LaunchConfiguration('debug')],
+        output='screen'
+    )
+
+    # Add the declared launch arguments to the launch description
+    ld.add_action(hardware_device_type_arg)
+    ld.add_action(trace_path_arg)
+    ld.add_action(metrics_arg)
+    ld.add_action(integrated_arg)
+    
+    # Add the ExecuteProcess action to the launch description
+    ld.add_action(analyzer)
+
+    return ld
 
 if __name__ == '__main__':
     analyze_planning(sys.argv[1:])
