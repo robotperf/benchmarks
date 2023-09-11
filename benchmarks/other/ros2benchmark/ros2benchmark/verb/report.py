@@ -16,6 +16,7 @@ import numpy as np
 import arrow
 import random
 import sys
+import seaborn as sns
 
 
 class ReportVerb(VerbExtension):
@@ -122,7 +123,8 @@ class ReportVerb(VerbExtension):
                   unique=False,
                   sortedata=False, 
                   sortedatareverse=False,
-                  filterout=None):
+                  filterout=None,
+                  colors_dict=None):
         """
         Plot the data in a bar plot and save it to a file.
 
@@ -135,6 +137,7 @@ class ReportVerb(VerbExtension):
         :param sortedata: if True, the data is sorted by value
         :param sortedatareverse: if True, the data is sorted by value in reverse order
         :param filterout: list of tuples (hardware, type) to filter out and not consider
+        :param colors_dict: dict of colors to use for each hardware as key
         """
 
         plotpath = '/tmp/report-' + title + '.png'
@@ -180,6 +183,12 @@ class ReportVerb(VerbExtension):
         # colors = [plt.cm.viridis(random.random()) for _ in range(len(names))]
         colors = [plt.cm.viridis(random.random(), alpha=0.2 if (data['type'].lower() == "grey") else 1.0) for data in filtered_data]
 
+        # use colors_dict to determine the colors list
+        if colors_dict:
+            colors = [colors_dict[data['hardware']] for data in filtered_data]
+            # add alpha=0.2 for grey
+            colors = [color if (data['type'].lower() == "black") else (color[0], color[1], color[2], 0.2) for color, data in zip(colors, filtered_data)]
+
         # Create a bar plot
         plt.figure(figsize=(10, 5))
         # plt.bar(names, values, color='blue')
@@ -192,6 +201,114 @@ class ReportVerb(VerbExtension):
         # Save the figure and close
         plt.savefig(plotpath, bbox_inches='tight')
         plt.close()
+        
+        return plotpath
+
+
+    @staticmethod
+    def boxplot_plot_data(data, 
+                          title,
+                          xlabel,
+                          ylabel,
+                          name_function,
+                          value_function, 
+                          filter=None, 
+                          unique=False,
+                          sortedata=False, 
+                          sortedatareverse=False,
+                          filterout=None,
+                          colors_dict=None):
+        """
+        Plot the data in a box plot and save it to a file.
+
+        :param data: list of dicts with the data to plot
+        :param title: title of the plot
+        :param name_function: function to extract the name from the data
+        :param value_function: function to extract the value from the data
+        :param filter: function to filter the data
+        :param unique: if True, only the most recent entry for each 'name', 'hardware', 'type', 'datasource' combination is plotted
+        :param sortedata: if True, the data is sorted by value
+        :param sortedatareverse: if True, the data is sorted by value in reverse order
+        :param filterout: list of tuples (hardware, type) to filter out and not consider        
+        """
+
+        plotpath = '/tmp/report-boxplot' + title + '.png'
+
+        # colors_dict
+        if not colors_dict:
+            colormap = plt.cm.tab20
+            list_hardware = list(set([d['hardware'] for d in data]))
+            colors = [colormap(i) for i in np.linspace(0, 1, len(list_hardware))]        
+            colors_dict = dict(zip(list_hardware, colors))  # explicit dict to ensure order
+
+        if filter:
+            # Filter data using the provided function
+            filtered_data = [d for d in data if filter(d)]
+        else:
+            filtered_data = data
+
+        if filterout:
+            # Filter out data using the provided list
+            filtered_data = [d for d in filtered_data if (d['hardware'], d['type']) not in filterout]
+
+        # order list using "value"
+        if sortedata:
+            filtered_data = sorted(filtered_data, key=lambda x: x['value'])
+        if sortedatareverse:
+            filtered_data = sorted(filtered_data, key=lambda x: x['value'], reverse=True)
+
+        # Extract names and values
+        names = [name_function(d) for d in filtered_data]
+        values = [value_function(d) for d in filtered_data]
+
+        # Group values by their corresponding names
+        grouped_values = defaultdict(list)
+        for n, v in zip(names, values):
+            grouped_values[n].append(v)
+
+        # # Sort names for better visualization
+        # sorted_names = sorted(grouped_values.keys())
+
+        # Compute average for each group
+        averages = {name: np.mean(values) for name, values in grouped_values.items()}
+
+        # Sort names by their average values
+        sorted_names = sorted(grouped_values.keys(), key=lambda x: averages[x])
+
+        # Extract grouped values in the order of sorted names
+        box_data = [grouped_values[name] for name in sorted_names]
+
+        # Create a box plot
+        plt.figure(figsize=(10, 5))
+        sns.set_style("whitegrid")  # Use seaborn's whitegrid style for better aesthetics
+        bp = plt.boxplot(box_data, vert=True,  
+                    patch_artist=True, 
+                    labels=sorted_names,                     
+                    )
+        
+        # Color boxes using colors_dict
+        for patch, name in zip(bp['boxes'], sorted_names):
+            hardware = name.split('⚫')[0].split('⚪')[0].strip()  # Extract hardware name from the label
+            if hardware in colors_dict:
+                patch.set_facecolor(colors_dict[hardware])
+                # add alpha=0.2 for grey
+                if name.endswith('⚪'):
+                    patch.set_alpha(0.2)
+
+        # Overlay individual data points on the boxplot
+        for i, line_data in enumerate(box_data, start=1):  # start=1 because boxplot indices start at 1
+            y = [i] * len(line_data)  # y-values are the same for a given box
+            plt.plot(y, line_data, 'b.', alpha=0.3)  # 'r.' specifies red dots
+
+        plt.title(title)
+        plt.xlabel(xlabel)
+        plt.ylabel(ylabel)
+        plt.xticks(rotation=87)  # Rotate x-axis labels for better visibility
+
+        # Save the figure and close
+        plt.tight_layout()  # Ensure that labels and titles fit within the figure boundaries
+        plt.savefig(plotpath, bbox_inches='tight')
+        plt.close()        
         
         return plotpath
 
@@ -773,6 +890,46 @@ class ReportVerb(VerbExtension):
 
         return plotpath
 
+    @staticmethod
+    def plot_color_coding(colors_dict):
+        # Extract hardware names
+        hardware_names = list(colors_dict.keys())
+
+        # Create a new list of hardware_name adding the ⚫ and ⚪ (add both) symbols at the end of each name
+        # this will duplicate the number of hardware names
+        hardware_names = [hardware_name + '⚫' for hardware_name in hardware_names] + [hardware_name + '⚪' for hardware_name in hardware_names]
+
+        # Create a figure and axis
+        fig, ax = plt.subplots(figsize=(len(hardware_names) * 0.5, 6))  # Adjusting the width based on number of hardware items
+
+        # For each hardware, plot a colored bar
+        for i, hardware in enumerate(hardware_names):
+            color = colors_dict[hardware[:-1]]
+            alpha_val = 0.2 if '⚪' in hardware else 1  # Adjust alpha for grey boxed solutions
+            ax.bar(i, 1, color=color, alpha=alpha_val)  # Setting height to 1 as it's just for visualization
+
+        # Set x-ticks and labels
+        ax.set_xticks(range(len(hardware_names)))
+        ax.set_xticklabels(hardware_names, rotation=90)  # Rotate x-axis labels for better visibility
+
+        # Remove y-axis
+        ax.get_yaxis().set_visible(False)
+
+        # Set title
+        ax.set_title("Color Coding per Hardware")
+
+        # Remove spines
+        for spine in ax.spines.values():
+            spine.set_visible(False)
+
+        plt.tight_layout()
+        plotpath = '/tmp/report-color-coding.png'
+        plt.savefig(plotpath)
+        plt.close()
+
+        return plotpath
+
+
 
 # #####################################################
 # #####################################################
@@ -881,11 +1038,14 @@ class ReportVerb(VerbExtension):
         list_hardware = sorted(list_hardware)
         # colormap = plt.cm.tab10
         # colormap = plt.cm.viridis
-        colormap = plt.cm.bwr
-        colormap = plt.cm.seismic
+        # colormap = plt.cm.bwr
+        # colormap = plt.cm.seismic
         colormap = plt.cm.tab20
         colors = [colormap(i) for i in np.linspace(0, 1, len(list_hardware))]        
         colors_dict = dict(zip(list_hardware, colors))  # explicit dict to ensure order
+
+        colorcoding_path = ReportVerb.plot_color_coding(colors_dict)
+        benchmark_id_report += f"\n![{colorcoding_path}]({colorcoding_path})\n"            
 
         # header of table
         benchmark_id_report_aux = "|   | " + " | ".join("{{}}".format() for _ in category_names) + " |\n"        
@@ -897,9 +1057,8 @@ class ReportVerb(VerbExtension):
             benchmark_id_report += "| " + str(metric_name) + " | "
             for idx, category in enumerate(category_groups):
                 filter_out = [("Kria KR260", "black"), ("Kria KV260", "black")]
-
                 # plotpath = (ReportVerb.radar_plot_data_byid(metric_group,
-                #                                     xlabel="Hardware (timestamp)",
+                #                                     xlabel="Hardware (acceleration kernel)",
                 #                                     ylabel=metric_name,
                 #                                     name_function=ReportVerb.plot_function_names_forid,
                 #                                     value_function=ReportVerb.plot_function_values,
@@ -911,7 +1070,7 @@ class ReportVerb(VerbExtension):
                 # benchmark_id_report += f"\n![{plotpath}]({plotpath})\n"
 
                 plotpath = (ReportVerb.radar_plot_data_byhardware(metric_group,
-                                                    xlabel="Hardware (timestamp)",
+                                                    xlabel="Hardware (acceleration kernel)",
                                                     ylabel=metric_name,
                                                     name_function=ReportVerb.plot_function_names_forid,
                                                     value_function=ReportVerb.plot_function_values,
@@ -925,6 +1084,8 @@ class ReportVerb(VerbExtension):
                                                     # benchmark_hardware=['AMD Ryzen 5 PRO 4650G',
                                                     #                     'Intel i7-8700K',
                                                     #                     'NVIDIA AGX Orin Dev. Kit',
+                                                    #                     'Kria KR260'],
+                                                    # benchmark_hardware=['Kria KR260 (ROBOTCORE® Perception)',
                                                     #                     'Kria KR260'],
                                                     colors_dict=colors_dict,
                                                     a = 500
@@ -953,22 +1114,34 @@ class ReportVerb(VerbExtension):
 
 
             ## ⏱ latency
-            filter_out = [("Kria KR260", "black")]
+            filter_out = [("Kria KR260", "black"), ("Qualcomm RB5 Robotics Kit", "black")]
             filtered_data = [item for item in list_results if (item['id'] == benchmark_id and item['metric'] == "latency")]
             sorted_filtered_data = sorted(filtered_data, key=lambda x: x['value'])
             plotpath = (ReportVerb.plot_data(sorted_filtered_data,
-                                             xlabel="Hardware (timestamp)",
+                                             xlabel="Hardware (acceleration kernel)",
                                              ylabel="Latency (ms)",
                                              name_function=ReportVerb.plot_function_names_forid,
                                              value_function=ReportVerb.plot_function_values,
                                              title=benchmark_id + "-latency",
                                              unique=unique_condition,
                                              sortedata=True,
-                                             filterout = filter_out))
+                                             filterout = filter_out,
+                                             colors_dict=colors_dict))
+            benchmark_id_report += f"\n![{plotpath}]({plotpath})\n"            
+            plotpath = (ReportVerb.boxplot_plot_data(sorted_filtered_data,
+                                             xlabel="Hardware (acceleration kernel)",
+                                             ylabel="Latency (ms)",
+                                             name_function=ReportVerb.plot_function_names_forid,
+                                             value_function=ReportVerb.plot_function_values,
+                                             title=benchmark_id + "-latency",
+                                             unique=unique_condition,
+                                             sortedata=True,
+                                             filterout = filter_out,
+                                             colors_dict=colors_dict))            
             benchmark_id_report += f"\n![{plotpath}]({plotpath})\n"
 
             plotpath_radar = (ReportVerb.radar_plot_data(sorted_filtered_data,
-                                             xlabel="Hardware (timestamp)",
+                                             xlabel="Hardware (acceleration kernel)",
                                              ylabel="Latency (ms)",
                                              name_function=ReportVerb.plot_function_names_forid,
                                              value_function=ReportVerb.plot_function_values,
@@ -989,18 +1162,29 @@ class ReportVerb(VerbExtension):
             filtered_data = [item for item in list_results if (item['id'] == benchmark_id and item['metric'] == "power")]
             sorted_filtered_data = sorted(filtered_data, key=lambda x: x['value'])
             plotpath = (ReportVerb.plot_data(sorted_filtered_data,
-                                             xlabel="Hardware (timestamp)",
+                                             xlabel="Hardware (acceleration kernel)",
                                              ylabel="Power (W)",
                                              name_function=ReportVerb.plot_function_names_forid,
                                              value_function=ReportVerb.plot_function_values,
                                              title=benchmark_id + "-power",
                                              unique=unique_condition,
                                              sortedata=True,
-                                             filterout = filter_out))
+                                             filterout = filter_out,
+                                             colors_dict=colors_dict))
+            # plotpath = (ReportVerb.boxplot_plot_data(sorted_filtered_data,
+            #                                             xlabel="Hardware (acceleration kernel)",
+            #                                             ylabel="Power (W)",
+            #                                             name_function=ReportVerb.plot_function_names_forid,
+            #                                             value_function=ReportVerb.plot_function_values,
+            #                                             title=benchmark_id + "-power",
+            #                                             unique=unique_condition,
+            #                                             sortedata=True,
+            #                                             filterout = filter_out,
+            #                                             colors_dict=colors_dict))            
             benchmark_id_report += f"\n![{plotpath}]({plotpath})\n"
 
             plotpath_radar = (ReportVerb.radar_plot_data(sorted_filtered_data,
-                                             xlabel="Hardware (timestamp)",
+                                             xlabel="Hardware (acceleration kernel)",
                                              ylabel="Power (W)",
                                              name_function=ReportVerb.plot_function_names_forid,
                                              value_function=ReportVerb.plot_function_values,
@@ -1021,18 +1205,29 @@ class ReportVerb(VerbExtension):
             filtered_data = [item for item in list_results if (item['id'] == benchmark_id and item['metric'] == "throughput")]
             sorted_filtered_data = sorted(filtered_data, key=lambda x: x['value'], reverse=True)
             plotpath = (ReportVerb.plot_data(sorted_filtered_data,
-                                             xlabel="Hardware (timestamp)",
+                                             xlabel="Hardware (acceleration kernel)",
                                              ylabel="Throughput (FPS)",
                                              name_function=ReportVerb.plot_function_names_forid,
                                              value_function=ReportVerb.plot_function_values,
                                              title=benchmark_id + "-throughput",
                                              unique=unique_condition,
                                              sortedatareverse=True,
-                                             filterout = filter_out))
+                                             filterout = filter_out,
+                                             colors_dict=colors_dict))
+            # plotpath = (ReportVerb.boxplot_plot_data(sorted_filtered_data,
+            #                                             xlabel="Hardware (acceleration kernel)",
+            #                                             ylabel="Throughput (FPS)",
+            #                                             name_function=ReportVerb.plot_function_names_forid,
+            #                                             value_function=ReportVerb.plot_function_values,
+            #                                             title=benchmark_id + "-throughput",
+            #                                             unique=unique_condition,
+            #                                             sortedatareverse=True,
+            #                                             filterout = filter_out,
+            #                                             colors_dict=colors_dict))            
             benchmark_id_report += f"\n![{plotpath}]({plotpath})\n"
 
             plotpath_radar = (ReportVerb.radar_plot_data(sorted_filtered_data,
-                                             xlabel="Hardware (timestamp)",
+                                             xlabel="Hardware (acceleration kernel)",
                                              ylabel="Throughput (FPS)",
                                              name_function=ReportVerb.plot_function_names_forid,
                                              value_function=ReportVerb.plot_function_values,

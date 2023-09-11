@@ -12,7 +12,7 @@ results:
 - result:
     category: workstation
     datasource: perception/image2
-    hardware: "Intel\xAE Core\u2122 i5-8250U CPU @ 1.60GHz \xD7 8"
+    hardware: "Intel i5-8250U"
     metric: latency
     metric_unit: ms
     note: ''
@@ -1472,4 +1472,14 @@ results:
     timestampt: '2023-07-24 20:18:10'
     type: black
     value: 18.541965997156815
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260 (ROBOTCORE® Perception)
+    metric: latency
+    metric_unit: ms
+    note: N/A
+    timestampt: '2023-09-09 00:00:00'
+    type: grey
+    value: 15.31
 short: Perception resize ROS Component.

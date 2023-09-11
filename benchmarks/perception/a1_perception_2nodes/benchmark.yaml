@@ -1375,17 +1375,6 @@ results:
     hardware: NVIDIA Jetson Nano
     metric: latency
     metric_unit: ms
-    note: mean_latency 26.995979568000003, rms_latency 27.02850517699519, max_latency
-      35.719599, min_latency 24.696163, lost messages 0.00 %
-    timestampt: '2023-07-05 06:24:42'
-    type: black
-    value: 35.719599
-- result:
-    category: edge
-    datasource: perception/image
-    hardware: NVIDIA Jetson Nano
-    metric: latency
-    metric_unit: ms
     note: mean_latency 104.41877520741487, rms_latency 104.87536868696881, max_latency
       575.094871, min_latency 26.298892, lost messages 1.33 %
     timestampt: '2023-07-05 06:27:25'

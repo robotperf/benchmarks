@@ -111,17 +111,6 @@ results:
 - result:
     category: edge
     datasource: simulation
-    hardware: NVIDIA AGX Orin Dev. Kit
-    metric: throughput
-    metric_unit: fps
-    note: "\u270Bmean_benchmark 6718.71, rms_benchmark 13985.87, max_benchmark 38437.88,\
-      \ min_benchmark 0.08, lost messages 0.07 %"
-    timestampt: '2023-07-21 17:55:36'
-    type: grey
-    value: 38437.88
-- result:
-    category: edge
-    datasource: simulation
     hardware: NVIDIA Jetson Nano
     metric: latency
     metric_unit: ms
@@ -182,7 +171,7 @@ results:
       \ min_benchmark 11.62, lost messages 0.04 %"
     timestampt: '2023-07-25 00:41:36'
     type: grey
-    value: 5360.44
+    value: 107.32
 - result:
     category: edge
     datasource: simulation
