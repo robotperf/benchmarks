@@ -2283,6 +2283,10 @@ class BenchmarkAnalyzer:
         # NOTE: programmed for only 1 initial list_statistics, if more provided
         # consider extending the self.lost_msgs to a list
         if len(list_statistics) == 3:  # 1 initial, +2 headers            
+            list_statistics[0].append("Total Execution Time")
+            list_statistics[1].append("---")
+            list_statistics[2].append((self.get_time_spent_in_target_chain()))
+
             list_statistics[0].append("Lost Messages")
             list_statistics[1].append("---")
             list_statistics[2].append("{:.2f} %".format((self.lost_msgs/len(self.image_pipeline_msg_sets))*100))
@@ -3134,3 +3138,21 @@ class BenchmarkAnalyzer:
         else:
             print("Type {} for filtering power trace sets does not exist, setting message ID analysis type".format(filter_type))
             self.power_trace_sets_filter_type = "ID"
+
+    def get_time_spent_in_target_chain(self, tracepath=None, debug=True):
+        """
+        Compute the amount of time during which the traces of a specific target_chain were being generated
+
+        Args:
+            tracepath (string, optional):
+                Path of the CTF tracefiles. Defaults to None.
+
+            debug (string, optional):
+                Weather to print debugging information.
+        """
+
+        testing_time_ns = 0.0
+        for msg_set in self.image_pipeline_msg_sets:
+            testing_time_ns += (msg_set[-1].default_clock_snapshot.ns_from_origin - msg_set[0].default_clock_snapshot.ns_from_origin)
+
+        return testing_time_ns/1e6
