@@ -227,4 +227,15 @@ results:
     timestampt: '2023-09-12 12:29:50'
     type: grey
     value: 4.471413612365723
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: "\u270B mean_benchmark 10.0, rms_benchmark 10.0, max_benchmark 10.21, min_benchmark\
+      \ 9.8, lost messages 0.17 %"
+    timestampt: '2023-09-12 12:32:07'
+    type: grey
+    value: 10.21
 short: Differential driver controller
