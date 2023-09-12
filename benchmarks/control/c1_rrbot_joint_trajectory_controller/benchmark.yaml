@@ -85,7 +85,7 @@ results:
       \ 9.99, lost messages 0.00 %"
     timestampt: '2023-07-20 14:18:49'
     type: grey
-    value: 10.01
+    value: 10.0
 - result:
     category: edge
     datasource: simulation
@@ -117,5 +117,5 @@ results:
       \ 9.98, lost messages 0.20 %"
     timestampt: '2023-07-21 17:48:23'
     type: grey
-    value: 10.03
+    value: 10.00
 short: Joint trajectory controller

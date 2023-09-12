@@ -40,7 +40,7 @@ results:
       \ 13333.1143, min_benchmark 13323.4525, lost messages 0.00 %"
     timestampt: '08-09-2023'
     type: grey
-    value: 13333.1143    
+    value: 13333.1143  
 - result:
     category: workstation
     datasource: simulation
