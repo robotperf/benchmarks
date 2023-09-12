@@ -15,44 +15,66 @@ results:
     hardware: Intel i7-12700H
     metric: latency
     metric_unit: ms
-    note: mean 0.21 ms, rms 1.17 ms, max 10.04 ms, min 0.06 ms, lost 0.00%, update
-      rate 10 Hz
+    note: mean 0.02 ms, rms 0.02 ms, max 0.07 ms, min 0.00 ms, lost 0.00%, update
+      rate 100 Hz
     timestampt: 08-07-2023
     type: grey
-    value: 10.04
+    value: 0.07
 - result:
     category: workstation
     datasource: N/A
     hardware: Intel i7-12700H
     metric: power
     metric_unit: W
-    note: mean 0.21 ms, rms 1.17 ms, max 10.04 ms, min 0.06 ms, lost 0.00%, update
-      rate 10 Hz
+    note: mean 0.02 ms, rms 0.02 ms, max 0.07 ms, min 0.00 ms, lost 0.00%, update
+      rate 100 Hz
     timestampt: 08-07-2023
     type: grey
-    value: 8.0799007415
+    value: 8.663870811462402
+- result:
+    category: workstation
+    datasource: N/A
+    hardware: Intel i7-12700H
+    metric: throughput
+    metric_unit: fps
+    note: mean 0.02 ms, rms 0.02 ms, max 0.07 ms, min 0.00 ms, lost 0.00%, update
+      rate 100 Hz
+    timestampt: 08-07-2023
+    type: grey
+    value: 100.00
 - result:
     category: workstation
     datasource: N/A
     hardware: Intel i5-13600K
     metric: latency
     metric_unit: ms
-    note: mean 0.02, ms, rms 0.05 ms, max 0.44 ms, min 0.009 ms, lost 0.00%, update
-      rate 10 Hz
+    note: mean 0.00, ms, rms 0.00 ms, max 0.01 ms, min 0.00 ms, lost 0.00%, update
+      rate 100 Hz
     timestampt: 08-07-2023
     type: grey
-    value: 0.44
+    value: 0.01
 - result:
     category: workstation
     datasource: N/A
     hardware: Intel i5-13600K
     metric: power
     metric_unit: W
-    note: mean 0.02, ms, rms 0.05 ms, max 0.44 ms, min 0.009 ms, lost 0.00%, update
-      rate 10 Hz
+    note: mean 0.00, ms, rms 0.00 ms, max 0.01 ms, min 0.00 ms, lost 0.00%, update
+      rate 100 Hz
     timestampt: 08-07-2023
     type: grey
-    value: 35.25370407104492
+    value: 35.30375671386719
+- result:
+    category: workstation
+    datasource: N/A
+    hardware: Intel i5-13600K
+    metric: throughput
+    metric_unit: fps
+    note: mean 0.00, ms, rms 0.00 ms, max 0.01 ms, min 0.00 ms, lost 0.00%, update
+      rate 100 Hz
+    timestampt: 08-07-2023
+    type: grey
+    value: 100.00
 - result:
     category: workstation
     datasource: simulation
@@ -85,7 +107,7 @@ results:
       \ min_benchmark 93.83, lost messages 0.07 %"
     timestampt: '2023-07-20 15:01:14'
     type: grey
-    value: 107.15
+    value: 100.0
 - result:
     category: edge
     datasource: simulation
@@ -108,6 +130,17 @@ results:
     timestampt: '2023-07-21 17:31:18'
     type: grey
     value: 11.179306030273438
+- result:
+    category: edge
+    datasource: simulation
+    hardware: NVIDIA AGX Orin Dev. Kit
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 6718.71, rms_benchmark 13985.87, max_benchmark 38437.88,\
+      \ min_benchmark 0.08, lost messages 0.07 %"
+    timestampt: '2023-07-21 17:55:36'
+    type: grey
+    value: 6718.71
 - result:
     category: edge
     datasource: simulation
@@ -139,7 +172,7 @@ results:
       \ min_benchmark 90.59, lost messages 0.04 %"
     timestampt: '2023-07-24 12:53:20'
     type: grey
-    value: 131.27
+    value: 100.01
 - result:
     category: edge
     datasource: simulation
@@ -204,5 +237,5 @@ results:
       \ min_benchmark 80.56, lost messages 0.02 %"
     timestampt: '2023-07-25 02:40:08'
     type: grey
-    value: 131.81
+    value: 100.0
 short: Forward command controller with acceleration commands

@@ -307,7 +307,9 @@ class ReportVerb(VerbExtension):
 
         # Save the figure and close
         plt.tight_layout()  # Ensure that labels and titles fit within the figure boundaries
+        plt.gcf().set_size_inches(10, 5)
         plt.savefig(plotpath, bbox_inches='tight')
+        # plt.savefig(plotpath, dpi=300)  # Adjust dpi as needed
         plt.close()        
         
         return plotpath
