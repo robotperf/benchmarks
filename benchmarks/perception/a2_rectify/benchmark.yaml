@@ -1733,4 +1733,14 @@ results:
     timestampt: '2023-07-24 16:07:25'
     type: black
     value: 30.181252
+- result:
+    category: edge
+    datasource: perception/image
+    hardware: Kria KR260 (ROBOTCORE® Perception)
+    metric: latency
+    metric_unit: ms
+    note: N/A
+    timestampt: '2023-09-09 00:00:00'
+    type: grey
+    value: 21.02
 short: Perception rectify ROS Component.

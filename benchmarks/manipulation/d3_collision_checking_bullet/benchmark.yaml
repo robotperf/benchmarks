@@ -9,6 +9,38 @@ results:
 - result:
     category: workstation
     datasource: simulation
+    hardware: Intel i5-13600K
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.2906, rms_benchmark 0.2994, max_benchmark\
+      \ 0.3909, min_benchmark 0.2243, lost messages 0.00 %"
+    timestampt: '2023-09-11 09:20:32'
+    type: grey
+    value: 0.3909
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i5-13600K
+    metric: power
+    metric_unit: W
+    note: "\u270B"
+    timestampt: '2023-09-11 09:20:32'
+    type: grey
+    value: 81.04869842529297
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: Intel i5-13600K
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 0.0, rms_benchmark 0.0, max_benchmark 0.0, min_benchmark\
+      \ 0.0, lost messages 0.00 %"
+    timestampt: '2023-09-11 09:20:32'
+    type: grey
+    value: 0.0
+- result:
+    category: workstation
+    datasource: simulation
     hardware: Intel i7-12700H
     metric: latency
     metric_unit: ms
