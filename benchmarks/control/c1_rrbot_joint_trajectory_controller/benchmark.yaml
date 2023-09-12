@@ -117,5 +117,15 @@ results:
       \ 9.98, lost messages 0.20 %"
     timestampt: '2023-07-21 17:48:23'
     type: grey
-    value: 10.00
+    value: 10.0
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: "\u270B "
+    timestampt: '2023-09-12 12:22:36'
+    type: grey
+    value: 5.444457054138184
 short: Joint trajectory controller
