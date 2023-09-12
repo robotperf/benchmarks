@@ -30,7 +30,7 @@ results:
       rate 100 Hz, position control
     timestampt: 10-07-2023
     type: grey
-    value: 8.9
+    value: 8.908805847167969
 - result:
     category: workstation
     datasource: N/A
@@ -52,7 +52,7 @@ results:
       control
     timestampt: 10-07-2023
     type: grey
-    value: 29.24
+    value: 29.240436553955078
 - result:
     category: workstation
     datasource: simulation
@@ -85,7 +85,7 @@ results:
       \ min_benchmark 99.02, lost messages 0.07 %"
     timestampt: '2023-07-20 14:39:15'
     type: grey
-    value: 100.86
+    value: 100.00
 - result:
     category: edge
     datasource: simulation
@@ -118,7 +118,7 @@ results:
       \ min_benchmark 0.35, lost messages 0.07 %"
     timestampt: '2023-07-21 18:47:20'
     type: grey
-    value: 39111.39
+    value: 1625.22
 - result:
     category: edge
     datasource: simulation
@@ -150,7 +150,7 @@ results:
       \ min_benchmark 87.72, lost messages 0.00 %"
     timestampt: '2023-07-24 09:44:43'
     type: grey
-    value: 116.35
+    value: 100.01
 - result:
     category: edge
     datasource: simulation
@@ -182,7 +182,7 @@ results:
       \ min_benchmark 83.64, lost messages 0.02 %"
     timestampt: '2023-07-24 22:49:16'
     type: grey
-    value: 124.39
+    value: 100.0
 - result:
     category: edge
     datasource: simulation
@@ -215,5 +215,5 @@ results:
       \ min_benchmark 96.03, lost messages 0.00 %"
     timestampt: '2023-07-25 00:31:46'
     type: grey
-    value: 104.27
+    value: 100.00
 short: Forward command controller Position

@@ -15,44 +15,66 @@ results:
     hardware: Intel i7-12700H
     metric: latency
     metric_unit: ms
-    note: mean 0.21 ms, rms 1.17 ms, max 10.04 ms, min 0.06 ms, lost 0.00%, update
-      rate 10 Hz
+    note: mean 0.02 ms, rms 0.02 ms, max 0.07 ms, min 0.00 ms, lost 0.00%, update
+      rate 100 Hz
     timestampt: 08-07-2023
     type: grey
-    value: 10.04
+    value: 0.07
+- result:
+    category: workstation
+    datasource: N/A
+    hardware: Intel i7-12700H
+    metric: throughput
+    metric_unit: fps
+    note: lost 0.00%, update
+      rate 100 Hz
+    timestampt: 08-07-2023
+    type: grey
+    value: 100.00
 - result:
     category: workstation
     datasource: N/A
     hardware: Intel i7-12700H
     metric: power
     metric_unit: W
-    note: mean 0.21 ms, rms 1.17 ms, max 10.04 ms, min 0.06 ms, lost 0.00%, update
-      rate 10 Hz
+    note: mean 0.02 ms, rms 0.02 ms, max 0.07 ms, min 0.00 ms, lost 0.00%, update
+      rate 100 Hz
     timestampt: 08-07-2023
     type: grey
-    value: 8.0799007415
+    value: 9.01890754699707
 - result:
     category: workstation
     datasource: N/A
     hardware: Intel i5-13600K
     metric: latency
     metric_unit: ms
-    note: mean 0.02, ms, rms 0.05 ms, max 0.44 ms, min 0.009 ms, lost 0.00%, update
-      rate 10 Hz
+    note: mean 0.01, ms, rms 0.01 ms, max 0.02 ms, min 0.00 ms, lost 0.00%, update
+      rate 100 Hz
     timestampt: 08-07-2023
     type: grey
-    value: 0.44
+    value: 0.02
 - result:
     category: workstation
     datasource: N/A
     hardware: Intel i5-13600K
     metric: power
     metric_unit: W
-    note: mean 0.02, ms, rms 0.05 ms, max 0.44 ms, min 0.009 ms, lost 0.00%, update
-      rate 10 Hz
+    note: mean 0.01, ms, rms 0.01 ms, max 0.02 ms, min 0.00 ms, lost 0.00%, update
+      rate 100 Hz
     timestampt: 08-07-2023
     type: grey
-    value: 35.25370407104492
+    value: 34.11692428588867
+- result:
+    category: workstation
+    datasource: N/A
+    hardware: Intel i5-13600K
+    metric: throughput
+    metric_unit: fps
+    note: mean 0.01, ms, rms 0.01 ms, max 0.02 ms, min 0.00 ms, lost 0.00%, update
+      rate 100 Hz
+    timestampt: 08-07-2023
+    type: grey
+    value: 100.00
 - result:
     category: workstation
     datasource: simulation
@@ -85,7 +107,7 @@ results:
       \ min_benchmark 94.94, lost messages 0.03 %"
     timestampt: '2023-07-20 14:50:57'
     type: grey
-    value: 108.34
+    value: 100.00
 - result:
     category: edge
     datasource: simulation
@@ -139,7 +161,7 @@ results:
       \ min_benchmark 89.41, lost messages 0.04 %"
     timestampt: '2023-07-24 11:18:00'
     type: grey
-    value: 111.5
+    value: 100.01
 - result:
     category: edge
     datasource: simulation
@@ -171,7 +193,7 @@ results:
       \ min_benchmark 96.77, lost messages 0.04 %"
     timestampt: '2023-07-24 23:42:04'
     type: grey
-    value: 103.41
+    value: 100.00
 - result:
     category: edge
     datasource: simulation
