@@ -3157,7 +3157,7 @@ class BenchmarkAnalyzer:
 
         return testing_time_ns/1e6
 
-    def get_time_spent_in_specified_target_chains(self, trace_path, target_chain_name=[]):
+    def get_time_spent_in_specified_target_chains(self, trace_path, target_chain_name):
         """
         Compute the amount of time during which the traces of a specific target_chain were being generated
 
@@ -3184,5 +3184,8 @@ class BenchmarkAnalyzer:
                     elif target in event.name:
                         last_trace_ns = msg.default_clock_snapshot.ns_from_origin
 
-        print("Time in ms: " + str((last_trace_ns - first_trace_ns)/1e6))
+        time_spent_in_ms = (last_trace_ns - first_trace_ns)/1e6
 
+        print("Total time spent in target {}: {} ms".format(target_chain_name, time_spent_in_ms))
+
+        return time_spent_in_ms
