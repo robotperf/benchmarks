@@ -7,7 +7,7 @@ reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchma
   and review the launch files to reproduce this package.
 results:
 - result:
-    category: edge
+    category: workstation
     datasource: perception/depth_image1
     hardware: Intel i5-13600K
     metric: latency
@@ -18,7 +18,7 @@ results:
     type: black
     value: 57.4
 - result:
-    category: edge
+    category: workstation
     datasource: perception/depth_image1
     hardware: Intel i5-13600K
     metric: power
@@ -27,6 +27,16 @@ results:
     timestampt: 08-07-2023
     type: black
     value: 32.44
+- result:
+    category: workstation
+    datasource: perception/depth_image1
+    hardware: Intel i5-13600K
+    metric: throughput
+    metric_unit: fps
+    note: Fixed at 30 FPS. lost 0.00 %.
+    timestampt: 08-07-2023
+    type: black
+    value: 30.194
 - result:
     category: edge
     datasource: perception/depth_image1
@@ -68,7 +78,7 @@ results:
       14.56166787712958, min_benchmark 1.401752375219967, lost messages 1.14 %
     timestampt: '2023-07-01 18:59:21'
     type: grey
-    value: 14.56166787712958
+    value: 10.01179515336643
 - result:
     category: workstation
     datasource: perception/depth_image1
@@ -100,7 +110,7 @@ results:
       34.984497844237744, min_benchmark 29.23188800258132, lost messages 0.00 %
     timestampt: '2023-07-01 19:09:30'
     type: grey
-    value: 34.984497844237744
+    value: 30.164149180490657
 - result:
     category: workstation
     datasource: perception/depth_image1
@@ -132,7 +142,7 @@ results:
       32.56260364066182, min_benchmark 28.05284763755054, lost messages 0.00 %
     timestampt: '2023-07-01 19:20:02'
     type: black
-    value: 32.56260364066182
+    value: 30.002004606407837
 - result:
     category: workstation
     datasource: perception/depth_image1
@@ -185,7 +195,7 @@ results:
       \ 0.64 %"
     timestampt: '2023-07-04 21:19:12'
     type: grey
-    value: 13.402456053681657
+    value: 10.018792680515206
 - result:
     category: workstation
     datasource: perception/depth_image1
@@ -217,7 +227,7 @@ results:
       43.240244006426536, min_benchmark 29.42664420197415, lost messages 0.00 %
     timestampt: '2023-07-04 21:28:41'
     type: grey
-    value: 43.240244006426536
+    value: 30.458207912685904
 - result:
     category: workstation
     datasource: perception/depth_image1
@@ -301,7 +311,7 @@ results:
       \ 0.88 %"
     timestampt: '2023-07-05 05:31:15'
     type: grey
-    value: 14.695484433264344
+    value: 10.001090744020777
 - result:
     category: workstation
     datasource: perception/depth_image1
@@ -333,7 +343,7 @@ results:
       31.775115559740275, min_benchmark 29.35094867696045, lost messages 0.00 %
     timestampt: '2023-07-05 05:41:30'
     type: grey
-    value: 31.775115559740275
+    value: 30.053021220336642
 - result:
     category: workstation
     datasource: perception/depth_image1
@@ -418,7 +428,7 @@ results:
       \ 0.76 %"
     timestampt: '2023-07-05 14:53:19'
     type: grey
-    value: 14.672484541547155
+    value: 10.025722598178604
 - result:
     category: workstation
     datasource: perception/depth_image1
@@ -450,7 +460,7 @@ results:
       31.460757581334715, min_benchmark 29.694387149124434, lost messages 0.00 %
     timestampt: '2023-07-05 15:03:01'
     type: grey
-    value: 31.460757581334715
+    value: 30.052433654786537
 - result:
     category: workstation
     datasource: perception/depth_image1
@@ -535,7 +545,7 @@ results:
       \ 0.50 %"
     timestampt: '2023-07-05 21:39:45'
     type: grey
-    value: 15.212177859505658
+    value: 9.998721437369246
 - result:
     category: workstation
     datasource: perception/depth_image1
@@ -567,7 +577,7 @@ results:
       32.24105268068716, min_benchmark 29.50626894615967, lost messages 0.00 %
     timestampt: '2023-07-05 21:48:27'
     type: grey
-    value: 32.24105268068716
+    value: 30.116341313941117
 - result:
     category: workstation
     datasource: perception/depth_image1
@@ -652,7 +662,7 @@ results:
       \ 0.88 %"
     timestampt: '2023-07-06 08:07:29'
     type: grey
-    value: 15.282185711993963
+    value: 10.015841670252444
 - result:
     category: workstation
     datasource: perception/depth_image1
@@ -684,7 +694,7 @@ results:
       31.38248212901018, min_benchmark 29.640832546962045, lost messages 0.00 %
     timestampt: '2023-07-06 08:16:54'
     type: grey
-    value: 31.38248212901018
+    value: 30.052883441752325
 - result:
     category: workstation
     datasource: perception/depth_image1

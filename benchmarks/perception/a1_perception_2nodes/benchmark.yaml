@@ -33,6 +33,58 @@ results:
 - result:
     category: workstation
     datasource: perception/image
+    hardware: Intel i7-12700H
+    metric: throughput
+    metric_unit: fps
+    note: throughput bounded to 30fps, estimated with RAPL
+    timestampt: 07-07-2023
+    type: black
+    value: 30.156
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: "Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE\xAE Perception)"
+    metric: latency
+    metric_unit: ms
+    note: mean 13.45 ms, RMS 13.52 ms, max 20.14 ms, min 8.39 ms, throughput bounded
+      to 30fps
+    timestampt: 07-07-2023
+    type: black
+    value: 20.14
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: "Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE\xAE Perception)"
+    metric: throughput
+    metric_unit: fps
+    note: throughput bounded to 30fps, estimated with RAPL and NVML
+    timestampt: 07-07-2023
+    type: black
+    value: 30.174
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: "Intel i5-13600K + NVIDIA GeForce RTX 3060 (ROBOTCORE\xAE Perception)"
+    metric: latency
+    metric_unit: ms
+    note: mean 8.14 ms, RMS 8.23 ms, max 16.79 ms, min 5.28 ms, throughput bounded
+      to 30fps
+    timestampt: 07-07-2023
+    type: black
+    value: 16.79
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: "Intel i5-13600K + NVIDIA GeForce RTX 3060 (ROBOTCORE\xAE Perception)"
+    metric: throughput
+    metric_unit: fps
+    note: throughput bounded to 30fps, estimated with RAPL and NVML
+    timestampt: 07-07-2023
+    type: black
+    value: 30.206
+- result:
+    category: workstation
+    datasource: perception/image
     hardware: "Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE\xAE Perception)"
     metric: latency
     metric_unit: ms
@@ -51,6 +103,38 @@ results:
     timestampt: 07-07-2023
     type: black
     value: 39.4
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: "Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE\xAE Perception)"
+    metric: throughput
+    metric_unit: fps
+    note: throughput bounded to 30fps, estimated with RAPL and NVML
+    timestampt: 07-07-2023
+    type: black
+    value: 30.183
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: "Intel i5-13600K + NVIDIA GeForce RTX 3060 (ROBOTCORE\xAE Perception)"
+    metric: latency
+    metric_unit: ms
+    note: mean 8.85 ms, rms 9.24 ms, max 20.67 ms, min 1.97 ms, % frames lost 0.13
+      %. Throughput configured in the 30-300 FPS range. Mean FPS observed 296.326.
+    timestampt: 07-07-2023
+    type: black
+    value: 20.67
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: "Intel i5-13600K + NVIDIA GeForce RTX 3060 (ROBOTCORE\xAE Perception)"
+    metric: throughput
+    metric_unit: fps
+    note: mean 8.85 ms, rms 9.24 ms, max 20.67 ms, min 1.97 ms, % frames lost 0.13
+      %. Throughput configured in the 30-300 FPS range. Mean FPS observed 296.326.
+    timestampt: 07-07-2023
+    type: black
+    value: 296.326
 - result:
     category: workstation
     datasource: perception/image
@@ -87,43 +171,66 @@ results:
 - result:
     category: workstation
     datasource: perception/image
-    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE\xAE Perception)
+    metric: latency
+    metric_unit: ms
+    note: mean 138.60 ms, rms 157.59 ms, max 286.57 ms, min 3.83 ms, % frames lost
+      5.09 %. Throughput configured in the 30-500 FPS range. Mean FPS observed 223.602.
+    timestampt: 07-07-2023
+    type: black
+    value: 286.57
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE\xAE Perception)
+    metric: throughput
+    metric_unit: fps
+    note: mean 138.60 ms, rms 157.59 ms, max 286.57 ms, min 3.83 ms, % frames lost
+      5.09 %. Throughput configured in the 30-500 FPS range. Mean FPS observed 223.602.
+    timestampt: 07-07-2023
+    type: black
+    value: 223.602
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE\xAE Perception)
     metric: latency
     metric_unit: ms
     note: mean 88.81 ms, rms 101.41 ms, max 197.53 ms, min 3.22 ms, % frames lost
-      3.24 %. Throughput configured in the 30-500 FPS range. Mean FPS observed 220.91.
+      3.24 %. Throughput configured in the 30-500 FPS range. Mean FPS observed 220.951.
     timestampt: 07-07-2023
     type: black
     value: 197.53
 - result:
     category: workstation
     datasource: perception/image
-    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE\xAE Perception)
     metric: power
     metric_unit: W
     note: Estimated with RAPL and NVML. Throughput configured in the 30-500 FPS range.
-      Mean FPS observed 220.91.
+      Mean FPS observed 220.951.
     timestampt: 07-07-2023
     type: black
     value: 42.08
 - result:
     category: workstation
     datasource: perception/image
-    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060
+    hardware: Intel i7-12700H + NVIDIA GeForce RTX 3060 (ROBOTCORE\xAE Perception)
     metric: throughput
     metric_unit: fps
     note: Throughput configured in the 30-500 FPS range. Mean FPS observed 220.91.
       % frames lost 3.24 %
     timestampt: 07-07-2023
     type: black
-    value: 220.91
+    value: 220.951
 - result:
     category: workstation
     datasource: perception/image
     hardware: Intel i5-13600K
     metric: latency
     metric_unit: ms
-    note: throughput bounded to 30fps
+    note: mean 12.15 ms, RMS 13.14 ms, max 24.67 ms, min 5.71 ms, throughput bounded
+      to 30fps
     timestampt: 07-07-2023
     type: black
     value: 24.67
@@ -137,6 +244,16 @@ results:
     timestampt: 07-07-2023
     type: black
     value: 21.37
+- result:
+    category: workstation
+    datasource: perception/image
+    hardware: Intel i5-13600K
+    metric: throughput
+    metric_unit: fps
+    note: throughput bounded to 30fps, estimated with RAPL
+    timestampt: 07-07-2023
+    type: black
+    value: 30.168
 - result:
     category: edge
     datasource: perception/image
@@ -262,7 +379,7 @@ results:
       45.27460770005173, min_benchmark 9.43612660892683, lost messages 0.00 %
     timestampt: '2023-07-01 17:30:50'
     type: grey
-    value: 45.27460770005173
+    value: 29.25599254168803
 - result:
     category: workstation
     datasource: perception/image
@@ -294,7 +411,7 @@ results:
       40.78378772658402, min_benchmark 27.675432490902267, lost messages 0.00 %
     timestampt: '2023-07-01 17:40:49'
     type: grey
-    value: 40.78378772658402
+    value: 30.245347842949002
 - result:
     category: workstation
     datasource: perception/image
@@ -326,7 +443,7 @@ results:
       32.865597813885636, min_benchmark 28.0221810134255, lost messages 0.00 %
     timestampt: '2023-07-01 17:51:14'
     type: black
-    value: 32.865597813885636
+    value: 30.004940357991266
 - result:
     category: workstation
     datasource: perception/image
@@ -360,7 +477,7 @@ results:
       \ 7.84 %"
     timestampt: '2023-07-04 19:29:42'
     type: grey
-    value: 41.49057892095183
+    value: 29.46749702654583
 - result:
     category: workstation
     datasource: perception/image
@@ -392,7 +509,7 @@ results:
       31.112538001242804, min_benchmark 28.72153139758829, lost messages 0.00 %
     timestampt: '2023-07-04 19:36:55'
     type: grey
-    value: 31.112538001242804
+    value: 30.01906058364618
 - result:
     category: workstation
     datasource: perception/image
@@ -468,7 +585,7 @@ results:
       \ 8.33 %"
     timestampt: '2023-07-04 19:49:20'
     type: grey
-    value: 33.00990122084147
+    value: 28.852008970914273
 - result:
     category: workstation
     datasource: perception/image
@@ -500,7 +617,7 @@ results:
       36.31387974586095, min_benchmark 27.029732191846016, lost messages 0.00 %
     timestampt: '2023-07-04 19:59:11'
     type: grey
-    value: 36.31387974586095
+    value: 30.099580444929877
 - result:
     category: workstation
     datasource: perception/image
@@ -554,7 +671,7 @@ results:
       \ 0.00 %"
     timestampt: '2023-07-04 21:10:15'
     type: grey
-    value: 164.43871393797338
+    value: 36.08898833599122
 - result:
     category: edge
     datasource: perception/image
@@ -576,7 +693,7 @@ results:
       33.282228471515324, min_benchmark 2.990200938094211, lost messages 134.48 %
     timestampt: '2023-07-04 21:17:26'
     type: grey
-    value: 33.282228471515324
+    value: 16.987402925011587
 - result:
     category: edge
     datasource: perception/image
@@ -630,7 +747,7 @@ results:
       \ 120.00 %"
     timestampt: '2023-07-04 21:32:05'
     type: grey
-    value: 246.50511214626823
+    value: 77.49089510354665
 - result:
     category: edge
     datasource: perception/image
@@ -652,7 +769,7 @@ results:
       35.260237122273864, min_benchmark 7.939015279158882, lost messages 106.06 %
     timestampt: '2023-07-04 21:39:16'
     type: grey
-    value: 35.260237122273864
+    value: 16.749318888002247
 - result:
     category: edge
     datasource: perception/image
@@ -686,7 +803,7 @@ results:
       \ 6.67 %"
     timestampt: '2023-07-04 21:46:23'
     type: grey
-    value: 37.369213358626816
+    value: 28.72494072900588
 - result:
     category: edge
     datasource: perception/image
@@ -718,7 +835,7 @@ results:
       33.262933443464696, min_benchmark 27.9845783704899, lost messages 0.00 %
     timestampt: '2023-07-04 21:53:37'
     type: grey
-    value: 33.262933443464696
+    value: 30.05063245740599
 - result:
     category: edge
     datasource: perception/image
@@ -793,7 +910,7 @@ results:
       \ 2.04 %"
     timestampt: '2023-07-04 22:11:01'
     type: grey
-    value: 121.2741400723616
+    value: 32.03769698784685
 - result:
     category: edge
     datasource: perception/image
@@ -825,7 +942,7 @@ results:
       105.55514564973981, min_benchmark 13.852840335126807, lost messages 7.94 %
     timestampt: '2023-07-04 22:18:25'
     type: grey
-    value: 105.55514564973981
+    value: 29.83747206171792
 - result:
     category: edge
     datasource: perception/image
@@ -879,7 +996,7 @@ results:
       \ 5.56 %"
     timestampt: '2023-07-04 22:30:10'
     type: grey
-    value: 109.33960301195624
+    value: 32.09990135437782
 - result:
     category: edge
     datasource: perception/image
@@ -901,7 +1018,7 @@ results:
       126.59947357406887, min_benchmark 8.47731437188692, lost messages 134.48 %
     timestampt: '2023-07-04 22:34:48'
     type: grey
-    value: 126.59947357406887
+    value: 18.789082552864727
 - result:
     category: edge
     datasource: perception/image
@@ -967,7 +1084,7 @@ results:
       \ 2.17 %"
     timestampt: '2023-07-05 03:43:39'
     type: grey
-    value: 36.7076928972743
+    value: 29.526662234418332
 - result:
     category: workstation
     datasource: perception/image
@@ -999,7 +1116,7 @@ results:
       31.961003484740147, min_benchmark 28.111084661703956, lost messages 0.00 %
     timestampt: '2023-07-05 03:50:39'
     type: grey
-    value: 31.961003484740147
+    value: 30.015841650713682
 - result:
     category: workstation
     datasource: perception/image
@@ -1075,7 +1192,7 @@ results:
       \ 3.70 %"
     timestampt: '2023-07-05 04:02:54'
     type: grey
-    value: 68.38775859121219
+    value: 30.362340755159714,
 - result:
     category: workstation
     datasource: perception/image
@@ -1107,7 +1224,7 @@ results:
       50.05508311621525, min_benchmark 27.045158247306077, lost messages 0.00 %
     timestampt: '2023-07-05 04:12:40'
     type: grey
-    value: 50.05508311621525
+    value: 30.31866503781318
 - result:
     category: workstation
     datasource: perception/image
@@ -1161,7 +1278,7 @@ results:
       \ 44.44 %"
     timestampt: '2023-07-05 05:21:36'
     type: grey
-    value: 166.9773279853835
+    value: 37.31905421898498
 - result:
     category: edge
     datasource: perception/image
@@ -1183,7 +1300,7 @@ results:
       33.19076021013336, min_benchmark 3.309865296128236, lost messages 142.86 %
     timestampt: '2023-07-05 05:28:45'
     type: grey
-    value: 33.19076021013336
+    value: 17.06033077162478
 - result:
     category: edge
     datasource: perception/image
@@ -1206,7 +1323,7 @@ results:
       \ 20.00 %"
     timestampt: '2023-07-05 05:43:09'
     type: grey
-    value: 33.04096484903914
+    value: 19.31211079978057
 - result:
     category: edge
     datasource: perception/image
@@ -1228,7 +1345,7 @@ results:
       33.86626186098089, min_benchmark 5.006307371562822, lost messages 100.00 %
     timestampt: '2023-07-05 05:50:03'
     type: grey
-    value: 33.86626186098089
+    value: 17.607260339250452
 - result:
     category: edge
     datasource: perception/image
@@ -1261,7 +1378,7 @@ results:
       \ 0.00 %"
     timestampt: '2023-07-05 05:57:17'
     type: grey
-    value: 42.1840701055373
+    value: 29.575135062657203
 - result:
     category: edge
     datasource: perception/image
@@ -1293,7 +1410,7 @@ results:
       35.73012181470436, min_benchmark 25.031042247042695, lost messages 0.00 %
     timestampt: '2023-07-05 06:04:59'
     type: grey
-    value: 35.73012181470436
+    value: 30.08819764479997
 - result:
     category: edge
     datasource: perception/image
@@ -1368,7 +1485,7 @@ results:
       \ 0.00 %"
     timestampt: '2023-07-05 06:22:19'
     type: grey
-    value: 64.73082656734358
+    value: 27.846977168035203
 - result:
     category: edge
     datasource: perception/image
@@ -1433,7 +1550,7 @@ results:
       \ 9.43 %"
     timestampt: '2023-07-05 06:37:11'
     type: grey
-    value: 34.569310638166
+    value: 29.685255637887153
 - result:
     category: edge
     datasource: perception/image
@@ -1455,7 +1572,7 @@ results:
       200.62196822589394, min_benchmark 8.47476688162122, lost messages 126.67 %
     timestampt: '2023-07-05 06:42:14'
     type: grey
-    value: 200.62196822589394
+    value: 21.683754936587366
 - result:
     category: edge
     datasource: perception/image
@@ -1520,7 +1637,7 @@ results:
       \ 4.17 %"
     timestampt: '2023-07-05 13:12:14'
     type: grey
-    value: 42.036982708129145
+    value: 29.601670798169597
 - result:
     category: workstation
     datasource: perception/image
@@ -1552,7 +1669,7 @@ results:
       31.33529958160168, min_benchmark 29.08558272746852, lost messages 0.00 %
     timestampt: '2023-07-05 13:19:25'
     type: grey
-    value: 31.33529958160168
+    value: 30.023992588866076
 - result:
     category: workstation
     datasource: perception/image
@@ -1608,7 +1725,7 @@ results:
       \ 3.57 %"
     timestampt: '2023-07-05 13:26:32'
     type: grey
-    value: 35.44038093306089
+    value: 28.507832400616014
 - result:
     category: workstation
     datasource: perception/image
@@ -1660,7 +1777,7 @@ results:
       34.13282419902546, min_benchmark 27.481224827198, lost messages 0.00 %
     timestampt: '2023-07-05 13:36:37'
     type: grey
-    value: 34.13282419902546
+    value: 30.04080542191162
 - result:
     category: workstation
     datasource: perception/image
@@ -1713,7 +1830,7 @@ results:
       64.47772110974155, min_benchmark 7.163699260655376, lost messages 100.00 %
     timestampt: '2023-07-05 15:04:31'
     type: grey
-    value: 64.47772110974155
+    value: 18.750987643308708
 - result:
     category: edge
     datasource: perception/image
@@ -1735,7 +1852,7 @@ results:
       30.945665816578902, min_benchmark 4.255834557666004, lost messages 106.06 %
     timestampt: '2023-07-05 15:26:21'
     type: grey
-    value: 30.945665816578902
+    value: 16.871540482509136
 - result:
     category: edge
     datasource: perception/image
@@ -1769,7 +1886,7 @@ results:
       \ 2.04 %"
     timestampt: '2023-07-05 15:33:29'
     type: grey
-    value: 38.137366446279565
+    value: 29.288332199400344
 - result:
     category: edge
     datasource: perception/image
@@ -1801,7 +1918,7 @@ results:
       34.418017143614335, min_benchmark 27.24812197087734, lost messages 0.00 %
     timestampt: '2023-07-05 15:40:38'
     type: grey
-    value: 34.418017143614335
+    value: 30.072437980548933
 - result:
     category: edge
     datasource: perception/image
@@ -1877,7 +1994,7 @@ results:
       \ 2.17 %"
     timestampt: '2023-07-05 15:57:35'
     type: grey
-    value: 69.15919637843716
+    value: 29.465051947220566
 - result:
     category: edge
     datasource: perception/image
@@ -1909,7 +2026,7 @@ results:
       34.795988509668604, min_benchmark 14.356993888974262, lost messages 1.49 %
     timestampt: '2023-07-05 16:04:54'
     type: grey
-    value: 34.795988509668604
+    value: 29.91899154911804
 - result:
     category: edge
     datasource: perception/image
@@ -1943,7 +2060,7 @@ results:
       \ 12.73 %"
     timestampt: '2023-07-05 16:12:05'
     type: grey
-    value: 117.79933872163213
+    value: 31.70465953402319
 - result:
     category: edge
     datasource: perception/image
@@ -1965,7 +2082,7 @@ results:
       32.875521964662454, min_benchmark 5.036430820885646, lost messages 172.00 %
     timestampt: '2023-07-05 16:16:53'
     type: grey
-    value: 32.875521964662454
+    value: 13.405904283078153
 - result:
     category: edge
     datasource: perception/image
@@ -2031,7 +2148,7 @@ results:
       \ 2.27 %"
     timestampt: '2023-07-05 19:55:44'
     type: grey
-    value: 41.85977803182945
+    value: 29.14349288497167
 - result:
     category: workstation
     datasource: perception/image
@@ -2063,7 +2180,7 @@ results:
       32.315408730136966, min_benchmark 27.740826996218807, lost messages 0.00 %
     timestampt: '2023-07-05 20:02:57'
     type: grey
-    value: 32.315408730136966
+    value: 30.008951335282426
 - result:
     category: workstation
     datasource: perception/image
@@ -2128,7 +2245,7 @@ results:
       \ 0.00 %"
     timestampt: '2023-07-05 20:10:28'
     type: grey
-    value: 32.23097074623625
+    value: 28.983607836718075
 - result:
     category: workstation
     datasource: perception/image
@@ -2170,7 +2287,7 @@ results:
       31.128416296995976, min_benchmark 29.722003856311165, lost messages 0.00 %
     timestampt: '2023-07-05 20:20:14'
     type: grey
-    value: 31.128416296995976
+    value: 30.028826476504708
 - result:
     category: workstation
     datasource: perception/image
@@ -2236,7 +2353,7 @@ results:
       \ 20.00 %"
     timestampt: '2023-07-05 21:39:13'
     type: grey
-    value: 62.30411585973698
+    value: 24.86752098190595
 - result:
     category: edge
     datasource: perception/image
@@ -2258,7 +2375,7 @@ results:
       37.52795128721811, min_benchmark 4.348673511072896, lost messages 112.50 %
     timestampt: '2023-07-05 21:46:21'
     type: grey
-    value: 37.52795128721811
+    value: 17.48818325323396
 - result:
     category: edge
     datasource: perception/image
@@ -2281,7 +2398,7 @@ results:
       \ 12.50 %"
     timestampt: '2023-07-05 22:00:26'
     type: grey
-    value: 44.581559488808225
+    value: 26.627153107630562
 - result:
     category: edge
     datasource: perception/image
@@ -2303,7 +2420,7 @@ results:
       34.83123794991548, min_benchmark 7.204475893038375, lost messages 100.00 %
     timestampt: '2023-07-05 22:07:56'
     type: grey
-    value: 34.83123794991548
+    value: 17.6244858377851
 - result:
     category: edge
     datasource: perception/image
@@ -2368,7 +2485,7 @@ results:
       \ 2.13 %"
     timestampt: '2023-07-05 22:22:14'
     type: grey
-    value: 42.12722785105177
+    value: 28.676739853456535
 - result:
     category: edge
     datasource: perception/image
@@ -2400,7 +2517,7 @@ results:
       33.965183105962474, min_benchmark 27.577077172327034, lost messages 0.00 %
     timestampt: '2023-07-05 22:29:33'
     type: grey
-    value: 33.965183105962474
+    value: 30.075860833281507
 - result:
     category: edge
     datasource: perception/image
@@ -2476,7 +2593,7 @@ results:
       \ 16.67 %"
     timestampt: '2023-07-05 22:46:28'
     type: grey
-    value: 385.276726935504
+    value: 49.43333737583661
 - result:
     category: edge
     datasource: perception/image
@@ -2508,7 +2625,7 @@ results:
       32.81461090239216, min_benchmark 26.37067795795819, lost messages 0.00 %
     timestampt: '2023-07-05 22:53:34'
     type: grey
-    value: 32.81461090239216
+    value: 30.05887685734644
 - result:
     category: edge
     datasource: perception/image
@@ -2573,7 +2690,7 @@ results:
       \ 12.00 %"
     timestampt: '2023-07-05 23:07:54'
     type: grey
-    value: 34.78563111327036
+    value: 30.066531567430985
 - result:
     category: edge
     datasource: perception/image
@@ -2595,7 +2712,7 @@ results:
       40.04903924757788, min_benchmark 8.459856193104143, lost messages 119.35 %
     timestampt: '2023-07-05 23:12:44'
     type: grey
-    value: 40.04903924757788
+    value: 15.97184394303764
 - result:
     category: edge
     datasource: perception/image
@@ -2671,7 +2788,7 @@ results:
       \ 1.75 %"
     timestampt: '2023-07-06 06:27:15'
     type: grey
-    value: 51.95975301451024
+    value: 30.3851864291009164
 - result:
     category: workstation
     datasource: perception/image
@@ -2715,7 +2832,7 @@ results:
       31.97843783476427, min_benchmark 29.029057564098633, lost messages 0.00 %
     timestampt: '2023-07-06 06:34:57'
     type: grey
-    value: 31.97843783476427
+    value: 30.02271827117355
 - result:
     category: workstation
     datasource: perception/image
@@ -2759,7 +2876,7 @@ results:
       \ 2.70 %"
     timestampt: '2023-07-06 06:40:11'
     type: grey
-    value: 41.28540796568093
+    value: 30.279110989365577
 - result:
     category: workstation
     datasource: perception/image
@@ -2866,7 +2983,7 @@ results:
       \ 33.33 %"
     timestampt: '2023-07-06 08:10:33'
     type: grey
-    value: 210.97059766071507
+    value: 42.2058828069855
 - result:
     category: edge
     datasource: perception/image
@@ -2888,7 +3005,7 @@ results:
       42.1944257534864, min_benchmark 7.5218121646146185, lost messages 100.00 %
     timestampt: '2023-07-06 08:17:43'
     type: grey
-    value: 42.1944257534864
+    value: 17.791576346848455
 - result:
     category: edge
     datasource: perception/image
@@ -2910,7 +3027,7 @@ results:
       38.944778757243284, min_benchmark 6.175420984623943, lost messages 100.00 %
     timestampt: '2023-07-06 08:39:19'
     type: grey
-    value: 38.944778757243284
+    value: 16.57706816951044
 - result:
     category: edge
     datasource: perception/image
@@ -2943,7 +3060,7 @@ results:
       \ 1.92 %"
     timestampt: '2023-07-06 08:46:24'
     type: grey
-    value: 42.12088956454567
+    value: 29.234071007157848
 - result:
     category: edge
     datasource: perception/image
@@ -2975,7 +3092,7 @@ results:
       38.37123323992496, min_benchmark 27.65861447877027, lost messages 0.00 %
     timestampt: '2023-07-06 08:53:42'
     type: grey
-    value: 38.37123323992496
+    value: 30.15377608138141
 - result:
     category: edge
     datasource: perception/image
@@ -3051,7 +3168,7 @@ results:
       \ 30.30 %"
     timestampt: '2023-07-06 09:10:34'
     type: grey
-    value: 118.02146456376008
+    value: 28.26531545088446
 - result:
     category: edge
     datasource: perception/image
@@ -3083,7 +3200,7 @@ results:
       35.23334675606401, min_benchmark 14.88178460932384, lost messages 3.03 %
     timestampt: '2023-07-06 09:17:42'
     type: grey
-    value: 35.23334675606401
+    value: 29.875145680402717
 - result:
     category: edge
     datasource: perception/image
@@ -3118,7 +3235,7 @@ results:
       \ 10.17 %"
     timestampt: '2023-07-06 09:25:19'
     type: grey
-    value: 135.02151635373852
+    value: 32.12737851105719
 - result:
     category: edge
     datasource: perception/image
@@ -3140,7 +3257,7 @@ results:
       38.971904024203724, min_benchmark 7.514973396618423, lost messages 106.06 %
     timestampt: '2023-07-06 09:30:18'
     type: grey
-    value: 38.971904024203724
+    value: 17.60650242279449
 - result:
     category: edge
     datasource: perception/image
@@ -3204,7 +3321,7 @@ results:
       \ min_benchmark 3.29, lost messages 0.00 %"
     timestampt: '2023-07-24 14:11:54'
     type: grey
-    value: 202.98
+    value: 72.42
 - result:
     category: edge
     datasource: perception/image
@@ -3236,6 +3353,6 @@ results:
       4.29, lost messages 112.50 %
     timestampt: '2023-07-24 14:30:06'
     type: grey
-    value: 34.5
+    value: 16.54
 short: Perception computational graph composed by 2 dataflow-connected *Components*,
   `rectify` and `resize`.
