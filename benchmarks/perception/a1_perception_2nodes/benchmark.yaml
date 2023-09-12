@@ -1192,7 +1192,7 @@ results:
       \ 3.70 %"
     timestampt: '2023-07-05 04:02:54'
     type: grey
-    value: 30.362340755159714,
+    value: 30.362340755159714
 - result:
     category: workstation
     datasource: perception/image
