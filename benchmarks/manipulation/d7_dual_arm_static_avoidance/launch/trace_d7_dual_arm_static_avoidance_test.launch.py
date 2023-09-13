@@ -50,7 +50,7 @@ def generate_launch_description():
                 FindPackageShare('robotcore_manipulation_moveit2'),
                 'launch',
                 'simulation',
-                'trace_d7_simulation_moveit2_power.launch.py'
+                'd7_simulation_moveit2_test.launch.py'
             ])
         ])
     )
