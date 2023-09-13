@@ -216,4 +216,70 @@ results:
     timestampt: '2023-07-25 01:33:09'
     type: grey
     value: 3.369999885559082
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.0179 ms, rms_benchmark 0.0181 ms, max_benchmark 0.0462 ms, min_benchmark\
+      \ 0.0075 ms, lost messages 0.00 %"
+    timestampt: '2023-09-13 17:29:00'
+    type: grey
+    value: 0.0462
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: "\u270Bmean_benchmark 0.0179 ms, rms_benchmark 0.0181 ms, max_benchmark 0.0462 ms, min_benchmark\
+      \ 0.0075 ms, lost messages 0.00 %"
+    timestampt: '2023-09-13 17:29:00'
+    type: grey
+    value: 5.034379959106445
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 100.01 fps, rms_benchmark 100.01 fps, max_benchmark 111.41 fps, min_benchmark\
+      \ 83.10 fps, lost messages 0.00 %"
+    timestampt: '2023-09-13 17:29:00'
+    type: grey
+    value: 100.01
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.0167 ms, rms_benchmark 0.0168 ms, max_benchmark 0.0532 ms, min_benchmark\
+      \ 0.0072 ms, lost messages 0.00 %"
+    timestampt: '2023-09-13 17:31:00'
+    type: grey
+    value: 0.0532
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: "\u270Bmean_benchmark 0.0167 ms, rms_benchmark 0.0168 ms, max_benchmark 0.0532 ms, min_benchmark\
+      \ 0.0072 ms, lost messages 0.00 %"
+    timestampt: '2023-09-13 17:31:00'
+    type: grey
+    value: 5.118247032165527
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 100.01 fps, rms_benchmark 100.01 fps, max_benchmark 105.65 fps, min_benchmark\
+      \ 95.46 fps, lost messages 0.00 %"
+    timestampt: '2023-09-13 17:31:00'
+    type: grey
+    value: 100.01
 short: Forward command controller with velocity commands

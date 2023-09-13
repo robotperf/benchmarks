@@ -80,4 +80,48 @@ results:
     timestampt: '08-09-2023'
     type: grey
     value: 13.847026824951172
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 3.8750 ms, rms_benchmark 4.1162 ms, max_benchmark 5.6565 ms, min_benchmark\
+      \ 2.2694 ms, lost messages 0.00 %"
+    timestampt: '2023-09-13 17:34:52'
+    type: grey
+    value: 5.6565
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: "\u270Bmean_benchmark 3.8750 ms, rms_benchmark 4.1162 ms, max_benchmark 5.6565 ms, min_benchmark\
+      \ 2.2694 ms, lost messages 0.00 %"
+    timestampt: '2023-09-13 17:34:52'
+    type: grey
+    value: 11.578874588012695
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 3.6152 ms, rms_benchmark 4.2670 ms, max_benchmark 6.7518 ms, min_benchmark\
+      \ 1.4750 ms, lost messages 0.00 %"
+    timestampt: '2023-09-13 17:36:03'
+    type: grey
+    value: 6.7518
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: "\u270Bmean_benchmark 3.6152 ms, rms_benchmark 4.2670 ms, max_benchmark 6.7518 ms, min_benchmark\
+      \ 1.4750 ms, lost messages 0.00 %"
+    timestampt: '2023-09-13 17:36:03'
+    type: grey
+    value: 10.524511337280273
 short: Collision checking between xArm6 and a box using FCL library.
