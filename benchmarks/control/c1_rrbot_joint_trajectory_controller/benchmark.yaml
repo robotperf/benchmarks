@@ -118,4 +118,103 @@ results:
     timestampt: '2023-07-21 17:48:23'
     type: grey
     value: 10.00
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.0667 ms, rms_benchmark 0.0696 ms, max_benchmark 0.3545 ms, min_benchmark\
+      \ 0.0161 ms, lost messages 0.00 %"
+    timestampt: '2023-09-13 17:24:23'
+    type: grey
+    value: 0.3545
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: "\u270Bmean_benchmark 0.0667 ms, rms_benchmark 0.0696 ms, max_benchmark 0.3545 ms, min_benchmark\
+      \ 0.0161 ms, lost messages 0.00 %"
+    timestampt: '2023-09-13 17:24:23'
+    type: grey
+    value: 4.357768535614014
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 10.00 fps, rms_benchmark 10.00 fps, max_benchmark 10.04 fps, min_benchmark\
+      \ 9.96 fps, lost messages 0.00 %"
+    timestampt: '2023-09-13 17:24:23'
+    type: grey
+    value: 10.00
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.0526 ms, rms_benchmark 0.0565 ms, max_benchmark 0.3250 ms, min_benchmark\
+      \ 0.0106 ms, lost messages 0.00 %"
+    timestampt: '2023-09-13 17:25:12'
+    type: grey
+    value: 0.3250
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: "\u270Bmean_benchmark 0.0526 ms, rms_benchmark 0.0565 ms, max_benchmark 0.3250 ms, min_benchmark\
+      \ 0.0106 ms, lost messages 0.00 %"
+    timestampt: '2023-09-13 17:25:12'
+    type: grey
+    value: 4.8581390380859375
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 10.00 fps, rms_benchmark 10.00 fps, max_benchmark 10.17 fps, min_benchmark\
+      \ 9.83 fps, lost messages 0.00 %"
+    timestampt: '2023-09-13 17:25:12'
+    type: grey
+    value: 10.00
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 0.0741 ms, rms_benchmark 0.0769 ms, max_benchmark 0.3401 ms, min_benchmark\
+      \ 0.0200 ms, lost messages 0.00 %"
+    timestampt: '2023-09-13 17:26:48'
+    type: grey
+    value: 0.3401
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: "\u270Bmean_benchmark 0.0741 ms, rms_benchmark 0.0769 ms, max_benchmark 0.3401 ms, min_benchmark\
+      \ 0.0200 ms, lost messages 0.00 %"
+    timestampt: '2023-09-13 17:26:48'
+    type: grey
+    value: 4.480826377868652
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: throughput
+    metric_unit: fps
+    note: "\u270Bmean_benchmark 10.00 fps, rms_benchmark 10.00 fps, max_benchmark 10.20 fps, min_benchmark\
+      \ 9.81 fps, lost messages 0.00 %"
+    timestampt: '2023-09-13 17:26:48'
+    type: grey
+    value: 10.00
 short: Joint trajectory controller
