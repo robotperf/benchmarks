@@ -104,4 +104,48 @@ results:
     timestampt: '08-09-2023'
     type: grey
     value: 6.190027713775635
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 9029.3716 ms, rms_benchmark 9525.2828 ms, max_benchmark 12379.8178 ms, min_benchmark\
+      \ 5034.0037 ms, lost messages 0.00 %"
+    timestampt: '2023-09-13 17:27:52'
+    type: grey
+    value: 12379.8178
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: "\u270Bmean_benchmark 9029.3716 ms, rms_benchmark 9525.2828 ms, max_benchmark 12379.8178 ms, min_benchmark\
+      \ 5034.0037 ms, lost messages 0.00 %"
+    timestampt: '2023-09-13 17:27:52'
+    type: grey
+    value: 4.555608749389648
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: "\u270Bmean_benchmark 9026.4061 ms, rms_benchmark 9521.3573 ms, max_benchmark 12379.7598 ms, min_benchmark\
+      \ 5039.6164 ms, lost messages 0.00 %"
+    timestampt: '2023-09-13 17:34:52'
+    type: grey
+    value: 12379.7598
+- result:
+    category: workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: power
+    metric_unit: W
+    note: "\u270Bmean_benchmark 9026.4061 ms, rms_benchmark 9521.3573 ms, max_benchmark 12379.7598 ms, min_benchmark\
+      \ 5039.6164 ms, lost messages 0.00 %"
+    timestampt: '2023-09-13 17:34:52'
+    type: grey
+    value: 4.490983963012695
 short: xArm6 planning and trajectory execution
