@@ -776,10 +776,16 @@ class ReportVerb(VerbExtension):
                 print("WARNING: angles and values have zero length for " + title + ", " + datakey + ", " + ylabel)
                 continue
 
-            ## debug
+            # # debug
             # pprint.pprint(names)
             # pprint.pprint(values)
             # pprint.pprint(angles)
+
+            def rgba_to_hex(rgba):
+                return "#{:02x}{:02x}{:02x}".format(int(rgba[0]*255), int(rgba[1]*255), int(rgba[2]*255))
+
+            # # debug for graph.js
+            # pprint.pprint({"datakey": datakey, "values": values, "color": rgba_to_hex(colors_dict[datakey]), "names": names})
 
             # Plot the data for this dataset
             current_color = colors_dict[datakey]
