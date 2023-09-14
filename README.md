@@ -36,6 +36,13 @@ RobotPerf benchmarks aim to cover the **complete robotics pipeline** including p
 
 <!-- perception-benchmarks-fini -->
 
+## Robotics Computing: Visualizing Performance
+
+For robotic architects, delving into the multifaceted dimensions of computing performance is crucial, yet often intricate. RobotPerf™ stands as a beacon in this space, offering a range of visualizations tailored for clarity and depth. One such illustration is the polar plot, which displays benchmarks within a particular robotic computing category on separate axes. Through RobotPerf™, architects can instantly perceive a system's proficiency across these benchmarks. They can pinpoint both the strengths and areas of improvement, and thereby make informed decisions in design and optimization. With RobotPerf™, the complexity of robotics computing performance is transformed into actionable insights, making the architect's role not only simpler but also more effective. 
+
+![RobotPerf visualization](https://robotperf.net/robotperf_files/visualizing_robotics_computing_performance.png)
+
+
 ## Contributing
 
 Start by reading the [benchmark specification](benchmarks/README.md). You can contribute to the project both as an individual or as a organization. If you are an individual, feel free to contribute by running the benchmarks and/or by contributing with new benchmarks (see [spec](benchmarks/README.md)). Once ready, submit a [pull request](https://github.com/robotperf/benchmarks/pulls) and/or [raise issues](https://github.com/robotperf/benchmarks/issues) as appropriate. If you are an organization willing to commit resources to the project and contribute to it, please [`contact here`](mailto:contact@accelerationrobotics.com).
