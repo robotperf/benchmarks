@@ -710,6 +710,7 @@ class ReportVerb(VerbExtension):
                 data_dict[benchmark["hardware"]].append(benchmark)
 
         # Process each dataset in data_dict and plot it
+        max_val = 0
         # NOTE: datakey is the "hardware" value of each benchmark
         for idx, datakey in enumerate(data_dict.keys()):
             if filter:
@@ -753,7 +754,8 @@ class ReportVerb(VerbExtension):
             # names = [ReportVerb.plot_function_id_withbenchtype(d) for d in filtered_data]    # NOTE this requires all
             #                                                                                # benchmarks to have all
             #                                                                                # types (grey, black)
-            names = [d["name"] for d in filtered_data]
+            # names = [d["name"] for d in filtered_data]
+            names = [d["id"] for d in filtered_data]
             
             
             # Normalize values and apply modified log transformation
@@ -791,6 +793,12 @@ class ReportVerb(VerbExtension):
             current_color = colors_dict[datakey]
             ax.plot(angles, values, linewidth=2, label=datakey, color=current_color, alpha=0.7)
             ax.fill(angles, values, alpha=0.2, color=current_color)
+
+            # get max value
+            max_val_iteration = max(values)
+            if max_val_iteration > max_val:
+                max_val = max_val_iteration
+
             # Close the loop by connecting the start and end points            
             ax.plot([angles[0], angles[-1]], [values[0], values[-1]], linewidth=2, color=current_color)                
             # Add dots to each data point
@@ -879,6 +887,9 @@ class ReportVerb(VerbExtension):
         ax.set_xticks(angles)
         ax.set_xticklabels(names, fontsize=12)
         ax.legend(loc='upper right', bbox_to_anchor=(1.1, 1.1), fontsize=12)
+
+        # Dynamically adjust y-axis limit
+        ax.set_ylim(0, max_val + 0.2 * max_val)  # Increase the maximum limit by 10%
 
         # title and save
         title_file = title.lower().replace(" ", "-")
