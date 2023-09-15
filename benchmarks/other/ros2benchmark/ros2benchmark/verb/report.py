@@ -646,7 +646,7 @@ class ReportVerb(VerbExtension):
         ax.yaxis.grid(True, color="#888888", linestyle='dashed', linewidth=0.5)
         ax.spines["polar"].set_color("#222222")
         ax.set_facecolor("#FAFAFA")
-        plt.title(title, size=14, color='black', y=1.15)
+        plt.title(title, size=18, color='black', y=1.15)
 
         # filter out a common list of names, so that angles are the same for all datasets
         common_names_sets = [set(name_function(d) for d in data_dict[key]) for key in data_dict.keys()]
@@ -817,7 +817,7 @@ class ReportVerb(VerbExtension):
                             textcoords='offset points',
                             horizontalalignment=ha,
                             verticalalignment='center',
-                            fontsize=6,
+                            fontsize=12,
                             color=current_color)
 
         # Add legend
@@ -867,12 +867,12 @@ class ReportVerb(VerbExtension):
             transformed_ytick_labels = [f'{inverse_modified_log(val, a) * max_values[d["id"]]:.2f}' for val in ytick_values]
         else:
             transformed_ytick_labels = [f'{inverse_modified_log(val, a) * max_value:.2f}' for val in ytick_values]
-        ax.set_yticklabels(transformed_ytick_labels, fontsize=6)
+        ax.set_yticklabels(transformed_ytick_labels, fontsize=12)
 
         # define x-ticks
         ax.set_xticks(angles)
-        ax.set_xticklabels(names, fontsize=6)
-        ax.legend(loc='upper right', bbox_to_anchor=(1.1, 1.1))
+        ax.set_xticklabels(names, fontsize=12)
+        ax.legend(loc='upper right', bbox_to_anchor=(1.1, 1.1), fontsize=12)
 
         # title and save
         title_file = title.lower().replace(" ", "-")
@@ -1092,7 +1092,10 @@ class ReportVerb(VerbExtension):
                                                     colors_dict=colors_dict,
                                                     a = 500
                                                     ))
-                benchmark_id_report += f"![{plotpath}]({plotpath}) | "
+                if plotpath:
+                    benchmark_id_report += f"![{plotpath}]({plotpath}) | "
+                else:
+                    benchmark_id_report += f" | "
             benchmark_id_report += f"\n"
 
         # sys.exit(0)

@@ -24,7 +24,6 @@
 # limitations under the License.
 
 import os
-POWER_LIB = os.environ.get('POWER_LIB')
 
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, RegisterEventHandler, EmitEvent, TimerAction
@@ -75,6 +74,10 @@ def generate_launch_description():
         # events_kernel=DEFAULT_EVENTS_KERNEL,
         # context_names=DEFAULT_CONTEXT,
     )
+
+    POWER_LIB = os.environ.get('POWER_LIB')
+    if POWER_LIB==None:
+        POWER_LIB = 'rapl'
 
     power_container = ComposableNodeContainer(
         name="power_container",

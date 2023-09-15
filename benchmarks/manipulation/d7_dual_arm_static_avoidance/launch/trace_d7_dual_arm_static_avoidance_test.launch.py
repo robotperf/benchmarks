@@ -25,7 +25,6 @@
 
 
 import os
-POWER_LIB = os.environ.get('POWER_LIB')
 
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, RegisterEventHandler, EmitEvent, TimerAction
@@ -51,7 +50,7 @@ def generate_launch_description():
                 FindPackageShare('robotcore_manipulation_moveit2'),
                 'launch',
                 'simulation',
-                'trace_d7_simulation_moveit2_power.launch.py'
+                'd7_simulation_moveit2_test.launch.py'
             ])
         ])
     )
@@ -76,6 +75,10 @@ def generate_launch_description():
         # events_kernel=DEFAULT_EVENTS_KERNEL,
         # context_names=DEFAULT_CONTEXT,
     )
+
+    POWER_LIB = os.environ.get('POWER_LIB')
+    if POWER_LIB==None:
+        POWER_LIB = 'rapl'
 
     power_container = ComposableNodeContainer(
         name="power_container",
