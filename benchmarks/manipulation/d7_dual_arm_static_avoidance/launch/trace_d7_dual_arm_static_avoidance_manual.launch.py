@@ -60,6 +60,8 @@ def generate_launch_description():
             "ros2:*",
             "robotcore_manipulation:*",
             "robotcore_power:*",
+            "dual_arm_static_avoidance:*",
+            "realtime_urdf_filter:*",
             # "lttng_ust_cyg_profile*",
             # "lttng_ust_statedump*",
             # "liblttng-ust-libc-wrapper",

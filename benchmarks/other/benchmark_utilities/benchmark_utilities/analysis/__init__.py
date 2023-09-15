@@ -2283,6 +2283,14 @@ class BenchmarkAnalyzer:
         # NOTE: programmed for only 1 initial list_statistics, if more provided
         # consider extending the self.lost_msgs to a list
         if len(list_statistics) == 3:  # 1 initial, +2 headers            
+            list_statistics[0].append("Total Execution Time")
+            list_statistics[1].append("---")
+            list_statistics[2].append((self.get_time_spent_in_target_chain()))
+
+            list_statistics[0].append("Samples")
+            list_statistics[1].append("---")
+            list_statistics[2].append("{}".format(self.get_target_chain_samples()))
+
             list_statistics[0].append("Lost Messages")
             list_statistics[1].append("---")
             list_statistics[2].append("{:.2f} %".format((self.lost_msgs/len(self.image_pipeline_msg_sets))*100))
@@ -2736,19 +2744,19 @@ class BenchmarkAnalyzer:
             errs = None
         return outs, errs
 
-    def get_target_chain_traces(self, trace_path):
+    def get_target_chain_traces(self, trace_path, debug):
         if not trace_path:
             trace_path = "/tmp/analysis/trace"
 
         if self.hardware_device_type == "cpu" and self.trace_sets_filter_type == "name":
             self.image_pipeline_msg_sets \
-                = self.msgsets_from_trace(trace_path, True)
+                = self.msgsets_from_trace(trace_path, debug=debug)
         elif self.hardware_device_type == "cpu" and self.trace_sets_filter_type == "ID":
             self.image_pipeline_msg_sets \
-                = self.msgsets_from_trace_identifier(trace_path, debug=True)
+                = self.msgsets_from_trace_identifier(trace_path, debug=debug)
         elif self.hardware_device_type == "cpu" and self.trace_sets_filter_type == "UID":
             self.image_pipeline_msg_sets \
-                = self.msgsets_from_trace_identifier(trace_path, debug=True, unique_funq = "tf2_uid", order=False)
+                = self.msgsets_from_trace_identifier(trace_path, debug=debug, unique_funq = "tf2_uid", order=False)
         elif self.hardware_device_type == "fpga":
             # NOTE: can't use msgsets_from_trace_identifier because vtf traces
             # won't have the unique identifier
@@ -2898,7 +2906,7 @@ class BenchmarkAnalyzer:
         outs, err = run('cd /tmp/benchmarks && git log -1', shell=True)
         print(outs)
 
-    def analyze_latency(self, tracepath=None, add_power=False):
+    def analyze_latency(self, tracepath=None, add_power=False, debug=True):
         """Analyze latency of the image pipeline
 
         Args:
@@ -2916,7 +2924,7 @@ class BenchmarkAnalyzer:
         if not hasattr(self, 'trace_sets_filter_type'):
             self.set_trace_sets_filter_type()
 
-        self.get_target_chain_traces(tracepath)      
+        self.get_target_chain_traces(tracepath, debug)      
         self.bar_charts_latency()
 
         if self.trace_sets_filter_type != "UID":
@@ -2942,7 +2950,7 @@ class BenchmarkAnalyzer:
         #     # self.upload_results()  # performed in CI/CD pipelines instead
 
 
-    def analyze_throughput(self, tracepath=None, add_power=False):
+    def analyze_throughput(self, tracepath=None, add_power=False, debug=True):
         """Analyze throughput of the image pipeline
 
         Args:
@@ -2959,7 +2967,7 @@ class BenchmarkAnalyzer:
         if not hasattr(self, 'trace_sets_filter_type'):
             self.set_trace_sets_filter_type()
         
-        self.get_target_chain_traces(tracepath)        
+        self.get_target_chain_traces(tracepath, debug)        
         barcharts_through_megabys_pot, barcharts_through_fps_pot = self.barchart_data_throughput(self.image_pipeline_msg_sets, 'potential')
         
 
@@ -3134,3 +3142,55 @@ class BenchmarkAnalyzer:
         else:
             print("Type {} for filtering power trace sets does not exist, setting message ID analysis type".format(filter_type))
             self.power_trace_sets_filter_type = "ID"
+
+    def get_time_spent_in_target_chain(self):
+        """
+        Compute the amount of time during which the traces of a specific target_chain were being generated
+        """
+
+        testing_time_ns = 0.0
+        for msg_set in self.image_pipeline_msg_sets:
+            testing_time_ns += (msg_set[-1].default_clock_snapshot.ns_from_origin - msg_set[0].default_clock_snapshot.ns_from_origin)
+
+        return testing_time_ns/1e6
+
+    def get_target_chain_samples(self):
+        """
+        Compute the amount of times the target_chain was generated
+        """
+
+        return len(self.image_pipeline_msg_sets)
+
+
+    def get_time_spent_in_specified_target_chains(self, trace_path, target_chain_name):
+        """
+        Compute the amount of time during which the traces of a specific target_chain were being generated
+
+        Args:
+            tracepath (string, optional):
+                Path of the CTF tracefiles. Defaults to None.
+
+            target_chain_name (list):
+                Strings of the targets to be considered for computing the time.
+        """
+        msg_it = bt2.TraceCollectionMessageIterator(trace_path)
+
+        # Iterate the trace messages and pick specified ones
+        first_time = True
+        first_trace_ns = 0.0
+        last_trace_ns = 0.0
+        for msg in msg_it:
+            if type(msg) is bt2._EventMessageConst:
+                event = msg.event
+                for target in target_chain_name:
+                    if (target in event.name) and first_time:
+                        first_trace_ns = msg.default_clock_snapshot.ns_from_origin
+                        first_time = False
+                    elif target in event.name:
+                        last_trace_ns = msg.default_clock_snapshot.ns_from_origin
+
+        time_spent_in_ms = (last_trace_ns - first_trace_ns)/1e6
+
+        print("Total time spent in target {}: {} ms".format(target_chain_name, time_spent_in_ms))
+
+        return time_spent_in_ms
