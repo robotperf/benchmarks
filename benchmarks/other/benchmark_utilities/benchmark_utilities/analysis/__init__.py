@@ -1797,8 +1797,8 @@ class BenchmarkAnalyzer:
                             msg_index
                         ].default_clock_snapshot.ns_from_origin
                     )
-                print('Length set')
-                print(len(image_pipeline_msg_sets[set_index]))
+                # print('Length set')
+                # print(len(image_pipeline_msg_sets[set_index]))
                 for msg_index in range(len(image_pipeline_msg_sets[set_index])):
                     if msg_index == 0:
                         previous = target_chain_ns[msg_index]

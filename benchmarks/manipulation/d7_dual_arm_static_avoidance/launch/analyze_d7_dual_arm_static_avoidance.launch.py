@@ -23,7 +23,7 @@
 # limitations under the License.
 
 import os
-from benchmark_utilities.analysis import BenchmarkAnalyzer
+from benchmark_utilities.analysis import BenchmarkAnalyzer, FrameHierarchy
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, ExecuteProcess
 from launch.substitutions import LaunchConfiguration
@@ -856,6 +856,129 @@ def analyze_realtime_urdf_filtering(argv):
         else:
             print('The metric ' + metric + ' is not yet implemented\n')
 
+def analyze_tf2_operations(argv):
+    tf_tree = FrameHierarchy()
+    tf_tree.add_frame("world", "link_base")
+
+    # Parse the command-line arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--hardware_device_type', type=str, help='Hardware Device Type (e.g. cpu or fpga)', default ='cpu')
+    parser.add_argument('--trace_path', type=str, help='Path to trace files (e.g. /tmp/analysis/trace)', default = '/tmp/analysis/trace')
+    parser.add_argument('--metrics', type=str, help='List of metrics to be analyzed (e.g. latency and/or throughput)', default = ['latency'])
+    parser.add_argument('--integrated', type=str, help='Integrated or separated version of the Resize and Rectify nodes (only for fpga now)', default='false') 
+    parser.add_argument('--trace_set_filter_type', type=str, help='Weather to filter trace sets by name or by unique ID', default='name') 
+    args = parser.parse_args(argv)
+
+    # Get the values of the arguments
+    hardware_device_type = args.hardware_device_type
+    trace_path = args.trace_path
+    metrics_string = args.metrics
+    metrics_elements = [element.strip() for element in metrics_string.strip("[]").split(",")]
+    metrics = json.loads(json.dumps(metrics_elements))
+    integrated = args.integrated
+    # trace_set_filter_type = args.trace_set_filter_type
+
+    # Instantiate the class
+    ba = BenchmarkAnalyzer('d7_dual_arm_static_avoidance', hardware_device_type, tf_tree)
+    ba.set_trace_sets_filter_type(filter_type="UID")
+
+    if hardware_device_type == 'cpu':
+        # add parameters for analyzing the traces
+        target_chain = [
+        # "ros2:callback_start",
+        "robotperf_benchmarks:robotcore_tf2_lookup_cb_init",
+        "robotperf_benchmarks:robotcore_tf2_lookup_cb_fini",
+        # "ros2:callback_end",
+        # "ros2:callback_start",
+        # "ros2:callback_end",
+        # "ros2:callback_start",
+        "robotperf_benchmarks:robotcore_tf2_set_cb_init",
+        "robotperf_benchmarks:robotcore_tf2_set_cb_fini",
+        # "ros2:callback_end",
+        ]
+
+        ba.add_target(
+            {
+                "name": "robotperf_benchmarks:robotcore_tf2_lookup_cb_init",
+                "name_disambiguous": "robotperf_benchmarks:robotcore_tf2_lookup_cb_init",
+                "colors_fg": "blue",
+                "colors_fg_bokeh": "silver",
+                "layer": "userland",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+        )
+        ba.add_target(
+            {
+                "name": "robotperf_benchmarks:robotcore_tf2_lookup_cb_fini",
+                "name_disambiguous": "robotperf_benchmarks:robotcore_tf2_lookup_cb_fini",
+                "colors_fg": "blue",
+                "colors_fg_bokeh": "darkgray",
+                "layer": "benchmark",
+                "label_layer": 5,
+                "marker": "plus",
+            }
+        )
+
+        ba.add_target(
+            {
+                "name": "robotperf_benchmarks:robotcore_tf2_set_cb_init",
+                "name_disambiguous": "robotperf_benchmarks:robotcore_tf2_set_cb_init",
+                "colors_fg": "blue",
+                "colors_fg_bokeh": "chocolate",
+                "layer": "benchmark",
+                "label_layer": 5,
+                "marker": "plus",
+            }
+        )
+        ba.add_target(
+            {
+                "name": "robotperf_benchmarks:robotcore_tf2_set_cb_fini",
+                "name_disambiguous": "robotperf_benchmarks:robotcore_tf2_set_cb_fini",
+                "colors_fg": "blue",
+                "colors_fg_bokeh": "coral",
+                "layer": "userland",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+        )
+    else:
+        print('The hardware device type ' + hardware_device_type + ' is not yet implemented\n')
+   
+    num_metrics = 0 # initialize the metric count
+    add_power = False # initialize the boolean
+    for metric in metrics:
+        if metric == 'power':
+            add_power = True
+            ba.add_power(
+            {
+                "name": "robotcore_power:robotcore_power_output_cb_fini",
+                "name_disambiguous": "robotcore_power:robotcore_power_output_cb_fini",
+                "colors_fg": "blue",
+                "colors_fg_bokeh": "silver",
+                "layer": "userland",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+            )
+        else:
+            num_metrics += 1 # it will be larger than 0 if other metrics besides power are desired
+    
+    for metric in metrics:
+        if metric == 'latency':
+            ba.analyze_latency(trace_path, add_power)
+        elif metric == 'throughput':
+            ba.analyze_throughput(trace_path, add_power)
+        elif metric == 'power': 
+            if num_metrics == 0: # launch independently iff no other metric is requested
+                total_consumption = ba.analyze_power(trace_path)
+                print("The average consumption is {} W".format(total_consumption))
+        else:
+            print('The metric ' + metric + ' is not yet implemented\n')
+    
+
+
+
 def print_total_benchmark_time(argv):
     # Parse the command-line arguments
     parser = argparse.ArgumentParser()
@@ -883,7 +1006,8 @@ def print_total_benchmark_time(argv):
         'dual_arm_control_update',
         'dual_arm_distance_calculation',
         'dual_arm_distance_evaluation',
-        'realtime_urdf_filter'
+        'realtime_urdf_filter',
+        'robotcore_tf2'
     ]
 
     ba.get_time_spent_in_specified_target_chains(trace_path, target_chain_name)
@@ -948,5 +1072,7 @@ if __name__ == '__main__':
     analyze_dual_arm_cp_calculation(sys.argv[1:])
     analyze_dual_arm_cp_evaluation(sys.argv[1:])
     analyze_realtime_urdf_filtering(sys.argv[1:])
+    
+    analyze_tf2_operations(sys.argv[1:])
 
     print_total_benchmark_time(sys.argv[1:])
