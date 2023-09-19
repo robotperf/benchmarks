@@ -60,6 +60,7 @@ def generate_launch_description():
             "ros2:*",
             "robotcore_manipulation:*",
             "robotcore_power:*",
+            "robotcore_control:*",
             "dual_arm_static_avoidance:*",
             "realtime_urdf_filter:*",
             "robotperf_benchmarks:*",
