@@ -72,7 +72,6 @@ def generate_launch_description():
     geometry_mesh_tcp_rpy = LaunchConfiguration('geometry_mesh_tcp_rpy', default='"0 0 0"')
 
     start_rviz = LaunchConfiguration('start_rviz', default='True')
-    benchmark = LaunchConfiguration('benchmark', default='d5')
 
     # robot moveit fake launch
     # xarm_moveit_config/launch/_robot_moveit_fake.launch.py
@@ -147,7 +146,7 @@ def generate_launch_description():
     xarm6_manipulation_benchmarks = Node(
         package='robotcore_manipulation_moveit2',
         executable='xarm6_manipulation_benchmarks',
-        arguments=[benchmark],
+        arguments=['xarm6', 'd5'],
         parameters=[xarm6_kinematics_description],
         output='screen'
     )

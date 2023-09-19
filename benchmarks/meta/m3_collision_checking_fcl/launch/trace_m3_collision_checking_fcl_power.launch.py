@@ -124,7 +124,7 @@ def generate_launch_description():
     xarm6_manipulation_benchmarks = Node(
         package='robotcore_manipulation_moveit2',
         executable='xarm6_manipulation_benchmarks',
-        arguments=['d2'],
+        arguments=['xarm6', 'd2'],
         output='screen'
     )
 
