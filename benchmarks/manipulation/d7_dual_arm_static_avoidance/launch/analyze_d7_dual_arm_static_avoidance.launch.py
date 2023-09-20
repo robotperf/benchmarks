@@ -1112,7 +1112,7 @@ def print_total_benchmark_time(argv):
     target_chain_name = [
         'robotcore_moveit2_planning', 
         'robotcore_moveit2_fcl_check', 
-        'robotcore_moveit2_direct_kinematics'
+        'robotcore_moveit2_direct_kinematics',
         'dual_arm_control_update',
         'robotcore_control',
         'dual_arm_distance_calculation',
