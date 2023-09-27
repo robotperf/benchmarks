@@ -24,11 +24,22 @@
 # limitations under the License.
 
 
+import os
+
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription, RegisterEventHandler, EmitEvent, TimerAction
+from launch_ros.actions import Node, ComposableNodeContainer
+from launch_ros.descriptions import ComposableNode
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-from launch.substitutions import PathJoinSubstitution
+from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
+from launch.event_handlers import OnProcessExit
+from launch.events import Shutdown
+
+from tracetools_launch.action import Trace
+from tracetools_trace.tools.names import DEFAULT_EVENTS_ROS
+from tracetools_trace.tools.names import DEFAULT_EVENTS_KERNEL
+from tracetools_trace.tools.names import DEFAULT_CONTEXT
 
 
 def generate_launch_description():
@@ -44,6 +55,55 @@ def generate_launch_description():
         ])
     )
 
+    trace = Trace(
+        session_name="d7_dual_arm_static_avoidance_workstation",
+        events_ust=[
+            "ros2:*",
+            "robotcore_manipulation:*",
+            "robotcore_power:*",
+            "robotcore_control:*",
+            "dual_arm_static_avoidance:*",
+            "robotperf_benchmarks:*",
+            # "lttng_ust_cyg_profile*",
+            # "lttng_ust_statedump*",
+            # "liblttng-ust-libc-wrapper",
+        ]
+        + DEFAULT_EVENTS_ROS,
+        context_fields={
+                'kernel': [],
+                'userspace': ['vpid', 'vtid', 'procname'],
+        },
+        # events_kernel=DEFAULT_EVENTS_KERNEL,
+        # context_names=DEFAULT_CONTEXT,
+    )
+
+    POWER_LIB = os.environ.get('POWER_LIB')
+    if POWER_LIB==None:
+        POWER_LIB = 'rapl'
+
+    power_container = ComposableNodeContainer(
+        name="power_container",
+        namespace="robotcore/power",
+        package="rclcpp_components",
+        executable="component_container",
+        composable_node_descriptions=[
+            ComposableNode(
+                package="robotcore-power",
+                namespace="robotcore/power",
+                plugin="robotcore::power::PowerComponent",
+                name="power_component",
+                parameters=[
+                    {"publish_rate": 20.0},
+                    {"power_lib": POWER_LIB}
+                ],
+            ),
+            
+        ],
+        output="screen",
+    )
+
     return LaunchDescription([
-        d7_workstation_launch
+        d7_workstation_launch,
+        trace,
+        power_container
     ])
