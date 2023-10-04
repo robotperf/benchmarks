@@ -1241,6 +1241,136 @@ def print_total_benchmark_time(argv):
 
     ba.get_time_spent_in_specified_target_chains(trace_path, target_chain_name)
 
+def plot_urdf_and_distance_calculation(argv):
+    
+    # Parse the command-line arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--hardware_device_type', type=str, help='Hardware Device Type (e.g. cpu or fpga)', default ='cpu')
+    parser.add_argument('--trace_path', type=str, help='Path to trace files (e.g. /tmp/analysis/trace)', default = '/tmp/analysis/trace')
+    parser.add_argument('--metrics', type=str, help='List of metrics to be analyzed (e.g. latency and/or throughput)', default = ['latency'])
+    parser.add_argument('--integrated', type=str, help='Integrated or separated version of the Resize and Rectify nodes (only for fpga now)', default='false') 
+    args = parser.parse_args(argv)
+
+    # Get the values of the arguments
+    hardware_device_type = args.hardware_device_type
+    trace_path = args.trace_path
+    metrics_string = args.metrics
+    metrics_elements = [element.strip() for element in metrics_string.strip("[]").split(",")]
+    metrics = json.loads(json.dumps(metrics_elements))
+    integrated = args.integrated
+
+    # Instantiate the class
+    ba = BenchmarkAnalyzer('d7_dual_arm_static_avoidance', hardware_device_type)
+
+    # Manipulation traces cannot be identified, since no ID is being stored in the tracepoints
+    ba.set_trace_sets_filter_type('name')
+
+    if hardware_device_type == 'cpu':
+        # add parameters for analyzing the traces
+        ## using message header id
+        target_chain = [
+            "realtime_urdf_filter:urdf_filter_cb_init",                                 # 0
+            "realtime_urdf_filter:urdf_filter_init",                                    # 1
+            "realtime_urdf_filter:urdf_filter_fini",                                    # 2
+            "realtime_urdf_filter:urdf_filter_cb_fini",                                 # 3
+            "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_init:",         # 4
+            "dual_arm_static_avoidance:dual_arm_distance_calculation_init",             # 5
+            "dual_arm_static_avoidance:dual_arm_distance_calculation_fini",             # 6
+            "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_fini",          # 7
+        ]
+
+        ba.add_target(
+            {
+                "name": "realtime_urdf_filter:urdf_filter_cb_init",
+                "name_disambiguous": "realtime_urdf_filter:urdf_filter_cb_init",
+                "colors_fg": "yellow",
+                "colors_fg_bokeh": "salmon",
+                "layer": "userland",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+        )
+        ba.add_target(
+            {
+                "name": "realtime_urdf_filter:urdf_filter_init",
+                "name_disambiguous": "realtime_urdf_filter:urdf_filter_init",
+                "colors_fg": "red",
+                "colors_fg_bokeh": "darksalmon",
+                "layer": "userland",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+        )
+        ba.add_target(
+            {
+                "name": "realtime_urdf_filter:urdf_filter_fini",
+                "name_disambiguous": "realtime_urdf_filter:urdf_filter_fini",
+                "colors_fg": "red",
+                "colors_fg_bokeh": "lightcoral",
+                "layer": "userland",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+        )
+        ba.add_target(
+            {
+                "name": "realtime_urdf_filter:urdf_filter_cb_fini",
+                "name_disambiguous": "realtime_urdf_filter:urdf_filter_cb_fini",
+                "colors_fg": "yellow",
+                "colors_fg_bokeh": "darkred",
+                "layer": "userland",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+        )
+
+        ba.add_target(
+            {
+                "name": "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_init",
+                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_init",
+                "colors_fg": "yellow",
+                "colors_fg_bokeh": "salmon",
+                "layer": "userland",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+        )
+        ba.add_target(
+            {
+                "name": "dual_arm_static_avoidance:dual_arm_distance_calculation_init",
+                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_init",
+                "colors_fg": "red",
+                "colors_fg_bokeh": "darksalmon",
+                "layer": "userland",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+        )
+        ba.add_target(
+            {
+                "name": "dual_arm_static_avoidance:dual_arm_distance_calculation_fini",
+                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_fini",
+                "colors_fg": "red",
+                "colors_fg_bokeh": "lightcoral",
+                "layer": "userland",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+        )
+        ba.add_target(
+            {
+                "name": "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_fini",
+                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_fini",
+                "colors_fg": "yellow",
+                "colors_fg_bokeh": "darkred",
+                "layer": "userland",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+        ) 
+
+    ba.draw_tracepoints(trace_path)
+
 def generate_launch_description():
     # Declare the launch arguments
     hardware_device_type_arg = DeclareLaunchArgument(
@@ -1351,3 +1481,5 @@ if __name__ == '__main__':
     analyze_tf2_operations_for_embedded(sys.argv[1:])
 
     print_total_benchmark_time(sys.argv[1:])
+
+    plot_urdf_and_distance_calculation(sys.argv[1:])
