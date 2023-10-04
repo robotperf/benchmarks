@@ -62,6 +62,7 @@ def generate_launch_description():
             "dual_arm_static_avoidance:*",
             "realtime_urdf_filter:*",
             "robotcore_manipulation:*",
+            "robotperf_benchmarks:*",
             # "lttng_ust_cyg_profile*",
             # "lttng_ust_statedump*",
             # "liblttng-ust-libc-wrapper",
