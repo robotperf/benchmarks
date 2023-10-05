@@ -1167,7 +1167,7 @@ def plot_urdf_and_distance_calculation(argv):
                 "name_disambiguous": "realtime_urdf_filter:urdf_filter_cb_init",
                 "colors_fg": "yellow",
                 "colors_fg_bokeh": "salmon",
-                "layer": "userland",
+                "layer": "vision pipeline",
                 "label_layer": 4,
                 "marker": "plus",
             }
@@ -1178,7 +1178,7 @@ def plot_urdf_and_distance_calculation(argv):
                 "name_disambiguous": "realtime_urdf_filter:urdf_filter_init",
                 "colors_fg": "red",
                 "colors_fg_bokeh": "darksalmon",
-                "layer": "userland",
+                "layer": "vision pipeline",
                 "label_layer": 4,
                 "marker": "plus",
             }
@@ -1189,7 +1189,7 @@ def plot_urdf_and_distance_calculation(argv):
                 "name_disambiguous": "realtime_urdf_filter:urdf_filter_fini",
                 "colors_fg": "red",
                 "colors_fg_bokeh": "lightcoral",
-                "layer": "userland",
+                "layer": "vision pipeline",
                 "label_layer": 4,
                 "marker": "plus",
             }
@@ -1200,7 +1200,7 @@ def plot_urdf_and_distance_calculation(argv):
                 "name_disambiguous": "realtime_urdf_filter:urdf_filter_cb_fini",
                 "colors_fg": "yellow",
                 "colors_fg_bokeh": "darkred",
-                "layer": "userland",
+                "layer": "vision pipeline",
                 "label_layer": 4,
                 "marker": "plus",
             }
@@ -1212,7 +1212,7 @@ def plot_urdf_and_distance_calculation(argv):
                 "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_init",
                 "colors_fg": "yellow",
                 "colors_fg_bokeh": "salmon",
-                "layer": "userland",
+                "layer": "vision pipeline",
                 "label_layer": 4,
                 "marker": "plus",
             }
@@ -1223,7 +1223,7 @@ def plot_urdf_and_distance_calculation(argv):
                 "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_init",
                 "colors_fg": "red",
                 "colors_fg_bokeh": "darksalmon",
-                "layer": "userland",
+                "layer": "vision pipeline",
                 "label_layer": 4,
                 "marker": "plus",
             }
@@ -1234,7 +1234,7 @@ def plot_urdf_and_distance_calculation(argv):
                 "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_fini",
                 "colors_fg": "red",
                 "colors_fg_bokeh": "lightcoral",
-                "layer": "userland",
+                "layer": "vision pipeline",
                 "label_layer": 4,
                 "marker": "plus",
             }
@@ -1245,7 +1245,7 @@ def plot_urdf_and_distance_calculation(argv):
                 "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_fini",
                 "colors_fg": "yellow",
                 "colors_fg_bokeh": "darkred",
-                "layer": "userland",
+                "layer": "vision pipeline",
                 "label_layer": 4,
                 "marker": "plus",
             }

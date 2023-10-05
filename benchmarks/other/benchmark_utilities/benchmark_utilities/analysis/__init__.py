@@ -1100,7 +1100,7 @@ class BenchmarkAnalyzer:
 
         # For some reason it seems to be displayed in the reverse order on the Y axis
         if self.hardware_device_type == "cpu":
-            segment_types = ["rmw", "rcl", "rclcpp", "userland", "benchmark"]
+            segment_types = ["rmw", "rcl", "rclcpp", "vision pipeline"]
         elif self.hardware_device_type == "fpga":
             segment_types = ["kernel", "rmw", "rcl", "rclcpp", "userland", "benchmark"]
 
@@ -1138,7 +1138,7 @@ class BenchmarkAnalyzer:
                                     # should match with the
                                     # one from the callback_start
             [(callback_start, callback_start + duration, duration)],
-            "seashell",
+            "crimson",
         )
 
         ## filter op
@@ -1164,7 +1164,7 @@ class BenchmarkAnalyzer:
                                     # should match with the
                                     # one from the callback_start
             [(callback_start, callback_start + duration, duration)],
-            "seashell",
+            "crimson",
         )
 
         ## filter op
