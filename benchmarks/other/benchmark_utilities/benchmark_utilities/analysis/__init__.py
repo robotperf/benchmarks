@@ -1124,34 +1124,19 @@ class BenchmarkAnalyzer:
             target_chain_ns.append(msg_set[msg_index].default_clock_snapshot.ns_from_origin)
         init_ns = target_chain_ns[0]
 
-        # print("1")
-
         # draw durations
 
         ## filter op
-        callback_start = (target_chain_ns[1] - init_ns) / 1e6
-        callback_end = (target_chain_ns[2] - init_ns) / 1e6
-        duration = callback_end - callback_start
-        self.add_durations_to_figure(
-            fig,
-            self.target_chain_layer[1],  # index used in here
-                                    # should match with the
-                                    # one from the callback_start
-            [(callback_start, callback_start + duration, duration)],
-            "crimson",
-        )
-
-        ## filter op
-        callback_start = (target_chain_ns[2] - init_ns) / 1e6
+        callback_start = (target_chain_ns[0] - init_ns) / 1e6
         callback_end = (target_chain_ns[3] - init_ns) / 1e6
         duration = callback_end - callback_start
         self.add_durations_to_figure(
             fig,
-            self.target_chain_layer[2],  # index used in here
+            self.target_chain_layer[0],  # index used in here
                                     # should match with the
                                     # one from the callback_start
             [(callback_start, callback_start + duration, duration)],
-            "lightgray",
+            "limegreen",
         )
 
         for msg_index in range(len(msg_set)):
@@ -1184,8 +1169,8 @@ class BenchmarkAnalyzer:
         fig.add_layout(new_legend, "right")
         
         ## output
-        show(fig)  # show in browser    
-        # export_png(fig, filename="/tmp/analysis/plot_trace_d1.png")
+        # show(fig)  # show in browser    
+        export_png(fig, filename="/tmp/analysis/plot_trace_d1.png")
 
     def traces_id_d7(self, msg_set):
         # this method only works for hardcoded traces, specifically for the a1 benchmark
