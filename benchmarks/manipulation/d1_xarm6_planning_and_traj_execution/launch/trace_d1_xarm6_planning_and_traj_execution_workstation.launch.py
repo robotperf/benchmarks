@@ -28,6 +28,12 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import PathJoinSubstitution
 from launch_ros.substitutions import FindPackageShare
 
+from tracetools_launch.action import Trace
+from tracetools_trace.tools.names import DEFAULT_EVENTS_ROS
+from tracetools_trace.tools.names import DEFAULT_EVENTS_KERNEL
+from tracetools_trace.tools.names import DEFAULT_CONTEXT
+
+
 def generate_launch_description():
 
     d1_workstation_launch = IncludeLaunchDescription(
@@ -42,6 +48,26 @@ def generate_launch_description():
         ])
     )
 
+    trace = Trace(
+        session_name="d1_dual_arm_static_avoidance_workstation",
+        events_ust=[
+            "ros2:*",
+            "robotcore_control:*",
+            "robotperf_benchmarks:*",
+            # "lttng_ust_cyg_profile*",
+            # "lttng_ust_statedump*",
+            # "liblttng-ust-libc-wrapper",
+        ]
+        + DEFAULT_EVENTS_ROS,
+        context_fields={
+                'kernel': [],
+                'userspace': ['vpid', 'vtid', 'procname'],
+        },
+        # events_kernel=DEFAULT_EVENTS_KERNEL,
+        # context_names=DEFAULT_CONTEXT,
+    )
+
     return LaunchDescription([
-        d1_workstation_launch
+        d1_workstation_launch,
+        trace
     ])
