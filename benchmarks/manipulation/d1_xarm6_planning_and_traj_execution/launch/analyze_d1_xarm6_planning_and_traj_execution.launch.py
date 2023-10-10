@@ -452,8 +452,8 @@ def analyze_inverse_kinematics(argv):
 
         ba.add_target(
             {
-                "name": "robotcore_manipulation:robotcore_moveit2_direct_kinematics_cb_init",
-                "name_disambiguous": "robotcore_manipulation:robotcore_moveit2_direct_kinematics_cb_init",
+                "name": "robotcore_manipulation:robotcore_moveit2_inverse_kinematics_kdl_cb_init",
+                "name_disambiguous": "robotcore_manipulation:robotcore_moveit2_inverse_kinematics_kdl_cb_init",
                 "colors_fg": "yellow",
                 "colors_fg_bokeh": "salmon",
                 "layer": "userland",
@@ -463,8 +463,8 @@ def analyze_inverse_kinematics(argv):
         )
         ba.add_target(
             {
-                "name": "robotcore_manipulation:robotcore_moveit2_direct_kinematics_init",
-                "name_disambiguous": "robotcore_manipulation:robotcore_moveit2_direct_kinematics_init",
+                "name": "robotcore_manipulation:robotcore_moveit2_inverse_kinematics_kdl_init",
+                "name_disambiguous": "robotcore_manipulation:robotcore_moveit2_inverse_kinematics_kdl_init",
                 "colors_fg": "red",
                 "colors_fg_bokeh": "darksalmon",
                 "layer": "userland",
@@ -474,8 +474,8 @@ def analyze_inverse_kinematics(argv):
         )
         ba.add_target(
             {
-                "name": "robotcore_manipulation:robotcore_moveit2_direct_kinematics_fini",
-                "name_disambiguous": "robotcore_manipulation:robotcore_moveit2_direct_kinematics_fini",
+                "name": "robotcore_manipulation:robotcore_moveit2_inverse_kinematics_kdl_fini",
+                "name_disambiguous": "robotcore_manipulation:robotcore_moveit2_inverse_kinematics_kdl_fini",
                 "colors_fg": "red",
                 "colors_fg_bokeh": "lightcoral",
                 "layer": "userland",
@@ -485,8 +485,8 @@ def analyze_inverse_kinematics(argv):
         )
         ba.add_target(
             {
-                "name": "robotcore_manipulation:robotcore_moveit2_direct_kinematics_cb_fini",
-                "name_disambiguous": "robotcore_manipulation:robotcore_moveit2_direct_kinematics_cb_fini",
+                "name": "robotcore_manipulation:robotcore_moveit2_inverse_kinematics_kdl_cb_fini",
+                "name_disambiguous": "robotcore_manipulation:robotcore_moveit2_inverse_kinematics_kdl_cb_fini",
                 "colors_fg": "yellow",
                 "colors_fg_bokeh": "darkred",
                 "layer": "userland",
