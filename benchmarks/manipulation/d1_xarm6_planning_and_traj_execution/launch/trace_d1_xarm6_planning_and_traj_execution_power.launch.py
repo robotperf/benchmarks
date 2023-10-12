@@ -109,6 +109,7 @@ def generate_launch_description():
             "ros2:*",
             "robotcore_manipulation:*",
             "robotcore_power:*",
+            "robotcore_control:*",
             "robotperf_benchmarks:*",
             # "lttng_ust_cyg_profile*",
             # "lttng_ust_statedump*",
