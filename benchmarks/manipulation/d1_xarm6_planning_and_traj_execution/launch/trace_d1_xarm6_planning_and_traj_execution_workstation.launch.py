@@ -49,7 +49,7 @@ def generate_launch_description():
     )
 
     trace = Trace(
-        session_name="d1_dual_arm_static_avoidance_workstation",
+        session_name="d1_xarm6_planning_and_traj_execution_workstation",
         events_ust=[
             "ros2:*",
             "robotcore_control:*",
