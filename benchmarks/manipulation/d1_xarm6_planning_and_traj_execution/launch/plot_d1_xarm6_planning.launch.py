@@ -50,7 +50,7 @@ def plot_planning_and_traj_execution(argv):
     ba = BenchmarkAnalyzer('d1_xarm6_planning_and_traj_execution', hardware_device_type)
     ba.set_trace_sets_filter_type('name')
 
-    ba.traces_id_d1(trace_path, include_trajectory_execution=True)
+    ba.traces_id_d1(trace_path, include_trajectory_execution=False)
 
 def generate_launch_description():
     # Declare the launch arguments
@@ -72,7 +72,7 @@ def generate_launch_description():
     # Define the ExecuteProcess action to run the Python script
     analyzer = ExecuteProcess(
         cmd=[
-            'python3', "src/benchmarks/benchmarks/manipulation/d1_xarm6_planning_and_traj_execution/launch/plot_d1_xarm6_planning_and_traj_execution.launch.py",
+            'python3', "src/benchmarks/benchmarks/manipulation/d1_xarm6_planning_and_traj_execution/launch/plot_d1_xarm6_planning.launch.py",
             '--hardware_device_type', LaunchConfiguration('hardware_device_type'),
             '--trace_path', LaunchConfiguration('trace_path')],
         output='screen'
