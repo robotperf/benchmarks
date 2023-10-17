@@ -1114,6 +1114,8 @@ class BenchmarkAnalyzer:
                 "OMPL",
                 "inverse kinematics", 
                 "collision checking", 
+                "FCL object construction",
+                "FCL collision computation",
                 "direct kinematics", 
                 "control"
             ]
@@ -1131,7 +1133,10 @@ class BenchmarkAnalyzer:
                 "FixStartStatePathConstraints": "#605770",
                 "OMPL": "#4D4861",
                 "inverse kinematics": "#D1ACA0",
-                "collision checking": "#FCBFB7",
+                "collision checking robot": "#FCBFB7",
+                "collision checking self": "#FC6E6E",
+                "FCL object construction": "#D68A7E",
+                "FCL collision computation": "#B05444",
                 "direct kinematics": "#334E58",
                 "control": "#333A3B"
             }
@@ -1391,36 +1396,112 @@ class BenchmarkAnalyzer:
                 colors["control"],
             )
 
-        # collision checking
-        target_chain_collision_checking = [
+        # collision checking -- Check robot collision
+        target_chain_check_robot_collision = [
             "robotcore_manipulation:robotcore_moveit2_fcl_check_robot_collision_cb_init",       # 0
             "robotcore_manipulation:robotcore_moveit2_fcl_check_robot_collision_init",          # 1
             "robotcore_manipulation:robotcore_moveit2_fcl_check_robot_collision_fini",          # 2
             "robotcore_manipulation:robotcore_moveit2_fcl_check_robot_collision_cb_fini",       # 3
-            "robotcore_manipulation:robotcore_moveit2_fcl_check_self_collision_cb_init",        # 4
-            "robotcore_manipulation:robotcore_moveit2_fcl_check_self_collision_init",           # 5
-            "robotcore_manipulation:robotcore_moveit2_fcl_check_self_collision_fini",           # 6
-            "robotcore_manipulation:robotcore_moveit2_fcl_check_self_collision_cb_fini"         # 7
         ]
 
-        self.target_chain = target_chain_collision_checking
-        collision_checking_msg_sets = self.msgsets_from_trace(trace_path, False)
-        collision_checking_msg_sets_in_timerange = []
+        self.target_chain = target_chain_check_robot_collision
+        check_robot_collision_msg_sets = self.msgsets_from_trace(trace_path, False)
+        check_robot_collision_msg_sets_in_timerange = []
         # Take msg sets within time range
-        for collision_checking_set in collision_checking_msg_sets:
-            if collision_checking_set[0].default_clock_snapshot.ns_from_origin > init_ns and collision_checking_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
-                collision_checking_msg_sets_in_timerange.append(collision_checking_set)
+        for check_robot_collision_set in check_robot_collision_msg_sets:
+            if check_robot_collision_set[0].default_clock_snapshot.ns_from_origin > init_ns and check_robot_collision_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
+                check_robot_collision_msg_sets_in_timerange.append(check_robot_collision_set)
 
 
-        for collision_checking_set in collision_checking_msg_sets_in_timerange:
-            callback_start = (collision_checking_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            callback_end = (collision_checking_set[3].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+        for check_robot_collision_set in check_robot_collision_msg_sets_in_timerange:
+            callback_start = (check_robot_collision_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            callback_end = (check_robot_collision_set[3].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
             duration = callback_end - callback_start
             self.add_durations_to_figure(
                 fig,
                 "collision checking",
                 [(callback_start, callback_start + duration, duration)],
-                colors["collision checking"],
+                colors["collision checking robot"],
+            )
+
+        # collision checking -- Check self collision
+        target_chain_check_self_collision = [
+            "robotcore_manipulation:robotcore_moveit2_fcl_check_self_collision_cb_init",       # 0
+            "robotcore_manipulation:robotcore_moveit2_fcl_check_self_collision_init",          # 1
+            "robotcore_manipulation:robotcore_moveit2_fcl_check_self_collision_fini",          # 2
+            "robotcore_manipulation:robotcore_moveit2_fcl_check_self_collision_cb_fini",       # 3
+        ]
+
+        self.target_chain = target_chain_check_self_collision
+        check_self_collision_msg_sets = self.msgsets_from_trace(trace_path, False)
+        check_self_collision_msg_sets_in_timerange = []
+        # Take msg sets within time range
+        for check_self_collision_set in check_self_collision_msg_sets:
+            if check_self_collision_set[0].default_clock_snapshot.ns_from_origin > init_ns and check_self_collision_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
+                check_self_collision_msg_sets_in_timerange.append(check_self_collision_set)
+
+
+        for check_self_collision_set in check_self_collision_msg_sets_in_timerange:
+            callback_start = (check_self_collision_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            callback_end = (check_self_collision_set[3].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            duration = callback_end - callback_start
+            self.add_durations_to_figure(
+                fig,
+                "collision checking",
+                [(callback_start, callback_start + duration, duration)],
+                colors["collision checking self"],
+            )
+
+        # collision checking -- FCL object construction
+        target_chain_fcl_object_construction = [
+            "robotcore_manipulation:robotcore_moveit2_fcl_construct_objects_init",       # 0
+            "robotcore_manipulation:robotcore_moveit2_fcl_construct_objects_fini"        # 1
+        ]
+
+        self.target_chain = target_chain_fcl_object_construction
+        fcl_object_construction_msg_sets = self.msgsets_from_trace(trace_path, False)
+
+        fcl_object_construction_msg_sets_in_timerange = []
+        # Take msg sets within time range
+        for fcl_object_construction_set in fcl_object_construction_msg_sets:
+            if fcl_object_construction_set[0].default_clock_snapshot.ns_from_origin > init_ns and fcl_object_construction_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
+                fcl_object_construction_msg_sets_in_timerange.append(fcl_object_construction_set)
+
+        for fcl_object_construction_set in fcl_object_construction_msg_sets_in_timerange:
+            callback_start = (fcl_object_construction_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            callback_end = (fcl_object_construction_set[1].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            duration = callback_end - callback_start
+            self.add_durations_to_figure(
+                fig,
+                "FCL object construction",
+                [(callback_start, callback_start + duration, duration)],
+                colors["FCL object construction"],
+            )
+
+        # collision checking -- FCL collision computation
+        target_chain_fcl_collision_computation = [
+            "robotcore_manipulation:robotcore_moveit2_fcl_compute_collision_init",       # 0
+            "robotcore_manipulation:robotcore_moveit2_fcl_compute_collision_fini"        # 1
+        ]
+
+        self.target_chain = target_chain_fcl_collision_computation
+        fcl_collision_computation_msg_sets = self.msgsets_from_trace(trace_path, False)
+        fcl_collision_computation_msg_sets_in_timerange = []
+        # Take msg sets within time range
+        for fcl_collision_computation_set in fcl_collision_computation_msg_sets:
+            if fcl_collision_computation_set[0].default_clock_snapshot.ns_from_origin > init_ns and fcl_collision_computation_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
+                fcl_collision_computation_msg_sets_in_timerange.append(fcl_collision_computation_set)
+
+
+        for fcl_collision_computation_set in fcl_collision_computation_msg_sets_in_timerange:
+            callback_start = (fcl_collision_computation_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            callback_end = (fcl_collision_computation_set[1].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            duration = callback_end - callback_start
+            self.add_durations_to_figure(
+                fig,
+                "FCL collision computation",
+                [(callback_start, callback_start + duration, duration)],
+                colors["FCL collision computation"],
             )
 
         # direct kinematics
