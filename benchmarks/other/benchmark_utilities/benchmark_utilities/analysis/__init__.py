@@ -1159,7 +1159,7 @@ class BenchmarkAnalyzer:
         fig.title.text_font_size = "20px"
         # fig.xaxis[0].formatter = DatetimeTickFormatter(milliseconds = ['%3Nms'])
         fig.xaxis[0].formatter = PrintfTickFormatter(format="%f ms")
-        fig.xaxis[0].ticker.desired_num_ticks = 20
+        fig.xaxis[0].ticker.desired_num_ticks = 10
         fig.xaxis[0].axis_label_text_font_size = "30px"
         fig.yaxis[0].major_label_text_font_size = "25px"
 
