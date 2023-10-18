@@ -470,11 +470,14 @@ class BenchmarkAnalyzer:
         """    
         payload_fields = msg.event.payload_field
         for field_name, field_value in payload_fields.items():
-            if "tf2_uid" in field_name:
-                id = msg.event.payload_field[field_name]          
+            if "tf2_uid" in field_name: # used in tf2
+                id = msg.event.payload_field[field_name]   
+            else:
+                if "rtps_msg" in field_name: # used in network benchmarks
+                    id = msg.event.payload_field[field_name]          
                                 
         return id
-
+    
     def msgsets_from_trace_identifier(
         self, 
         tracename, 
