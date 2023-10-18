@@ -1109,8 +1109,16 @@ class BenchmarkAnalyzer:
                 # "rclcpp", 
                 "tf2",
                 "planning", 
+                "AddTimeOptimalParameterization",
+                "FixWorkspaceBounds",
+                "FixStartStateBounds",
+                "FixStartStateCollision",
+                "FixStartStatePathConstraints",
+                "OMPL",
                 "inverse kinematics", 
                 "collision checking", 
+                "FCL object construction",
+                "FCL collision computation",
                 "direct kinematics", 
                 "control"
             ]
@@ -1120,9 +1128,18 @@ class BenchmarkAnalyzer:
                 # "rcl": ""
                 # "rclcpp": ""
                 "tf2": "#6B6D76",
-                "planning": "#A69888",
+                "planning": "#C08321",
+                "AddTimeOptimalParameterization": "#DCA463",
+                "FixWorkspaceBounds": "#F7C4A5",
+                "FixStartStateBounds": "#CB9D94",
+                "FixStartStateCollision": "#9E7682",
+                "FixStartStatePathConstraints": "#605770",
+                "OMPL": "#4D4861",
                 "inverse kinematics": "#D1ACA0",
-                "collision checking": "#FCBFB7",
+                "collision checking robot": "#FCBFB7",
+                "collision checking self": "#FC6E6E",
+                "FCL object construction": "#D68A7E",
+                "FCL collision computation": "#B05444",
                 "direct kinematics": "#334E58",
                 "control": "#333A3B"
             }
@@ -1145,7 +1162,7 @@ class BenchmarkAnalyzer:
         fig.title.text_font_size = "20px"
         # fig.xaxis[0].formatter = DatetimeTickFormatter(milliseconds = ['%3Nms'])
         fig.xaxis[0].formatter = PrintfTickFormatter(format="%f ms")
-        fig.xaxis[0].ticker.desired_num_ticks = 20
+        fig.xaxis[0].ticker.desired_num_ticks = 10
         fig.xaxis[0].axis_label_text_font_size = "30px"
         fig.yaxis[0].major_label_text_font_size = "25px"
 
@@ -1174,6 +1191,8 @@ class BenchmarkAnalyzer:
         msg_set = plan_and_traj_execution_msg_sets[index_to_plot]
         init_ns = msg_set[0].default_clock_snapshot.ns_from_origin
         fini_ns = msg_set[-1].default_clock_snapshot.ns_from_origin
+        fig.x_range.start = 0
+        # fig.x_range.end = fini_ns / 1e6
 
         callback_start = (msg_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
         callback_end = (msg_set[3].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
@@ -1194,6 +1213,162 @@ class BenchmarkAnalyzer:
                 "traj execution",
                 [(callback_start, callback_start + duration, duration)],
                 colors["traj execution"],
+            )
+
+        # AddTimeOptimalParameterization
+
+        target_chain_add_time_optimal_parametrization = [
+            "robotcore_manipulation:robotcore_moveit2_add_time_optimal_parametrization_init",   # 0
+            "robotcore_manipulation:robotcore_moveit2_add_time_optimal_parametrization_fini"    # 1
+        ]
+
+        self.target_chain = target_chain_add_time_optimal_parametrization
+        add_time_optimal_parametrization_msg_sets = self.msgsets_from_trace(trace_path, False)
+        add_time_optimal_parametrization_msg_sets_in_timerange = []
+        # Take msg sets within time range
+        for add_time_optimal_parametrization_set in add_time_optimal_parametrization_msg_sets:
+            if add_time_optimal_parametrization_set[0].default_clock_snapshot.ns_from_origin > init_ns and add_time_optimal_parametrization_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
+                add_time_optimal_parametrization_msg_sets_in_timerange.append(add_time_optimal_parametrization_set)
+
+        for add_time_optimal_parametrization_set in add_time_optimal_parametrization_msg_sets_in_timerange:
+            callback_start = (add_time_optimal_parametrization_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            callback_end = (add_time_optimal_parametrization_set[1].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            duration = callback_end - callback_start
+            self.add_durations_to_figure(
+                fig,
+                "AddTimeOptimalParameterization",
+                [(callback_start, callback_start + duration, duration)],
+                colors["AddTimeOptimalParameterization"],
+            )
+
+        # FixWorkspaceBounds
+
+        target_chain_fix_workspace_bounds = [
+            "robotcore_manipulation:robotcore_moveit2_fix_workspace_bounds_init",   # 0
+            "robotcore_manipulation:robotcore_moveit2_fix_workspace_bounds_fini"    # 1
+        ]
+
+        self.target_chain = target_chain_fix_workspace_bounds
+        fix_workspace_bounds_msg_sets = self.msgsets_from_trace(trace_path, False)
+        fix_workspace_bounds_msg_sets_in_timerange = []
+        # Take msg sets within time range
+        for fix_workspace_bounds_set in fix_workspace_bounds_msg_sets:
+            if fix_workspace_bounds_set[0].default_clock_snapshot.ns_from_origin > init_ns and fix_workspace_bounds_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
+                fix_workspace_bounds_msg_sets_in_timerange.append(fix_workspace_bounds_set)
+
+        for fix_workspace_bounds_set in fix_workspace_bounds_msg_sets_in_timerange:
+            callback_start = (fix_workspace_bounds_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            callback_end = (fix_workspace_bounds_set[1].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            duration = callback_end - callback_start
+            self.add_durations_to_figure(
+                fig,
+                "FixWorkspaceBounds",
+                [(callback_start, callback_start + duration, duration)],
+                colors["FixWorkspaceBounds"],
+            )
+
+        # FixStartStateBounds
+
+        target_chain_fix_start_state_bounds = [
+            "robotcore_manipulation:robotcore_moveit2_fix_start_state_bounds_init",   # 0
+            "robotcore_manipulation:robotcore_moveit2_fix_start_state_bounds_fini"    # 1
+        ]
+
+        self.target_chain = target_chain_fix_start_state_bounds
+        fix_start_state_bounds_msg_sets = self.msgsets_from_trace(trace_path, False)
+        fix_start_state_bounds_msg_sets_in_timerange = []
+        # Take msg sets within time range
+        for fix_start_state_bounds_set in fix_start_state_bounds_msg_sets:
+            if fix_start_state_bounds_set[0].default_clock_snapshot.ns_from_origin > init_ns and fix_start_state_bounds_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
+                fix_start_state_bounds_msg_sets_in_timerange.append(fix_start_state_bounds_set)
+
+        for fix_start_state_bounds_set in fix_start_state_bounds_msg_sets_in_timerange:
+            callback_start = (fix_start_state_bounds_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            callback_end = (fix_start_state_bounds_set[1].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            duration = callback_end - callback_start
+            self.add_durations_to_figure(
+                fig,
+                "FixStartStateBounds",
+                [(callback_start, callback_start + duration, duration)],
+                colors["FixStartStateBounds"],
+            )
+
+        # FixStartStateCollision
+
+        target_chain_fix_start_state_collision = [
+            "robotcore_manipulation:robotcore_moveit2_fix_start_state_collision_init",   # 0
+            "robotcore_manipulation:robotcore_moveit2_fix_start_state_collision_fini"    # 1
+        ]
+
+        self.target_chain = target_chain_fix_start_state_collision
+        fix_start_state_collision_msg_sets = self.msgsets_from_trace(trace_path, False)
+        fix_start_state_collision_msg_sets_in_timerange = []
+        # Take msg sets within time range
+        for fix_start_state_collision_set in fix_start_state_collision_msg_sets:
+            if fix_start_state_collision_set[0].default_clock_snapshot.ns_from_origin > init_ns and fix_start_state_collision_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
+                fix_start_state_collision_msg_sets_in_timerange.append(fix_start_state_collision_set)
+
+        for fix_start_state_collision_set in fix_start_state_collision_msg_sets_in_timerange:
+            callback_start = (fix_start_state_collision_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            callback_end = (fix_start_state_collision_set[1].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            duration = callback_end - callback_start
+            self.add_durations_to_figure(
+                fig,
+                "FixStartStateCollision",
+                [(callback_start, callback_start + duration, duration)],
+                colors["FixStartStateCollision"],
+            )
+
+        # FixStartStatePathConstraints
+
+        target_chain_fix_start_state_path_constraints = [
+            "robotcore_manipulation:robotcore_moveit2_fix_start_state_path_constraints_init",   # 0
+            "robotcore_manipulation:robotcore_moveit2_fix_start_state_path_constraints_fini"    # 1
+        ]
+
+        self.target_chain = target_chain_fix_start_state_path_constraints
+        fix_start_state_path_constraints_msg_sets = self.msgsets_from_trace(trace_path, False)
+        fix_start_state_path_constraints_msg_sets_in_timerange = []
+        # Take msg sets within time range
+        for fix_start_state_path_constraints_set in fix_start_state_path_constraints_msg_sets:
+            if fix_start_state_path_constraints_set[0].default_clock_snapshot.ns_from_origin > init_ns and fix_start_state_path_constraints_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
+                fix_start_state_path_constraints_msg_sets_in_timerange.append(fix_start_state_path_constraints_set)
+
+        for fix_start_state_path_constraints_set in fix_start_state_path_constraints_msg_sets_in_timerange:
+            callback_start = (fix_start_state_path_constraints_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            callback_end = (fix_start_state_path_constraints_set[1].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            duration = callback_end - callback_start
+            self.add_durations_to_figure(
+                fig,
+                "FixStartStatePathConstraints",
+                [(callback_start, callback_start + duration, duration)],
+                colors["FixStartStatePathConstraints"],
+            )
+
+        # OMPL
+
+        target_chain_ompl = [
+            "robotcore_manipulation:robotcore_moveit2_ompl_solver_init",   # 0
+            "robotcore_manipulation:robotcore_moveit2_ompl_solver_fini"    # 1
+        ]
+
+        self.target_chain = target_chain_ompl
+        ompl_msg_sets = self.msgsets_from_trace(trace_path, False)
+        ompl_msg_sets_in_timerange = []
+        # Take msg sets within time range
+        for ompl_set in ompl_msg_sets:
+            if ompl_set[0].default_clock_snapshot.ns_from_origin > init_ns and ompl_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
+                ompl_msg_sets_in_timerange.append(ompl_set)
+
+        for ompl_set in ompl_msg_sets_in_timerange:
+            callback_start = (ompl_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            callback_end = (ompl_set[1].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            duration = callback_end - callback_start
+            self.add_durations_to_figure(
+                fig,
+                "OMPL",
+                [(callback_start, callback_start + duration, duration)],
+                colors["OMPL"],
             )
 
         # control
@@ -1224,36 +1399,112 @@ class BenchmarkAnalyzer:
                 colors["control"],
             )
 
-        # collision checking
-        target_chain_collision_checking = [
+        # collision checking -- Check robot collision
+        target_chain_check_robot_collision = [
             "robotcore_manipulation:robotcore_moveit2_fcl_check_robot_collision_cb_init",       # 0
             "robotcore_manipulation:robotcore_moveit2_fcl_check_robot_collision_init",          # 1
             "robotcore_manipulation:robotcore_moveit2_fcl_check_robot_collision_fini",          # 2
             "robotcore_manipulation:robotcore_moveit2_fcl_check_robot_collision_cb_fini",       # 3
-            "robotcore_manipulation:robotcore_moveit2_fcl_check_self_collision_cb_init",        # 4
-            "robotcore_manipulation:robotcore_moveit2_fcl_check_self_collision_init",           # 5
-            "robotcore_manipulation:robotcore_moveit2_fcl_check_self_collision_fini",           # 6
-            "robotcore_manipulation:robotcore_moveit2_fcl_check_self_collision_cb_fini"         # 7
         ]
 
-        self.target_chain = target_chain_collision_checking
-        collision_checking_msg_sets = self.msgsets_from_trace(trace_path, False)
-        collision_checking_msg_sets_in_timerange = []
+        self.target_chain = target_chain_check_robot_collision
+        check_robot_collision_msg_sets = self.msgsets_from_trace(trace_path, False)
+        check_robot_collision_msg_sets_in_timerange = []
         # Take msg sets within time range
-        for collision_checking_set in collision_checking_msg_sets:
-            if collision_checking_set[0].default_clock_snapshot.ns_from_origin > init_ns and collision_checking_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
-                collision_checking_msg_sets_in_timerange.append(collision_checking_set)
+        for check_robot_collision_set in check_robot_collision_msg_sets:
+            if check_robot_collision_set[0].default_clock_snapshot.ns_from_origin > init_ns and check_robot_collision_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
+                check_robot_collision_msg_sets_in_timerange.append(check_robot_collision_set)
 
 
-        for collision_checking_set in collision_checking_msg_sets_in_timerange:
-            callback_start = (collision_checking_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            callback_end = (collision_checking_set[3].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+        for check_robot_collision_set in check_robot_collision_msg_sets_in_timerange:
+            callback_start = (check_robot_collision_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            callback_end = (check_robot_collision_set[3].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
             duration = callback_end - callback_start
             self.add_durations_to_figure(
                 fig,
                 "collision checking",
                 [(callback_start, callback_start + duration, duration)],
-                colors["collision checking"],
+                colors["collision checking robot"],
+            )
+
+        # collision checking -- Check self collision
+        target_chain_check_self_collision = [
+            "robotcore_manipulation:robotcore_moveit2_fcl_check_self_collision_cb_init",       # 0
+            "robotcore_manipulation:robotcore_moveit2_fcl_check_self_collision_init",          # 1
+            "robotcore_manipulation:robotcore_moveit2_fcl_check_self_collision_fini",          # 2
+            "robotcore_manipulation:robotcore_moveit2_fcl_check_self_collision_cb_fini",       # 3
+        ]
+
+        self.target_chain = target_chain_check_self_collision
+        check_self_collision_msg_sets = self.msgsets_from_trace(trace_path, False)
+        check_self_collision_msg_sets_in_timerange = []
+        # Take msg sets within time range
+        for check_self_collision_set in check_self_collision_msg_sets:
+            if check_self_collision_set[0].default_clock_snapshot.ns_from_origin > init_ns and check_self_collision_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
+                check_self_collision_msg_sets_in_timerange.append(check_self_collision_set)
+
+
+        for check_self_collision_set in check_self_collision_msg_sets_in_timerange:
+            callback_start = (check_self_collision_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            callback_end = (check_self_collision_set[3].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            duration = callback_end - callback_start
+            self.add_durations_to_figure(
+                fig,
+                "collision checking",
+                [(callback_start, callback_start + duration, duration)],
+                colors["collision checking self"],
+            )
+
+        # collision checking -- FCL object construction
+        target_chain_fcl_object_construction = [
+            "robotcore_manipulation:robotcore_moveit2_fcl_construct_objects_init",       # 0
+            "robotcore_manipulation:robotcore_moveit2_fcl_construct_objects_fini"        # 1
+        ]
+
+        self.target_chain = target_chain_fcl_object_construction
+        fcl_object_construction_msg_sets = self.msgsets_from_trace(trace_path, False)
+
+        fcl_object_construction_msg_sets_in_timerange = []
+        # Take msg sets within time range
+        for fcl_object_construction_set in fcl_object_construction_msg_sets:
+            if fcl_object_construction_set[0].default_clock_snapshot.ns_from_origin > init_ns and fcl_object_construction_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
+                fcl_object_construction_msg_sets_in_timerange.append(fcl_object_construction_set)
+
+        for fcl_object_construction_set in fcl_object_construction_msg_sets_in_timerange:
+            callback_start = (fcl_object_construction_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            callback_end = (fcl_object_construction_set[1].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            duration = callback_end - callback_start
+            self.add_durations_to_figure(
+                fig,
+                "FCL object construction",
+                [(callback_start, callback_start + duration, duration)],
+                colors["FCL object construction"],
+            )
+
+        # collision checking -- FCL collision computation
+        target_chain_fcl_collision_computation = [
+            "robotcore_manipulation:robotcore_moveit2_fcl_compute_collision_init",       # 0
+            "robotcore_manipulation:robotcore_moveit2_fcl_compute_collision_fini"        # 1
+        ]
+
+        self.target_chain = target_chain_fcl_collision_computation
+        fcl_collision_computation_msg_sets = self.msgsets_from_trace(trace_path, False)
+        fcl_collision_computation_msg_sets_in_timerange = []
+        # Take msg sets within time range
+        for fcl_collision_computation_set in fcl_collision_computation_msg_sets:
+            if fcl_collision_computation_set[0].default_clock_snapshot.ns_from_origin > init_ns and fcl_collision_computation_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
+                fcl_collision_computation_msg_sets_in_timerange.append(fcl_collision_computation_set)
+
+
+        for fcl_collision_computation_set in fcl_collision_computation_msg_sets_in_timerange:
+            callback_start = (fcl_collision_computation_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            callback_end = (fcl_collision_computation_set[1].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+            duration = callback_end - callback_start
+            self.add_durations_to_figure(
+                fig,
+                "FCL collision computation",
+                [(callback_start, callback_start + duration, duration)],
+                colors["FCL collision computation"],
             )
 
         # direct kinematics
