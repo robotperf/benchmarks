@@ -33,9 +33,6 @@ import sys
 import argparse
 import json
 
-tf_tree = FrameHierarchy()
-tf_tree.add_frame("world", "turtle1")
-tf_tree.add_frame("world", "turtle2")
 
 def main(argv):
     
@@ -54,39 +51,20 @@ def main(argv):
     metrics = json.loads(json.dumps(metrics_elements))
  
     # Instantiate the class
-    ba = BenchmarkAnalyzer('m1_turtle_tf2_demo', hardware_device_type, tf_tree)
+    ba = BenchmarkAnalyzer('n2_inter_process', hardware_device_type)
     ba.set_trace_sets_filter_type(filter_type="UID")
-
+    
     if hardware_device_type == 'cpu':
         target_chain = [
-        # "ros2:callback_start",
-        "robotperf_benchmarks:robotcore_tf2_lookup_cb_init",
-        "robotperf_benchmarks:robotcore_tf2_lookup_cb_fini",
-        # "ros2:callback_end",
-        # "ros2:callback_start",
-        # "ros2:callback_end",
-        # "ros2:callback_start",
-        "robotperf_benchmarks:robotcore_tf2_set_cb_init",
-        "robotperf_benchmarks:robotcore_tf2_set_cb_fini",
-        # "ros2:callback_end",
+        "robotcore_rtps:robotcore_rtps_start_pingpong",
+        "robotcore_rtps:robotcore_rtps_end_pingpong",
         ]
 
-        # # add parameters for analyzing the traces
-        # ba.add_target(
-        #     {
-        #         "name": "ros2:callback_start",
-        #         "name_disambiguous": "ros2:callback_start",
-        #         "colors_fg": "blue",
-        #         "colors_fg_bokeh": "lightgray",
-        #         "layer": "rclcpp",
-        #         "label_layer": 3,
-        #         "marker": "diamond",
-        #     }
-        # )
+        
         ba.add_target(
             {
-                "name": "robotperf_benchmarks:robotcore_tf2_lookup_cb_init",
-                "name_disambiguous": "robotperf_benchmarks:robotcore_tf2_lookup_cb_init",
+                "name": "robotcore_rtps:robotcore_rtps_start_pingpong",
+                "name_disambiguous": "robotcore_rtps:robotcore_rtps_start_pingpong",
                 "colors_fg": "blue",
                 "colors_fg_bokeh": "silver",
                 "layer": "userland",
@@ -96,8 +74,8 @@ def main(argv):
         )
         ba.add_target(
             {
-                "name": "robotperf_benchmarks:robotcore_tf2_lookup_cb_fini",
-                "name_disambiguous": "robotperf_benchmarks:robotcore_tf2_lookup_cb_fini",
+                "name": "robotcore_rtps:robotcore_rtps_end_pingpong",
+                "name_disambiguous": "robotcore_rtps:robotcore_rtps_end_pingpong",
                 "colors_fg": "blue",
                 "colors_fg_bokeh": "darkgray",
                 "layer": "benchmark",
@@ -105,83 +83,6 @@ def main(argv):
                 "marker": "plus",
             }
         )
-        # ba.add_target(
-        #     {
-        #         "name": "ros2:callback_end",
-        #         "name_disambiguous": "ros2:callback_end",
-        #         "colors_fg": "blue",
-        #         "colors_fg_bokeh": "gray",
-        #         "layer": "rclcpp",
-        #         "label_layer": 3,
-        #         "marker": "diamond",
-        #     }
-        # )
-        # ba.add_target(
-        #     {
-        #         "name": "ros2:callback_start",
-        #         "name_disambiguous": "ros2:callback_start (2)",
-        #         "colors_fg": "blue",
-        #         "colors_fg_bokeh": "lightsalmon",
-        #         "layer": "rclcpp",
-        #         "label_layer": 3,
-        #         "marker": "diamond",
-        #     }
-        # )
-        # ba.add_target(
-        #     {
-        #         "name": "ros2:callback_end",
-        #         "name_disambiguous": "ros2:callback_end (2)",
-        #         "colors_fg": "blue",
-        #         "colors_fg_bokeh": "red",
-        #         "layer": "rclcpp",
-        #         "label_layer": 3,
-        #         "marker": "diamond",
-        #     }
-        # )
-        # ba.add_target(
-        #     {
-        #         "name": "ros2:callback_start",
-        #         "name_disambiguous": "ros2:callback_start (3)",
-        #         "colors_fg": "blue",
-        #         "colors_fg_bokeh": "chartreuse",
-        #         "layer": "rclcpp",
-        #         "label_layer": 3,
-        #         "marker": "diamond",
-        #     }
-        # )
-        ba.add_target(
-            {
-                "name": "robotperf_benchmarks:robotcore_tf2_set_cb_init",
-                "name_disambiguous": "robotperf_benchmarks:robotcore_tf2_set_cb_init",
-                "colors_fg": "blue",
-                "colors_fg_bokeh": "chocolate",
-                "layer": "benchmark",
-                "label_layer": 5,
-                "marker": "plus",
-            }
-        )
-        ba.add_target(
-            {
-                "name": "robotperf_benchmarks:robotcore_tf2_set_cb_fini",
-                "name_disambiguous": "robotperf_benchmarks:robotcore_tf2_set_cb_fini",
-                "colors_fg": "blue",
-                "colors_fg_bokeh": "coral",
-                "layer": "userland",
-                "label_layer": 4,
-                "marker": "plus",
-            }
-        )
-        # ba.add_target(
-        #     {
-        #         "name": "ros2:callback_end",
-        #         "name_disambiguous": "ros2:callback_end ()",
-        #         "colors_fg": "blue",
-        #         "colors_fg_bokeh": "cornflowerblue",
-        #         "layer": "rclcpp",
-        #         "label_layer": 3,
-        #         "marker": "diamond",
-        #     }
-        # )
         
     else:
         print('The hardware device type ' + hardware_device_type + ' is not yet implemented\n')
@@ -244,7 +145,7 @@ def generate_launch_description():
     # Define the ExecuteProcess action to run the Python script
     analyzer = ExecuteProcess(
         cmd=[
-            'python3', "src/benchmarks/benchmarks/meta/m1_turtle_tf2_demo/launch/analyze_m1_turtle_tf2_demo.launch.py",
+            'python3', "src/benchmarks/benchmarks/network/n2_inter_process/launch/analyze_n2_inter_process.launch.py",
             '--hardware_device_type', LaunchConfiguration('hardware_device_type'),
             '--trace_path', LaunchConfiguration('trace_path'),
             '--metrics', LaunchConfiguration('metrics')],
