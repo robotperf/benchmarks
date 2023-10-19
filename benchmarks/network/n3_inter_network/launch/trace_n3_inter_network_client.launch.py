@@ -35,25 +35,6 @@ from tracetools_trace.tools.names import DEFAULT_EVENTS_KERNEL
 from tracetools_trace.tools.names import DEFAULT_CONTEXT
 
 def generate_launch_description():
-
-     # Trace
-    trace = Trace(
-        session_name="n3_inter_network_client",
-        events_ust=[
-            "robotcore_rtps:*",
-            "ros2:*"
-            # "lttng_ust_cyg_profile*",
-            # "lttng_ust_statedump*",
-            # "liblttng-ust-libc-wrapper",
-        ]
-        + DEFAULT_EVENTS_ROS,
-        context_fields={
-                'kernel': [],
-                'userspace': ['vpid', 'vtid', 'procname'],
-        },
-        # events_kernel=DEFAULT_EVENTS_KERNEL,
-        # context_names=DEFAULT_CONTEXT,
-    )
         
     client_node = Node(
         package='cpp_loopback',
@@ -64,6 +45,5 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
-        trace,
         client_node
     ])
