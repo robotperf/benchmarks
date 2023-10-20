@@ -44,6 +44,8 @@ from tracetools_trace.tools.names import DEFAULT_CONTEXT
 
 import os
 POWER_LIB = os.environ.get('POWER_LIB')
+if not POWER_LIB:
+    POWER_LIB = 'rapl'  # default to RAPL
 
 def generate_launch_description():
     prefix = LaunchConfiguration('prefix', default='')
@@ -128,6 +130,7 @@ def generate_launch_description():
         package='robotcore_manipulation_moveit2',
         executable='xarm6_manipulation_benchmarks',
         arguments=['xarm6', 'd1'],
+        # prefix=['xterm -e gdb -ex run --args'],    
         output='screen'
     )
 
