@@ -1107,46 +1107,58 @@ class BenchmarkAnalyzer:
                 # "rmw", 
                 # "rcl", 
                 # "rclcpp", 
-                "tf2",
-                "planning", 
+                "TF2",
+                "Planning", 
                 "AddTimeOptimalParameterization",
                 "FixWorkspaceBounds",
                 "FixStartStateBounds",
                 "FixStartStateCollision",
                 "FixStartStatePathConstraints",
                 "OMPL",
-                "inverse kinematics", 
-                "collision checking", 
+                "RRT solver",
+                "State sampler",
+                "Neighbor search",
+                "State validity check",
+                "RRT tree growth",
+                "Find solution path",
+                "Inverse kinematics", 
+                "Collision checking", 
                 "FCL object construction",
                 "FCL collision computation",
-                "direct kinematics", 
-                "control"
+                "Direct kinematics", 
+                "Control"
             ]
 
             colors = {
                 # "rmw": ""
                 # "rcl": ""
                 # "rclcpp": ""
-                "tf2": "#6B6D76",
-                "planning": "#C08321",
+                "TF2": "#6B6D76",
+                "Planning": "#C08321",
                 "AddTimeOptimalParameterization": "#DCA463",
                 "FixWorkspaceBounds": "#F7C4A5",
                 "FixStartStateBounds": "#CB9D94",
                 "FixStartStateCollision": "#9E7682",
                 "FixStartStatePathConstraints": "#605770",
                 "OMPL": "#4D4861",
-                "inverse kinematics": "#D1ACA0",
-                "collision checking robot": "#FCBFB7",
-                "collision checking self": "#FC6E6E",
+                "RRT solver": "#4D4861",
+                "State sampler": "#4D4861",
+                "Neighbor search": "#4D4861",
+                "State validity check": "#4D4861",
+                "RRT tree growth": "#4D4861",
+                "Find solution path": "#4D4861",
+                "Inverse kinematics": "#D1ACA0",
+                "Collision checking robot": "#FCBFB7",
+                "Collision checking self": "#FC6E6E",
                 "FCL object construction": "#D68A7E",
                 "FCL collision computation": "#B05444",
-                "direct kinematics": "#334E58",
-                "control": "#333A3B"
+                "Direct kinematics": "#334E58",
+                "Control": "#333A3B"
             }
 
             if include_trajectory_execution:
-                segment_types.append("traj execution")
-                colors["traj execution"] = "#33261D"
+                segment_types.append("Traj execution")
+                colors["Traj execution"] = "#33261D"
 
         elif self.hardware_device_type == "fpga":
             segment_types = ["kernel", "rmw", "rcl", "rclcpp", "userland", "benchmark"]
@@ -1156,7 +1168,7 @@ class BenchmarkAnalyzer:
             x_axis_label=f"Milliseconds",
             y_range=segment_types,
             plot_width=2000,
-            plot_height=1000,
+            plot_height=1500,
         )
         fig.title.align = "center"
         fig.title.text_font_size = "20px"
@@ -1199,9 +1211,9 @@ class BenchmarkAnalyzer:
         duration = callback_end - callback_start
         self.add_durations_to_figure(
             fig,
-            "planning",
+            "Planning",
             [(callback_start, callback_start + duration, duration)],
-            colors["planning"],
+            colors["Planning"],
         )
     
         if include_trajectory_execution:
@@ -1210,168 +1222,128 @@ class BenchmarkAnalyzer:
             duration = callback_end - callback_start
             self.add_durations_to_figure(
                 fig,
-                "traj execution",
+                "Traj execution",
                 [(callback_start, callback_start + duration, duration)],
-                colors["traj execution"],
+                colors["Traj execution"],
             )
 
-        # AddTimeOptimalParameterization
+        def plot_row_within_timerange(target_chain, trace_path, timerange, fig, row_name, row_color):
+            self.target_chain = target_chain
+            msg_sets = self.msgsets_from_trace(trace_path, False)
+            msg_sets_in_timerange = []
+            # Take msg sets within time range
+            for msg_set in msg_sets:
+                if msg_set[0].default_clock_snapshot.ns_from_origin > timerange[0] and msg_set[-1].default_clock_snapshot.ns_from_origin < timerange[1]:
+                    msg_sets_in_timerange.append(msg_set)
 
+            for msg_set in msg_sets_in_timerange:
+                callback_start = (msg_set[0].default_clock_snapshot.ns_from_origin - timerange[0]) / 1e6
+                callback_end = (msg_set[-1].default_clock_snapshot.ns_from_origin - timerange[0]) / 1e6
+                duration = callback_end - callback_start
+                self.add_durations_to_figure(
+                    fig,
+                    row_name,
+                    [(callback_start, callback_start + duration, duration)],
+                    colors[row_color],
+                )
+
+        # AddTimeOptimalParameterization
         target_chain_add_time_optimal_parametrization = [
             "robotcore_manipulation:robotcore_moveit2_add_time_optimal_parametrization_init",   # 0
             "robotcore_manipulation:robotcore_moveit2_add_time_optimal_parametrization_fini"    # 1
         ]
 
-        self.target_chain = target_chain_add_time_optimal_parametrization
-        add_time_optimal_parametrization_msg_sets = self.msgsets_from_trace(trace_path, False)
-        add_time_optimal_parametrization_msg_sets_in_timerange = []
-        # Take msg sets within time range
-        for add_time_optimal_parametrization_set in add_time_optimal_parametrization_msg_sets:
-            if add_time_optimal_parametrization_set[0].default_clock_snapshot.ns_from_origin > init_ns and add_time_optimal_parametrization_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
-                add_time_optimal_parametrization_msg_sets_in_timerange.append(add_time_optimal_parametrization_set)
-
-        for add_time_optimal_parametrization_set in add_time_optimal_parametrization_msg_sets_in_timerange:
-            callback_start = (add_time_optimal_parametrization_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            callback_end = (add_time_optimal_parametrization_set[1].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            duration = callback_end - callback_start
-            self.add_durations_to_figure(
-                fig,
-                "AddTimeOptimalParameterization",
-                [(callback_start, callback_start + duration, duration)],
-                colors["AddTimeOptimalParameterization"],
-            )
+        plot_row_within_timerange(target_chain_add_time_optimal_parametrization, trace_path, [init_ns, fini_ns], fig, "AddTimeOptimalParameterization", "AddTimeOptimalParameterization")
 
         # FixWorkspaceBounds
-
         target_chain_fix_workspace_bounds = [
             "robotcore_manipulation:robotcore_moveit2_fix_workspace_bounds_init",   # 0
             "robotcore_manipulation:robotcore_moveit2_fix_workspace_bounds_fini"    # 1
         ]
 
-        self.target_chain = target_chain_fix_workspace_bounds
-        fix_workspace_bounds_msg_sets = self.msgsets_from_trace(trace_path, False)
-        fix_workspace_bounds_msg_sets_in_timerange = []
-        # Take msg sets within time range
-        for fix_workspace_bounds_set in fix_workspace_bounds_msg_sets:
-            if fix_workspace_bounds_set[0].default_clock_snapshot.ns_from_origin > init_ns and fix_workspace_bounds_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
-                fix_workspace_bounds_msg_sets_in_timerange.append(fix_workspace_bounds_set)
-
-        for fix_workspace_bounds_set in fix_workspace_bounds_msg_sets_in_timerange:
-            callback_start = (fix_workspace_bounds_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            callback_end = (fix_workspace_bounds_set[1].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            duration = callback_end - callback_start
-            self.add_durations_to_figure(
-                fig,
-                "FixWorkspaceBounds",
-                [(callback_start, callback_start + duration, duration)],
-                colors["FixWorkspaceBounds"],
-            )
+        plot_row_within_timerange(target_chain_fix_workspace_bounds, trace_path, [init_ns, fini_ns], fig, "FixWorkspaceBounds", "FixWorkspaceBounds")
 
         # FixStartStateBounds
-
         target_chain_fix_start_state_bounds = [
             "robotcore_manipulation:robotcore_moveit2_fix_start_state_bounds_init",   # 0
             "robotcore_manipulation:robotcore_moveit2_fix_start_state_bounds_fini"    # 1
         ]
 
-        self.target_chain = target_chain_fix_start_state_bounds
-        fix_start_state_bounds_msg_sets = self.msgsets_from_trace(trace_path, False)
-        fix_start_state_bounds_msg_sets_in_timerange = []
-        # Take msg sets within time range
-        for fix_start_state_bounds_set in fix_start_state_bounds_msg_sets:
-            if fix_start_state_bounds_set[0].default_clock_snapshot.ns_from_origin > init_ns and fix_start_state_bounds_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
-                fix_start_state_bounds_msg_sets_in_timerange.append(fix_start_state_bounds_set)
-
-        for fix_start_state_bounds_set in fix_start_state_bounds_msg_sets_in_timerange:
-            callback_start = (fix_start_state_bounds_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            callback_end = (fix_start_state_bounds_set[1].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            duration = callback_end - callback_start
-            self.add_durations_to_figure(
-                fig,
-                "FixStartStateBounds",
-                [(callback_start, callback_start + duration, duration)],
-                colors["FixStartStateBounds"],
-            )
+        plot_row_within_timerange(target_chain_fix_start_state_bounds, trace_path, [init_ns, fini_ns], fig, "FixStartStateBounds", "FixStartStateBounds")
 
         # FixStartStateCollision
-
         target_chain_fix_start_state_collision = [
             "robotcore_manipulation:robotcore_moveit2_fix_start_state_collision_init",   # 0
             "robotcore_manipulation:robotcore_moveit2_fix_start_state_collision_fini"    # 1
         ]
 
-        self.target_chain = target_chain_fix_start_state_collision
-        fix_start_state_collision_msg_sets = self.msgsets_from_trace(trace_path, False)
-        fix_start_state_collision_msg_sets_in_timerange = []
-        # Take msg sets within time range
-        for fix_start_state_collision_set in fix_start_state_collision_msg_sets:
-            if fix_start_state_collision_set[0].default_clock_snapshot.ns_from_origin > init_ns and fix_start_state_collision_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
-                fix_start_state_collision_msg_sets_in_timerange.append(fix_start_state_collision_set)
-
-        for fix_start_state_collision_set in fix_start_state_collision_msg_sets_in_timerange:
-            callback_start = (fix_start_state_collision_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            callback_end = (fix_start_state_collision_set[1].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            duration = callback_end - callback_start
-            self.add_durations_to_figure(
-                fig,
-                "FixStartStateCollision",
-                [(callback_start, callback_start + duration, duration)],
-                colors["FixStartStateCollision"],
-            )
+        plot_row_within_timerange(target_chain_fix_start_state_collision, trace_path, [init_ns, fini_ns], fig, "FixStartStateCollision", "FixStartStateCollision")
 
         # FixStartStatePathConstraints
-
         target_chain_fix_start_state_path_constraints = [
             "robotcore_manipulation:robotcore_moveit2_fix_start_state_path_constraints_init",   # 0
             "robotcore_manipulation:robotcore_moveit2_fix_start_state_path_constraints_fini"    # 1
         ]
 
-        self.target_chain = target_chain_fix_start_state_path_constraints
-        fix_start_state_path_constraints_msg_sets = self.msgsets_from_trace(trace_path, False)
-        fix_start_state_path_constraints_msg_sets_in_timerange = []
-        # Take msg sets within time range
-        for fix_start_state_path_constraints_set in fix_start_state_path_constraints_msg_sets:
-            if fix_start_state_path_constraints_set[0].default_clock_snapshot.ns_from_origin > init_ns and fix_start_state_path_constraints_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
-                fix_start_state_path_constraints_msg_sets_in_timerange.append(fix_start_state_path_constraints_set)
-
-        for fix_start_state_path_constraints_set in fix_start_state_path_constraints_msg_sets_in_timerange:
-            callback_start = (fix_start_state_path_constraints_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            callback_end = (fix_start_state_path_constraints_set[1].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            duration = callback_end - callback_start
-            self.add_durations_to_figure(
-                fig,
-                "FixStartStatePathConstraints",
-                [(callback_start, callback_start + duration, duration)],
-                colors["FixStartStatePathConstraints"],
-            )
+        plot_row_within_timerange(target_chain_fix_start_state_path_constraints, trace_path, [init_ns, fini_ns], fig, "FixStartStatePathConstraints", "FixStartStatePathConstraints")
 
         # OMPL
-
         target_chain_ompl = [
             "robotcore_manipulation:robotcore_moveit2_ompl_solver_init",   # 0
             "robotcore_manipulation:robotcore_moveit2_ompl_solver_fini"    # 1
         ]
 
-        self.target_chain = target_chain_ompl
-        ompl_msg_sets = self.msgsets_from_trace(trace_path, False)
-        ompl_msg_sets_in_timerange = []
-        # Take msg sets within time range
-        for ompl_set in ompl_msg_sets:
-            if ompl_set[0].default_clock_snapshot.ns_from_origin > init_ns and ompl_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
-                ompl_msg_sets_in_timerange.append(ompl_set)
+        plot_row_within_timerange(target_chain_ompl, trace_path, [init_ns, fini_ns], fig, "OMPL", "OMPL")
 
-        for ompl_set in ompl_msg_sets_in_timerange:
-            callback_start = (ompl_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            callback_end = (ompl_set[1].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            duration = callback_end - callback_start
-            self.add_durations_to_figure(
-                fig,
-                "OMPL",
-                [(callback_start, callback_start + duration, duration)],
-                colors["OMPL"],
-            )
+        # RRT solver
+        target_chain_rrt_solver = [
+            "robotcore_manipulation:robotcore_ompl_rrt_solver_init",   # 0
+            "robotcore_manipulation:robotcore_ompl_rrt_solver_fini"    # 1
+        ]
 
-        # control
+        plot_row_within_timerange(target_chain_rrt_solver, trace_path, [init_ns, fini_ns], fig, "RRT solver", "RRT solver")
+
+        # State sampler
+        target_chain_state_sampler = [
+            "robotcore_manipulation:robotcore_ompl_state_sampler_init",   # 0
+            "robotcore_manipulation:robotcore_ompl_state_sampler_fini"    # 1
+        ]
+
+        plot_row_within_timerange(target_chain_state_sampler, trace_path, [init_ns, fini_ns], fig, "State sampler", "State sampler")
+
+        # Neighbor search
+        target_chain_neighbor_search = [
+            "robotcore_manipulation:robotcore_ompl_neighbor_search_init",   # 0
+            "robotcore_manipulation:robotcore_ompl_neighbor_search_fini"    # 1
+        ]
+
+        plot_row_within_timerange(target_chain_neighbor_search, trace_path, [init_ns, fini_ns], fig, "Neighbor search", "Neighbor search")
+
+        # State validity check
+        target_chain_state_validity_check = [
+            "robotcore_manipulation:robotcore_moveit2_check_state_validity_init",   # 0
+            "robotcore_manipulation:robotcore_moveit2_check_state_validity_fini"    # 1
+        ]
+        
+        plot_row_within_timerange(target_chain_state_validity_check, trace_path, [init_ns, fini_ns], fig, "State validity check", "State validity check")
+
+        # RRT tree growth
+        target_chain_rrt_growth = [
+            "robotcore_manipulation:robotcore_ompl_grow_rrt_tree_init",   # 0
+            "robotcore_manipulation:robotcore_ompl_grow_rrt_tree_init"    # 1
+        ]
+        
+        plot_row_within_timerange(target_chain_rrt_growth, trace_path, [init_ns, fini_ns], fig, "RRT tree growth", "RRT tree growth")
+
+        # Find solution path
+        target_chain_find_solution_path = [
+            "robotcore_manipulation:robotcore_ompl_find_solution_path_init",   # 0
+            "robotcore_manipulation:robotcore_ompl_find_solution_path_fini"    # 1
+        ]
+        
+        plot_row_within_timerange(target_chain_find_solution_path, trace_path, [init_ns, fini_ns], fig, "Find solution path", "Find solution path")
+
+        # Control
         target_chain_control = [
             "robotcore_control:robotcore_control_joint_trajectory_controller_cb_init",  # 0
             "robotcore_control:robotcore_control_joint_trajectory_controller_init",     # 1
@@ -1379,27 +1351,9 @@ class BenchmarkAnalyzer:
             "robotcore_control:robotcore_control_joint_trajectory_controller_cb_fini"   # 3
         ]
 
-        self.target_chain = target_chain_control
-        control_msg_sets = self.msgsets_from_trace(trace_path, False)
-        control_msg_sets_in_timerange = []
-        # Take msg sets within time range
-        for control_set in control_msg_sets:
-            if control_set[0].default_clock_snapshot.ns_from_origin > init_ns and control_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
-                control_msg_sets_in_timerange.append(control_set)
+        plot_row_within_timerange(target_chain_control, trace_path, [init_ns, fini_ns], fig, "Control", "Control")
 
-
-        for control_set in control_msg_sets_in_timerange:
-            callback_start = (control_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            callback_end = (control_set[3].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            duration = callback_end - callback_start
-            self.add_durations_to_figure(
-                fig,
-                "control",
-                [(callback_start, callback_start + duration, duration)],
-                colors["control"],
-            )
-
-        # collision checking -- Check robot collision
+        # Collision checking -- Check robot collision
         target_chain_check_robot_collision = [
             "robotcore_manipulation:robotcore_moveit2_fcl_check_robot_collision_cb_init",       # 0
             "robotcore_manipulation:robotcore_moveit2_fcl_check_robot_collision_init",          # 1
@@ -1407,27 +1361,9 @@ class BenchmarkAnalyzer:
             "robotcore_manipulation:robotcore_moveit2_fcl_check_robot_collision_cb_fini",       # 3
         ]
 
-        self.target_chain = target_chain_check_robot_collision
-        check_robot_collision_msg_sets = self.msgsets_from_trace(trace_path, False)
-        check_robot_collision_msg_sets_in_timerange = []
-        # Take msg sets within time range
-        for check_robot_collision_set in check_robot_collision_msg_sets:
-            if check_robot_collision_set[0].default_clock_snapshot.ns_from_origin > init_ns and check_robot_collision_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
-                check_robot_collision_msg_sets_in_timerange.append(check_robot_collision_set)
+        plot_row_within_timerange(target_chain_check_robot_collision, trace_path, [init_ns, fini_ns], fig, "Collision checking", "Collision checking robot")
 
-
-        for check_robot_collision_set in check_robot_collision_msg_sets_in_timerange:
-            callback_start = (check_robot_collision_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            callback_end = (check_robot_collision_set[3].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            duration = callback_end - callback_start
-            self.add_durations_to_figure(
-                fig,
-                "collision checking",
-                [(callback_start, callback_start + duration, duration)],
-                colors["collision checking robot"],
-            )
-
-        # collision checking -- Check self collision
+        # Collision checking -- Check self collision
         target_chain_check_self_collision = [
             "robotcore_manipulation:robotcore_moveit2_fcl_check_self_collision_cb_init",       # 0
             "robotcore_manipulation:robotcore_moveit2_fcl_check_self_collision_init",          # 1
@@ -1435,79 +1371,25 @@ class BenchmarkAnalyzer:
             "robotcore_manipulation:robotcore_moveit2_fcl_check_self_collision_cb_fini",       # 3
         ]
 
-        self.target_chain = target_chain_check_self_collision
-        check_self_collision_msg_sets = self.msgsets_from_trace(trace_path, False)
-        check_self_collision_msg_sets_in_timerange = []
-        # Take msg sets within time range
-        for check_self_collision_set in check_self_collision_msg_sets:
-            if check_self_collision_set[0].default_clock_snapshot.ns_from_origin > init_ns and check_self_collision_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
-                check_self_collision_msg_sets_in_timerange.append(check_self_collision_set)
+        plot_row_within_timerange(target_chain_check_robot_collision, trace_path, [init_ns, fini_ns], fig, "Collision checking", "Collision checking self")
 
-
-        for check_self_collision_set in check_self_collision_msg_sets_in_timerange:
-            callback_start = (check_self_collision_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            callback_end = (check_self_collision_set[3].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            duration = callback_end - callback_start
-            self.add_durations_to_figure(
-                fig,
-                "collision checking",
-                [(callback_start, callback_start + duration, duration)],
-                colors["collision checking self"],
-            )
-
-        # collision checking -- FCL object construction
+        # Collision checking -- FCL object construction
         target_chain_fcl_object_construction = [
             "robotcore_manipulation:robotcore_moveit2_fcl_construct_objects_init",       # 0
             "robotcore_manipulation:robotcore_moveit2_fcl_construct_objects_fini"        # 1
         ]
 
-        self.target_chain = target_chain_fcl_object_construction
-        fcl_object_construction_msg_sets = self.msgsets_from_trace(trace_path, False)
+        plot_row_within_timerange(target_chain_fcl_object_construction, trace_path, [init_ns, fini_ns], fig, "FCL object construction", "FCL object construction")
 
-        fcl_object_construction_msg_sets_in_timerange = []
-        # Take msg sets within time range
-        for fcl_object_construction_set in fcl_object_construction_msg_sets:
-            if fcl_object_construction_set[0].default_clock_snapshot.ns_from_origin > init_ns and fcl_object_construction_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
-                fcl_object_construction_msg_sets_in_timerange.append(fcl_object_construction_set)
-
-        for fcl_object_construction_set in fcl_object_construction_msg_sets_in_timerange:
-            callback_start = (fcl_object_construction_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            callback_end = (fcl_object_construction_set[1].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            duration = callback_end - callback_start
-            self.add_durations_to_figure(
-                fig,
-                "FCL object construction",
-                [(callback_start, callback_start + duration, duration)],
-                colors["FCL object construction"],
-            )
-
-        # collision checking -- FCL collision computation
+        # Collision checking -- FCL collision computation
         target_chain_fcl_collision_computation = [
             "robotcore_manipulation:robotcore_moveit2_fcl_compute_collision_init",       # 0
             "robotcore_manipulation:robotcore_moveit2_fcl_compute_collision_fini"        # 1
         ]
 
-        self.target_chain = target_chain_fcl_collision_computation
-        fcl_collision_computation_msg_sets = self.msgsets_from_trace(trace_path, False)
-        fcl_collision_computation_msg_sets_in_timerange = []
-        # Take msg sets within time range
-        for fcl_collision_computation_set in fcl_collision_computation_msg_sets:
-            if fcl_collision_computation_set[0].default_clock_snapshot.ns_from_origin > init_ns and fcl_collision_computation_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
-                fcl_collision_computation_msg_sets_in_timerange.append(fcl_collision_computation_set)
+        plot_row_within_timerange(target_chain_fcl_collision_computation, trace_path, [init_ns, fini_ns], fig, "FCL collision computation", "FCL collision computation")
 
-
-        for fcl_collision_computation_set in fcl_collision_computation_msg_sets_in_timerange:
-            callback_start = (fcl_collision_computation_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            callback_end = (fcl_collision_computation_set[1].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            duration = callback_end - callback_start
-            self.add_durations_to_figure(
-                fig,
-                "FCL collision computation",
-                [(callback_start, callback_start + duration, duration)],
-                colors["FCL collision computation"],
-            )
-
-        # direct kinematics
+        # Direct kinematics
         target_chain_direct_kinematics = [
             "robotcore_manipulation:robotcore_moveit2_direct_kinematics_cb_init",       # 0
             "robotcore_manipulation:robotcore_moveit2_direct_kinematics_init",          # 1
@@ -1515,27 +1397,9 @@ class BenchmarkAnalyzer:
             "robotcore_manipulation:robotcore_moveit2_direct_kinematics_cb_fini",       # 3
         ]
 
-        self.target_chain = target_chain_direct_kinematics
-        direct_kinematics_msg_sets = self.msgsets_from_trace(trace_path, False)
-        direct_kinematics_msg_sets_in_timerange = []
-        # Take msg sets within time range
-        for direct_kinematics_set in direct_kinematics_msg_sets:
-            if direct_kinematics_set[0].default_clock_snapshot.ns_from_origin > init_ns and direct_kinematics_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
-                direct_kinematics_msg_sets_in_timerange.append(direct_kinematics_set)
+        plot_row_within_timerange(target_chain_direct_kinematics, trace_path, [init_ns, fini_ns], fig, "Direct kinematics", "Direct kinematics")
 
-
-        for direct_kinematics_set in direct_kinematics_msg_sets_in_timerange:
-            callback_start = (direct_kinematics_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            callback_end = (direct_kinematics_set[3].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            duration = callback_end - callback_start
-            self.add_durations_to_figure(
-                fig,
-                "direct kinematics",
-                [(callback_start, callback_start + duration, duration)],
-                colors["direct kinematics"],
-            )
-
-        # inverse kinematics
+        # Inverse kinematics
         target_chain_inverse_kinematics = [
             "robotcore_manipulation:robotcore_moveit2_inverse_kinematics_kdl_cb_init",       # 0
             "robotcore_manipulation:robotcore_moveit2_inverse_kinematics_kdl_init",          # 1
@@ -1543,27 +1407,9 @@ class BenchmarkAnalyzer:
             "robotcore_manipulation:robotcore_moveit2_inverse_kinematics_kdl_cb_fini",       # 3
         ]
 
-        self.target_chain = target_chain_inverse_kinematics
-        inverse_kinematics_msg_sets = self.msgsets_from_trace(trace_path, False)
-        inverse_kinematics_msg_sets_in_timerange = []
-        # Take msg sets within time range
-        for inverse_kinematics_set in inverse_kinematics_msg_sets:
-            if inverse_kinematics_set[0].default_clock_snapshot.ns_from_origin > init_ns and inverse_kinematics_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
-                inverse_kinematics_msg_sets_in_timerange.append(inverse_kinematics_set)
+        plot_row_within_timerange(target_chain_inverse_kinematics, trace_path, [init_ns, fini_ns], fig, "Inverse kinematics", "Inverse kinematics")
 
-
-        for inverse_kinematics_set in inverse_kinematics_msg_sets_in_timerange:
-            callback_start = (inverse_kinematics_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            callback_end = (inverse_kinematics_set[3].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            duration = callback_end - callback_start
-            self.add_durations_to_figure(
-                fig,
-                "inverse kinematics",
-                [(callback_start, callback_start + duration, duration)],
-                colors["inverse kinematics"],
-            )
-
-        # tf2
+        # TF2
         target_chain_tf2 = [
             # "robotperf_benchmarks:robotcore_tf2_lookup_cb_init",
             # "robotperf_benchmarks:robotcore_tf2_lookup_cb_fini",
@@ -1571,25 +1417,7 @@ class BenchmarkAnalyzer:
             "robotperf_benchmarks:robotcore_tf2_set_cb_fini",
         ]
 
-        self.target_chain = target_chain_tf2
-        tf2_msg_sets = self.msgsets_from_trace(trace_path, False)
-        tf2_msg_sets_in_timerange = []
-        # Take msg sets within time range
-        for tf2_set in tf2_msg_sets:
-            if tf2_set[0].default_clock_snapshot.ns_from_origin > init_ns and tf2_set[-1].default_clock_snapshot.ns_from_origin < fini_ns:
-                tf2_msg_sets_in_timerange.append(tf2_set)
-
-
-        for tf2_set in tf2_msg_sets_in_timerange:
-            callback_start = (tf2_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            callback_end = (tf2_set[1].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
-            duration = callback_end - callback_start
-            self.add_durations_to_figure(
-                fig,
-                "tf2",
-                [(callback_start, callback_start + duration, duration)],
-                colors["tf2"],
-            )
+        plot_row_within_timerange(target_chain_tf2, trace_path, [init_ns, fini_ns], fig, "TF2", "TF2")
         
         ## output
         show(fig)  # show in browser    
