@@ -2629,7 +2629,7 @@ class BenchmarkAnalyzer:
         rms_ = self.rms_sets(image_pipeline_msg_sets_ms)
         min_ = self.min_sets(image_pipeline_msg_sets_ms)
         max_ = self.max_sets(image_pipeline_msg_sets_ms)
-        #median_ = self.median_sets(image_pipeline_msg_sets_ms)
+        median_ = self.median_sets(image_pipeline_msg_sets_ms)
 
         if self.trace_sets_filter_type != "UID":
             first_target = self.target_chain[0]
@@ -2645,21 +2645,21 @@ class BenchmarkAnalyzer:
             rms_benchmark = self.rms_sets(image_pipeline_msg_sets_ms, indices)
             max_benchmark = self.max_sets(image_pipeline_msg_sets_ms, indices)
             min_benchmark = self.min_sets(image_pipeline_msg_sets_ms, indices)
-        #median_benchmark = self.median_sets(image_pipeline_msg_sets_ms, indices)
+            median_benchmark = self.median_sets(image_pipeline_msg_sets_ms, indices)
         
         if verbose:
             print(color("mean: " + str(mean_), fg="yellow"))
             print("rms: " + str(rms_))
             print("min: " + str(min_))
             print(color("max: " + str(max_), fg="red"))
-            #print(color("median: " + str(max_), fg="yellow"))
+            print(color("median: " + str(max_), fg="yellow"))
 
             if self.trace_sets_filter_type != "UID":
                 print(color("mean benchmark: " + str(mean_benchmark), fg="yellow"))
                 print("rms benchmark: " + str(rms_benchmark))
                 print("min benchmark: " + str(min_benchmark))
                 print(color("max benchmark: " + str(max_benchmark), fg="red"))
-                #print(color("median benchmark: " + str(max_benchmark), fg="yellow"))
+                print(color("median benchmark: " + str(max_benchmark), fg="yellow"))
 
         if self.trace_sets_filter_type != "UID":
             return [
@@ -2667,12 +2667,12 @@ class BenchmarkAnalyzer:
                 rms_benchmark,
                 max_benchmark,
                 min_benchmark,
-                #median_benchmark,
+                median_benchmark,
                 mean_,
                 rms_,
                 max_,
                 min_,
-                #median_,
+                median_,
             ]
         else: 
             return [
@@ -2680,7 +2680,7 @@ class BenchmarkAnalyzer:
                 rms_,
                 max_,
                 min_,
-                #median_,
+                median_,
             ]
     
     def statistics_1d(self, image_pipeline_msg_sets_ms, verbose=False):
@@ -2689,25 +2689,25 @@ class BenchmarkAnalyzer:
         rms_benchmark = round(self.rms(image_pipeline_msg_sets_ms),2)
         max_benchmark = round(self.max(image_pipeline_msg_sets_ms),2)
         min_benchmark = round(self.min(image_pipeline_msg_sets_ms),2)
-        #median_benchmark = self.median(image_pipeline_msg_sets_ms)
+        median_benchmark = self.median(image_pipeline_msg_sets_ms)
 
         if verbose:
             print(color("mean benchmark: " + str(mean_benchmark), fg="yellow"))
             print("rms benchmark: " + str(rms_benchmark))
             print("min benchmark: " + str(min_benchmark))
             print(color("max benchmark: " + str(max_benchmark), fg="red"))
-            #print(color("median benchmark: " + str(median_benchmark), fg="yellow"))
+            print(color("median benchmark: " + str(median_benchmark), fg="yellow"))
 
         return [
             mean_benchmark,
             rms_benchmark,
             max_benchmark,
             min_benchmark,
-            #median_benchmark,
+            median_benchmark,
             '-',
             '-',
             '-',
-            #'-',
+            '-',
             '-'
         ]
 
@@ -2747,8 +2747,8 @@ class BenchmarkAnalyzer:
                         "---",
                         "---",
                         "---",
-                        #"---",
-                        #"---",
+                        "---",
+                        "---",
                         "---",
                     ],
                 )
@@ -2760,12 +2760,12 @@ class BenchmarkAnalyzer:
                         "Benchmark RMS",
                         "Benchmark Max ",
                         "Benchmark Min",
-                        #"Benchmark Median",
+                        "Benchmark Median",
                         "Mean",
                         "RMS",
                         "Max",
                         "Min",
-                        #"Median",
+                        "Median",
                     ],
                 )
             else :
@@ -2777,7 +2777,7 @@ class BenchmarkAnalyzer:
                         "---",
                         "---",
                         "---",
-                        #"---",
+                        "---",
                         "---",
                     ],
                 )
@@ -2789,7 +2789,7 @@ class BenchmarkAnalyzer:
                         "RMS",
                         "Max",
                         "Min",
-                        #"Median",
+                        "Median",
                     ],
                 )
         else:
@@ -2810,8 +2810,8 @@ class BenchmarkAnalyzer:
                         "---",
                         "---",
                         "---",
-                        #"---",
-                        #"---",
+                        "---",
+                        "---",
                         "---",
                     ],
                 )
@@ -2823,12 +2823,12 @@ class BenchmarkAnalyzer:
                         "Benchmark RMS",
                         "Benchmark Max ",
                         "Benchmark Min",
-                        #"Benchmark Median",
+                        "Benchmark Median",
                         "Mean",
                         "RMS",
                         "Max",
                         "Min",
-                        #"Median",
+                        "Median",
                     ],
                 )
             else:
@@ -2840,7 +2840,7 @@ class BenchmarkAnalyzer:
                         "---",
                         "---",
                         "---",
-                        #"---",
+                        "---",
                         "---",
                     ],
                 )
@@ -2852,7 +2852,7 @@ class BenchmarkAnalyzer:
                         "RMS",
                         "Max",
                         "Min",
-                        #"Median",
+                        "Median",
                     ],
                 )
         baseline = list_statistics[2]  # baseline for %
@@ -2986,8 +2986,8 @@ class BenchmarkAnalyzer:
                     "---",
                     "---",
                     "---",
-                    #"---",
-                    #"---",
+                    "---",
+                    "---",
                     "---",
                     "---",
                     "---",
@@ -3002,8 +3002,8 @@ class BenchmarkAnalyzer:
                     "Benchmark RMS",
                     "Benchmark Max ",
                     "Benchmark Min",
-                    #"Benchmark Median",
-                    #" ",
+                    "Benchmark Median",
+                    " ",
                     " ",
                     " ",
                     " ",
@@ -3040,8 +3040,8 @@ class BenchmarkAnalyzer:
                     "Benchmark RMS",
                     "Benchmark Max ",
                     "Benchmark Min",
-                    #"Benchmark Median",
-                    #" ",
+                    "Benchmark Median",
+                    " ",
                     " ",
                     " ",
                     " ",
