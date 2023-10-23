@@ -1140,7 +1140,9 @@ class BenchmarkAnalyzer:
                 "FixStartStateBounds": "#CB9D94",
                 "FixStartStateCollision": "#9E7682",
                 "FixStartStatePathConstraints": "#605770",
-                "OMPL": "#4D4861",
+                "OMPL_presolver": "#343339",
+                "OMPL_solver": "#4D4861",
+                "OMPL_postsolver": "#433185",
                 "RRT solver": "#4D4861",
                 "State sampler": "#4D4861",
                 "Neighbor search": "#4D4861",
@@ -1287,13 +1289,29 @@ class BenchmarkAnalyzer:
 
         plot_row_within_timerange(target_chain_fix_start_state_path_constraints, trace_path, [init_ns, fini_ns], fig, "FixStartStatePathConstraints", "FixStartStatePathConstraints")
 
-        # OMPL
-        target_chain_ompl = [
+        # OMPL presolver
+        target_chain_ompl_presolver = [
+            "robotcore_manipulation:robotcore_moveit2_ompl_presolver_init",   # 0
+            "robotcore_manipulation:robotcore_moveit2_ompl_presolver_fini"    # 1
+        ]
+
+        plot_row_within_timerange(target_chain_ompl_presolver, trace_path, [init_ns, fini_ns], fig, "OMPL", "OMPL_presolver")
+
+        # OMPL solver
+        target_chain_ompl_solver = [
             "robotcore_manipulation:robotcore_moveit2_ompl_solver_init",   # 0
             "robotcore_manipulation:robotcore_moveit2_ompl_solver_fini"    # 1
         ]
 
-        plot_row_within_timerange(target_chain_ompl, trace_path, [init_ns, fini_ns], fig, "OMPL", "OMPL")
+        plot_row_within_timerange(target_chain_ompl_solver, trace_path, [init_ns, fini_ns], fig, "OMPL", "OMPL_solver")
+
+        # OMPL postsolver
+        target_chain_ompl_postsolver = [
+            "robotcore_manipulation:robotcore_moveit2_ompl_postsolver_init",   # 0
+            "robotcore_manipulation:robotcore_moveit2_ompl_postsolver_fini"    # 1
+        ]
+
+        plot_row_within_timerange(target_chain_ompl_postsolver, trace_path, [init_ns, fini_ns], fig, "OMPL", "OMPL_postsolver")
 
         # RRT solver
         target_chain_rrt_solver = [
@@ -1371,7 +1389,7 @@ class BenchmarkAnalyzer:
             "robotcore_manipulation:robotcore_moveit2_fcl_check_self_collision_cb_fini",       # 3
         ]
 
-        plot_row_within_timerange(target_chain_check_robot_collision, trace_path, [init_ns, fini_ns], fig, "Collision checking", "Collision checking self")
+        plot_row_within_timerange(target_chain_check_self_collision, trace_path, [init_ns, fini_ns], fig, "Collision checking", "Collision checking self")
 
         # Collision checking -- FCL object construction
         target_chain_fcl_object_construction = [
