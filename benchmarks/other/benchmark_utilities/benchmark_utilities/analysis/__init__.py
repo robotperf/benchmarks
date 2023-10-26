@@ -1125,6 +1125,8 @@ class BenchmarkAnalyzer:
                 "Collision checking", 
                 "FCL object construction",
                 "FCL collision computation",
+                "Broad phase analysis",
+                "Narrow phase analysis",
                 "Direct kinematics", 
                 "Control"
             ]
@@ -1154,6 +1156,10 @@ class BenchmarkAnalyzer:
                 "Collision checking self": "#FC6E6E",
                 "FCL object construction": "#D68A7E",
                 "FCL collision computation": "#B05444",
+                "Broad phase analysis": "#B05444",
+                "Narrow phase analysis": "#B05444",
+                "Narrow phase initialize": "#000000",
+                "Narrow phase collide": "#000000",
                 "Direct kinematics": "#334E58",
                 "Control": "#333A3B"
             }
@@ -1406,6 +1412,38 @@ class BenchmarkAnalyzer:
         ]
 
         plot_row_within_timerange(target_chain_fcl_collision_computation, trace_path, [init_ns, fini_ns], fig, "FCL collision computation", "FCL collision computation")
+        
+        # Collision checking -- Broad phase
+        target_chain_fcl_broad_phase = [
+            "robotcore_fcl:robotcore_fcl_broad_phase_solver_general_init",       # 0
+            "robotcore_fcl:robotcore_fcl_broad_phase_solver_general_fini"        # 1
+        ]
+
+        plot_row_within_timerange(target_chain_fcl_broad_phase, trace_path, [init_ns, fini_ns], fig, "Broad phase analysis", "Broad phase analysis")
+
+        # Collision checking -- Narrow phase: general
+        target_chain_fcl_narrow_phase_general = [
+            "robotcore_fcl:robotcore_fcl_narrow_phase_solver_general_init",       # 0
+            "robotcore_fcl:robotcore_fcl_narrow_phase_solver_general_fini"        # 1
+        ]
+
+        plot_row_within_timerange(target_chain_fcl_narrow_phase_general, trace_path, [init_ns, fini_ns], fig, "Narrow phase analysis", "Narrow phase analysis")
+
+        # Collision checking -- Narrow phase: initialize
+        target_chain_fcl_narrow_phase_initialize = [
+            "robotcore_fcl:robotcore_fcl_narrow_phase_solver_initialize_init",       # 0
+            "robotcore_fcl:robotcore_fcl_narrow_phase_solver_initialize_fini"        # 1
+        ]
+
+        plot_row_within_timerange(target_chain_fcl_narrow_phase_initialize, trace_path, [init_ns, fini_ns], fig, "Narrow phase analysis", "Narrow phase initialize")
+
+        # Collision checking -- Narrow phase: collide
+        target_chain_fcl_narrow_phase_collide = [
+            "robotcore_fcl:robotcore_fcl_narrow_phase_solver_collide_init",       # 0
+            "robotcore_fcl:robotcore_fcl_narrow_phase_solver_collide_fini"        # 1
+        ]
+
+        plot_row_within_timerange(target_chain_fcl_narrow_phase_collide, trace_path, [init_ns, fini_ns], fig, "Narrow phase analysis", "Narrow phase collide")
 
         # Direct kinematics
         target_chain_direct_kinematics = [
