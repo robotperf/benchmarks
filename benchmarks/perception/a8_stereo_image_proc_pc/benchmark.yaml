@@ -1,0 +1,7 @@
+description: 'The stereo_image_proc::PointCloudNode node within the [stereo_image_proc](https://github.com/ros-perception/image_pipeline/tree/humble/stereo_image_proc)
+Combines a rectified color image and disparity image to produce a point cloud.'
+graph: ../../../imgs/a8_stereo_image_proc_pc_graph.png
+id: a8
+name: a8_stereo_image_proc_pc
+reproduction: 
+results:

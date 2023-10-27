@@ -55,22 +55,22 @@ else:
     POWER = "off"
 
 def launch_setup(container_prefix, container_sigterm_timeout):
-    """Generate launch description for benchmarking stereo_image_proc DisparityNode."""
+    """Generate launch description for benchmarking stereo_image_proc_pc PointCloudNode."""
 
     data_loader_node = ComposableNode(
         name='DataLoaderNode',
-        namespace=TestDisparityNode.generate_namespace(),
+        namespace=TestPointCloudNode.generate_namespace(),
         package='ros2_benchmark',
         plugin='ros2_benchmark::DataLoaderNode',
-        remappings=[('left_camera/image_raw', 'data_loader/left_camera/image'),
-                    ('left_camera/camera_info', 'data_loader/left_camera/camera_info'),
-                    ('right_camera/image_raw', 'data_loader/right_camera/image'),
-                    ('right_camera/camera_info', 'data_loader/right_camera/camera_info')]                    
+        remappings=[('/r2b/hawk_0_left_rgb_image', 'data_loader/left_camera/image'),
+                    ('/r2b/hawk_0_left_rgb_camera_info', 'data_loader/left_camera/camera_info'),
+                    ('/r2b/hawk_0_right_rgb_image', 'data_loader/right_camera/image'),
+                    ('/r2b/hawk_0_right_rgb_camera_info', 'data_loader/right_camera/camera_info')]                    
     )
 
     playback_node = ComposableNode(
         name='PlaybackNode',
-        namespace=TestDisparityNode.generate_namespace(),
+        namespace=TestPointCloudNode.generate_namespace(),
         package='ros2_benchmark',
         plugin='ros2_benchmark::PlaybackNode',
         parameters=[{
@@ -80,107 +80,143 @@ def launch_setup(container_prefix, container_sigterm_timeout):
                 'sensor_msgs/msg/Image',
                 'sensor_msgs/msg/CameraInfo'],
         }],
-        remappings=[('buffer/input0', 'data_loader/left_camera/image'),
+        remappings=[('buffer/input0', '/r2b/data_loader/left_camera/image'),
                     ('input0', 'left_camera/image_raw'),
-                    ('buffer/input1', 'data_loader/left_camera/camera_info'),
+                    ('buffer/input1', '/r2b/data_loader/left_camera/camera_info'),
                     ('input1', 'left_camera/camera_info'),
-                    ('buffer/input2', 'data_loader/right_camera/image'),
+                    ('buffer/input2', '/r2b/data_loader/right_camera/image'),
                     ('input2', 'right_camera/image_raw'),
-                    ('buffer/input3', 'data_loader/right_camera/camera_info'),
+                    ('buffer/input3', '/r2b/data_loader/right_camera/camera_info'),
                     ('input3', 'right_camera/camera_info')],                   
     )
-
+    disparity_node = ComposableNode(
+        namespace="robotperf/preprocessing",
+        package="stereo_image_proc",
+        plugin="stereo_image_proc::DisparityNode",
+        name="stereo_image_proc_disparity_node",
+        remappings=[
+            ('left/camera_info', '/r2b/left_camera/camera_info'),
+            ('left/image_rect', '/r2b/left_camera/image_raw'),
+            ('right/camera_info', '/r2b/right_camera/camera_info'),
+            ('right/image_rect', '/r2b/right_camera/image_raw'),                    
+        ],
+        extra_arguments=[{'use_intra_process_comms': True}],
+    )
     input_node_left = ComposableNode(
         package="a1_perception_2nodes",
-        namespace="robotperf",
         plugin="robotperf::perception::ImageInputComponent",
-        name="image_input_component",
+        name="image_input_component_left",
+        namespace="robotperf/input",
         parameters=[
             {"input_topic_name":"/robotperf/input/left_input/left_image_raw"}
         ],
         remappings=[
             ("image", "/r2b/left_camera/image_raw"),
-            ("camera_info", "/r2b/left_camera/camera_info"),
+            ("camera_info", "/r2b/left_camera/camera_info")
         ],
         extra_arguments=[{'use_intra_process_comms': True}],
     )
-
     input_node_right = ComposableNode(
         package="a1_perception_2nodes",
-        namespace="robotperf",
         plugin="robotperf::perception::ImageInputComponent",
-        name="image_input_component",
+        name="image_input_component_right",
+        namespace="robotperf/input",
         parameters=[
             {"input_topic_name":"/robotperf/input/right_input/right_image_raw"}
         ],
         remappings=[
             ("image", "/r2b/right_camera/image_raw"),
-            ("camera_info", "/r2b/right_camera/camera_info"),
+            ("camera_info", "/r2b/right_camera/camera_info")
         ],
         extra_arguments=[{'use_intra_process_comms': True}],
     )
 
-    disparity_node = ComposableNode(
+    input_disparity_node = ComposableNode(
+        package="a8_stereo_image_proc_pc",
+        namespace="robotperf/input",
+        plugin="robotperf::perception::DisparityInputComponent",
+        name="disparity_input_component",
+        parameters=[
+            {"prev_topic_name":"/robotperf/preprocessing/disparity",
+            "post_topic_name":"/robotperf/input/disparity"}
+        ],
+        extra_arguments=[{'use_intra_process_comms': True}],
+    )
+    pc_node_black_box = ComposableNode(
         namespace="robotperf/benchmark",
         package="stereo_image_proc",
-        plugin="stereo_image_proc::DisparityNode",
-        name="disparity_node",
+        plugin="stereo_image_proc::PointCloudNode",
+        name="stereo_image_proc_pc_node",
         remappings=[
+            ('left/image_rect_color', '/r2b/right_camera/image_raw'),
+            ('left/camera_info', '/r2b/left_camera/camera_info'),
+            ('right/camera_info', '/r2b/right_camera/camera_info'),
+            ('disparity', '/robotperf/preprocessing/disparity'),     
+        ],
+        extra_arguments=[{'use_intra_process_comms': True}],
+    )
+
+    pc_node_grey_box = ComposableNode(
+        namespace="robotperf/benchmark",
+        package="stereo_image_proc",
+        plugin="stereo_image_proc::PointCloudNode",
+        name="stereo_image_proc_pc_node",
+        remappings=[
+            ('left/image_rect_color', '/robotperf/input/left_input/left_image_raw'),
             ('left/camera_info', '/robotperf/input/left_input/camera_info'),
-            ('left/image_rect', '/robotperf/input/left_input/left_image_raw'),
             ('right/camera_info', '/robotperf/input/right_input/camera_info'),
-            ('right/image_rect', '/robotperf/input/right_input/right_image_raw'),                    
+            ('disparity', '/robotperf/input/disparity'),     
         ],
         extra_arguments=[{'use_intra_process_comms': True}],
     )
 
     output_node = ComposableNode(
-        package="a3_stereo_image_proc",
+        package="a8_stereo_image_proc_pc",
         namespace="robotperf",
-        plugin="robotperf::perception::DisparityOutputComponent",
-        name="disparity_output_component",
+        plugin="robotperf::perception::PcOutputComponent",
+        name="pc_output_component",
         parameters=[
-            {"output_topic_name":"/robotperf/benchmark/disparity"}
+            {"output_topic_name":"/robotperf/benchmark/points2"}
         ],
         extra_arguments=[{'use_intra_process_comms': True}],
     )
 
     monitor_node = ComposableNode(
         name='MonitorNode',
-        namespace=TestDisparityNode.generate_namespace(),
+        namespace=TestPointCloudNode.generate_namespace(),
         package='ros2_benchmark',
         plugin='ros2_benchmark::MonitorNode',
         parameters=[{
-            'monitor_data_format': 'stereo_msgs/msg/DisparityImage',
-            'monitor_power_data_format': 'power_msgs/msg/Power',
+            'monitor_data_format': 'sensor_msgs/msg/PointCloud2',
+            # 'monitor_power_data_format': 'power_msgs/msg/Power',
         }],
         remappings=[
-            ('output', '/robotperf/benchmark/disparity')],
+            ('output', '/robotperf/benchmark/points2')],
     )
 
     if OPTION == 'with_monitor_node':
         composable_node_descriptions_option=[
             data_loader_node,
             playback_node,
-            input_node_left,
-            input_node_right,
             disparity_node,
-            output_node,
+            pc_node_black_box,
             monitor_node           
         ]
     else:
         composable_node_descriptions_option=[
             data_loader_node,
             playback_node,
+            disparity_node,
             input_node_left,
             input_node_right,
-            disparity_node,
+            input_disparity_node,
+            pc_node_grey_box,
             output_node,           
         ]
 
     composable_node_container = ComposableNodeContainer(
         name='container',
-        namespace=TestDisparityNode.generate_namespace(),
+        namespace=TestPointCloudNode.generate_namespace(),
         package='rclcpp_components',
         executable='component_container_mt',
         prefix=container_prefix,
@@ -215,12 +251,12 @@ def launch_setup(container_prefix, container_sigterm_timeout):
         return [composable_node_container]
 
 
-class TestDisparityNode(ROS2BenchmarkTest):
-    """Performance test for stereo_image_proc DisparityNode."""
+class TestPointCloudNode(ROS2BenchmarkTest):
+    """Performance test for stereo_image_proc PointCloudNode."""
 
     # Custom configurations
     config = ROS2BenchmarkConfig(
-        benchmark_name='stereo_image_proc::DisparityNode Benchmark',
+        benchmark_name='stereo_image_proc::PointCloudNode Benchmark',
         input_data_path=ROSBAG_PATH,
         # Upper and lower bounds of peak throughput search window
         publisher_upper_frequency=30.0,
@@ -265,4 +301,4 @@ class TestDisparityNode(ROS2BenchmarkTest):
             print(str_out)
      
 def generate_test_description():
-    return TestDisparityNode.generate_test_description_with_nsys(launch_setup)
+    return TestPointCloudNode.generate_test_description_with_nsys(launch_setup)

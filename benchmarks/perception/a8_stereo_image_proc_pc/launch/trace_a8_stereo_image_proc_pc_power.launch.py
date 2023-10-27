@@ -5,7 +5,7 @@
 #    @@@@@ @@  @@    @@@@
 #    @@@@@ @@  @@    @@@@ Copyright (c) 2023, Acceleration Robotics®
 #    @@@@@ @@  @@    @@@@ Author: Víctor Mayoral Vilches <victor@accelerationrobotics.com>
-#    @@@@@ @@  @@    @@@@
+#    @@@@@ @@  @@    @@@@ Author: Alejandra Martínez Fariña <alex@accelerationrobotics.com>
 #    @@@@@@@@@&@@@@@@@@@@
 #    @@@@@@@@@@@@@@@@@@@@
 #
@@ -31,14 +31,17 @@ from tracetools_launch.action import Trace
 from tracetools_trace.tools.names import DEFAULT_EVENTS_ROS
 from tracetools_trace.tools.names import DEFAULT_EVENTS_KERNEL
 from tracetools_trace.tools.names import DEFAULT_CONTEXT
- 
+
+POWER_LIB = os.environ.get('POWER_LIB')
+
 def generate_launch_description():
      # Trace
     trace = Trace(
-        session_name="a3_stereo_image_proc",
+        session_name="a8_stereo_image_proc_pc",
         events_ust=[
             "robotperf_benchmarks:*",
             "ros2_image_pipeline:*",
+            "robotcore_power:*",
             "ros2:*"
         ]
         + DEFAULT_EVENTS_ROS,
@@ -46,6 +49,27 @@ def generate_launch_description():
                 'kernel': [],
                 'userspace': ['vpid', 'vtid', 'procname'],
         },
+    )
+
+    power_container = ComposableNodeContainer(
+        name="power_container",
+        namespace="robotcore/power",
+        package="rclcpp_components",
+        executable="component_container",
+        composable_node_descriptions=[
+            ComposableNode(
+                package="robotcore-power",
+                namespace="robotcore/power",
+                plugin="robotcore::power::PowerComponent",
+                name="power_component",
+                parameters=[
+                    {"publish_rate": 20.0},
+                    {"power_lib": POWER_LIB}
+                ],
+            ),
+            
+        ],
+        output="screen",
     )
  
     perception_container = ComposableNodeContainer(
@@ -55,10 +79,23 @@ def generate_launch_description():
         executable="component_container",
         composable_node_descriptions=[
             ComposableNode(
+                namespace="robotperf/preprocessing",
+                package="stereo_image_proc",
+                plugin="stereo_image_proc::DisparityNode",
+                name="stereo_image_proc_disparity_node",
+                remappings=[
+                    ('left/camera_info', '/hawk_0_left_rgb_camera_info'),
+                    ('left/image_rect', '/hawk_0_left_rgb_image'),
+                    ('right/camera_info', '/hawk_0_right_rgb_camera_info'),
+                    ('right/image_rect', '/hawk_0_right_rgb_image'),                    
+                ],
+                extra_arguments=[{'use_intra_process_comms': True}],
+            ),
+            ComposableNode(
                 package="a1_perception_2nodes",
                 plugin="robotperf::perception::ImageInputComponent",
-                name="image_input_component",
-                namespace="robotperf",
+                name="image_input_component_left",
+                namespace="robotperf/input",
                 parameters=[
                     {"input_topic_name":"/robotperf/input/left_input/left_image_raw"}
                 ],
@@ -71,8 +108,8 @@ def generate_launch_description():
             ComposableNode(
                 package="a1_perception_2nodes",
                 plugin="robotperf::perception::ImageInputComponent",
-                name="image_input_component",
-                namespace="robotperf",
+                name="image_input_component_right",
+                namespace="robotperf/input",
                 parameters=[
                     {"input_topic_name":"/robotperf/input/right_input/right_image_raw"}
                 ],
@@ -82,16 +119,15 @@ def generate_launch_description():
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],
             ),
+
             ComposableNode(
-                namespace="robotperf/benchmark",
-                package="stereo_image_proc",
-                plugin="stereo_image_proc::DisparityNode",
-                name="stereo_image_proc_disparity_node",
-                remappings=[
-                    ('left/camera_info', '/robotperf/input/left_input/camera_info'),
-                    ('left/image_rect', '/robotperf/input/left_input/left_image_raw'),
-                    ('right/camera_info', '/robotperf/input/right_input/camera_info'),
-                    ('right/image_rect', '/robotperf/input/right_input/right_image_raw'),                    
+                package="a8_stereo_image_proc_pc",
+                namespace="robotperf/input",
+                plugin="robotperf::perception::DisparityInputComponent",
+                name="disparity_input_component",
+                parameters=[
+                    {"prev_topic_name":"/robotperf/preprocessing/disparity",
+                    "post_topic_name":"/robotperf/input/disparity"}
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],
             ),
@@ -101,10 +137,10 @@ def generate_launch_description():
                 plugin="stereo_image_proc::PointCloudNode",
                 name="stereo_image_proc_pc_node",
                 remappings=[
-                    ('left/camera_info', '/robotperf/input/left_input/camera_info'),
                     ('left/image_rect_color', '/robotperf/input/left_input/left_image_raw'),
+                    ('left/camera_info', '/robotperf/input/left_input/camera_info'),
                     ('right/camera_info', '/robotperf/input/right_input/camera_info'),
-                    ('disparity', '/robotperf/benchmark/disparity'),                         
+                    ('disparity', '/robotperf/input/disparity'),     
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],
             ),
@@ -117,7 +153,7 @@ def generate_launch_description():
                     {"output_topic_name":"/robotperf/benchmark/points2"}
                 ],
                 extra_arguments=[{'use_intra_process_comms': True}],
-            ),
+            )
         ],
         output="screen",
     )
@@ -126,5 +162,6 @@ def generate_launch_description():
         # LTTng tracing
         trace,
         # image pipeline
-        perception_container
+        perception_container,
+        power_container
     ])
