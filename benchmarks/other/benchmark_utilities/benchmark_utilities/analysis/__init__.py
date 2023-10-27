@@ -1158,8 +1158,9 @@ class BenchmarkAnalyzer:
                 "FCL collision computation": "#B05444",
                 "Broad phase analysis": "#B05444",
                 "Narrow phase analysis": "#B05444",
-                "Narrow phase initialize": "#000000",
-                "Narrow phase collide": "#000000",
+                "Narrow phase initialize": "#AAABBC",
+                "Narrow phase collide": "#8B8982",
+                "Narrow phase obbDisjoint": "#373F47",
                 "Direct kinematics": "#334E58",
                 "Control": "#333A3B"
             }
@@ -1210,7 +1211,8 @@ class BenchmarkAnalyzer:
         index_to_plot = len(plan_and_traj_execution_msg_sets) // 2
         msg_set = plan_and_traj_execution_msg_sets[index_to_plot]
         init_ns = msg_set[0].default_clock_snapshot.ns_from_origin
-        fini_ns = msg_set[-1].default_clock_snapshot.ns_from_origin
+        # fini_ns = msg_set[-1].default_clock_snapshot.ns_from_origin
+        fini_ns = init_ns + 5*1e6 # just plot 5 ms from the start
         fig.x_range.start = 0
         # fig.x_range.end = fini_ns / 1e6
 
@@ -1444,6 +1446,14 @@ class BenchmarkAnalyzer:
         ]
 
         plot_row_within_timerange(target_chain_fcl_narrow_phase_collide, trace_path, [init_ns, fini_ns], fig, "Narrow phase analysis", "Narrow phase collide")
+
+        # Collision checking -- Narrow phase: obbDisjoint
+        target_chain_fcl_narrow_phase_obbdisjoint = [
+            "robotcore_fcl:robotcore_fcl_narrow_phase_solver_obbdisjoint_init",       # 0
+            "robotcore_fcl:robotcore_fcl_narrow_phase_solver_obbdisjoint_fini"        # 1
+        ]
+
+        plot_row_within_timerange(target_chain_fcl_narrow_phase_obbdisjoint, trace_path, [init_ns, fini_ns], fig, "Narrow phase analysis", "Narrow phase obbDisjoint")
 
         # Direct kinematics
         target_chain_direct_kinematics = [
