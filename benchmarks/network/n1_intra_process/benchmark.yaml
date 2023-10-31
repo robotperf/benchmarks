@@ -6,14 +6,24 @@ reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchma
   and review the launch files to reproduce this package.
 results:
 - result:
-    category: placeholder
+    category: workstation - workstation
     datasource: simulation
-    hardware: Intel i7-12700H (ROBOTCORE Transforms)
+    hardware: Intel i5-13600K - Intel i5-13600K 
     metric: latency
     metric_unit: ms
-    note: mean 0.0455 ms, RMS 0.0580 ms, max 0.9370 ms, min 0.0047 ms
-    timestampt: 31-08-2023
+    note: median 0.0172 ms, mean 0.0218 ms, 1000000 samples, 0.00 % lost messages, Fast DDS
+    timestampt: 31-10-2023
     type: grey
-    value: 0.9370
-short: Network computational graph composed by two components.
+    value: 0.0172
+- result:
+    category: embedded - embedded
+    datasource: simulation
+    hardware: Agilex7 HPS - Agilex7 HPS 
+    metric: latency
+    metric_unit: ms
+    note: median 0.2010 ms, mean 0.2059 ms, 998582 samples, 0.00 % lost messages, Fast DDS
+    timestampt: 31-10-2023
+    type: grey
+    value: 0.2010
+short: Local computational graph composed by two components.
 

@@ -1,4 +1,4 @@
-description: 'A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for inter-process communication.'
+description: 'A simple local computational graph composed by two nodes. Used to demonstrate a simple ping-pong for inter-process communication.'
 graph: ../../../imgs/n2_inter_process.png
 id: n2
 name: n2_inter_process
@@ -6,14 +6,24 @@ reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchma
   and review the launch files to reproduce this package.
 results:
 - result:
-    category: placeholder
+    category: workstation - workstation
     datasource: simulation
-    hardware: Intel i7-12700H (ROBOTCORE Transforms)
+    hardware: Intel i5-13600K - Intel i5-13600K  
     metric: latency
     metric_unit: ms
-    note: mean 0.0455 ms, RMS 0.0580 ms, max 0.9370 ms, min 0.0047 ms
-    timestampt: 31-08-2023
+    note: median 0.0283 ms, mean 0.0289 ms, 1000000 samples, 0.00 % lost messages, Fast DDS
+    timestampt: 31-10-2023
     type: grey
-    value: 0.9370
-short: Network computational graph composed by two nodes.
+    value: 0.0283
+- result:
+    category: embedded - embedded
+    datasource: simulation
+    hardware: Agilex7 HPS - Agilex7 HPS 
+    metric: latency
+    metric_unit: ms
+    note: median 0.3801 ms, mean 0.4285 ms, 998222 samples, 0.00 % lost messages, Fast DDS
+    timestampt: 31-10-2023
+    type: grey
+    value: 0.3801
+short: Local computational graph composed by two nodes.
 
