@@ -919,7 +919,7 @@ class ReportVerb(VerbExtension):
         hardware_names = [hardware_name + '⚫' for hardware_name in hardware_names] + [hardware_name + '⚪' for hardware_name in hardware_names]
 
         # Create a figure and axis
-        fig, ax = plt.subplots(figsize=(len(hardware_names) * 0.5, 6))  # Adjusting the width based on number of hardware items
+        fig, ax = plt.subplots(figsize=(len(hardware_names) * 0.5, 8))  # Adjusting the width based on number of hardware items
 
         # For each hardware, plot a colored bar
         for i, hardware in enumerate(hardware_names):
@@ -1047,6 +1047,7 @@ class ReportVerb(VerbExtension):
         control_group = ["c1", "c2", "c3", "c4", "c5"]
         # manipulation_group = ["d1", "d2", "d3", "d4", "d5", "d6"]
         manipulation_group = ["d2", "d3", "d4", "d5", "d6"]
+        middleware_group = ["n1", "n2", "n3"]
 
         category_groups = [perception_group, localization_group, control_group, manipulation_group]
         category_names = ["Perception", "Localization", "Control", "Manipulation"]

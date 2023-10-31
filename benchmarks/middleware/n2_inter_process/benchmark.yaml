@@ -8,7 +8,7 @@ results:
 - result:
     category: workstation - workstation
     datasource: simulation
-    hardware: Intel i5-13600K - Intel i5-13600K  
+    hardware: Intel i5-13600K
     metric: latency
     metric_unit: ms
     note: median 0.0283 ms, mean 0.0289 ms, 1000000 samples, 0.00 % lost messages, Fast DDS
@@ -18,7 +18,7 @@ results:
 - result:
     category: embedded - embedded
     datasource: simulation
-    hardware: Agilex7 HPS - Agilex7 HPS 
+    hardware: Intel Agilex® 7 FPGA F-Series
     metric: latency
     metric_unit: ms
     note: median 0.3801 ms, mean 0.4285 ms, 998222 samples, 0.00 % lost messages, Fast DDS
