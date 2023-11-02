@@ -145,7 +145,7 @@ def generate_launch_description():
     # Define the ExecuteProcess action to run the Python script
     analyzer = ExecuteProcess(
         cmd=[
-            'python3', "src/benchmarks/benchmarks/network/n3_intra_network/launch/analyze_n3_intra_network.launch.py",
+            'python3', "src/benchmarks/benchmarks/middleware/n3_intra_network/launch/analyze_n3_intra_network.launch.py",
             '--hardware_device_type', LaunchConfiguration('hardware_device_type'),
             '--trace_path', LaunchConfiguration('trace_path'),
             '--metrics', LaunchConfiguration('metrics')],
