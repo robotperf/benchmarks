@@ -25,5 +25,55 @@ results:
     timestampt: 31-10-2023
     type: grey
     value: 0.2010
+- result:
+    category: workstation - workstation
+    datasource: simulation
+    hardware: Intel i7-12700H
+    metric: latency
+    metric_unit: ms
+    note: median 0.0687 ms, mean 0.1000 ms, 1000000 samples, 0.00 % lost messages, Fast DDS
+    timestampt: 07-11-2023
+    type: grey
+    value: 0.0687
+- result:
+    category: workstation - workstation
+    datasource: simulation
+    hardware: Intel i7-12700H
+    metric: latency
+    metric_unit: ms
+    note: median 0.0902 ms, mean 0.0981 ms, 1000000 samples, 0.00 % lost messages, Cyclone DDS
+    timestampt: 07-11-2023
+    type: grey
+    value: 0.0902
+- result:
+    category: workstation - workstation
+    datasource: simulation
+    hardware: Intel i7-12700H
+    metric: latency
+    metric_unit: ms
+    note: median 0.0850 ms, mean 0.1044 ms, 1000000 samples, 0.00 % lost messages, Gurum DDS
+    timestampt: 07-11-2023
+    type: grey
+    value: 0.0850
+- result:
+    category: workstation - workstation
+    datasource: simulation
+    hardware: Intel i7-12700H
+    metric: latency
+    metric_unit: ms
+    note: median 0.0633 ms, mean 0.0944 ms, 1000000 samples, 0.00 % lost messages, Connext DDS
+    timestampt: 07-11-2023
+    type: grey
+    value: 0.0633 
+- result:
+    category: workstation - workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G
+    metric: latency
+    metric_unit: ms
+    note: median 0.1460 ms, mean 0.1409 ms, 1000000 samples, 0.00 % lost messages, Connext DDS
+    timestampt: 07-11-2023
+    type: grey
+    value: 0.1460 
 short: Local computational graph composed by two components.
 
