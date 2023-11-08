@@ -166,5 +166,5 @@ def generate_launch_description():
         trace,
         xarm6_manipulation_benchmarks,
         shutdown_after_benchmark,
-        power_container
+        # power_container
     ])

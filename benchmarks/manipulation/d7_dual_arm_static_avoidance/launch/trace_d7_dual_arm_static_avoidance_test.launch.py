@@ -106,5 +106,5 @@ def generate_launch_description():
     return LaunchDescription([
         dual_arm_static_avoidance,
         trace,
-        power_container
+        # power_container
     ])
