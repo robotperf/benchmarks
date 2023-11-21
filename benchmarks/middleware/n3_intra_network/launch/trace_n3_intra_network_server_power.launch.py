@@ -72,14 +72,14 @@ def generate_launch_description():
     )
 
     power_container = ComposableNodeContainer(
-        name="power_container",
+        name="power_container_server",
         namespace="robotcore/power",
         package="rclcpp_components",
         executable="component_container",
         composable_node_descriptions=[
             ComposableNode(
                 package="robotcore-power",
-                namespace="robotcore/power",
+                namespace="robotcore/server/power",
                 plugin="robotcore::power::PowerComponent",
                 name="power_component",
                 parameters=[
@@ -96,5 +96,5 @@ def generate_launch_description():
     return LaunchDescription([
         trace,
         server_node,
-        power_container
+        power_container_server
     ])
