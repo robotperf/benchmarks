@@ -88,5 +88,5 @@ def generate_launch_description():
     return LaunchDescription([
         client_node,
         trace,
-        power_container_client
+        power_container
     ])

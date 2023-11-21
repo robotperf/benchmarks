@@ -96,5 +96,5 @@ def generate_launch_description():
     return LaunchDescription([
         trace,
         server_node,
-        power_container_server
+        power_container
     ])
