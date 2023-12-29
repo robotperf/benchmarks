@@ -15,7 +15,13 @@
 			"NODE_VERSION": "lts/*"
 		}
 	},
-	"workspaceMount": "source=${localWorkspaceFolder},target=/tmp/benchmark_ws/src/benchmarks,type=bind,consistency=cached", 
+	
+	"mounts": [
+		"source=${localWorkspaceFolder},target=/tmp/benchmark_ws/src/benchmarks,type=bind,consistency=cached",
+		"source=${localWorkspaceFolder}/../rosbags,target=/tmp/benchmark_ws/src/rosbags,type=bind,consistency=cached",
+		"source=${localWorkspaceFolder}/../ros2_benchmark,target=/tmp/benchmark_ws/src/ros2_benchmark,type=bind,consistency=cached"
+	],
+	// "workspaceMount": "source=${localWorkspaceFolder},target=/tmp/benchmark_ws/src/benchmarks,type=bind,consistency=cached", 
 	"workspaceFolder": "/tmp/benchmark_ws/",
 
 	// Configure tool-specific properties.
@@ -59,14 +65,16 @@
 																		// the dockerfile to cache
 																		// requirements in container
 
+																		// Use 'postCreateCommand' to run commands after the container is created.
+
 	// "postStartCommand": ["nohup", "ros2", "topic", "hz", "&"],
 
 	// // Comment out to connect as root instead. More info: https://aka.ms/vscode-remote/containers/non-root.
 	// "remoteUser": "vscode"
-
+	
 	"runArgs": [
-					"--privileged",
-					"-e", "DISPLAY=host.docker.internal:0",
-    				"-v", "/tmp/.X11-unix:/tmp/.X11-unix"
-				]
+		"--privileged",
+		"-e", "DISPLAY=host.docker.internal:0",
+		"-v", "/tmp/.X11-unix:/tmp/.X11-unix"
+	]
 }
