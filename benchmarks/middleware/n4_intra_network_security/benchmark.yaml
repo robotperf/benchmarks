@@ -1,10 +1,10 @@
 description: 'A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for intra-network communication.'
-graph: ../../../imgs/n3_intra_network.png
-id: n3
-name: n3_intra_network
-reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/network/n3_intra_network
+graph: ../../../imgs/n4_intra_network_security.png
+id: n4
+name: n4_intra_network_security
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/network/n4_intra_network_security
   and review the launch files to reproduce this package.
-results:
+results: @todo  
 - result:
     category: workstation - workstation
     datasource: simulation

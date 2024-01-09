@@ -1,22 +1,24 @@
-# n3_intra_network
+# n4_intra_network_security
 
 Network computational graph composed by two nodes.
 
 ### ID
-n3
+n4
 
 ### Description
 A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for intra-network communication.
 
-![](../../../imgs/n3_intra_network.png)
+![](../../../imgs/n4_intra_network_security.png)
 
 ## Reproduction Steps
 
 ```bash
-Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/network/n3_intra_network and review the launch files to reproduce this package.
+Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/network/n4_intra_network_security and review the launch files to reproduce this package.
 ```
 
 ## Results
+
+@todo
 
 | Type | Hardware | Metric | Value | Category | Timestamp | Note | Data Source |
 | --- | --- | --- | --- | --- | --- | --- | --- |
