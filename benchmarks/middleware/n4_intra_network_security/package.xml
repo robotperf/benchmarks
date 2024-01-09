@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
+<package format="2">
+  <name>n3_intra_network</name>
+  <version>0.1.0</version>
+  <description>
+    A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for intra-network communication.
+  </description>
+  <maintainer email="alex@accelerationrobotics.com">Alejandra Martínez Fariña</maintainer>
+  <license>Apache License 2.0</license>
+  <author email="alex@accelerationrobotics.com">Alejandra Martínez Fariña</author>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <test_depend>ament_lint_auto</test_depend>
+  <test_depend>ament_lint_common</test_depend>
+
+  <export>
+    <build_type>ament_cmake</build_type>
+  </export>
+</package>
+
