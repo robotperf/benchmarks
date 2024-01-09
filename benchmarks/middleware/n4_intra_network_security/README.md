@@ -32,13 +32,9 @@ export ROS_SECURITY_ENABLE=true
 export ROS_SECURITY_STRATEGY=Enforce
 ros2 launch n4_intra_network_security trace_n4_intra_network_security_server.launch.py # Launch server
 ros2 launch n4_intra_network_security trace_n4_intra_network_security_client.launch.py # Launch client
-
-
 ```
 
 ## Results
-
-@todo
 
 | Type | Hardware | Metric | Value | Category | Timestamp | Note | Data Source |
 | --- | --- | --- | --- | --- | --- | --- | --- |
