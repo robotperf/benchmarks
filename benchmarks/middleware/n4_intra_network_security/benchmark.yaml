@@ -27,27 +27,5 @@ results:
     type: grey
     value: 0.4932
 
-- result:
-    category: workstation - workstation
-    datasource: simulation
-    hardware: Intel i7-8700K (server) <-> AMD Ryzen 5 PRO 4650G (client)
-    metric: latency
-    metric_unit: ms
-    note: median 0.2765 ms, mean 0.3019 ms, 1000000 samples, 0.00 % lost messages, Cyclone DDS
-    timestampt: 01-09-2024
-    type: grey
-    value: 0.2765
-
-- result:
-    category: workstation - workstation
-    datasource: simulation
-    hardware: AMD Ryzen 5 PRO 4650G (server) <-> Intel i7-8700K (client)
-    metric: latency
-    metric_unit: ms
-    note: median 0.3101 ms, mean 0.4329 ms, 1000000 samples, 0.00 % lost messages, Cyclone DDS
-    timestampt: 01-09-2024
-    type: grey
-    value: 0.3101
-
 short: Network computational graph composed by two nodes.
 
