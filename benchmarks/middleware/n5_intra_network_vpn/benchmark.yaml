@@ -8,142 +8,22 @@ results:
 - result:
     category: workstation - workstation
     datasource: simulation
-    hardware: Intel i5-8250U <-> Intel i5-13600K 
+    hardware: Intel i7-8700K (server) <-> AMD Ryzen 5 PRO 4650G (client)
     metric: latency
     metric_unit: ms
-    note: median 0.4243 ms, mean 0.4307 ms, 1000000 samples, 0.00 % lost messages, Fast DDS
-    timestampt: 31-10-2023
+    note: median 0.4974 ms, mean 0.5387 ms, 1000000 samples, 0.00 % lost messages, Cyclone DDS
+    timestampt: 01-10-2024
     type: grey
-    value: 0.4243
-- result:
-    category: workstation - embedded
-    datasource: simulation
-    hardware: Intel i5-13600K <-> Intel Agilex® 7
-    metric: latency
-    metric_unit: ms
-    note: median 0.4457 ms, mean 0.4534 ms, 1000000 samples, 0.00 % lost messages, Fast DDS
-    timestampt: 31-10-2023
-    type: grey
-    value: 0.4457
-- result:
-    category: workstation - embedded
-    datasource: simulation
-    hardware: Intel i5-13600K <-> Intel Agilex® 7
-    metric: latency
-    metric_unit: ms
-    note: median 0.4039 ms, mean 0.4095 ms, 1000000 samples, 0.00 % lost messages, Cyclone DDS
-    timestampt: 31-10-2023
-    type: grey
-    value: 0.4039
-- result:
-    category: workstation - embedded
-    datasource: simulation
-    hardware: Intel i5-13600K <-> Intel Agilex® 7 (ROBOTCORE® ROS 2)
-    metric: latency
-    metric_unit: ms
-    note: median 0.0285 ms, mean 0.1028 ms, 1000000 samples, 0.00 % lost messages, Cyclone DDS
-    timestampt: 31-10-2023
-    type: grey
-    value: 0.0285
-- result:
-    category: workstation - embedded
-    datasource: simulation
-    hardware: Intel i5-13600K <-> Intel Agilex® 7 (ROBOTCORE® ROS 2) <-> HPS
-    metric: latency
-    metric_unit: ms
-    note: median 0.0411 ms, mean 0.1035 ms, 1000000 samples, 0.00 % lost messages, Cyclone DDS
-    timestampt: 31-10-2023
-    type: grey
-    value: 0.0411
-- result:
-    category: embedded - embedded
-    datasource: simulation
-    hardware: Intel Agilex® 7 (ROBOTCORE® ROS 2) <-> Intel Agilex® 7 (ROBOTCORE® ROS 2)
-    metric: latency
-    metric_unit: ms
-    note: median 0.0049 ms, mean 0.0056 ms, 1000000 samples, 0.00 % lost messages, Cyclone DDS
-    timestampt: 31-10-2023
-    type: grey
-    value: 0.0049
+    value: 0.4974
 - result:
     category: workstation - workstation
     datasource: simulation
-    hardware: Intel i5-13600K <->  Intel i5-8250U
+    hardware: AMD Ryzen 5 PRO 4650G (server) <-> Intel i7-8700K (client)
     metric: latency
     metric_unit: ms
-    note: median 0.3797 ms, mean 0.4721 ms, 1000000 samples, 0.00 % lost messages, Ecal Dynamic DDS
-    timestampt: 07-11-2023
+    note: median 0.8986 ms, mean 0.9556 ms, 874817 samples, 0.00 % lost messages, Cyclone DDS
+    timestampt: 01-10-2024
     type: grey
-    value: 0.3797
-- result:
-    category: workstation - workstation
-    datasource: simulation
-    hardware: Intel i5-8250U <-> Intel i5-13600K
-    metric: latency
-    metric_unit: ms
-    note: median 0.3661 ms, mean 0.3767 ms, 1000000 samples, 0.00 % lost messages, Ecal Dynamic DDS
-    timestampt: 07-11-2023
-    type: grey
-    value: 0.3661
-- result:
-    category: workstation - workstation
-    datasource: simulation
-    hardware: Intel i7-8700K <-> AMD Ryzen 5 PRO 4650G
-    metric: latency
-    metric_unit: ms
-    note: median 0.5469 ms, mean 0.5465 ms, 780061 samples, 0.00 % lost messages, Connext DDS
-    timestampt: 07-11-2023
-    type: grey
-    value: 0.5469
-- result:
-    category: workstation - workstation
-    datasource: simulation
-    hardware: AMD Ryzen 5 PRO 4650G <-> Intel i7-8700K
-    metric: latency
-    metric_unit: ms
-    note: median 1.1165 ms, mean 1.0618 ms, 1000000 samples, 0.00 % lost messages, Connext DDS
-    timestampt: 07-11-2023
-    type: grey
-    value: 1.1165
-- result:
-    category: workstation - workstation
-    datasource: simulation
-    hardware: Intel i7-8700K <-> AMD Ryzen 5 PRO 4650G
-    metric: latency
-    metric_unit: ms
-    note: median 0.3312 ms, mean 0.3390 ms, 780061 samples, 0.00 % lost messages, Fast DDS
-    timestampt: 07-11-2023
-    type: grey
-    value: 0.3312
-- result:
-    category: workstation - workstation
-    datasource: simulation
-    hardware: AMD Ryzen 5 PRO 4650G <-> Intel i7-8700K
-    metric: latency
-    metric_unit: ms
-    note: median 0.2925 ms, mean 0.2984 ms, 1000000 samples, 0.00 % lost messages, Fast DDS
-    timestampt: 07-11-2023
-    type: grey
-    value: 0.2925
-- result:
-    category: workstation - workstation
-    datasource: simulation
-    hardware: Intel i7-8700K <-> AMD Ryzen 5 PRO 4650G
-    metric: latency
-    metric_unit: ms
-    note: median 0.3219 ms, mean 0.3283 ms, 780061 samples, 0.00 % lost messages, Cyclone DDS
-    timestampt: 07-11-2023
-    type: grey
-    value: 0.3219
-- result:
-    category: workstation - workstation
-    datasource: simulation
-    hardware: AMD Ryzen 5 PRO 4650G <-> Intel i7-8700K
-    metric: latency
-    metric_unit: ms
-    note: median 0.3009 ms, mean 0.3121 ms, 1000000 samples, 0.00 % lost messages, Fast DDS
-    timestampt: 07-11-2023
-    type: grey
-    value: 0.3009
+    value: 0.8986
 short: Network computational graph composed by two nodes.
 
