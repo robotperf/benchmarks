@@ -6,7 +6,7 @@ Network computational graph composed by two nodes.
 n5
 
 ### Description
-A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for intra-network communication.
+A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for inter-network communication via Wireguard.
 
 ![](../../../imgs/n5_inter_network_vpn.png)
 
@@ -14,6 +14,50 @@ A simple network computational graph composed by two nodes. Used to demonstrate 
 
 ```bash
 Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/network/n5_inter_network_vpn and review the launch files to reproduce this package.
+
+# 1) Prior to launching the node, the VPN must be configured and enabled from both sides (client and server).
+
+# Make sure the firewall is not blocking the communication:
+
+# 1.a) Option 1: disable the firewall
+sudo ufw disable
+
+# 1.b) Option 2: specific configuration of the firewall. For example, to allow traffic in computer 1 (10.0.0.1) towards computer 2 (10.0.0.2):
+sudo ufw allow from 10.0.0.2
+sudo ufw allow to 10.0.0.2
+
+
+# 2) Besides, CycloneDDS must be properly configured:
+
+# 2.1) Create cycloneDDS.xml file and dump the following content and replacing the address by those VPN addresses of the computers involved:
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<CycloneDDS xmlns="https://cdds.io/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://cdds.io/config https://raw.githubusercontent.com/eclipse-cyclonedds/cyclonedds/master/etc/cyclonedds.xsd">
+<Domain id="any">
+    <Compatibility><ManySocketsMode>many</ManySocketsMode></Compatibility>
+    <!-- For CycloneDDS in ROS Galactic -->
+    <!-- <General><NetworkInterfaceAddress>enp1s0</NetworkInterfaceAddress></General> -->
+    <!-- For CycloneDDS in ROS Humble or Rolling -->
+    <General><Interfaces><NetworkInterface name="wg0"/></Interfaces></General>
+
+    <Discovery>
+        <Peers><Peer address="10.0.0.1"/><Peer address="10.0.0.2"/></Peers>
+        <ParticipantIndex>auto</ParticipantIndex>
+    </Discovery>
+</Domain>
+</CycloneDDS>
+
+# 2.2) Configure ROS to use CycloneDDS as middleware 
+
+export CYCLONEDDS_URI=file://$PWD/cyclonedds.xml
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+
+# 3) Finally, compile and launch
+colcon build --merge-install
+source install/local_setup.bash
+ros2 launch n5_inter_network_vpn trace_n5_inter_network_vpn_server.launch.py # Launch server
+ros2 launch n5_inter_network_vpn trace_n5_inter_network_vpn_client.launch.py # Launch client
+
 ```
 
 ## Results
