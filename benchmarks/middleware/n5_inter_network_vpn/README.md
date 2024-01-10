@@ -1,19 +1,19 @@
-# n3_intra_network
+# n5_inter_network_vpn
 
 Network computational graph composed by two nodes.
 
 ### ID
-n3
+n5
 
 ### Description
 A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for intra-network communication.
 
-![](../../../imgs/n3_intra_network.png)
+![](../../../imgs/n5_inter_network_vpn.png)
 
 ## Reproduction Steps
 
 ```bash
-Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/network/n3_intra_network and review the launch files to reproduce this package.
+Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/network/n5_inter_network_vpn and review the launch files to reproduce this package.
 ```
 
 ## Results
