@@ -37,12 +37,14 @@ from tracetools_trace.tools.names import DEFAULT_CONTEXT
 POWER_LIB = os.environ.get('POWER_LIB')
 
 def generate_launch_description():
-        
+
     # Trace
     trace = Trace(
-        session_name="n5_inter_network_vpn_client",
+        session_name="n5_intra_network_vpn_server",
         events_ust=[
+            "robotcore_rtps:*",
             "robotcore_power:*",
+            "ros2:*"
             # "lttng_ust_cyg_profile*",
             # "lttng_ust_statedump*",
             # "liblttng-ust-libc-wrapper",
@@ -55,24 +57,29 @@ def generate_launch_description():
         # events_kernel=DEFAULT_EVENTS_KERNEL,
         # context_names=DEFAULT_CONTEXT,
     )
-    
-    client_node = Node(
+        
+    server_node = Node(
         package='cpp_loopback',
-        executable='client',
-        name='client',
+        executable='server',
+        name='server',
         namespace='robotcore',
         output='screen',
+        # parameters=[
+        #     {
+        #         "iterations": 10000,
+        #     }
+        # ],
     )
 
     power_container = ComposableNodeContainer(
-        name="power_container_client",
+        name="power_container_server",
         namespace="robotcore/power",
         package="rclcpp_components",
         executable="component_container",
         composable_node_descriptions=[
             ComposableNode(
                 package="robotcore-power",
-                namespace="robotcore/client/power",
+                namespace="robotcore/server/power",
                 plugin="robotcore::power::PowerComponent",
                 name="power_component",
                 parameters=[
@@ -85,8 +92,9 @@ def generate_launch_description():
         output="screen",
     )
 
+
     return LaunchDescription([
-        client_node,
         trace,
+        server_node,
         power_container
     ])

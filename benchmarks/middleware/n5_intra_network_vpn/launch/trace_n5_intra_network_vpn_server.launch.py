@@ -38,7 +38,7 @@ def generate_launch_description():
 
      # Trace
     trace = Trace(
-        session_name="n5_inter_network_vpn_server",
+        session_name="n5_intra_network_vpn_server",
         events_ust=[
             "robotcore_rtps:*",
             "ros2:*"
