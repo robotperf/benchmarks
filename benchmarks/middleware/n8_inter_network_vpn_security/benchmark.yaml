@@ -1,8 +1,8 @@
-description: 'A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for intra-network communication.'
-graph: ../../../imgs/n6_intra_network_security_vpn.png
-id: n6
-name: n6_intra_network_security_vpn
-reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/network/n6_intra_network_security_vpn
+description: 'A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for inter-network communication.'
+graph: ../../../imgs/n8_inter_network_vpn_security.png
+id: n8
+name: n8_inter_network_vpn_security
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/network/n8_inter_network_vpn_security
   and review the launch files to reproduce this package.
 results:
 - result:

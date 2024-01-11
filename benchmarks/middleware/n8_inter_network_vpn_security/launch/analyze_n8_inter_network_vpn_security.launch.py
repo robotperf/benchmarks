@@ -51,7 +51,7 @@ def main(argv):
     metrics = json.loads(json.dumps(metrics_elements))
  
     # Instantiate the class
-    ba = BenchmarkAnalyzer('n6_intra_network_security_vpn', hardware_device_type)
+    ba = BenchmarkAnalyzer('n8_inter_network_vpn_security', hardware_device_type)
     ba.set_trace_sets_filter_type(filter_type="UID")
     
     if hardware_device_type == 'cpu':
@@ -145,7 +145,7 @@ def generate_launch_description():
     # Define the ExecuteProcess action to run the Python script
     analyzer = ExecuteProcess(
         cmd=[
-            'python3', "src/benchmarks/benchmarks/middleware/n6_intra_network_security_vpn/launch/analyze_n6_intra_network_security_vpn.launch.py",
+            'python3', "src/benchmarks/benchmarks/middleware/n8_inter_network_vpn_security/launch/analyze_n8_inter_network_vpn_security.launch.py",
             '--hardware_device_type', LaunchConfiguration('hardware_device_type'),
             '--trace_path', LaunchConfiguration('trace_path'),
             '--metrics', LaunchConfiguration('metrics')],

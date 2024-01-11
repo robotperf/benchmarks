@@ -1,19 +1,19 @@
-# n6_intra_network_security_vpn
+# n8_inter_network_vpn_security
 
 Network computational graph composed by two nodes.
 
 ### ID
-n6
+n8
 
 ### Description
-A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for intra-network communication with ros2 security enabled and a VPN connecting the two nodes.
+A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for inter-network communication with ros2 security enabled and a VPN connecting the two nodes.
 
-![](../../../imgs/n6_intra_network_security_vpn.png)
+![](../../../imgs/n8_inter_network_vpn_security.png)
 
 ## Reproduction Steps
 
 ```bash
-Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/network/n6_intra_network_security_vpn and review the launch files to reproduce this package.
+Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/network/n8_inter_network_vpn_security and review the launch files to reproduce this package.
 
 Prior to launching the node, security must be enabled from both sides (client and server):
 
@@ -21,8 +21,8 @@ Prior to launching the node, security must be enabled from both sides (client an
 cd my_workspace
 source /opt/ros/humble/setup.bash
 ros2 security create_keystore my_keystore
-ros2 security create_enclave my_keystore /n6/loopback_server # or create_key
-ros2 security create_enclave my_keystore /n6/loopback_client # or create_key
+ros2 security create_enclave my_keystore /n8/loopback_server # or create_key
+ros2 security create_enclave my_keystore /n8/loopback_client # or create_key
 
 # 2) From each side: set up environment variables and run server / client
 export ROS_SECURITY_KEYSTORE=/path/to/my_keystore
@@ -68,8 +68,8 @@ export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 # 5) Finally, compile and launch
 colcon build --merge-install
 source install/local_setup.bash
-ros2 launch n6_intra_network_security_vpn trace_n6_intra_network_security_vpn_server.launch.py # Launch server
-ros2 launch n6_intra_network_security_vpn trace_n6_intra_network_security_vpn_client.launch.py # Launch client
+ros2 launch n8_inter_network_vpn_security trace_n8_inter_network_vpn_security_server.launch.py # Launch server
+ros2 launch n8_inter_network_vpn_security trace_n8_inter_network_vpn_security_client.launch.py # Launch client
 
 ```
 

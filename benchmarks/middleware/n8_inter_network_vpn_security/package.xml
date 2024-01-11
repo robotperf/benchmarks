@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format2.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="2">
-  <name>n6_intra_network_security_vpn</name>
+  <name>n8_inter_network_vpn_security</name>
   <version>0.1.0</version>
   <description>
-    A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for intra-network communication.
+    A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for inter-network communication.
   </description>
   <maintainer email="alex@accelerationrobotics.com">Alejandra Martínez Fariña</maintainer>
   <license>Apache License 2.0</license>
