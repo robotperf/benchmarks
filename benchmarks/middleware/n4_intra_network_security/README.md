@@ -6,7 +6,7 @@ Network computational graph composed by two nodes.
 n4
 
 ### Description
-A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for intra-network communication.
+A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for intra-network communication with ros2 security enabled.
 
 ![](../../../imgs/n4_intra_network_security.png)
 

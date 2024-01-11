@@ -6,7 +6,7 @@ Network computational graph composed by two nodes.
 n6
 
 ### Description
-A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for intra-network communication.
+A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for intra-network communication with ros2 security enabled and a VPN connecting the two nodes.
 
 ![](../../../imgs/n6_intra_network_security_vpn.png)
 
