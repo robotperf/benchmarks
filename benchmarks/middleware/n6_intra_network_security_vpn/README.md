@@ -1,37 +1,76 @@
-# n4_intra_network_security
+# n6_intra_network_security_vpn
 
 Network computational graph composed by two nodes.
 
 ### ID
-n4
+n6
 
 ### Description
-A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for intra-network communication with ros2 security enabled.
+A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for intra-network communication with ros2 security enabled and a VPN connecting the two nodes.
 
-![](../../../imgs/n4_intra_network_security.png)
+![](../../../imgs/n6_intra_network_security_vpn.png)
 
 ## Reproduction Steps
 
 ```bash
-Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/network/n4_intra_network_security and review the launch files to reproduce this package.
+Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/network/n6_intra_network_security_vpn and review the launch files to reproduce this package.
 
 Prior to launching the node, security must be enabled from both sides (client and server):
 
-# Create keystore from one single machine (and then copy my_keystore folder into the other machine)
+# 1) Create keystore from one single machine (and then copy my_keystore folder into the other machine)
 cd my_workspace
 source /opt/ros/humble/setup.bash
 ros2 security create_keystore my_keystore
-ros2 security create_enclave my_keystore /n4/loopback_server
-ros2 security create_enclave my_keystore /n4/loopback_client
+ros2 security create_enclave my_keystore /n6/loopback_server # or create_key
+ros2 security create_enclave my_keystore /n6/loopback_client # or create_key
 
-# From each side: set up environment variables and run server / client
-colcon build --merge-install
-source install/local_setup.bash
+# 2) From each side: set up environment variables and run server / client
 export ROS_SECURITY_KEYSTORE=/path/to/my_keystore
 export ROS_SECURITY_ENABLE=true
 export ROS_SECURITY_STRATEGY=Enforce
-ros2 launch n4_intra_network_security trace_n4_intra_network_security_server.launch.py # Launch server
-ros2 launch n4_intra_network_security trace_n4_intra_network_security_client.launch.py # Launch client
+
+# 3) Prior to launching the node, the VPN must be configured and enabled from both sides (client and server).
+
+# Make sure the firewall is not blocking the communication:
+
+# 3.a) Option 1: disable the firewall
+sudo ufw disable
+
+# 3.b) Option 2: specific configuration of the firewall. For example, to allow traffic in computer 1 (10.0.0.1) towards computer 2 (10.0.0.2):
+sudo ufw allow from 10.0.0.2
+sudo ufw allow to 10.0.0.2
+
+# 4) Besides, CycloneDDS must be properly configured:
+
+# 4.1) Create cycloneDDS.xml file and dump the following content and replacing the address by those VPN addresses of the computers involved:
+
+<?xml version="1.0" encoding="UTF-8" ?>
+<CycloneDDS xmlns="https://cdds.io/config" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://cdds.io/config https://raw.githubusercontent.com/eclipse-cyclonedds/cyclonedds/master/etc/cyclonedds.xsd">
+<Domain id="any">
+    <Compatibility><ManySocketsMode>many</ManySocketsMode></Compatibility>
+    <!-- For CycloneDDS in ROS Galactic -->
+    <!-- <General><NetworkInterfaceAddress>enp1s0</NetworkInterfaceAddress></General> -->
+    <!-- For CycloneDDS in ROS Humble or Rolling -->
+    <General><Interfaces><NetworkInterface name="wg0"/></Interfaces></General>
+
+    <Discovery>
+        <Peers><Peer address="10.0.0.1"/><Peer address="10.0.0.2"/></Peers>
+        <ParticipantIndex>auto</ParticipantIndex>
+    </Discovery>
+</Domain>
+</CycloneDDS>
+
+# 4.2) Configure ROS to use CycloneDDS as middleware 
+
+export CYCLONEDDS_URI=file://$PWD/cyclonedds.xml
+export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
+
+# 5) Finally, compile and launch
+colcon build --merge-install
+source install/local_setup.bash
+ros2 launch n6_intra_network_security_vpn trace_n6_intra_network_security_vpn_server.launch.py # Launch server
+ros2 launch n6_intra_network_security_vpn trace_n6_intra_network_security_vpn_client.launch.py # Launch client
+
 ```
 
 ## Results
