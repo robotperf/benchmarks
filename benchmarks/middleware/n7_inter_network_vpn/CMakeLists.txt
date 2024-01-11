@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.8)
-project(n5_intra_network_vpn)
+project(n7_inter_network_vpn)
 
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)

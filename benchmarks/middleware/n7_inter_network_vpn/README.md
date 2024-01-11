@@ -1,19 +1,19 @@
-# n5_intra_network_vpn
+# n7_inter_network_vpn
 
 Network computational graph composed by two nodes.
 
 ### ID
-n5
+n7
 
 ### Description
 A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for intra-network communication via Wireguard.
 
-![](../../../imgs/n5_intra_network_vpn.png)
+![](../../../imgs/n7_inter_network_vpn.png)
 
 ## Reproduction Steps
 
 ```bash
-Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/network/n5_intra_network_vpn and review the launch files to reproduce this package.
+Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/network/n7_inter_network_vpn and review the launch files to reproduce this package.
 
 # 1) Prior to launching the node, the VPN must be configured and enabled from both sides (client and server).
 
@@ -55,8 +55,8 @@ export RMW_IMPLEMENTATION=rmw_cyclonedds_cpp
 # 3) Finally, compile and launch
 colcon build --merge-install
 source install/local_setup.bash
-ros2 launch n5_intra_network_vpn trace_n5_intra_network_vpn_server.launch.py # Launch server
-ros2 launch n5_intra_network_vpn trace_n5_intra_network_vpn_client.launch.py # Launch client
+ros2 launch n7_inter_network_vpn trace_n7_inter_network_vpn_server.launch.py # Launch server
+ros2 launch n7_inter_network_vpn trace_n7_inter_network_vpn_client.launch.py # Launch client
 
 ```
 
