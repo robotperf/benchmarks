@@ -1,0 +1,29 @@
+description: 'A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for intra-network communication via Wireguard.'
+graph: ../../../imgs/n5_intra_network_vpn.png
+id: n5
+name: n5_intra_network_vpn
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/network/n5_intra_network_vpn
+  and review the launch files to reproduce this package.
+results:
+- result:
+    category: workstation - workstation
+    datasource: simulation
+    hardware: Intel i7-8700K (server) <-> AMD Ryzen 5 PRO 4650G (client)
+    metric: latency
+    metric_unit: ms
+    note: median 0.4974 ms, mean 0.5387 ms, 1000000 samples, 0.00 % lost messages, Cyclone DDS
+    timestampt: 01-10-2024
+    type: grey
+    value: 0.4974
+- result:
+    category: workstation - workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G (server) <-> Intel i7-8700K (client)
+    metric: latency
+    metric_unit: ms
+    note: median 0.8986 ms, mean 0.9556 ms, 874817 samples, 0.00 % lost messages, Cyclone DDS
+    timestampt: 01-10-2024
+    type: grey
+    value: 0.8986
+short: Network computational graph composed by two nodes.
+
