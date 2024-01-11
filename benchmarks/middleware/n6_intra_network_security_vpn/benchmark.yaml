@@ -1,0 +1,75 @@
+description: 'A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for intra-network communication.'
+graph: ../../../imgs/n4_intra_network_security.png
+id: n4
+name: n4_intra_network_security
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/network/n4_intra_network_security
+  and review the launch files to reproduce this package.
+results:
+- result:
+    category: workstation - workstation
+    datasource: simulation
+    hardware: Intel i7-8700K (server) <-> AMD Ryzen 5 PRO 4650G (client)
+    metric: latency
+    metric_unit: ms
+    note: median 0.4456 ms, mean 0.4901 ms, 1000000 samples, 0.00 % lost messages, Fast DDS
+    timestampt: 01-09-2024
+    type: grey
+    value: 0.4456
+
+- result:
+    category: workstation - workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G (server) <-> Intel i7-8700K (client)
+    metric: latency
+    metric_unit: ms
+    note: median 0.4932 ms, 0.5679 ms, 1000000 samples, 0.00 % lost messages, Fast DDS
+    timestampt: 01-09-2024
+    type: grey
+    value: 0.4932
+
+- result:
+    category: workstation - workstation
+    datasource: simulation
+    hardware: Intel i7-8700K (server) <-> AMD Ryzen 5 PRO 4650G (client)
+    metric: latency
+    metric_unit: ms
+    note: median 0.4615 ms, mean 0.4958 ms, 1000000 samples, 0.00 % lost messages, Fast DDS
+    timestampt: 01-09-2024
+    type: grey
+    value: 0.4615
+
+- result:
+    category: workstation - workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G (server) <-> Intel i7-8700K (client)
+    metric: latency
+    metric_unit: ms
+    note: median 0.4464 ms, 0.4680 ms, 1000000 samples, 0.00 % lost messages, Fast DDS
+    timestampt: 01-09-2024
+    type: grey
+    value: 0.4464
+
+- result:
+    category: workstation - workstation
+    datasource: simulation
+    hardware: Intel i7-8700K (server) <-> AMD Ryzen 5 PRO 4650G (client)
+    metric: latency
+    metric_unit: ms
+    note: median 0.3089 ms, mean 0.3137 ms, 1000000 samples, 0.00 % lost messages, Cyclone DDS
+    timestampt: 01-09-2024
+    type: grey
+    value: 0.3089
+
+- result:
+    category: workstation - workstation
+    datasource: simulation
+    hardware: AMD Ryzen 5 PRO 4650G (server) <-> Intel i7-8700K (client)
+    metric: latency
+    metric_unit: ms
+    note: median 0.3963 ms, 0.4852 ms, 1000000 samples, 0.00 % lost messages, Cyclone DDS
+    timestampt: 01-09-2024
+    type: grey
+    value: 0.3963
+
+short: Network computational graph composed by two nodes.
+
