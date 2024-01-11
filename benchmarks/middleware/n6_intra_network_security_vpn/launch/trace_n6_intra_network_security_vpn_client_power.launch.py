@@ -40,7 +40,7 @@ def generate_launch_description():
         
     # Trace
     trace = Trace(
-        session_name="n4_intra_network_security_client",
+        session_name="n6_intra_network_security_vpn_client",
         events_ust=[
             "robotcore_power:*",
             # "lttng_ust_cyg_profile*",
@@ -62,7 +62,7 @@ def generate_launch_description():
         name='client',
         namespace='robotcore',
         output='screen',
-        arguments=['--ros-args', '--enclave', '/n4/loopback_client'],
+        arguments=['--ros-args', '--enclave', '/n6/loopback_client'],
     )
 
     power_container = ComposableNodeContainer(

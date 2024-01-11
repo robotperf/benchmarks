@@ -42,7 +42,7 @@ def generate_launch_description():
         name='client',
         namespace='robotcore',
         output='screen',
-        arguments=['--ros-args', '--enclave', '/n4/loopback_client'],
+        arguments=['--ros-args', '--enclave', '/n6/loopback_client'],
     )
 
     return LaunchDescription([

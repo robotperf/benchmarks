@@ -40,7 +40,7 @@ def generate_launch_description():
 
     # Trace
     trace = Trace(
-        session_name="n4_intra_network_security_server",
+        session_name="n6_intra_network_security_vpn_server",
         events_ust=[
             "robotcore_rtps:*",
             "robotcore_power:*",
@@ -64,7 +64,7 @@ def generate_launch_description():
         name='server',
         namespace='robotcore',
         output='screen',
-        arguments=['--ros-args', '--enclave', '/n4/loopback_server'],
+        arguments=['--ros-args', '--enclave', '/n6/loopback_server'],
         # parameters=[
         #     {
         #         "iterations": 10000,

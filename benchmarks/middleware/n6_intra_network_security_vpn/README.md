@@ -1,19 +1,19 @@
-# n4_intra_network_security
+# n6_intra_network_security_vpn
 
 Network computational graph composed by two nodes.
 
 ### ID
-n4
+n6
 
 ### Description
 A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for intra-network communication.
 
-![](../../../imgs/n4_intra_network_security.png)
+![](../../../imgs/n6_intra_network_security_vpn.png)
 
 ## Reproduction Steps
 
 ```bash
-Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/network/n4_intra_network_security and review the launch files to reproduce this package.
+Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/network/n6_intra_network_security_vpn and review the launch files to reproduce this package.
 
 Prior to launching the node, security must be enabled from both sides (client and server):
 
@@ -21,8 +21,8 @@ Prior to launching the node, security must be enabled from both sides (client an
 cd my_workspace
 source /opt/ros/humble/setup.bash
 ros2 security create_keystore my_keystore
-ros2 security create_enclave my_keystore /n4/loopback_server
-ros2 security create_enclave my_keystore /n4/loopback_client
+ros2 security create_enclave my_keystore /n6/loopback_server
+ros2 security create_enclave my_keystore /n6/loopback_client
 
 # From each side: set up environment variables and run server / client
 colcon build --merge-install
@@ -30,8 +30,8 @@ source install/local_setup.bash
 export ROS_SECURITY_KEYSTORE=/path/to/my_keystore
 export ROS_SECURITY_ENABLE=true
 export ROS_SECURITY_STRATEGY=Enforce
-ros2 launch n4_intra_network_security trace_n4_intra_network_security_server.launch.py # Launch server
-ros2 launch n4_intra_network_security trace_n4_intra_network_security_client.launch.py # Launch client
+ros2 launch n6_intra_network_security_vpn trace_n6_intra_network_security_vpn_server.launch.py # Launch server
+ros2 launch n6_intra_network_security_vpn trace_n6_intra_network_security_vpn_client.launch.py # Launch client
 ```
 
 ## Results
