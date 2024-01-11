@@ -6,7 +6,7 @@ Network computational graph composed by two nodes.
 n7
 
 ### Description
-A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for intra-network communication via Wireguard.
+A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for inter-network communication via Wireguard.
 
 ![](../../../imgs/n7_inter_network_vpn.png)
 

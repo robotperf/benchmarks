@@ -1,4 +1,4 @@
-description: 'A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for intra-network communication via Wireguard.'
+description: 'A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for inter-network communication via Wireguard.'
 graph: ../../../imgs/n7_inter_network_vpn.png
 id: n7
 name: n7_inter_network_vpn
