@@ -1,0 +1,19 @@
+description: 'A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for inter-network communication via Wireguard.'
+graph: ../../../imgs/n7_inter_network_vpn.png
+id: n7
+name: n7_inter_network_vpn
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/network/n7_inter_network_vpn
+  and review the launch files to reproduce this package.
+results:
+- result:
+    category: workstation - workstation
+    datasource: simulation
+    hardware: Intel i5-13600K (server) <-> Intel i7-8700K (client)
+    metric: latency
+    metric_unit: ms
+    note: median 28.0395 ms, mean 28.6437 ms, 92094 samples, 0.00 % lost messages, Cyclone DDS
+    timestampt: 01-11-2024
+    type: grey
+    value: 28.0395
+short: Network computational graph composed by two nodes.
+
