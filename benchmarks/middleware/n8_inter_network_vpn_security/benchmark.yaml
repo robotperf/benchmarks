@@ -1,0 +1,20 @@
+description: 'A simple network computational graph composed by two nodes. Used to demonstrate a simple ping-pong for inter-network communication.'
+graph: ../../../imgs/n8_inter_network_vpn_security.png
+id: n8
+name: n8_inter_network_vpn_security
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/network/n8_inter_network_vpn_security
+  and review the launch files to reproduce this package.
+results:
+- result:
+    category: workstation - workstation
+    datasource: simulation
+    hardware: Intel i5-13600K (server) <-> Intel i7-8700K (client)
+    metric: latency
+    metric_unit: ms
+    note: median 29.4749 ms, mean 29.0294 ms, 85504 samples, 0.00 % lost messages, Cyclone DDS
+    timestampt: 01-12-2024
+    type: grey
+    value: 29.4749
+
+short: Network computational graph composed by two nodes.
+
