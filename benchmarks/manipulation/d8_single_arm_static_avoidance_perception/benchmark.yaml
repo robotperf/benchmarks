@@ -1,0 +1,18 @@
+description: 'Benchmark involving a single robotic arm with holding a static position and implementing a perception-based collision avoidance approach.'
+graph: ../../../imgs/d8_single_arm_static_avoidance_perception.svg
+id: d8
+name: d8_single_arm_static_avoidance_perception
+reproduction: Refer to https://github.com/robotperf/benchmarks/tree/main/benchmarks/manipulation/d8_single_arm_static_avoidance_perception
+  and review the launch files to reproduce this package.
+results:
+- result:
+    category: workstation
+    datasource: N/A
+    hardware: Intel i5-13600K
+    metric: latency
+    metric_unit: ms
+    note: mean 121.6300 ms, rms 121.6337 ms, max 122.5769 ms, min 120.6832 ms, lost 0.00% (planning)
+    timestampt: 08-09-2023
+    type: grey
+    value: 0.01
+short: A computational graph whose perception workload allows one robotic arm avoid collisions while maintaining a static position.

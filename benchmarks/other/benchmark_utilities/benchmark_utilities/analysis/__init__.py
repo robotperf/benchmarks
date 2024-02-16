@@ -2490,8 +2490,8 @@ class BenchmarkAnalyzer:
 
                 init_ns = target_chain_ns[0]
                 fixed_target_chain_ns = [init_ns] + target_chain_ns
-                # stringout = color("raw image → " + msg_set[0].event.name + " → ")
-                stringout = color("raw image ")
+                # stringout = color("input → " + msg_set[0].event.name + " → ")
+                stringout = color("input ")
                 for msg_index in range(len(msg_set)):
                     stringout += " → " + color(
                         msg_set[msg_index].event.name
@@ -2664,7 +2664,7 @@ class BenchmarkAnalyzer:
             sum(x) / len(x) for x in zip(*image_pipeline_msg_sets_ns)
         ]
         # print(image_pipeline_msg_ns_average)
-        stringout = color("raw image ")
+        stringout = color("input ")
         for msg_index in range(len(image_pipeline_msg_ns_average[:-1])):
             stringout += " → " + color(
                 image_pipeline_msg_sets[0][msg_index].event.name
@@ -3762,7 +3762,9 @@ class BenchmarkAnalyzer:
 
     def set_trace_sets_filter_type(self, filter_type="ID"):
         """
-        Select weather trace sets will be filtered using msgsets_from_trace_identifier or msgsets_from_trace method
+        Select wether trace sets will be filtered using msgsets_from_trace_identifier or msgsets_from_trace method
+
+        TODO: Explain better what does each
 
         :param: filter_type: string defining which method to use
         """
