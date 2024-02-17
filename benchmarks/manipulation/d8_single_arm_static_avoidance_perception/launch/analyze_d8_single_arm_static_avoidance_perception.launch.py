@@ -497,7 +497,8 @@ def analyze_tf2_operations(argv):
 
     # Instantiate the class
     ba = BenchmarkAnalyzer('d8_single_arm_static_avoidance_perception', hardware_device_type, tf_tree)
-    ba.set_trace_sets_filter_type(filter_type="UID")
+    # ba.set_trace_sets_filter_type(filter_type="UID")
+    ba.set_trace_sets_filter_type('name')
 
     if hardware_device_type == 'cpu':
         # add parameters for analyzing the traces
@@ -583,9 +584,9 @@ def analyze_tf2_operations(argv):
     
     for metric in metrics:
         if metric == 'latency':
-            ba.analyze_latency(trace_path, add_power)
+            ba.analyze_latency(trace_path, add_power, debug=False)
         elif metric == 'throughput':
-            ba.analyze_throughput(trace_path, add_power)
+            ba.analyze_throughput(trace_path, add_power, debug=False)
         elif metric == 'power': 
             if num_metrics == 0: # launch independently iff no other metric is requested
                 total_consumption = ba.analyze_power(trace_path)
@@ -685,14 +686,15 @@ def generate_launch_description():
     return ld
 
 if __name__ == '__main__':
-    analyze_dual_arm_cobra_control(sys.argv[1:])
-    # analyze_dual_arm_joint_trajectory_control(sys.argv[1:])  # robotcore-control
-    analyze_dual_arm_cp_calculation(sys.argv[1:])
-    analyze_dual_arm_cp_evaluation(sys.argv[1:])
-    analyze_realtime_urdf_filtering(sys.argv[1:])
-    #
     analyze_tf2_operations(sys.argv[1:])
+    analyze_dual_arm_cobra_control(sys.argv[1:])
+    analyze_dual_arm_cp_evaluation(sys.argv[1:])
+    analyze_dual_arm_cp_calculation(sys.argv[1:])
+    analyze_realtime_urdf_filtering(sys.argv[1:])
+    
     print_total_benchmark_time(sys.argv[1:])
+    # analyze_dual_arm_joint_trajectory_control(sys.argv[1:])  # robotcore-control
+    #
 
     
 

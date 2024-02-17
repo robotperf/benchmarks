@@ -16,6 +16,7 @@ import subprocess
 import yaml
 import time
 import json
+import random
 from tabnanny import verbose
 from turtle import width
 from wasabi import color
@@ -775,7 +776,7 @@ class BenchmarkAnalyzer:
 
         return image_pipeline_msg_sets
 
-    def msgsets_from_trace_no_vpid(self, tracename, debug=False, target=True):
+    def msgsets_from_trace_no_vpid(self, tracename, debug=False, target=True, order=True):
         """
         Returns a list of message sets ready to be used
         for plotting them in various forms.
@@ -785,6 +786,12 @@ class BenchmarkAnalyzer:
 
         NOTE: NOT coded for multiple Nodes running concurrently or multithreaded executors
         Classification expects events in the corresponding order.
+
+        Args:
+            tracename (string): path for the trace file
+            debug (bool, optional): [description]. Defaults to False.
+            target (bool, optional): to specify the traces to be selected (target or power)
+            order (bool, optional): to specify if the order of the tracepoints is to be considered strictly
         """
         # Create a trace collection message iterator from the first command-line
         # argument.
@@ -841,7 +848,7 @@ class BenchmarkAnalyzer:
                     new_set.append(image_pipeline_msgs[index])
                     image_pipeline_msg_sets.append(new_set)
                     if debug:
-                        print(color("Found: " + str(image_pipeline_msgs[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue"))
+                        print(color("Found: " + str(image_pipeline_msgs[index].event.name) + " - " + str([x.event.name for x in new_set]), fg="blue", bg="white"))
                     chain_index = 0  # restart
                     new_set = []  # restart
                 # match
@@ -874,11 +881,14 @@ class BenchmarkAnalyzer:
                     #     and self.target_chain[chain_index - 3] == "ros2_image_pipeline:image_proc_rectify_cb_fini"):
                     #     print(color("Skipping: " + str(image_pipeline_msgs[index].event.name), fg="yellow"))
                     else:
-                        new_set.append(image_pipeline_msgs[index])
-                        if debug:
-                            print(color("Altered order: " + str([x.event.name for x in new_set]) + ", restarting", fg="red"))
-                        chain_index = 0  # restart
-                        new_set = []  # restart
+                        if order:
+                            new_set.append(image_pipeline_msgs[index])
+                            if debug:
+                                print(color("Altered order: " + str([x.event.name for x in new_set]) + ", restarting", fg="red"))
+                            chain_index = 0  # restart
+                            new_set = []  # restart
+                        else:
+                            pass
 
             elif not target and image_pipeline_msgs[index].event.name in self.power_chain:  # optimization
      
@@ -1490,8 +1500,7 @@ class BenchmarkAnalyzer:
         # export_png(fig, filename="/tmp/analysis/plot_trace_d1.png")
 
     def traces_id_d7(self, msg_set):
-        # this method only works for hardcoded traces, specifically for the a1 benchmark
-        # TODO: make this function generic so other benchmarks can also be plotted 
+        # NOTE: cobra-specific
 
         # For some reason it seems to be displayed in the reverse order on the Y axis
         if self.hardware_device_type == "cpu":
@@ -1625,6 +1634,131 @@ class BenchmarkAnalyzer:
         ## output
         # show(fig)  # show in browser    
         export_png(fig, filename="/tmp/analysis/plot_trace_d7.png")
+
+    def traces_id_d8(self, msg_set):
+        # NOTE: cobra-specific
+
+        # For some reason it seems to be displayed in the reverse order on the Y axis
+        if self.hardware_device_type == "cpu":
+            segment_types = ["URDF Filter", "Distance Calculation", "Distance Evaluation", "Control Update"]
+
+        fig = figure(
+            title="RobotPerf benchmark:" + self.benchmark_name,
+            x_axis_label=f"Milliseconds",
+            y_range=segment_types,
+            plot_width=2000,
+            plot_height=600,
+        )
+        fig.title.align = "center"
+        fig.title.text_font_size = "20px"
+        # fig.xaxis[0].formatter = DatetimeTickFormatter(milliseconds = ['%3Nms'])
+        fig.xaxis[0].formatter = PrintfTickFormatter(format="%f ms")
+        fig.xaxis[0].ticker.desired_num_ticks = 20
+        fig.xaxis[0].axis_label_text_font_size = "30px"
+        fig.yaxis[0].major_label_text_font_size = "25px"
+
+        target_chain_ns = []
+        for msg_index in range(len(msg_set)):
+            target_chain_ns.append(msg_set[msg_index].default_clock_snapshot.ns_from_origin)
+        init_ns = target_chain_ns[0]
+
+        ############################################################################################################
+        # draw durations
+        ############################################################################################################
+        # repeat this for each segment, from 0 to 3
+        for i in range(4):
+            ## ROS 2 underhead
+            callback_start = (target_chain_ns[0 + 4*i] - init_ns) / 1e6
+            callback_end = (target_chain_ns[1 + 4*i] - init_ns) / 1e6
+            duration = callback_end - callback_start
+            self.add_durations_to_figure(
+                fig,
+                self.target_chain_layer[0 + 4*i],  # index used in here
+                                        # should match with the
+                                        # one from the callback_start
+                [(callback_start, callback_start + duration, duration)],
+                "lightgray",
+            )
+
+            ## operation
+            callback_start = (target_chain_ns[1 + 4*i] - init_ns) / 1e6
+            callback_end = (target_chain_ns[2+ 4*i] - init_ns) / 1e6
+            duration = callback_end - callback_start
+            self.add_durations_to_figure(
+                fig,
+                self.target_chain_layer[1+ 4*i],  # index used in here
+                                        # should match with the
+                                        # one from the callback_start
+                [(callback_start, callback_start + duration, duration)],
+                "crimson",
+            )
+
+            ## ROS 2 overhead
+            callback_start = (target_chain_ns[2+ 4*i] - init_ns) / 1e6
+            callback_end = (target_chain_ns[3+ 4*i] - init_ns) / 1e6
+            duration = callback_end - callback_start
+            self.add_durations_to_figure(
+                fig,
+                self.target_chain_layer[2+ 4*i],  # index used in here
+                                        # should match with the
+                                        # one from the callback_start
+                [(callback_start, callback_start + duration, duration)],
+                "lightgray",
+            )
+
+        # ############################################################################################################
+        # # draw markers
+        # ############################################################################################################
+        # for msg_index in range(len(msg_set)):
+        #     #     self.add_markers_to_figure(fig, msg_set[msg_index].event.name, [(target_chain_ns[msg_index] - init_ns)/1e6], 'blue', marker_type='plus', legend_label='timing')
+        #     # print("marker ms: " + str((target_chain_ns[msg_index] - init_ns) / 1e6))
+        #     self.add_markers_to_figure(
+        #         fig,
+        #         self.target_chain_layer[msg_index],
+        #         [(target_chain_ns[msg_index] - init_ns) / 1e6],
+        #         self.target_chain_colors_fg_bokeh[msg_index],
+        #         marker_type=self.target_chain_marker[msg_index],
+        #         # legend_label=msg_set[msg_index].event.name,
+        #         legend_label=self.target_chain_dissambiguous[msg_index],
+        #         size=10,
+        #     )        
+        #     if "urdf_filter_cb_init" in msg_set[msg_index].event.name:
+        #         label = Label(
+        #             x=(target_chain_ns[msg_index] - init_ns) / 1e6,
+        #             y=self.target_chain_label_layer[msg_index],
+        #             x_offset=-40,
+        #             y_offset=-40,
+        #             text=self.target_chain_dissambiguous[msg_index].split(":")[-1],
+        #         )
+
+        #     elif "dual_arm_distance_calculation_cb_fini" in msg_set[msg_index].event.name:
+        #         label = Label(
+        #             x=(target_chain_ns[msg_index] - init_ns) / 1e6,
+        #             y=self.target_chain_label_layer[msg_index],
+        #             x_offset=-200,
+        #             y_offset=-40,
+        #             text=self.target_chain_dissambiguous[msg_index].split(":")[-1],
+        #         )
+        #     else:
+        #         label = Label(
+        #             x=(target_chain_ns[msg_index] - init_ns) / 1e6,
+        #             y=self.target_chain_label_layer[msg_index],
+        #             x_offset=-30,
+        #             y_offset=-30,
+        #             # text=self.target_chain_dissambiguous[msg_index].split(":")[-1],
+        #             text="",
+        #         )
+        #     fig.add_layout(label)
+
+        # # hack legend to the right
+        # fig.legend.location = "right"
+        # new_legend = fig.legend[0]
+        # fig.legend[0] = None
+        # fig.add_layout(new_legend, "right")
+        
+        ## output
+        # show(fig)  # show in browser    
+        export_png(fig, filename="/tmp/analysis/plot_trace_d8.png")
 
     def traces(self, msg_set):
         # this method only works for hardcoded traces, specifically for the a1 benchmark
@@ -3488,11 +3622,27 @@ class BenchmarkAnalyzer:
             # index_to_plot = len(self.image_pipeline_msg_sets) // 2
             # msg_set = self.image_pipeline_msg_sets[index_to_plot]
             self.traces_id_d1(trace_path, include_trajectory_execution=False)
-        elif self.benchmark_name == "d7_dual_arm_static_avoidance":
-            self.image_pipeline_msg_sets = self.msgsets_from_trace_no_vpid(trace_path, True)
+        elif (self.benchmark_name == "d7_dual_arm_static_avoidance"):            
+            self.image_pipeline_msg_sets = self.msgsets_from_trace_no_vpid(trace_path, False)
+            print(len(self.image_pipeline_msg_sets))
             index_to_plot = len(self.image_pipeline_msg_sets) // 2
             msg_set = self.image_pipeline_msg_sets[index_to_plot]
             self.traces_id_d7(msg_set)
+        elif (self.benchmark_name == "d8_single_arm_static_avoidance_perception"):            
+            self.image_pipeline_msg_sets = self.msgsets_from_trace_no_vpid(trace_path, debug=False, order=False)
+            print(len(self.image_pipeline_msg_sets))
+            if len(self.image_pipeline_msg_sets) > 0:
+                # # middle index
+                # index_to_plot = len(self.image_pipeline_msg_sets) // 2
+                # pick a random index within the set
+                index_to_plot = random.randint(0, len(self.image_pipeline_msg_sets)-1)
+                # pick the set coherent with the index
+                msg_set = self.image_pipeline_msg_sets[index_to_plot]
+                self.traces_id_d8(msg_set)
+            else:
+                print(color("No traces to draw", fg="red"))
+        else:
+            print(color("No traces to draw", fg="red"))
 
     def bar_charts_latency(self):
         if not self.trace_sets_filter_type == "UID":

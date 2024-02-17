@@ -66,20 +66,32 @@ def plot_urdf_and_distance_calculation(argv):
             "realtime_urdf_filter:urdf_filter_init",                                    # 1
             "realtime_urdf_filter:urdf_filter_fini",                                    # 2
             "realtime_urdf_filter:urdf_filter_cb_fini",                                 # 3
+            #
             "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_init:",         # 4
             "dual_arm_static_avoidance:dual_arm_distance_calculation_init",             # 5
             "dual_arm_static_avoidance:dual_arm_distance_calculation_fini",             # 6
             "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_fini",          # 7
+            #
+            "dual_arm_static_avoidance:dual_arm_distance_evaluation_cb_init",           # 8
+            "dual_arm_static_avoidance:dual_arm_distance_evaluation_init",              # 9
+            "dual_arm_static_avoidance:dual_arm_distance_evaluation_fini",              # 10
+            "dual_arm_static_avoidance:dual_arm_distance_evaluation_cb_fini",           # 11
+            #
+            "dual_arm_static_avoidance:dual_arm_control_update_cb_init",                # 12
+            "dual_arm_static_avoidance:dual_arm_control_update_init",                   # 13
+            "dual_arm_static_avoidance:dual_arm_control_update_fini",                   # 14
+            "dual_arm_static_avoidance:dual_arm_control_update_cb_fini",                # 15
         ]
 
+        # URDF Filter
         ba.add_target(
             {
                 "name": "realtime_urdf_filter:urdf_filter_cb_init",
                 "name_disambiguous": "realtime_urdf_filter:urdf_filter_cb_init",
                 "colors_fg": "yellow",
                 "colors_fg_bokeh": "salmon",
-                "layer": "vision pipeline",
-                "label_layer": 4,
+                "layer": "URDF Filter",
+                "label_layer": 1,
                 "marker": "plus",
             }
         )
@@ -89,8 +101,8 @@ def plot_urdf_and_distance_calculation(argv):
                 "name_disambiguous": "realtime_urdf_filter:urdf_filter_init",
                 "colors_fg": "red",
                 "colors_fg_bokeh": "darksalmon",
-                "layer": "vision pipeline",
-                "label_layer": 4,
+                "layer": "URDF Filter",
+                "label_layer": 1,
                 "marker": "plus",
             }
         )
@@ -100,8 +112,8 @@ def plot_urdf_and_distance_calculation(argv):
                 "name_disambiguous": "realtime_urdf_filter:urdf_filter_fini",
                 "colors_fg": "red",
                 "colors_fg_bokeh": "lightcoral",
-                "layer": "vision pipeline",
-                "label_layer": 4,
+                "layer": "URDF Filter",
+                "label_layer": 1,
                 "marker": "plus",
             }
         )
@@ -111,20 +123,21 @@ def plot_urdf_and_distance_calculation(argv):
                 "name_disambiguous": "realtime_urdf_filter:urdf_filter_cb_fini",
                 "colors_fg": "yellow",
                 "colors_fg_bokeh": "darkred",
-                "layer": "vision pipeline",
-                "label_layer": 4,
+                "layer": "URDF Filter",
+                "label_layer": 1,
                 "marker": "plus",
             }
         )
 
+        # Distance Calculation
         ba.add_target(
             {
                 "name": "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_init",
                 "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_init",
                 "colors_fg": "yellow",
                 "colors_fg_bokeh": "salmon",
-                "layer": "vision pipeline",
-                "label_layer": 4,
+                "layer": "Distance Calculation",
+                "label_layer": 2,
                 "marker": "plus",
             }
         )
@@ -134,8 +147,8 @@ def plot_urdf_and_distance_calculation(argv):
                 "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_init",
                 "colors_fg": "red",
                 "colors_fg_bokeh": "darksalmon",
-                "layer": "vision pipeline",
-                "label_layer": 4,
+                "layer": "Distance Calculation",
+                "label_layer": 2,
                 "marker": "plus",
             }
         )
@@ -145,8 +158,8 @@ def plot_urdf_and_distance_calculation(argv):
                 "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_fini",
                 "colors_fg": "red",
                 "colors_fg_bokeh": "lightcoral",
-                "layer": "vision pipeline",
-                "label_layer": 4,
+                "layer": "Distance Calculation",
+                "label_layer": 2,
                 "marker": "plus",
             }
         )
@@ -156,11 +169,103 @@ def plot_urdf_and_distance_calculation(argv):
                 "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_fini",
                 "colors_fg": "yellow",
                 "colors_fg_bokeh": "darkred",
-                "layer": "vision pipeline",
+                "layer": "Distance Calculation",
+                "label_layer": 2,
+                "marker": "plus",
+            }
+        )
+
+        # Distance Evaluation
+        ba.add_target(
+            {
+                "name": "dual_arm_static_avoidance:dual_arm_distance_evaluation_cb_init",
+                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_evaluation_cb_init",
+                "colors_fg": "yellow",
+                "colors_fg_bokeh": "salmon",
+                "layer": "Distance Evaluation",
+                "label_layer": 3,
+                "marker": "plus",
+            }
+        )
+        ba.add_target(
+            {
+                "name": "dual_arm_static_avoidance:dual_arm_distance_evaluation_init",
+                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_evaluation_init",
+                "colors_fg": "red",
+                "colors_fg_bokeh": "darksalmon",
+                "layer": "Distance Evaluation",
+                "label_layer": 3,
+                "marker": "plus",
+            }
+        )
+        ba.add_target(
+            {
+                "name": "dual_arm_static_avoidance:dual_arm_distance_evaluation_fini",
+                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_evaluation_fini",
+                "colors_fg": "red",
+                "colors_fg_bokeh": "lightcoral",
+                "layer": "Distance Evaluation",
+                "label_layer": 3,
+                "marker": "plus",
+            }
+        )
+        ba.add_target(
+            {
+                "name": "dual_arm_static_avoidance:dual_arm_distance_evaluation_cb_fini",
+                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_evaluation_cb_fini",
+                "colors_fg": "yellow",
+                "colors_fg_bokeh": "darkred",
+                "layer": "Distance Evaluation",
+                "label_layer": 3,
+                "marker": "plus",
+            }
+        )
+
+        # Control Update
+        ba.add_target(
+            {
+                "name": "dual_arm_static_avoidance:dual_arm_control_update_cb_init",
+                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_control_update_cb_init",
+                "colors_fg": "yellow",
+                "colors_fg_bokeh": "salmon",
+                "layer": "Control Update",
                 "label_layer": 4,
                 "marker": "plus",
             }
-        ) 
+        )
+        ba.add_target(
+            {
+                "name": "dual_arm_static_avoidance:dual_arm_control_update_init",
+                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_control_update_init",
+                "colors_fg": "red",
+                "colors_fg_bokeh": "darksalmon",
+                "layer": "Control Update",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+        )
+        ba.add_target(
+            {
+                "name": "dual_arm_static_avoidance:dual_arm_control_update_fini",
+                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_control_update_fini",
+                "colors_fg": "red",
+                "colors_fg_bokeh": "lightcoral",
+                "layer": "Control Update",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+        )
+        ba.add_target(
+            {
+                "name": "dual_arm_static_avoidance:dual_arm_control_update_cb_fini",
+                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_control_update_cb_fini",
+                "colors_fg": "yellow",
+                "colors_fg_bokeh": "darkred",
+                "layer": "Control Update",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+        )        
 
     ba.draw_tracepoints(trace_path)
 
