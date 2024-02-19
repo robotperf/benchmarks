@@ -1,0 +1,33 @@
+description: 'The [pointcloud_to_laserscan](https://github.com/ros-perception/pointcloud_to_laserscan/tree/humble)
+  package converts a pointcloud to a laser scan. The a7_pointcloud_to_laserscan benchmark evaluates 
+  the performance of the PointCloudToLaserScanNode node within the pointcloud_to_laserscan 
+  package.'
+graph: ../../../imgs/a6_depthimage_to_laserscan_graph_grey_box.png
+id: a7
+name: a7_pointcloud_to_laserscan
+reproduction: 
+
+  # Build the Benchmark
+	colcon build --merge-install --packages-up-to a7_pointcloud_to_laserscan
+
+  # Source the overlay
+	source install/setup.bash
+
+  # Automatically run the benchmark. (Remember to set your environment variables):
+  export ROSBAG="perception/r2b_cafe"
+  export PACKAGE="a7_pointcloud_to_laserscan"
+  export TYPE="grey"
+  export METRIC="latency"
+  launch_test src/benchmarks/benchmarks/perception/a7_pointcloud_to_laserscan/launch/trace_a7_pointcloud_to_laserscan_auto.launch.py 
+
+  # Or manually run the benchmark using the grey-box methodology:
+  ros2 bag play --loop <path_to_ros_bag>
+	ros2 launch a7_pointcloud_to_laserscan trace_a7_pointcloud_to_laserscan.launch.py
+
+  # Analyze the trace data
+  cd /tmp/
+	mkdir analysis
+	ros2 launch a7_pointcloud_to_laserscan analyze_a7_pointcloud_to_laserscan.launch.py trace_path:=$HOME/.ros/tracing
+
+results:
+

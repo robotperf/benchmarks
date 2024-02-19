@@ -135,6 +135,42 @@ void TRACEPOINT(
     image_output_info_msg_size_arg);
 }
 
+// pointcloud_input
+void TRACEPOINT(
+  robotperf_pointcloud_input_cb_init, 
+  const void * pointcloud_input_node_arg, 
+  const void * pointcloud_input_pointcloud_msg_arg, 
+  uint32_t pointcloud_input_header_nsec_arg, 
+  uint32_t pointcloud_input_header_sec_arg, 
+  size_t pointcloud_input_msg_size_arg)
+{
+  CONDITIONAL_TP(
+    robotperf_pointcloud_input_cb_init, 
+    pointcloud_input_node_arg, 
+    pointcloud_input_pointcloud_msg_arg,
+    pointcloud_input_header_nsec_arg, 
+    pointcloud_input_header_sec_arg, 
+    pointcloud_input_msg_size_arg);
+}
+
+void TRACEPOINT(
+  robotperf_pointcloud_input_cb_fini, 
+  const void * pointcloud_input_node_arg, 
+  const void * pointcloud_input_pointcloud_msg_arg, 
+  uint32_t pointcloud_input_header_nsec_arg, 
+  uint32_t pointcloud_input_header_sec_arg, 
+  size_t pointcloud_input_msg_size_arg)
+{
+  CONDITIONAL_TP(
+    robotperf_pointcloud_input_cb_fini, 
+    pointcloud_input_node_arg, 
+    pointcloud_input_pointcloud_msg_arg,
+    pointcloud_input_header_nsec_arg, 
+    pointcloud_input_header_sec_arg, 
+    pointcloud_input_msg_size_arg);
+}
+
+// pointcloud_output
 void TRACEPOINT(
   robotperf_pointcloud_output_cb_init,
   const void * pointcloud_output_node,
@@ -167,6 +203,76 @@ void TRACEPOINT(
     image_input_header_nsec_arg,
     image_input_header_sec_arg,
     pointcloud_output_msg_size_arg);
+}
+
+// laserscan_input
+void TRACEPOINT(
+  robotperf_laserscan_input_cb_init,
+  const void * laserscan_input_node_arg,
+  const void * laserscan_input_scan_msg_arg,
+  uint32_t laserscan_input_header_nsec_arg,
+  uint32_t laserscan_input_header_sec_arg,
+  size_t laserscan_input_msg_size_arg)
+{
+  CONDITIONAL_TP(
+    robotperf_laserscan_input_cb_init,
+    laserscan_input_node_arg,
+    laserscan_input_scan_msg_arg,
+    laserscan_input_header_nsec_arg,
+    laserscan_input_header_sec_arg,
+    laserscan_input_msg_size_arg);
+}
+
+void TRACEPOINT(
+  robotperf_laserscan_input_cb_fini,
+  const void * laserscan_input_node_arg,
+  const void * laserscan_input_scan_msg_arg,
+  uint32_t laserscan_input_header_nsec_arg,
+  uint32_t laserscan_input_header_sec_arg,
+  size_t laserscan_input_msg_size_arg)
+{
+  CONDITIONAL_TP(
+    robotperf_laserscan_input_cb_fini,
+    laserscan_input_node_arg,
+    laserscan_input_scan_msg_arg,
+    laserscan_input_header_nsec_arg,
+    laserscan_input_header_sec_arg,
+    laserscan_input_msg_size_arg);
+}
+
+// laserscan_output
+void TRACEPOINT(
+  robotperf_laserscan_output_cb_init,
+  const void * laserscan_output_node_arg,
+  const void * laserscan_output_scan_msg_arg,
+  uint32_t laserscan_output_header_nsec_arg,
+  uint32_t laserscan_output_header_sec_arg,
+  size_t laserscan_output_msg_size_arg)
+{
+  CONDITIONAL_TP(
+    robotperf_laserscan_output_cb_init,
+    laserscan_output_node_arg,
+    laserscan_output_scan_msg_arg,
+    laserscan_output_header_nsec_arg,
+    laserscan_output_header_sec_arg,
+    laserscan_output_msg_size_arg);
+}
+
+void TRACEPOINT(
+  robotperf_laserscan_output_cb_fini,
+  const void * laserscan_output_node_arg,
+  const void * laserscan_output_scan_msg_arg,
+  uint32_t laserscan_output_header_nsec_arg,
+  uint32_t laserscan_output_header_sec_arg,
+  size_t laserscan_output_msg_size_arg)
+{
+  CONDITIONAL_TP(
+    robotperf_laserscan_output_cb_fini,
+    laserscan_output_node_arg,
+    laserscan_output_scan_msg_arg,
+    laserscan_output_header_nsec_arg,
+    laserscan_output_header_sec_arg,
+    laserscan_output_msg_size_arg);
 }
 
 #ifndef _WIN32

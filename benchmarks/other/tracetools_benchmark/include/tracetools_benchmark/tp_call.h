@@ -138,6 +138,46 @@ TRACEPOINT_EVENT(
   )
 )
 
+// robotperf pointcloud_input init callback
+TRACEPOINT_EVENT(
+  TRACEPOINT_PROVIDER,
+  robotperf_pointcloud_input_cb_init,
+  TP_ARGS(
+    const void *, pointcloud_input_node_arg,
+    const void *, pointcloud_input_pointcloud_msg_arg,
+    uint32_t, pointcloud_input_header_nsec_arg,
+    uint32_t, pointcloud_input_header_sec_arg,
+    size_t, pointcloud_input_msg_size_arg),
+  TP_FIELDS(
+    ctf_integer_hex(const void *, pointcloud_input_node, pointcloud_input_node_arg)
+    ctf_integer_hex(const void *, pointcloud_input_pointcloud_msg, pointcloud_input_pointcloud_msg_arg)
+    ctf_integer(uint32_t, pointcloud_input_header_nsec, pointcloud_input_header_nsec_arg)
+    ctf_integer(uint32_t, pointcloud_input_header_sec, pointcloud_input_header_sec_arg)
+    ctf_integer(size_t, pointcloud_input_msg_size, pointcloud_input_msg_size_arg)
+    ctf_string(version, tracetools_benchmark_VERSION)
+  )
+)
+
+// robotperf pointcloud_input end of callback (after publication)
+TRACEPOINT_EVENT(
+  TRACEPOINT_PROVIDER,
+  robotperf_pointcloud_input_cb_fini,
+  TP_ARGS(
+    const void *, pointcloud_input_node_arg,
+    const void *, pointcloud_input_pointcloud_msg_arg,
+    uint32_t, pointcloud_input_header_nsec_arg,
+    uint32_t, pointcloud_input_header_sec_arg,
+    size_t, pointcloud_input_msg_size_arg),
+  TP_FIELDS(
+    ctf_integer_hex(const void *, pointcloud_input_node, pointcloud_input_node_arg)
+    ctf_integer_hex(const void *, pointcloud_input_pointcloud_msg, pointcloud_input_pointcloud_msg_arg)
+    ctf_integer(uint32_t, pointcloud_input_header_nsec, pointcloud_input_header_nsec_arg)
+    ctf_integer(uint32_t, pointcloud_input_header_sec, pointcloud_input_header_sec_arg)
+    ctf_integer(size_t, pointcloud_input_msg_size, pointcloud_input_msg_size_arg)
+    ctf_string(version, tracetools_benchmark_VERSION)
+  )
+)
+
 TRACEPOINT_EVENT(
   TRACEPOINT_PROVIDER,
   robotperf_pointcloud_output_cb_init,
@@ -172,6 +212,90 @@ TRACEPOINT_EVENT(
     ctf_integer(uint32_t, image_input_header_nsec, image_input_header_nsec_arg)
     ctf_integer(uint32_t, image_input_header_sec, image_input_header_sec_arg)
     ctf_integer(size_t, pointcloud_output_msg_size, pointcloud_output_msg_size_arg)
+    ctf_string(version, tracetools_benchmark_VERSION)
+  )
+)
+
+// robotperf laserscan_input init callback
+TRACEPOINT_EVENT(
+  TRACEPOINT_PROVIDER,                 // tracepoint provider name
+  robotperf_laserscan_input_cb_init,   // tracepoint name
+  TP_ARGS(
+    // input arguments
+    const void *, laserscan_input_node_arg,
+    const void *, laserscan_input_scan_msg_arg,
+    uint32_t, laserscan_input_header_nsec_arg,
+    uint32_t, laserscan_input_header_sec_arg,
+    size_t, laserscan_input_msg_size_arg),
+  TP_FIELDS(
+    // output event fields
+    ctf_integer_hex(const void *, laserscan_input_node, laserscan_input_node_arg)
+    ctf_integer_hex(const void *, laserscan_input_scan_msg, laserscan_input_scan_msg_arg)
+    ctf_integer(uint32_t, laserscan_input_header_nsec, laserscan_input_header_nsec_arg)
+    ctf_integer(uint32_t, laserscan_input_header_sec, laserscan_input_header_sec_arg)
+    ctf_integer(size_t, laserscan_input_msg_size, laserscan_input_msg_size_arg)
+    ctf_string(version, tracetools_benchmark_VERSION)
+  )
+)
+
+// robotperf laserscan_input end of callback (after publication)
+TRACEPOINT_EVENT(
+  TRACEPOINT_PROVIDER,
+  robotperf_laserscan_input_cb_fini,
+  TP_ARGS(
+    const void *, laserscan_input_node_arg,
+    const void *, laserscan_input_scan_msg_arg,
+    uint32_t, laserscan_input_header_nsec_arg,
+    uint32_t, laserscan_input_header_sec_arg,
+    size_t, laserscan_input_msg_size_arg),
+  TP_FIELDS(
+    ctf_integer_hex(const void *, laserscan_input_node, laserscan_input_node_arg)
+    ctf_integer_hex(const void *, laserscan_input_scan_msg, laserscan_input_scan_msg_arg)
+    ctf_integer(uint32_t, laserscan_input_header_nsec, laserscan_input_header_nsec_arg)
+    ctf_integer(uint32_t, laserscan_input_header_sec, laserscan_input_header_sec_arg)
+    ctf_integer(size_t, laserscan_input_msg_size, laserscan_input_msg_size_arg)
+    ctf_string(version, tracetools_benchmark_VERSION)
+  )
+)
+
+// robotperf laserscan_output init callback
+TRACEPOINT_EVENT(
+  TRACEPOINT_PROVIDER,                 // tracepoint provider name
+  robotperf_laserscan_output_cb_init,  // tracepoint name
+  TP_ARGS(
+    // input arguments
+    const void *, laserscan_output_node_arg,
+    const void *, laserscan_output_scan_msg_arg,
+    uint32_t, laserscan_output_header_nsec_arg,
+    uint32_t, laserscan_output_header_sec_arg,
+    size_t, laserscan_output_msg_size_arg),
+  TP_FIELDS(
+    // output event fields
+    ctf_integer_hex(const void *, laserscan_output_node, laserscan_output_node_arg)
+    ctf_integer_hex(const void *, laserscan_output_scan_msg, laserscan_output_scan_msg_arg)
+    ctf_integer(uint32_t, laserscan_output_header_nsec, laserscan_output_header_nsec_arg)
+    ctf_integer(uint32_t, laserscan_output_header_sec, laserscan_output_header_sec_arg)
+    ctf_integer(size_t, laserscan_output_msg_size, laserscan_output_msg_size_arg)
+    ctf_string(version, tracetools_benchmark_VERSION)
+  )
+)
+
+// robotperf laserscan_output end of callback (after publication)
+TRACEPOINT_EVENT(
+  TRACEPOINT_PROVIDER,
+  robotperf_laserscan_output_cb_fini,
+  TP_ARGS(
+    const void *, laserscan_output_node_arg,
+    const void *, laserscan_output_scan_msg_arg,
+    uint32_t, laserscan_output_header_nsec_arg,
+    uint32_t, laserscan_output_header_sec_arg,
+    size_t, laserscan_output_msg_size_arg),
+  TP_FIELDS(
+    ctf_integer_hex(const void *, laserscan_output_node, laserscan_output_node_arg)
+    ctf_integer_hex(const void *, laserscan_output_scan_msg, laserscan_output_scan_msg_arg)
+    ctf_integer(uint32_t, laserscan_output_header_nsec, laserscan_output_header_nsec_arg)
+    ctf_integer(uint32_t, laserscan_output_header_sec, laserscan_output_header_sec_arg)
+    ctf_integer(size_t, laserscan_output_msg_size, laserscan_output_msg_size_arg)
     ctf_string(version, tracetools_benchmark_VERSION)
   )
 )
