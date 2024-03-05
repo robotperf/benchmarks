@@ -67,7 +67,7 @@ def plot_urdf_and_distance_calculation(argv):
             "realtime_urdf_filter:urdf_filter_fini",                                    # 2
             "realtime_urdf_filter:urdf_filter_cb_fini",                                 # 3
             #
-            "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_init:",         # 4
+            "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_init",         # 4
             "dual_arm_static_avoidance:dual_arm_distance_calculation_init",             # 5
             "dual_arm_static_avoidance:dual_arm_distance_calculation_fini",             # 6
             "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_fini",          # 7

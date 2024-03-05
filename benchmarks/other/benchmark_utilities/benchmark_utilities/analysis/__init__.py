@@ -1760,6 +1760,191 @@ class BenchmarkAnalyzer:
         # show(fig)  # show in browser    
         export_png(fig, filename="/tmp/analysis/plot_trace_d8.png")
 
+    def traces_id_d8_full(self, trace_path, number_of_trace_sets=10):
+        """
+        Depict all traces in a single plot for d8
+
+        Args:
+            trace_path ([type]): full path to the trace directory
+            number_of_trace_sets (int): number of "Control Update" trace sets to used to set the x-axis range
+
+        # NOTE: cobra-specific
+        """
+        # For some reason it seems to be displayed in the reverse order on the Y axis
+        segment_types = [
+            # "rmw", 
+            # "rcl", 
+            # "rclcpp",            
+            "URDF Filter", 
+            "Distance Calculation", 
+            "Distance Evaluation", 
+            "Control Update",
+            "TF2",
+
+        ]
+
+        colors = {
+            # "rmw": ""
+            # "rcl": ""
+            # "rclcpp": ""
+            "TF2": "#6B6D76",  # lookup
+            "TF2 lookup": "#6B6D76",  # lookup
+            "TF2 set": "#000000",  # set
+            "Control Update": "#C08321",
+            "Distance Evaluation": "#D1ACA0",
+            "Distance Calculation": "#FCBFB7",
+            "URDF Filter": "#333A3B"
+            # "Direct kinematics": "#334E58",
+        }
+
+
+        fig = figure(
+            title="RobotPerf benchmark:" + self.benchmark_name,
+            x_axis_label=f"Milliseconds",
+            y_range=segment_types,
+            plot_width=2000,
+            plot_height=1500,
+        )
+        fig.title.align = "center"
+        fig.title.text_font_size = "20px"
+        # fig.xaxis[0].formatter = DatetimeTickFormatter(milliseconds = ['%3Nms'])
+        fig.xaxis[0].formatter = PrintfTickFormatter(format="%f ms")
+        fig.xaxis[0].ticker.desired_num_ticks = 10
+        fig.xaxis[0].axis_label_text_font_size = "30px"
+        fig.yaxis[0].major_label_text_font_size = "25px"
+
+        
+        # Let's pick "Control Update" matches to determine sets
+        target_chain_control = [
+            "dual_arm_static_avoidance:dual_arm_control_update_cb_init",                # 0
+            "dual_arm_static_avoidance:dual_arm_control_update_init",                   # 1
+            "dual_arm_static_avoidance:dual_arm_control_update_fini",                   # 2
+            "dual_arm_static_avoidance:dual_arm_control_update_cb_fini",                # 3
+        ]
+
+        ## planning and trajectory execution
+        self.target_chain = target_chain_control
+
+        # # Pick time references from one trace
+        #
+        # d8_msg_sets = self.msgsets_from_trace(trace_path, False)
+        # index_to_plot = len(d8_msg_sets) // 2
+        # msg_set = d8_msg_sets[index_to_plot]
+        # init_ns = msg_set[0].default_clock_snapshot.ns_from_origin
+        # # fini_ns = msg_set[-1].default_clock_snapshot.ns_from_origin
+        # fini_ns = init_ns + 5*1e6 # just plot 5 ms from the start
+
+        d8_msg_sets = self.msgsets_from_trace_no_vpid(trace_path, debug=False, order=False)
+        # print(len(d8_msg_sets))
+        init_ns = d8_msg_sets[0][0].default_clock_snapshot.ns_from_origin  # first msg of the first set
+        fini_ns = d8_msg_sets[number_of_trace_sets][-1].default_clock_snapshot.ns_from_origin  # last msg of the last set
+
+        # x time range
+        fig.x_range.start = 0
+        # fig.x_range.end = fini_ns / 1e6
+
+        # callback_start = (msg_set[0].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+        # callback_end = (msg_set[3].default_clock_snapshot.ns_from_origin - init_ns) / 1e6
+        # duration = callback_end - callback_start
+        # self.add_durations_to_figure(
+        #     fig,
+        #     "Planning",
+        #     [(callback_start, callback_start + duration, duration)],
+        #     colors["Planning"],
+        # )
+    
+        def plot_row_within_timerange(target_chain, trace_path, timerange, fig, row_name, row_color, debug=False):
+            # debug arguments provided by printing it to stdout:
+            if debug:
+                print("target_chain: ", target_chain)
+                print("trace_path: ", trace_path)
+                print("timerange: ", timerange)
+                print("fig: ", fig)
+                print("row_name: ", row_name)
+                print("row_color: ", row_color)
+
+
+            self.target_chain = target_chain
+            # msg_sets = self.msgsets_from_trace(trace_path, False)
+            msg_sets = self.msgsets_from_trace_no_vpid(trace_path, debug=False, order=False)
+            if debug:
+                print("len msg_sets: ", len(msg_sets))
+            msg_sets_in_timerange = []
+            
+            # Take msg sets within time range
+            for msg_set in msg_sets:
+                if debug:
+                    # make time stamps human readable while printing
+                    print("msg_set[0].default_clock_snapshot.ns_from_origin: ", msg_set[0].default_clock_snapshot.ns_from_origin)
+
+                    print("msg_set[0].default_clock_snapshot.ns_from_origin: ", msg_set[0].default_clock_snapshot.ns_from_origin)
+                    print("msg_set[-1].default_clock_snapshot.ns_from_origin: ", msg_set[-1].default_clock_snapshot.ns_from_origin)
+                    print("timerange[0]: ", timerange[0])
+                    print("timerange[1]: ", timerange[1])
+                if msg_set[0].default_clock_snapshot.ns_from_origin > timerange[0] and msg_set[-1].default_clock_snapshot.ns_from_origin < timerange[1]:
+                    msg_sets_in_timerange.append(msg_set)
+
+            if debug:
+                print("len msg_sets_in_timerange: ", len(msg_sets_in_timerange))
+
+            for msg_set in msg_sets_in_timerange:
+                callback_start = (msg_set[0].default_clock_snapshot.ns_from_origin - timerange[0]) / 1e6
+                callback_end = (msg_set[-1].default_clock_snapshot.ns_from_origin - timerange[0]) / 1e6
+                duration = callback_end - callback_start
+                self.add_durations_to_figure(
+                    fig,
+                    row_name,
+                    [(callback_start, callback_start + duration, duration)],
+                    colors[row_color],
+                )
+
+        # TF2 lookup
+        target_chain_tf2_loopkup = [
+            "robotperf_benchmarks:robotcore_tf2_lookup_cb_init",   # 0
+            "robotperf_benchmarks:robotcore_tf2_lookup_cb_fini"    # 1
+        ]
+        plot_row_within_timerange(target_chain_tf2_loopkup, trace_path, [init_ns, fini_ns], fig, "TF2", "TF2 lookup")
+
+        # TF2 set
+        target_chain_tf2_loopkup = [
+            "robotperf_benchmarks:robotcore_tf2_set_cb_init",   # 0
+            "robotperf_benchmarks:robotcore_tf2_set_cb_fini"    # 1
+        ]
+        plot_row_within_timerange(target_chain_tf2_loopkup, trace_path, [init_ns, fini_ns], fig, "TF2", "TF2 set")
+
+        # Control Update
+        target_chain_tf2_loopkup = [
+            "dual_arm_static_avoidance:dual_arm_control_update_cb_init",   # 0
+            "dual_arm_static_avoidance:dual_arm_control_update_cb_fini"    # 1
+        ]
+        plot_row_within_timerange(target_chain_tf2_loopkup, trace_path, [init_ns, fini_ns], fig, "Control Update", "Control Update")
+
+        # Distance Evaluation
+        target_chain_tf2_loopkup = [
+            "dual_arm_static_avoidance:dual_arm_distance_evaluation_cb_init",   # 0
+            "dual_arm_static_avoidance:dual_arm_distance_evaluation_cb_fini"    # 1
+        ]
+        plot_row_within_timerange(target_chain_tf2_loopkup, trace_path, [init_ns, fini_ns], fig, "Distance Evaluation", "Distance Evaluation")
+
+        # Distance Calculation
+        target_chain_tf2_loopkup = [
+            "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_init",   # 0
+            "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_fini"    # 1
+        ]
+        plot_row_within_timerange(target_chain_tf2_loopkup, trace_path, [init_ns, fini_ns], fig, "Distance Calculation", "Distance Calculation")
+
+        # URDF Filter
+        target_chain_tf2_loopkup = [
+            "realtime_urdf_filter:urdf_filter_cb_init",   # 0
+            "realtime_urdf_filter:urdf_filter_cb_fini"    # 1
+        ]
+        plot_row_within_timerange(target_chain_tf2_loopkup, trace_path, [init_ns, fini_ns], fig, "URDF Filter", "URDF Filter")
+        
+        ## output
+        # show(fig)  # show in browser    
+        export_png(fig, filename="/tmp/analysis/plot_trace_d8_full.png")
+
+
     def traces(self, msg_set):
         # this method only works for hardcoded traces, specifically for the a1 benchmark
         # TODO: make this function generic so other benchmarks can also be plotted 
@@ -3623,21 +3808,21 @@ class BenchmarkAnalyzer:
             # msg_set = self.image_pipeline_msg_sets[index_to_plot]
             self.traces_id_d1(trace_path, include_trajectory_execution=False)
         elif (self.benchmark_name == "d7_dual_arm_static_avoidance"):            
-            self.image_pipeline_msg_sets = self.msgsets_from_trace_no_vpid(trace_path, False)
-            print(len(self.image_pipeline_msg_sets))
-            index_to_plot = len(self.image_pipeline_msg_sets) // 2
-            msg_set = self.image_pipeline_msg_sets[index_to_plot]
+            self.msg_sets = self.msgsets_from_trace_no_vpid(trace_path, False)
+            print(len(self.msg_sets))
+            index_to_plot = len(self.msg_sets) // 2
+            msg_set = self.msg_sets[index_to_plot]
             self.traces_id_d7(msg_set)
         elif (self.benchmark_name == "d8_single_arm_static_avoidance_perception"):            
-            self.image_pipeline_msg_sets = self.msgsets_from_trace_no_vpid(trace_path, debug=False, order=False)
-            print(len(self.image_pipeline_msg_sets))
-            if len(self.image_pipeline_msg_sets) > 0:
+            self.msg_sets = self.msgsets_from_trace_no_vpid(trace_path, debug=False, order=False)
+            print(len(self.msg_sets))
+            if len(self.msg_sets) > 0:
                 # # middle index
-                # index_to_plot = len(self.image_pipeline_msg_sets) // 2
+                # index_to_plot = len(self.msg_sets) // 2
                 # pick a random index within the set
-                index_to_plot = random.randint(0, len(self.image_pipeline_msg_sets)-1)
+                index_to_plot = random.randint(0, len(self.msg_sets)-1)
                 # pick the set coherent with the index
-                msg_set = self.image_pipeline_msg_sets[index_to_plot]
+                msg_set = self.msg_sets[index_to_plot]
                 self.traces_id_d8(msg_set)
             else:
                 print(color("No traces to draw", fg="red"))
