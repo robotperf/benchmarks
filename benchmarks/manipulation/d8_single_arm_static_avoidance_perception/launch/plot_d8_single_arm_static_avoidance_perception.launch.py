@@ -301,7 +301,7 @@ def generate_launch_description():
     # Define the ExecuteProcess action to run the Python script
     analyzer = ExecuteProcess(
         cmd=[
-            'python3', "src/benchmarks/benchmarks/manipulation/d8_single_arm_static_avoidance_perception/launch/plot_d8_single_arm_static_avoidance_perception.launch.py",
+            'python3', os.path.abspath(__file__),
             '--hardware_device_type', LaunchConfiguration('hardware_device_type'),
             '--trace_path', LaunchConfiguration('trace_path'),
             '--metrics', LaunchConfiguration('metrics'),
