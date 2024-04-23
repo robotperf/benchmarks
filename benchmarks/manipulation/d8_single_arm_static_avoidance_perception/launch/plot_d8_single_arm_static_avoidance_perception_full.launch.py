@@ -50,7 +50,7 @@ def plot_planning_and_traj_execution(argv):
     ba = BenchmarkAnalyzer('d8_single_arm_static_avoidance_perception', hardware_device_type)
     ba.set_trace_sets_filter_type('name')
 
-    ba.traces_id_d8_full(trace_path, number_of_trace_sets=100)
+    ba.traces_id_d8_full(trace_path, number_of_trace_sets=10)
 
 def generate_launch_description():
     # Declare the launch arguments
