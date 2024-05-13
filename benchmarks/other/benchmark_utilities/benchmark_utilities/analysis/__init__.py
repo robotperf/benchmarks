@@ -1640,7 +1640,7 @@ class BenchmarkAnalyzer:
 
         # For some reason it seems to be displayed in the reverse order on the Y axis
         if self.hardware_device_type == "cpu":
-            segment_types = ["URDF Filter", "Distance Calculation", "Distance Evaluation", "Control Update"]
+            segment_types = ["RealSense2 Frame", "URDF Filter", "Distance Calculation", "Distance Evaluation", "Control Update"]
 
         fig = figure(
             title="RobotPerf benchmark:" + self.benchmark_name,
@@ -1665,15 +1665,29 @@ class BenchmarkAnalyzer:
         ############################################################################################################
         # draw durations
         ############################################################################################################
-        # repeat this for each segment, from 0 to 3
+        # draw the realsense bits (0, 1)
+        ## operation
+        callback_start = (target_chain_ns[0] - init_ns) / 1e6
+        callback_end = (target_chain_ns[1] - init_ns) / 1e6
+        duration = callback_end - callback_start
+        self.add_durations_to_figure(
+            fig,
+            self.target_chain_layer[0],  # index used in here
+                                    # should match with the
+                                    # one from the callback_start
+            [(callback_start, callback_start + duration, duration)],
+            "crimson",
+        )        
+
+        # draw the first four blocks (2-17)
         for i in range(4):
             ## ROS 2 underhead
-            callback_start = (target_chain_ns[0 + 4*i] - init_ns) / 1e6
-            callback_end = (target_chain_ns[1 + 4*i] - init_ns) / 1e6
+            callback_start = (target_chain_ns[2 + 4*i] - init_ns) / 1e6
+            callback_end = (target_chain_ns[3 + 4*i] - init_ns) / 1e6
             duration = callback_end - callback_start
             self.add_durations_to_figure(
                 fig,
-                self.target_chain_layer[0 + 4*i],  # index used in here
+                self.target_chain_layer[2 + 4*i],  # index used in here
                                         # should match with the
                                         # one from the callback_start
                 [(callback_start, callback_start + duration, duration)],
@@ -1681,12 +1695,12 @@ class BenchmarkAnalyzer:
             )
 
             ## operation
-            callback_start = (target_chain_ns[1 + 4*i] - init_ns) / 1e6
-            callback_end = (target_chain_ns[2+ 4*i] - init_ns) / 1e6
+            callback_start = (target_chain_ns[3 + 4*i] - init_ns) / 1e6
+            callback_end = (target_chain_ns[4+ 4*i] - init_ns) / 1e6
             duration = callback_end - callback_start
             self.add_durations_to_figure(
                 fig,
-                self.target_chain_layer[1+ 4*i],  # index used in here
+                self.target_chain_layer[3+ 4*i],  # index used in here
                                         # should match with the
                                         # one from the callback_start
                 [(callback_start, callback_start + duration, duration)],
@@ -1694,12 +1708,12 @@ class BenchmarkAnalyzer:
             )
 
             ## ROS 2 overhead
-            callback_start = (target_chain_ns[2+ 4*i] - init_ns) / 1e6
-            callback_end = (target_chain_ns[3+ 4*i] - init_ns) / 1e6
+            callback_start = (target_chain_ns[4+ 4*i] - init_ns) / 1e6
+            callback_end = (target_chain_ns[5+ 4*i] - init_ns) / 1e6
             duration = callback_end - callback_start
             self.add_durations_to_figure(
                 fig,
-                self.target_chain_layer[2+ 4*i],  # index used in here
+                self.target_chain_layer[4+ 4*i],  # index used in here
                                         # should match with the
                                         # one from the callback_start
                 [(callback_start, callback_start + duration, duration)],
@@ -1758,7 +1772,7 @@ class BenchmarkAnalyzer:
         
         ## output
         # show(fig)  # show in browser    
-        export_png(fig, filename="/tmp/analysis/plot_trace_d8.png")
+        export_png(fig, filename="/tmp/plot_trace_d8.png")
 
     def traces_id_d8_full(self, trace_path, number_of_trace_sets=10):
         """
@@ -1774,7 +1788,8 @@ class BenchmarkAnalyzer:
         segment_types = [
             # "rmw", 
             # "rcl", 
-            # "rclcpp",            
+            # "rclcpp",
+            "RealSense2 Frame",
             "URDF Filter", 
             "Distance Calculation", 
             "Distance Evaluation", 
@@ -1793,7 +1808,8 @@ class BenchmarkAnalyzer:
             "Control Update": "#C08321",
             "Distance Evaluation": "#D1ACA0",
             "Distance Calculation": "#FCBFB7",
-            "URDF Filter": "#333A3B"
+            "URDF Filter": "#333A3B",
+            "RealSense2 Frame": "#334E58",
             # "Direct kinematics": "#334E58",
         }
 
@@ -1939,10 +1955,17 @@ class BenchmarkAnalyzer:
             "realtime_urdf_filter:urdf_filter_cb_fini"    # 1
         ]
         plot_row_within_timerange(target_chain_tf2_loopkup, trace_path, [init_ns, fini_ns], fig, "URDF Filter", "URDF Filter")
-        
+
+        # RealSense2 Frame
+        target_chain_realsense2 = [
+            "robotperf_benchmarks:realsense2_frame_cb_init",   # 0
+            "robotperf_benchmarks:realsense2_frame_cb_fini"    # 1
+        ]
+        plot_row_within_timerange(target_chain_realsense2, trace_path, [init_ns, fini_ns], fig, "RealSense2 Frame", "RealSense2 Frame")
+
         ## output
         # show(fig)  # show in browser    
-        export_png(fig, filename="/tmp/analysis/plot_trace_d8_full.png")
+        export_png(fig, filename="/tmp/plot_trace_d8_full.png")
 
 
     def traces(self, msg_set):

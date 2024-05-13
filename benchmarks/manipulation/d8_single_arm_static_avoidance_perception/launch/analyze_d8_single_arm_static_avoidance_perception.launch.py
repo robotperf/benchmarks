@@ -473,6 +473,94 @@ def analyze_realtime_urdf_filtering(argv):
         else:
             print('The metric ' + metric + ' is not yet implemented\n')
 
+
+def analyze_realsense2_frame(argv):
+    
+    # Parse the command-line arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--hardware_device_type', type=str, help='Hardware Device Type (e.g. cpu or fpga)', default ='cpu')
+    parser.add_argument('--trace_path', type=str, help='Path to trace files (e.g. /tmp/analysis/trace)', default = '/tmp/analysis/trace')
+    parser.add_argument('--metrics', type=str, help='List of metrics to be analyzed (e.g. latency and/or throughput)', default = ['latency'])
+    parser.add_argument('--integrated', type=str, help='Integrated or separated version of the Resize and Rectify nodes (only for fpga now)', default='false') 
+    args = parser.parse_args(argv)
+
+    # Get the values of the arguments
+    hardware_device_type = args.hardware_device_type
+    trace_path = args.trace_path
+    metrics_string = args.metrics
+    metrics_elements = [element.strip() for element in metrics_string.strip("[]").split(",")]
+    metrics = json.loads(json.dumps(metrics_elements))
+    integrated = args.integrated
+
+    # Instantiate the class
+    ba = BenchmarkAnalyzer('d8_single_arm_static_avoidance_perception', hardware_device_type)
+
+    # Manipulation traces cannot be identified, since no ID is being stored in the tracepoints
+    ba.set_trace_sets_filter_type('name')
+
+    if hardware_device_type == 'cpu':
+        # add parameters for analyzing the traces
+        ## using message header id
+        target_chain = [
+            "robotperf_benchmarks:realsense2_frame_cb_init",        # 0
+            "robotperf_benchmarks:realsense2_frame_cb_fini",        # 1
+        ]
+
+        ba.add_target(
+            {
+                "name": "robotperf_benchmarks:realsense2_frame_cb_init",
+                "name_disambiguous": "robotperf_benchmarks:realsense2_frame_cb_init",
+                "colors_fg": "yellow",
+                "colors_fg_bokeh": "salmon",
+                "layer": "userland",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+        )
+        ba.add_target(
+            {
+                "name": "robotperf_benchmarks:realsense2_frame_cb_fini",
+                "name_disambiguous": "robotperf_benchmarks:realsense2_frame_cb_fini",
+                "colors_fg": "red",
+                "colors_fg_bokeh": "darksalmon",
+                "layer": "userland",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+        )
+        
+    num_metrics = 0 # initialize the metric count
+    add_power = False # initialize the boolean
+    for metric in metrics:
+        if metric == 'power':
+            add_power = True
+            ba.add_power(
+            {
+                "name": "robotcore_power:robotcore_power_output_cb_fini",
+                "name_disambiguous": "robotcore_power:robotcore_power_output_cb_fini",
+                "colors_fg": "blue",
+                "colors_fg_bokeh": "silver",
+                "layer": "userland",
+                "label_layer": 4,
+                "marker": "plus",
+            }
+            )
+        else:
+            num_metrics += 1 # it will be larger than 0 if other metrics besides power are desired
+    
+    for metric in metrics:
+        if metric == 'latency':
+            ba.analyze_latency(trace_path, add_power, debug=False)
+        elif metric == 'throughput':
+            ba.analyze_throughput(trace_path, add_power, debug=False)
+        elif metric == 'power': 
+            if num_metrics == 0: # launch independently iff no other metric is requested
+                total_consumption = ba.analyze_power(trace_path)
+                print("The average consumption is {} W".format(total_consumption))
+        else:
+            print('The metric ' + metric + ' is not yet implemented\n')
+
+
 def analyze_tf2_operations(argv):
     tf_tree = FrameHierarchy()
     tf_tree.add_frame("world", "link_base")
@@ -629,6 +717,7 @@ def print_total_benchmark_time(argv):
         'dual_arm_distance_calculation',
         'dual_arm_distance_evaluation',
         'realtime_urdf_filter',
+        'realsense2_frame_cb',
         'robotcore_tf2'
     ]
 
@@ -692,7 +781,7 @@ if __name__ == '__main__':
     analyze_dual_arm_cp_evaluation(sys.argv[1:])
     analyze_dual_arm_cp_calculation(sys.argv[1:])
     analyze_realtime_urdf_filtering(sys.argv[1:])
-    
+    analyze_realsense2_frame(sys.argv[1:])    
     print_total_benchmark_time(sys.argv[1:])
     # analyze_dual_arm_joint_trajectory_control(sys.argv[1:])  # robotcore-control
     #
