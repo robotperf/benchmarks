@@ -1774,6 +1774,76 @@ class BenchmarkAnalyzer:
         # show(fig)  # show in browser    
         export_png(fig, filename="/tmp/plot_trace_d8.png")
 
+    def traces_add_target_chain(self, target_chain_ns, init_ns, fig, index_start, index_end, color="crimson"):
+        callback_start = (target_chain_ns[index_start] - init_ns) / 1e6
+        callback_end = (target_chain_ns[index_end] - init_ns) / 1e6
+        duration = callback_end - callback_start
+        self.add_durations_to_figure(fig, self.target_chain_layer[index_start], [(callback_start, callback_start + duration, duration)], color, )        
+
+    
+    def traces_id_d8_fpga(self, msg_set):
+        # NOTE: cobra-specific
+
+        # For some reason it seems to be displayed in the reverse order on the Y axis
+        if self.hardware_device_type == "cpu":
+            segment_types = ["RealSense2 Frame", "URDF Filter", "Distance Calculation", "Distance Evaluation", "Control Update"]
+
+        fig = figure(
+            title="RobotPerf benchmark:" + self.benchmark_name,
+            x_axis_label=f"Milliseconds",
+            y_range=segment_types,
+            plot_width=2000,
+            plot_height=600,
+        )
+        fig.title.align = "center"
+        fig.title.text_font_size = "20px"
+        # fig.xaxis[0].formatter = DatetimeTickFormatter(milliseconds = ['%3Nms'])
+        fig.xaxis[0].formatter = PrintfTickFormatter(format="%f ms")
+        fig.xaxis[0].ticker.desired_num_ticks = 20
+        fig.xaxis[0].axis_label_text_font_size = "30px"
+        fig.yaxis[0].major_label_text_font_size = "25px"
+
+        target_chain_ns = []
+        for msg_index in range(len(msg_set)):
+            target_chain_ns.append(msg_set[msg_index].default_clock_snapshot.ns_from_origin)
+        init_ns = target_chain_ns[0]
+
+        ############################################################################################################
+        # draw durations
+        ############################################################################################################
+        
+        # draw the realsense bits (0, 1)
+        self.traces_add_target_chain(target_chain_ns, init_ns, fig, index_start=0, index_end=1, color="crimson")
+
+        # draw realtime urdf filter (2-5)
+        self.traces_add_target_chain(target_chain_ns, init_ns, fig, index_start=2, index_end=3, color="lightgray") # overhead
+        self.traces_add_target_chain(target_chain_ns, init_ns, fig, index_start=3, index_end=4, color="crimson") # operation
+        self.traces_add_target_chain(target_chain_ns, init_ns, fig, index_start=4, index_end=5, color="lightgray") # overhead
+        
+        # draw distance calculation (6-21)
+        self.traces_add_target_chain(target_chain_ns, init_ns, fig, index_start=6, index_end=7, color="lightgray") # overhead
+        self.traces_add_target_chain(target_chain_ns, init_ns, fig, index_start=7, index_end=8, color="lightgreen") # dimg_post_processor (process image, contours, blur, edges, etc.)
+        self.traces_add_target_chain(target_chain_ns, init_ns, fig, index_start=8, index_end=9, color="blue") # process_cp_fpga_part1 (transform for cps, convert to depth space)
+        self.traces_add_target_chain(target_chain_ns, init_ns, fig, index_start=10, index_end=11, color="green") # send_data_to_driver
+        self.traces_add_target_chain(target_chain_ns, init_ns, fig, index_start=12, index_end=13, color="yellow") # send_data_to_fpga
+        self.traces_add_target_chain(target_chain_ns, init_ns, fig, index_start=14, index_end=15, color="pink") # fpga_operation
+        self.traces_add_target_chain(target_chain_ns, init_ns, fig, index_start=16, index_end=17, color="brown") # read_from_fpga
+        self.traces_add_target_chain(target_chain_ns, init_ns, fig, index_start=18, index_end=19, color="orange") # read_from_driver
+        self.traces_add_target_chain(target_chain_ns, init_ns, fig, index_start=19, index_end=20, color="purple") # nothing (empty lines)
+        self.traces_add_target_chain(target_chain_ns, init_ns, fig, index_start=20, index_end=21, color="lightgray") # overhead (publishing obstacles)
+
+        # draw distance evaluation (22-25)
+        self.traces_add_target_chain(target_chain_ns, init_ns, fig, index_start=22, index_end=23, color="lightgray") # overhead
+        self.traces_add_target_chain(target_chain_ns, init_ns, fig, index_start=23, index_end=24, color="crimson") # operation
+        self.traces_add_target_chain(target_chain_ns, init_ns, fig, index_start=24, index_end=25, color="lightgray") # overhead
+
+        # draw control update (26-29)
+        self.traces_add_target_chain(target_chain_ns, init_ns, fig, index_start=26, index_end=27, color="lightgray") # overhead
+        self.traces_add_target_chain(target_chain_ns, init_ns, fig, index_start=27, index_end=28, color="crimson") # operation
+        self.traces_add_target_chain(target_chain_ns, init_ns, fig, index_start=28, index_end=29, color="lightgray") # overhead
+   
+        export_png(fig, filename="/tmp/plot_trace_d8_fpga.png")
+
     def traces_id_d8_full(self, trace_path, number_of_trace_sets=10):
         """
         Depict all traces in a single plot for d8
@@ -3847,6 +3917,23 @@ class BenchmarkAnalyzer:
                 # pick the set coherent with the index
                 msg_set = self.msg_sets[index_to_plot]
                 self.traces_id_d8(msg_set)
+            else:
+                print(color("No traces to draw", fg="red"))
+        else:
+            print(color("No traces to draw", fg="red"))
+
+    def draw_tracepoints_fpga(self, trace_path="/tmp/analysis"):        
+        if (self.benchmark_name == "d8_single_arm_static_avoidance_perception"):            
+            self.msg_sets = self.msgsets_from_trace_no_vpid(trace_path, debug=False, order=False)
+            print(len(self.msg_sets))
+            if len(self.msg_sets) > 0:
+                # # middle index
+                # index_to_plot = len(self.msg_sets) // 2
+                # pick a random index within the set
+                index_to_plot = random.randint(0, len(self.msg_sets)-1)
+                # pick the set coherent with the index
+                msg_set = self.msg_sets[index_to_plot]
+                self.traces_id_d8_fpga(msg_set)
             else:
                 print(color("No traces to draw", fg="red"))
         else:
