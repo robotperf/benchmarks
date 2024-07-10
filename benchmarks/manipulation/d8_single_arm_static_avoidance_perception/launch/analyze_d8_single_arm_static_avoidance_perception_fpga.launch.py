@@ -1832,6 +1832,6 @@ if __name__ == '__main__':
     analyze_distance_calculation_fpga_operation(sys.argv[1:])
     analyze_distance_calculation_read_from_fpga(sys.argv[1:])
     analyze_distance_calculation_read_from_driver(sys.argv[1:])
-    analyze_distance_calculation_getobstacle_distances(sys.argv[1:])
+    # analyze_distance_calculation_getobstacle_distances(sys.argv[1:])
 
     print_total_benchmark_time(sys.argv[1:])

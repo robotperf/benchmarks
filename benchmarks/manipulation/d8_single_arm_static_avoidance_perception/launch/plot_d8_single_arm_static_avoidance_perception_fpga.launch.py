@@ -33,6 +33,26 @@ import sys
 import argparse
 import json
 
+class Trace_Plot:
+    def __init__(self, name, layer, label_layer, colors_fg="red", colors_fg_bokeh="darkred",  marker="plus"):
+        self.name = name
+        self.name_disambiguous = name
+        self.colors_fg = colors_fg
+        self.colors_fg_bokeh = colors_fg_bokeh
+        self.layer = layer
+        self.label_layer = label_layer
+        self.marker = marker
+    def add_target_ba(self, ba):
+        target_placeholder = {
+            "name": self.name,
+            "name_disambiguous": self.name_disambiguous,
+            "colors_fg": self.colors_fg,
+            "colors_fg_bokeh": self.colors_fg_bokeh,
+            "layer": self.layer,
+            "label_layer": self.label_layer,
+            "marker": self.marker,    
+        }
+        ba.add_target(target_placeholder)        
 
 def plot_urdf_and_distance_calculation(argv):
     
@@ -58,398 +78,54 @@ def plot_urdf_and_distance_calculation(argv):
     # Manipulation traces cannot be identified, since no ID is being stored in the tracepoints
     ba.set_trace_sets_filter_type('name')
 
+    trace_plot_list = []
+    # RealSense2 Frame
+    trace_plot_list.append(Trace_Plot(name="robotperf_benchmarks:realsense2_frame_cb_init", layer="RealSense2 Frame", label_layer=1))
+    trace_plot_list.append(Trace_Plot(name="robotperf_benchmarks:realsense2_frame_cb_fini", layer="RealSense2 Frame", label_layer=1))
+    # URDF Filter
+    trace_plot_list.append(Trace_Plot(name="realtime_urdf_filter:urdf_filter_cb_init", layer="URDF Filter", label_layer=2))
+    trace_plot_list.append(Trace_Plot(name="realtime_urdf_filter:urdf_filter_init", layer="URDF Filter", label_layer=2))
+    trace_plot_list.append(Trace_Plot(name="realtime_urdf_filter:urdf_filter_fini", layer="URDF Filter", label_layer=2))
+    trace_plot_list.append(Trace_Plot(name="realtime_urdf_filter:urdf_filter_cb_fini", layer="URDF Filter", label_layer=2))
+    # Distance Calculation
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:dual_arm_distance_calculation_cb_init", layer="Distance Calculation", label_layer=3))
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:dual_arm_distance_calculation_init", layer="Distance Calculation", label_layer=3))
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:distance_calculation_process_cp_fpga_part1_init", layer="Distance Calculation", label_layer=3))
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:distance_calculation_process_cp_fpga_part1_fini", layer="Distance Calculation", label_layer=3))
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:distance_calculation_send_data_to_driver_init", layer="Distance Calculation", label_layer=3))
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:distance_calculation_send_data_to_driver_fini", layer="Distance Calculation", label_layer=3))
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:distance_calculation_send_data_to_fpga_init", layer="Distance Calculation", label_layer=3))
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:distance_calculation_send_data_to_fpga_fini", layer="Distance Calculation", label_layer=3))
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:distance_calculation_fpga_operation_init", layer="Distance Calculation", label_layer=3))
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:distance_calculation_fpga_operation_fini", layer="Distance Calculation", label_layer=3))
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:distance_calculation_read_from_fpga_init", layer="Distance Calculation", label_layer=3))
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:distance_calculation_read_from_fpga_fini", layer="Distance Calculation", label_layer=3))
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:distance_calculation_read_from_driver_init", layer="Distance Calculation", label_layer=3))
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:distance_calculation_read_from_driver_fini", layer="Distance Calculation", label_layer=3))
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:dual_arm_distance_calculation_fini", layer="Distance Calculation", label_layer=3))
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:dual_arm_distance_calculation_cb_fini", layer="Distance Calculation", label_layer=3))
+    # Distance Evaluation       
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:dual_arm_distance_evaluation_cb_init", layer="Distance Evaluation", label_layer=4))
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:dual_arm_distance_evaluation_init", layer="Distance Evaluation", label_layer=4))
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:dual_arm_distance_evaluation_fini", layer="Distance Evaluation", label_layer=4))
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:dual_arm_distance_evaluation_cb_fini", layer="Distance Evaluation", label_layer=4))
+    # Control Update
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:dual_arm_control_update_cb_init", layer="Control Update", label_layer=5))
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:dual_arm_control_update_init", layer="Control Update", label_layer=5))
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:dual_arm_control_update_fini", layer="Control Update", label_layer=5))
+    trace_plot_list.append(Trace_Plot(name="dual_arm_static_avoidance:dual_arm_control_update_cb_fini", layer="Control Update", label_layer=5))       
+
     if hardware_device_type == 'cpu':
         # add parameters for analyzing the traces
         ## using message header id
-        target_chain = [
-            "robotperf_benchmarks:realsense2_frame_cb_init",                            # 0
-            "robotperf_benchmarks:realsense2_frame_cb_fini",                            # 1
-            #
-            "realtime_urdf_filter:urdf_filter_cb_init",                                 # 2
-            "realtime_urdf_filter:urdf_filter_init",                                    # 3
-            "realtime_urdf_filter:urdf_filter_fini",                                    # 4
-            "realtime_urdf_filter:urdf_filter_cb_fini",                                 # 5
-            #
-            "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_init",          # 6
-            "dual_arm_static_avoidance:dual_arm_distance_calculation_init",             # 7
-            "dual_arm_static_avoidance:dual_arm_distance_calculation_process_cp_fpga_part1_init", # 8
-            "dual_arm_static_avoidance:dual_arm_distance_calculation_process_cp_fpga_part1_fini", # 9
-            "dual_arm_static_avoidance:dual_arm_distance_calculation_send_data_to_driver_init",   # 10
-            "dual_arm_static_avoidance:dual_arm_distance_calculation_send_data_to_driver_fini",   # 11
-            "dual_arm_static_avoidance:dual_arm_distance_calculation_send_data_to_fpga_init",     # 12
-            "dual_arm_static_avoidance:dual_arm_distance_calculation_send_data_to_fpga_fini",     # 13
-            "dual_arm_static_avoidance:dual_arm_distance_calculation_fpga_operation_init",        # 14
-            "dual_arm_static_avoidance:dual_arm_distance_calculation_fpga_operation_fini",        # 15
-            "dual_arm_static_avoidance:dual_arm_distance_calculation_read_from_fpga_init",        # 16
-            "dual_arm_static_avoidance:dual_arm_distance_calculation_read_from_fpga_fini",        # 17
-            "dual_arm_static_avoidance:dual_arm_distance_calculation_read_from_driver_init",      # 18
-            "dual_arm_static_avoidance:dual_arm_distance_calculation_read_from_driver_fini",      # 19
-            "dual_arm_static_avoidance:dual_arm_distance_calculation_fini",             # 20
-            "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_fini",          # 21
-            #
-            "dual_arm_static_avoidance:dual_arm_distance_evaluation_cb_init",           # 22
-            "dual_arm_static_avoidance:dual_arm_distance_evaluation_init",              # 23
-            "dual_arm_static_avoidance:dual_arm_distance_evaluation_fini",              # 24
-            "dual_arm_static_avoidance:dual_arm_distance_evaluation_cb_fini",           # 25
-            #
-            "dual_arm_static_avoidance:dual_arm_control_update_cb_init",                # 26
-            "dual_arm_static_avoidance:dual_arm_control_update_init",                   # 27
-            "dual_arm_static_avoidance:dual_arm_control_update_fini",                   # 28
-            "dual_arm_static_avoidance:dual_arm_control_update_cb_fini",                # 29
-        ]
-        #####################################################
-        # RealSense2 Frame
-        #####################################################    
-        ba.add_target(
-            {
-                "name": "robotperf_benchmarks:realsense2_frame_cb_init",
-                "name_disambiguous": "robotperf_benchmarks:realsense2_frame_cb_init",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "darkred",
-                "layer": "RealSense2 Frame",
-                "label_layer": 1,
-                "marker": "plus",
-            }
-        )
-
-        ba.add_target(
-            {
-                "name": "robotperf_benchmarks:realsense2_frame_cb_fini",
-                "name_disambiguous": "robotperf_benchmarks:realsense2_frame_cb_fini",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "darkred",
-                "layer": "RealSense2 Frame",
-                "label_layer": 1,
-                "marker": "plus",
-            }
-        )        
-
-        ##################################################### 
-        # URDF Filter
-        #####################################################
-        ba.add_target(
-            {
-                "name": "realtime_urdf_filter:urdf_filter_cb_init",
-                "name_disambiguous": "realtime_urdf_filter:urdf_filter_cb_init",
-                "colors_fg": "yellow",
-                "colors_fg_bokeh": "salmon",
-                "layer": "URDF Filter",
-                "label_layer": 2,
-                "marker": "plus",
-            }
-        )
-        ba.add_target(
-            {
-                "name": "realtime_urdf_filter:urdf_filter_init",
-                "name_disambiguous": "realtime_urdf_filter:urdf_filter_init",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "darksalmon",
-                "layer": "URDF Filter",
-                "label_layer": 2,
-                "marker": "plus",
-            }
-        )
-        ba.add_target(
-            {
-                "name": "realtime_urdf_filter:urdf_filter_fini",
-                "name_disambiguous": "realtime_urdf_filter:urdf_filter_fini",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "lightcoral",
-                "layer": "URDF Filter",
-                "label_layer": 2,
-                "marker": "plus",
-            }
-        )
-        ba.add_target(
-            {
-                "name": "realtime_urdf_filter:urdf_filter_cb_fini",
-                "name_disambiguous": "realtime_urdf_filter:urdf_filter_cb_fini",
-                "colors_fg": "yellow",
-                "colors_fg_bokeh": "darkred",
-                "layer": "URDF Filter",
-                "label_layer": 2,
-                "marker": "plus",
-            }
-        )
-
-        #####################################################
-        # Distance Calculation
-        #####################################################
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_init",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_init",
-                "colors_fg": "yellow",
-                "colors_fg_bokeh": "salmon",
-                "layer": "Distance Calculation",
-                "label_layer": 3,
-                "marker": "plus",
-            }
-        )
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_distance_calculation_init",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_init",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "darksalmon",
-                "layer": "Distance Calculation",
-                "label_layer": 3,
-                "marker": "plus",
-            }
-        )
+        target_chain = []
+        for trace in trace_plot_list:
+            target_chain.append(trace.name)
         
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_distance_calculation_process_cp_fpga_part1_init",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_process_cp_fpga_part1_init",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "darksalmon",
-                "layer": "Distance Calculation",
-                "label_layer": 3,
-                "marker": "plus",
-            }
-        )
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_distance_calculation_process_cp_fpga_part1_fini",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_process_cp_fpga_part1_fini",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "lightcoral",
-                "layer": "Distance Calculation",
-                "label_layer": 3,
-                "marker": "plus",
-            }
-        )       
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_distance_calculation_send_data_to_driver_init",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_send_data_to_driver_init",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "darksalmon",
-                "layer": "Distance Calculation",
-                "label_layer": 3,
-                "marker": "plus",
-            }
-        )
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_distance_calculation_send_data_to_driver_fini",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_send_data_to_driver_fini",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "lightcoral",
-                "layer": "Distance Calculation",
-                "label_layer": 3,
-                "marker": "plus",
-            }
-        )     
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_distance_calculation_send_data_to_fpga_init",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_send_data_to_fpga_init",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "darksalmon",
-                "layer": "Distance Calculation",
-                "label_layer": 3,
-                "marker": "plus",
-            }
-        )
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_distance_calculation_send_data_to_fpga_fini",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_send_data_to_fpga_fini",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "lightcoral",
-                "layer": "Distance Calculation",
-                "label_layer": 3,
-                "marker": "plus",
-            }
-        )     
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_distance_calculation_fpga_operation_init",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_fpga_operation_init",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "darksalmon",
-                "layer": "Distance Calculation",
-                "label_layer": 3,
-                "marker": "plus",
-            }
-        )
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_distance_calculation_fpga_operation_fini",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_fpga_operation_fini",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "lightcoral",
-                "layer": "Distance Calculation",
-                "label_layer": 3,
-                "marker": "plus",
-            }
-        )     
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_distance_calculation_read_from_fpga_init",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_read_from_fpga_init",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "darksalmon",
-                "layer": "Distance Calculation",
-                "label_layer": 3,
-                "marker": "plus",
-            }
-        )
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_distance_calculation_read_from_fpga_fini",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_read_from_fpga_fini",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "lightcoral",
-                "layer": "Distance Calculation",
-                "label_layer": 3,
-                "marker": "plus",
-            }
-        )     
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_distance_calculation_read_from_driver_init",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_read_from_driver_init",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "darksalmon",
-                "layer": "Distance Calculation",
-                "label_layer": 3,
-                "marker": "plus",
-            }
-        )
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_distance_calculation_read_from_driver_fini",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_read_from_driver_fini",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "lightcoral",
-                "layer": "Distance Calculation",
-                "label_layer": 3,
-                "marker": "plus",
-            }
-        )                                        
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_distance_calculation_fini",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_fini",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "lightcoral",
-                "layer": "Distance Calculation",
-                "label_layer": 3,
-                "marker": "plus",
-            }
-        )
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_fini",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_calculation_cb_fini",
-                "colors_fg": "yellow",
-                "colors_fg_bokeh": "darkred",
-                "layer": "Distance Calculation",
-                "label_layer": 3,
-                "marker": "plus",
-            }
-        )
-
-        #####################################################
-        # Distance Evaluation
-        #####################################################
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_distance_evaluation_cb_init",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_evaluation_cb_init",
-                "colors_fg": "yellow",
-                "colors_fg_bokeh": "salmon",
-                "layer": "Distance Evaluation",
-                "label_layer": 4,
-                "marker": "plus",
-            }
-        )
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_distance_evaluation_init",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_evaluation_init",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "darksalmon",
-                "layer": "Distance Evaluation",
-                "label_layer": 4,
-                "marker": "plus",
-            }
-        )
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_distance_evaluation_fini",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_evaluation_fini",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "lightcoral",
-                "layer": "Distance Evaluation",
-                "label_layer": 4,
-                "marker": "plus",
-            }
-        )
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_distance_evaluation_cb_fini",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_distance_evaluation_cb_fini",
-                "colors_fg": "yellow",
-                "colors_fg_bokeh": "darkred",
-                "layer": "Distance Evaluation",
-                "label_layer": 4,
-                "marker": "plus",
-            }
-        )
-
-        #####################################################
-        # Control Update
-        #####################################################
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_control_update_cb_init",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_control_update_cb_init",
-                "colors_fg": "yellow",
-                "colors_fg_bokeh": "salmon",
-                "layer": "Control Update",
-                "label_layer": 5,
-                "marker": "plus",
-            }
-        )
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_control_update_init",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_control_update_init",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "darksalmon",
-                "layer": "Control Update",
-                "label_layer": 5,
-                "marker": "plus",
-            }
-        )
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_control_update_fini",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_control_update_fini",
-                "colors_fg": "red",
-                "colors_fg_bokeh": "lightcoral",
-                "layer": "Control Update",
-                "label_layer": 5,
-                "marker": "plus",
-            }
-        )
-        ba.add_target(
-            {
-                "name": "dual_arm_static_avoidance:dual_arm_control_update_cb_fini",
-                "name_disambiguous": "dual_arm_static_avoidance:dual_arm_control_update_cb_fini",
-                "colors_fg": "yellow",
-                "colors_fg_bokeh": "darkred",
-                "layer": "Control Update",
-                "label_layer": 5,
-                "marker": "plus",
-            }
-        )    
-
-    ba.draw_tracepoints(trace_path)
+        for trace in trace_plot_list:
+            trace.add_target_ba(ba)
+            
+    ba.draw_tracepoints_fpga(trace_path)
 
 def generate_launch_description():
     # Declare the launch arguments
