@@ -154,16 +154,18 @@ class Benchmark:
         # print("debugging: ", self.name)
 
         for result in yaml_data["results"]:
+            result_data = result.get("result", {})
+            timestampt = result_data.get("timestampt", "unknown")
             try:
-                metric = result["result"]["metric"]
-                metric_unit = result["result"]["metric_unit"]
-                result_type = result["result"]["type"]
-                hardware = result["result"]["hardware"]
-                category = result["result"]["category"]
-                timestampt = result["result"]["timestampt"]
-                value = float(result["result"]["value"])
-                note = result["result"]["note"]
-                datasource = result["result"]["datasource"]
+                metric = result_data["metric"]
+                metric_unit = result_data["metric_unit"]
+                result_type = result_data["type"]
+                hardware = result_data["hardware"]
+                category = result_data["category"]
+                timestampt = result_data["timestampt"]
+                value = float(result_data["value"])
+                note = result_data["note"]
+                datasource = result_data["datasource"]
 
                 self.results.append({
                     "metric": metric,
@@ -178,7 +180,10 @@ class Benchmark:
                 })
 
             except KeyError as e:
-                print(f"{e} not found in benchmark.yml of: {self.name} (timestamp: {timestampt})")
+                print(
+                    f"{e} not found in benchmark.yaml of: {self.name} "
+                    f"(timestamp: {timestampt})"
+                )
 
     def __str__(self):
         yaml_data = {
